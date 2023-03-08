@@ -1,25 +1,43 @@
 package raf.bolnica1.patient.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.services.PatientService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
 
+    private PatientService patientService;
 
-
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
+    }
 
     //Registracija pacijenta
-    public ResponseEntity<Object> registerPatient(Object object){
-
-        return (ResponseEntity<Object>) object;
+    @RequestMapping(value="/register",
+                    method = RequestMethod.POST,
+                    consumes = "application/json",
+                    produces = "application/json")
+    public ResponseEntity<PatientDto> registerPatient(@RequestBody PatientDto patient){
+        patient = patientService.registerPatient(patient);
+        if(patient != null)
+            return ResponseEntity.ok(patient);
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
     //Azuriranje podataka pacijenta
-    @RequestMapping(value = "/{path}")
+    @RequestMapping()
     public ResponseEntity<?> updatePatient(Object object){
         return (ResponseEntity) object;
     }
@@ -31,6 +49,17 @@ public class PatientController {
         return (ResponseEntity) object;
     }
 
+
+    @RequestMapping(value = "/filter",
+                    method = RequestMethod.GET,
+                    produces = "application/json")
+    public ResponseEntity<List<PatientDto>> filterPatients(@Param("lbp")String lbp,
+                                                        @Param("jmbg")String jmbg,
+                                                        @Param("name")String name,
+                                                        @Param("surname")String surname){
+        List<PatientDto> patients = patientService.filterPatients(lbp, jmbg, name, surname);
+        return ResponseEntity.ok(patients);
+    }
 
     //Pretraga pacijenta
     @RequestMapping(value = "/find")
