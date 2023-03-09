@@ -23,8 +23,8 @@ public class SpringSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .anyRequest().authenticated()
                 .antMatchers("/h2-console/").permitAll()
+                .anyRequest().authenticated()
                 .and().csrf().ignoringAntMatchers("/h2-console/")
                 .and().headers().frameOptions().sameOrigin();
 
