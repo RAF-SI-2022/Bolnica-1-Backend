@@ -37,9 +37,14 @@ public class PatientController {
 
 
     //Azuriranje podataka pacijenta
-    @RequestMapping()
-    public ResponseEntity<?> updatePatient(Object object){
-        return (ResponseEntity) object;
+    @RequestMapping(method = RequestMethod.PUT,
+                    consumes = "application/json",
+                    produces = "application/json")
+    public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patient){
+        patient = patientService.updatePatient(patient);
+        if(patient != null)
+            return ResponseEntity.ok(patient);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
 

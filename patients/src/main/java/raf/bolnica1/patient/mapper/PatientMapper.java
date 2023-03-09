@@ -14,6 +14,8 @@ public class PatientMapper {
     public static Patient patientDtoToPatient(PatientDto dto){
         Patient patient = new Patient();
 
+        if(dto.getId() != null)
+            patient.setId(dto.getId());
         patient.setJmbg(dto.getJmbg());
         patient.setName(dto.getName());
         patient.setParentName(dto.getParentName());
@@ -91,4 +93,47 @@ public class PatientMapper {
         return entityList;
     }
 
+
+    public static void compareAndSet(PatientDto dto, Patient patient){
+        if(dto.getJmbg() != null && !dto.getJmbg().equals(""))
+            patient.setJmbg(dto.getJmbg());
+        if(dto.getName() != null && !dto.getName().equals(""))
+            patient.setName(dto.getName());
+        if(dto.getParentName() != null && !dto.getParentName().equals(""))
+            patient.setParentName(dto.getParentName());
+        if(dto.getSurname() != null && !dto.getSurname().equals(""))
+            patient.setSurname(dto.getSurname());
+        if(dto.getGender() != null)
+            patient.setGender(dto.getGender());
+        if(dto.getDateOfBirth() != null && !dto.getDateOfBirth().equals(""))
+            patient.setDateOfBirth(Date.valueOf(dto.getDateOfBirth()));
+        if(dto.getDateAndTimeOfDeath() != null && !dto.getDateAndTimeOfDeath().equals(""))
+            patient.setDateAndTimeOfDeath(Timestamp.valueOf(dto.getDateAndTimeOfDeath()));
+        if(dto.getBirthPlace() != null && !dto.getBirthPlace().equals(""))
+            patient.setBirthPlace(dto.getBirthPlace());
+        if(dto.getPlaceOfLiving() != null && !dto.getPlaceOfLiving().equals(""))
+            patient.setPlaceOfLiving(dto.getPlaceOfLiving());
+        if(dto.getCitizenship() != null && !dto.getCitizenship().equals(""))
+            patient.setCitizenship(dto.getCitizenship());
+        if(dto.getPhone() != null && !dto.getPhone().equals(""))
+            patient.setPhone(dto.getPhone());
+        if(dto.getEmail() != null && !dto.getEmail().equals(""))
+            patient.setEmail(dto.getEmail());
+        if(dto.getGuardianJmbg() != null && !dto.getGuardianJmbg().equals(""))
+            patient.setGuardianJmbg(dto.getGuardianJmbg());
+        if(dto.getGuardianNameAndSurname() != null && !dto.getGuardianNameAndSurname().equals(""))
+            patient.setGuardianNameAndSurname(dto.getGuardianNameAndSurname());
+
+        if(dto.getMaritalStatus() != null)
+            patient.getSocialData().setMaritalStatus(dto.getMaritalStatus());
+        if(dto.getNumOfChildren() >= 0)
+            patient.getSocialData().setNumOfChildren(dto.getNumOfChildren());
+        if(dto.getExpertiseDegree() != null)
+            patient.getSocialData().setExpertiseDegree(dto.getExpertiseDegree());
+        if(dto.getProfession() != null && !dto.getProfession().equals(""))
+            patient.getSocialData().setProfession(dto.getProfession());
+        if(dto.getFamilyStatus() != null)
+            patient.getSocialData().setFamilyStatus(dto.getFamilyStatus());
+
+    }
 }

@@ -59,8 +59,15 @@ public class PatientService {
     }
 
     //Azuriranje podataka pacijenta
-    public static ResponseEntity<?> updatePatient(Object object){
-        return (ResponseEntity) object;
+    public PatientDto updatePatient(PatientDto dto){
+        Optional<Patient> patient = patientRepository.findById(dto.getId());
+        if(patient.isPresent()){
+            PatientMapper.compareAndSet(dto, patient.get());
+            socialDataRepository.save(patient.get().getSocialData());
+            patientRepository.save(patient.get());
+            return dto;
+        }
+        return null;
     }
 
 
