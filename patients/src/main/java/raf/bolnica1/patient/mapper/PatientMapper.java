@@ -46,6 +46,8 @@ public class PatientMapper {
     public static PatientDto patientToPatientDto(Patient patient){
         PatientDto dto = new PatientDto();
 
+        if(patient.getId() != null)
+            dto.setId(patient.getId());
         if(patient.getLbp() != null)
             dto.setLbp(patient.getLbp());
         dto.setJmbg(patient.getJmbg());

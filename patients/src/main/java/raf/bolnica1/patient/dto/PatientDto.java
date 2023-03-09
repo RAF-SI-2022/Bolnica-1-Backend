@@ -10,6 +10,7 @@ import raf.bolnica1.patient.domain.MaritalStatus;
 @Getter
 @Setter
 public class PatientDto {
+    private Long id;
     private String jmbg;
     private String lbp;
     private String name;
