@@ -2,6 +2,7 @@ package raf.bolnica1.patient.services;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
@@ -70,10 +71,26 @@ public class PatientService {
         return null;
     }
 
-
     //Brisanje pacijenta
-    public static ResponseEntity<?> deletePatient(Object object){
-        return (ResponseEntity) object;
+    public boolean deletePatient(String lbp){
+        Optional<Patient> patient = patientRepository.findByLbp(lbp);
+        if(patient.isPresent()){
+            patient.get().setDeleted(true);
+            patientRepository.save(patient.get());
+        }
+        else
+             return false;
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findAll();
+        if(!medicalRecords.isEmpty()){
+            for(MedicalRecord mr: medicalRecords){
+                if(mr.getPatient().getLbp().equals(lbp)){
+                    mr.setDeleted(true);
+                    medicalRecordRepository.save(mr);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -115,6 +132,8 @@ public class PatientService {
                     patients.removeIf(p -> !p.getLbp().equals(tempPatientJmbg.get().getLbp()));
             }
         }
+        //izbacujemo sve pacijente koji su "obrisani"
+        patients.removeIf(p -> p.isDeleted());
 
         return PatientMapper.allToDto(patients);
     }

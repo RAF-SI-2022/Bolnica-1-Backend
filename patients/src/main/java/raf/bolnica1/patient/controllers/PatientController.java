@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.PatientDto;
 import raf.bolnica1.patient.services.PatientService;
 
@@ -49,10 +46,14 @@ public class PatientController {
 
 
     //Brisanje pacijenta
-    @RequestMapping(value = "/delete/{path}")
-    public ResponseEntity<?> deletePatient(Object object){
-        return (ResponseEntity) object;
+    @RequestMapping(value = "/delete/{lbp}",
+            method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletePatient(@PathVariable String lbp){
+        if(patientService.deletePatient(lbp))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().build();
     }
+
 
 
     @RequestMapping(value = "/filter",
