@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.services;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
+
 @Service
 public class PatientService {
+
 
     private PatientRepository patientRepository;
     private MedicalRecordRepository medicalRecordRepository;
@@ -68,7 +73,6 @@ public class PatientService {
             patientRepository.save(patient.get());
             return dto;
         }
-        return null;
     }
 
     //Brisanje pacijenta
@@ -139,40 +143,38 @@ public class PatientService {
     }
 
     //Pretraga pacijenta
-    public static ResponseEntity<?> findPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findPatient(Object object){
+        return null;
     }
 
 
     //Pretraga pacijenta preko LBP-a
-    public static ResponseEntity<?> findPatientLBP(Object object){
-        return (ResponseEntity) object;
+    public Object findPatientLBP(Object object){
+        return null;
     }
 
 
     //Dobijanje istorije bolesti pacijenta
-    public static ResponseEntity<?> hisotryOfDeseasePatient(Object object){
-        return (ResponseEntity) object;
+    public Object hisotryOfDeseasePatient(Object object){
+        return null;
     }
 
 
     //Svi izvestaji
-    public static ResponseEntity<?> findReportPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findReportPatient(Object object){
+        return null;
     }
 
 
     //Svi kartoni
-    public static ResponseEntity<?> findMedicalChartPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findMedicalChartPatient(Object object){
+        return null;
     }
 
 
     //Krvne grupe
-    public static ResponseEntity<?> findDetailsPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findDetailsPatient(Object object){
+        return null;
     }
-
-
 
 }
