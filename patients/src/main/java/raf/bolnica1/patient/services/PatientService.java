@@ -1,63 +1,60 @@
 package raf.bolnica1.patient.services;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PatientService {
 
-
     //Registracija pacijenta
-    public static ResponseEntity<Object> registerPatient(Object object){
-        return (ResponseEntity<Object>) object;
+    public Object registerPatient(Object object){
+        return null;
     }
 
     //Azuriranje podataka pacijenta
-    public static ResponseEntity<?> updatePatient(Object object){
-        return (ResponseEntity) object;
+    public Object updatePatient(Object object){
+        return null;
     }
 
 
     //Brisanje pacijenta
-    public static ResponseEntity<?> deletePatient(Object object){
-        return (ResponseEntity) object;
+    public Object deletePatient(Object object){
+        return null;
     }
 
 
     //Pretraga pacijenta
-    public static ResponseEntity<?> findPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findPatient(Object object){
+        return null;
     }
 
 
     //Pretraga pacijenta preko LBP-a
-    public static ResponseEntity<?> findPatientLBP(Object object){
-        return (ResponseEntity) object;
+    public Object findPatientLBP(Object object){
+        return null;
     }
 
 
     //Dobijanje istorije bolesti pacijenta
-    public static ResponseEntity<?> hisotryOfDeseasePatient(Object object){
-        return (ResponseEntity) object;
+    public Object hisotryOfDeseasePatient(Object object){
+        return null;
     }
 
 
     //Svi izvestaji
-    public static ResponseEntity<?> findReportPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findReportPatient(Object object){
+        return null;
     }
 
 
     //Svi kartoni
-    public static ResponseEntity<?> findMedicalChartPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findMedicalChartPatient(Object object){
+        return null;
     }
 
 
     //Krvne grupe
-    public static ResponseEntity<?> findDetailsPatient(Object object){
-        return (ResponseEntity) object;
+    public Object findDetailsPatient(Object object){
+        return null;
     }
-
-
 
 }

@@ -1,76 +1,84 @@
 package raf.bolnica1.patient.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.services.PatientService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
 
+    private PatientService service;
 
-
-
-    //Registracija pacijenta
-    public ResponseEntity<Object> registerPatient(Object object){
-
-        return (ResponseEntity<Object>) object;
+    @Autowired
+    public PatientController(PatientService patientService) {
+        this.service = patientService;
     }
 
+    //Registracija pacijenta
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> registerPatient(Object object){
+        return null;
+    }
 
     //Azuriranje podataka pacijenta
-    @RequestMapping(value = "/{path}")
-    public ResponseEntity<?> updatePatient(Object object){
-        return (ResponseEntity) object;
+    //ppn = personal patient number
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,path = "/{ppn}")
+    public ResponseEntity<Object> updatePatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
+        return null;
     }
 
 
     //Brisanje pacijenta
-    @RequestMapping(value = "/delete/{path}")
-    public ResponseEntity<?> deletePatient(Object object){
-        return (ResponseEntity) object;
+    @DeleteMapping(value = "/delete/{ppn}")
+    public ResponseEntity<Object> deletePatient(@PathVariable("ppn") Long ppn){
+        return null;
     }
 
 
     //Pretraga pacijenta
-    @RequestMapping(value = "/find")
-    public ResponseEntity<?> findPatient(Object object){
-        return (ResponseEntity) object;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/find")
+    public ResponseEntity<Object> findPatient(@Valid @RequestBody Object object){
+        return null;
     }
 
 
     //Pretraga pacijenta preko LBP-a
-    @RequestMapping(value = "/find/{path}")
-    public ResponseEntity<?> findPatientLBP(Object object){
-        return (ResponseEntity) object;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/find/{ppn}")
+    public ResponseEntity<Object> findPatientLBP(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
+        return null;
     }
 
 
     //Dobijanje istorije bolesti pacijenta
-    @RequestMapping(value = "/findByDesease/{query}")
-    public ResponseEntity<?> hisotryOfDeseasePatient(Object object){
-        return (ResponseEntity) object;
+    @RequestMapping(value = "/findByDesease")
+    public ResponseEntity<?> hisotryOfDeseasePatient(@RequestParam("ppn") Long ppn, @RequestParam("mkb10") Long mkb10){
+        return null;
     }
 
 
     //Svi izvestaji
-    @RequestMapping(value = "/findReport")
-    public ResponseEntity<?> findReportPatient(Object object){
-        return (ResponseEntity) object;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
+    public ResponseEntity<Object> findReportPatient(@Valid @RequestBody Object object){
+        return null;
     }
 
 
     //Svi kartoni
-    @RequestMapping(value = "/findMedicalChart/{path}")
-    public ResponseEntity<?> findMedicalChartPatient(Object object){
-        return (ResponseEntity) object;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findMedicalChart/{ppn}")
+    public ResponseEntity<Object> findMedicalChartPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
+        return null;
     }
 
 
     //Krvne grupe
-    @RequestMapping(value = "/findDetails/{path}")
-    public ResponseEntity<?> findDetailsPatient(Object object){
-        return (ResponseEntity) object;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
+    public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
+        return null;
     }
 
 
