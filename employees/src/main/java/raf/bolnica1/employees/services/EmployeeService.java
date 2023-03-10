@@ -1,40 +1,20 @@
 package raf.bolnica1.employees.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import raf.bolnica1.employees.dto.employee.*;
 
-@Service
-public class EmployeeService {
+public interface EmployeeService {
+    EmployeeDto createEmployee(EmployeeCreateDto dto);
 
-    private final PasswordEncoder passwordEncoder;
+    EmployeeDto findEmployeeInfo(String lbz);
 
-    @Autowired
-    public EmployeeService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    EmployeeMessageDto softDeleteEmployee(String lbz);
 
-    public Object createEmployee(Object object) {
-        return null;
-    }
+    Object passwordReset(Object object);
 
-    public Object findEmployeeInfo(Object object) {
-        return null;
-    }
+    Page<EmployeeDto> listEmployeesWithFilters(String name, String surname, String deleted, String departmentName, String hospitalShortName, int page, int size);
 
-    public Object softDeleteEmployee(Object object) {
-        return null;
-    }
+    EmployeeDto editEmployeeInfo(EmployeeUpdateDto dto, String lbz);
 
-    public Object passwordReset(Object object) {
-        return null;
-    }
-
-    public Object listEmployees(Object object) {
-        return null;
-    }
-
-    public Object editEmployeeInfo(Object object) {
-        return null;
-    }
+    EmployeeDto editEmployeeInfoByAdmin(EmployeeUpdateAdminDto dto, String lbz);
 }
