@@ -2,6 +2,9 @@ package raf.bolnica1.patient.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.ExpertiseDegree;
+import raf.bolnica1.patient.domain.constants.FamilyStatus;
+import raf.bolnica1.patient.domain.constants.MaritalStatus;
 
 import javax.persistence.*;
 

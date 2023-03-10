@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "general_medical_data")
@@ -13,6 +14,8 @@ public class GeneralMedicalData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private char[] bloodType = new char[2];
-    private boolean rH;
+    @Pattern(regexp = "^(A|B|AB|O)$")
+    private String bloodType;
+    @Pattern(regexp = "[+-]")
+    private char rH;
 }
