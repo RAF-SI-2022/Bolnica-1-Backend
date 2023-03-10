@@ -2,10 +2,7 @@ package raf.bolnica1.patient.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import raf.bolnica1.patient.domain.ExpertiseDegree;
-import raf.bolnica1.patient.domain.FamilyStatus;
-import raf.bolnica1.patient.domain.Gender;
-import raf.bolnica1.patient.domain.MaritalStatus;
+import raf.bolnica1.patient.domain.constants.*;
 
 @Getter
 @Setter
@@ -21,7 +18,7 @@ public class PatientDto {
     private String dateAndTimeOfDeath;
     private String birthPlace;
     private String placeOfLiving;
-    private String citizenship;
+    private CountryCode citizenship;
     private String phone;
     private String email;
     private String guardianJmbg;
