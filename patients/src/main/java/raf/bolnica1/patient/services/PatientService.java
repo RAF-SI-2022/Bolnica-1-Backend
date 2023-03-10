@@ -73,6 +73,7 @@ public class PatientService {
             patientRepository.save(patient.get());
             return dto;
         }
+        return null;
     }
 
     //Brisanje pacijenta
