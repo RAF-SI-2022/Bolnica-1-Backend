@@ -5,45 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7654bfcc-784b-4720-ad6a-a1202a683cee" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Allergy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/AllergyData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Anamnesis.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/DiagnosisCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/ExaminationHistory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/ExpertiseDegree.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/FamilyStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Gender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/GeneralMedicalData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/MaritalStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/MedicalHistory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/MedicalRecord.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Operation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Patient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/SocialData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Therapy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/TreatmentResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/Vaccination.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/domain/VaccinationData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/AllergyDataRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/AllergyRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/AnamnesisRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/DiagnosisCodeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/ExaminationHistoryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/GeneralMedicalDataRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/MedicalHistoryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/MedicalRecordRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/OperationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/PatientRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/SocialDataRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/TherapyRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/VaccinationDataRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/repository/VaccinationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../employees/src/main/java/raf/bolnica1/employees/domain/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/../employees/src/main/java/raf/bolnica1/employees/domain/Employee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/security/SpringSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/raf/bolnica1/patient/security/SpringSecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,23 +25,30 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2Mjd0r903bYPYzxzMAHWBvacAuP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Radovan/Desktop/faks/4.godina/NWP/projekat",
+    "spring.configuration.checksum": "b39024efbc6de61976f585c8421c6bba"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="raf.bolnica1.patient.domain" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="raf.bolnica1.patient.security" />
     </key>
   </component>
   <component name="RunManager" selected="Application.PatientApplication">
@@ -117,6 +87,9 @@
       <option name="presentableId" value="Default" />
       <updated>1678284707776</updated>
       <workItem from="1678284709806" duration="29000" />
+      <workItem from="1678304744366" duration="3434000" />
+      <workItem from="1678361870883" duration="905000" />
+      <workItem from="1678364815282" duration="1919000" />
     </task>
     <servers />
   </component>
