@@ -1,11 +1,15 @@
 package raf.bolnica1.employees.controllers;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.employees.checking.CheckEmployee;
+import raf.bolnica1.employees.checking.jwtService.TokenService;
 import raf.bolnica1.employees.dto.employee.*;
 import raf.bolnica1.employees.services.EmployeeService;
 
@@ -17,6 +21,7 @@ import javax.validation.Valid;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+    private TokenService tokenService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmployeeDto> createEmployee(@Valid @RequestBody EmployeeCreateDto dto) {
@@ -25,14 +30,13 @@ public class EmployeeController {
 
     //pen - personal employee number
     @PutMapping(path = "/edit/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeDto> editEmployeeInfo(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateDto dto) {
-        // aspect
+    @CheckEmployee
+    public ResponseEntity<EmployeeDto> editEmployeeInfo(@PathVariable String lbz, @RequestHeader("Authorization") String authorization, @Valid @RequestBody EmployeeUpdateDto dto) {
         return new ResponseEntity<>(employeeService.editEmployeeInfo(dto, lbz), HttpStatus.OK);
     }
 
     @PutMapping(path = "/edit/admin/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmployeeDto> editEmployeeInfoByAdmin(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateAdminDto dto) {
-        // aspect
         return new ResponseEntity<>(employeeService.editEmployeeInfoByAdmin(dto, lbz), HttpStatus.OK);
     }
 
@@ -47,9 +51,13 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/find/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CheckEmployee
     public ResponseEntity<Object> findEmployeeInfo(@PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
-        // unpack token
-        // aspect
+        return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
+    }
+
+    @GetMapping(path = "/find/admin/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findEmployeeInfoByAdmin(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
 
@@ -63,5 +71,14 @@ public class EmployeeController {
                                                          @RequestParam (defaultValue = "2") Integer size) {
         // System.out.println("name = " + name + "\n surname = " + surname + "\n deleted = " + deleted + "\n departmentName = " + departmentName + "\n hospitalShortName = " + hospitalShortName + "\n page = " + page + "\n size = " + size + "\n");
         return new ResponseEntity<>(employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/token")
+    public ResponseEntity<String> token(){
+        Claims claims = Jwts.claims();
+        claims.put("lbz", "ABC1233");
+        String token = tokenService.generateToken(claims);
+        System.out.println(token);
+        return new ResponseEntity<String>(token, HttpStatus.OK);
     }
 }
