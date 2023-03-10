@@ -3,6 +3,8 @@ package raf.bolnica1.patient.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.CountryCode;
+import raf.bolnica1.patient.domain.constants.Gender;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -28,7 +30,10 @@ public class Patient {
     private Timestamp dateAndTimeOfDeath;
     private String birthPlace;
     private String placeOfLiving;
-    private String citizenship;
+    @Enumerated(EnumType.STRING)
+    private CountryCode residenceCountry;
+    @Enumerated(EnumType.STRING)
+    private CountryCode citizenship;
     private String phone;
     private String email;
     private String guardianJmbg;

@@ -2,6 +2,7 @@ package raf.bolnica1.patient.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.TreatmentResult;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
