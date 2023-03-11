@@ -28,7 +28,8 @@ public class SpringSecurityConfig {
                 .and().csrf().ignoringAntMatchers("/h2-console/")
                 .and().headers().frameOptions().sameOrigin();
 
-                 http.sessionManagement()
+
+        http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 

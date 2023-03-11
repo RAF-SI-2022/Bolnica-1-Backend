@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Profession;
 import raf.bolnica1.employees.domain.Title;
 
