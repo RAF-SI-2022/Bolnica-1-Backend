@@ -4,11 +4,10 @@ package raf.bolnica1.employees.runner;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.domain.*;
-import raf.bolnica1.employees.repository.DepartmentRepository;
-import raf.bolnica1.employees.repository.EmployeeRepository;
-import raf.bolnica1.employees.repository.HospitalRepository;
+import raf.bolnica1.employees.repository.*;
 
 import java.sql.Date;
 
@@ -20,6 +19,9 @@ public class TestDataRunner implements CommandLineRunner {
     private DepartmentRepository departmentRepository;
     private HospitalRepository hospitalRepository;
     private EmployeeRepository employeeRepository;
+    private PrivilegeRepository privilegeRepository;
+    private EmployeesPrivilegeRepository employeesPrivilegeRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -59,6 +61,19 @@ public class TestDataRunner implements CommandLineRunner {
         departmentRepository.save(department1);
         departmentRepository.save(department2);
 
+        // privileges
+
+        Privilege privilege1 = new Privilege();
+        privilege1.setName("Administrator");
+        privilege1.setShortName("Admin");
+
+        Privilege privilege2 = new Privilege();
+        privilege2.setName("Korisnik");
+        privilege2.setShortName("Kor");
+
+        privilegeRepository.save(privilege1);
+        privilegeRepository.save(privilege2);
+
         // employees
 
         Employee employee1 = new Employee();
@@ -73,7 +88,7 @@ public class TestDataRunner implements CommandLineRunner {
         employee1.setPhone("123-456-7890");
         employee1.setEmail("john.doe@example.com");
         employee1.setUsername("johndoe");
-        employee1.setPassword("password");
+        employee1.setPassword(passwordEncoder.encode("password"));
         employee1.setTitle(Title.DR_MED_SPEC);
         employee1.setProfession(Profession.MED_SESTRA);
         employee1.setDepartment(department1);
@@ -90,13 +105,31 @@ public class TestDataRunner implements CommandLineRunner {
         employee2.setPhone("123-456-7890");
         employee2.setEmail("john.doe@example.com");
         employee2.setDeleted(true);
-        employee2.setUsername("johndoe");
-        employee2.setPassword("password");
+        employee2.setUsername("johndoe1");
+        employee2.setPassword(passwordEncoder.encode("password"));
         employee2.setTitle(Title.DR_MED_SPEC);
         employee2.setProfession(Profession.MED_SESTRA);
         employee2.setDepartment(department2);
 
         employeeRepository.save(employee1);
         employeeRepository.save(employee2);
+
+        // employees privilege
+
+        EmployeesPrivilege employeesPrivilege1 = new EmployeesPrivilege();
+        employeesPrivilege1.setEmployee(employee1);
+        employeesPrivilege1.setPrivilege(privilege1);
+
+        EmployeesPrivilege employeesPrivilege2 = new EmployeesPrivilege();
+        employeesPrivilege2.setEmployee(employee1);
+        employeesPrivilege2.setPrivilege(privilege2);
+
+        EmployeesPrivilege employeesPrivilege3 = new EmployeesPrivilege();
+        employeesPrivilege3.setEmployee(employee2);
+        employeesPrivilege3.setPrivilege(privilege1);
+
+        employeesPrivilegeRepository.save(employeesPrivilege1);
+        employeesPrivilegeRepository.save(employeesPrivilege2);
+        employeesPrivilegeRepository.save(employeesPrivilege3);
     }
 }

@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    Optional<Employee> findByUsername(String username);
     Optional<Employee> findByLbz(String lbz);
 
     @Query("SELECT e FROM Employee e JOIN Department d " +
