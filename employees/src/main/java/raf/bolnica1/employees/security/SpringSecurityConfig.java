@@ -49,4 +49,5 @@ public class SpringSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new Argon2PasswordEncoder();
     }
+
 }
