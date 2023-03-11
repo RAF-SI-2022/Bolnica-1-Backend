@@ -60,7 +60,7 @@ public class AuthFilter extends OncePerRequestFilter {
             if (perm) {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             } else {
-                httpServletResponse.setStatus(403);
+                httpServletResponse.setStatus(401);
             }
 
         }
