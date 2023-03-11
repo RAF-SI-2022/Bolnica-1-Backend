@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import raf.bolnica1.patient.domain.GeneralMedicalData;
+import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.PatientDto;
 import raf.bolnica1.patient.mapper.PatientMapper;
-import raf.bolnica1.patient.repository.GeneralMedicalDataRepository;
-import raf.bolnica1.patient.repository.MedicalRecordRepository;
-import raf.bolnica1.patient.repository.PatientRepository;
-import raf.bolnica1.patient.repository.SocialDataRepository;
+import raf.bolnica1.patient.repository.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -31,14 +29,18 @@ public class PatientService {
 
     private PatientRepository patientRepository;
     private MedicalRecordRepository medicalRecordRepository;
+    private MedicalHistoryRepository medicalHistoryRepository;
+    private ExaminationHistoryRepository examinationHistoryRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
     private SocialDataRepository socialDataRepository;
 
-    public PatientService(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository, GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository) {
+    public PatientService(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository, GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,MedicalHistoryRepository medicalHistoryRepository,ExaminationHistoryRepository examinationHistoryRepository) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.generalMedicalDataRepository = generalMedicalDataRepository;
         this.socialDataRepository = socialDataRepository;
+        this.medicalHistoryRepository = medicalHistoryRepository;
+        this.examinationHistoryRepository = examinationHistoryRepository;
     }
 
     //Registracija pacijenta
@@ -165,9 +167,27 @@ public class PatientService {
 
 
     //Dobijanje istorije bolesti pacijenta
-    public Object hisotryOfDeseasePatient(Object object){
+    public Optional<List<MedicalHistory>> hisotryOfDeseasePatient(String  lbp, String mkb10){
+        //Dohvatanje konkretnog pacijenta preko lbp-a
+        Optional<Patient> patient;
+        patient = patientRepository.findByLbp(lbp);
+
+        //Dohvatanje kartona konkretnog pacijenta
+        Optional<MedicalRecord> medical;
+        medical =  medicalRecordRepository.findByPatient_Lbp(patient.get().getLbp());
+
+        //Dohvatanje bolesti preko karotna i preko mkb10 (dijagnoza)
+        Optional<List<MedicalHistory>> history;
+        history = medicalHistoryRepository.findByMedicalRecord_IdAndDiagnosisCode_Id(medical.get().getId(), Long.valueOf(mkb10));
+
+        //Provera da li postoji bolest ako postoji onda vraca bolest ili vise bolesti ako ne onda vraca null
+        if(history.isPresent()){
+            return history;
+        }
+
         return null;
     }
+
 
 
     //Svi izvestaji

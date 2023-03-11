@@ -6,11 +6,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.PatientDtoDesease;
 import raf.bolnica1.patient.services.PatientService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -101,9 +104,18 @@ public class PatientController {
     }
 
     //Dobijanje istorije bolesti pacijenta
-    @RequestMapping(value = "/findByDesease")
-    public ResponseEntity<?> hisotryOfDeseasePatient(@RequestParam("ppn") Long ppn, @RequestParam("mkb10") Long mkb10){
-        return null;
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
+    public ResponseEntity<?> hisotryOfDeseasePatient(@Valid @RequestBody PatientDtoDesease patient){
+        //Dohvatanje istorija bolesti preko lbpa-a pacijenta i preko mkb10 (dijagnoza)
+        Optional<List<MedicalHistory>> medicalHistory = patientService.hisotryOfDeseasePatient(patient.getLbp(),patient.getMkb10());
+
+        //Provera da li postoji bolest
+        if( medicalHistory != null){
+            return ResponseEntity.ok(medicalHistory);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
     }
 
 
