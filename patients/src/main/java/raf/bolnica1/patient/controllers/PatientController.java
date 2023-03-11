@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.PatientDto;
 import raf.bolnica1.patient.services.PatientService;
 
@@ -86,11 +87,18 @@ public class PatientController {
 
 
     //Pretraga pacijenta preko LBP-a
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/find/{ppn}")
-    public ResponseEntity<Object> findPatientLBP(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
-        return null;
-    }
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/find/{lbp}")
+    public ResponseEntity<Patient> findPatientLBP(@PathVariable("lbp") String lbp){// @Valid @RequestBody Object object
+        //Dohvatanje konkretnog pacijenta preko lbp-a
+        Patient patient = patientService.findPatientLBP(lbp);
 
+        //Provera da li pacijent postoji
+        if( patient != null){
+            return ResponseEntity.ok(patient);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
 
     //Dobijanje istorije bolesti pacijenta
     @RequestMapping(value = "/findByDesease")

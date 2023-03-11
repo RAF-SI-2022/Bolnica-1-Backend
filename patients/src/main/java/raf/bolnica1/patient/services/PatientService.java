@@ -150,7 +150,16 @@ public class PatientService {
 
 
     //Pretraga pacijenta preko LBP-a
-    public Object findPatientLBP(Object object){
+    public Patient findPatientLBP(String lbp){
+
+        Optional<Patient> patient;
+        patient = patientRepository.findByLbp(lbp);
+
+        //Provera da li pacijent postoji, ako postoji vraca ga ako ne onda vraca null
+        if(patient.isPresent()) {
+            return patient.get();
+        }
+
         return null;
     }
 
