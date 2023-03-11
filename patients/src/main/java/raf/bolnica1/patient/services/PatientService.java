@@ -1,12 +1,19 @@
 package raf.bolnica1.patient.services;
 
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import raf.bolnica1.patient.domain.GeneralMedicalData;
+import raf.bolnica1.patient.domain.MedicalRecord;
+import raf.bolnica1.patient.domain.Patient;
+import raf.bolnica1.patient.dto.MedicalRecordDto;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import raf.bolnica1.patient.domain.*;
+
 import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.mapper.MedicalRecordMapper;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
 
@@ -16,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.stereotype.Service;
 
 
 @Service
@@ -235,8 +240,16 @@ public class PatientService {
 
 
     //Svi kartoni
-    public Object findMedicalChartPatient(Object object){
-        return null;
+    //m22
+    public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp) {
+
+        Optional<List<MedicalRecord>> list = medicalRecordRepository.findByPatientLbp(lbp);
+
+        if(list.isPresent()){
+            return MedicalRecordMapper.allToDto(list.get());
+        } else {
+            return null;
+        }
     }
 
 
