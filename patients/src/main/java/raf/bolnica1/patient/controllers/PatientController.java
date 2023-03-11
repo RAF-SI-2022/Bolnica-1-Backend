@@ -6,10 +6,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.PatientDto;
 import raf.bolnica1.patient.dto.PatientDtoDesease;
+import raf.bolnica1.patient.dto.PatientDtoReport;
 import raf.bolnica1.patient.services.PatientService;
 
 import java.util.List;
@@ -120,9 +122,35 @@ public class PatientController {
 
 
     //Svi izvestaji
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
-    public ResponseEntity<Object> findReportPatient(@Valid @RequestBody Object object){
-        return null;
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
+    public ResponseEntity<?> findReportPatient(@Valid @RequestBody PatientDtoReport patient){
+
+        //Provera da li se vrsi pretraga preko konkretnog datuma ili preko raspona datuma od-do
+        if(patient.getCurrDate() != null && patient.getFromDate() == null && patient.getToDate() == null){
+            //Pretraga preko konkretnog datuma i lbp-a pacijenta
+            Optional<List<ExaminationHistory>> examinationHistory = patientService.findReportPatientByCurrDate(patient.getLbp(),patient.getCurrDate());
+
+            //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
+            if(examinationHistory != null){
+                return ResponseEntity.ok(examinationHistory);
+            }else{
+                return null;
+            }
+
+
+        }else if(patient.getCurrDate() == null && patient.getFromDate() != null && patient.getToDate() != null){
+            //Pretraga preko raspona datuma od-do i lbp-a pacijenta
+            Optional<List<ExaminationHistory>> examinationHistory = patientService.findReportPatientByFromAndToDate(patient.getLbp(),patient.getFromDate(),patient.getToDate());
+
+            //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
+            if(examinationHistory != null){
+                return ResponseEntity.ok(examinationHistory);
+            }else{
+                return null;
+            }
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
 
