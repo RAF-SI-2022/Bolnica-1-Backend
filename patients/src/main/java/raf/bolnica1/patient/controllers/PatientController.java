@@ -16,6 +16,8 @@ import raf.bolnica1.patient.dto.PatientDtoDesease;
 import raf.bolnica1.patient.dto.PatientDtoReport;
 import raf.bolnica1.patient.services.PatientService;
 
+//import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,12 +126,15 @@ public class PatientController {
 
     //Svi izvestaji
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
-    public ResponseEntity<?> findReportPatient(@Valid @RequestBody PatientDtoReport patient){
+    public ResponseEntity<?> findReportPatient(@Param("lbp") String lbp,
+                                               @Param("currDate") Date currDate,
+                                               @Param("fromDate") Date fromDate,
+                                               @Param("toDate") Date toDate){
 
         //Provera da li se vrsi pretraga preko konkretnog datuma ili preko raspona datuma od-do
-        if(patient.getCurrDate() != null && patient.getFromDate() == null && patient.getToDate() == null){
+        if(currDate != null && fromDate == null && toDate == null){
             //Pretraga preko konkretnog datuma i lbp-a pacijenta
-            Optional<List<ExaminationHistory>> examinationHistory = patientService.findReportPatientByCurrDate(patient.getLbp(),patient.getCurrDate());
+            List<PatientDtoReport> examinationHistory = patientService.findReportPatientByCurrDate(lbp,currDate);
 
             //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
             if(examinationHistory != null){
@@ -139,9 +144,9 @@ public class PatientController {
             }
 
 
-        }else if(patient.getCurrDate() == null && patient.getFromDate() != null && patient.getToDate() != null){
+        }else if(currDate == null && fromDate != null && toDate != null){
             //Pretraga preko raspona datuma od-do i lbp-a pacijenta
-            Optional<List<ExaminationHistory>> examinationHistory = patientService.findReportPatientByFromAndToDate(patient.getLbp(),patient.getFromDate(),patient.getToDate());
+            List<PatientDtoReport> examinationHistory = patientService.findReportPatientByFromAndToDate(lbp,fromDate,toDate);
 
             //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
             if(examinationHistory != null){
