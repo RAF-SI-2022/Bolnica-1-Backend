@@ -48,15 +48,15 @@ public class PatientService {
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto){
         Patient patient = PatientMapper.patientDtoToPatient(dto);
-        patient.setLbp(UUID.randomUUID().toString());
-
+//        patient.setLbp(UUID.randomUUID().toString());
+        System.err.println(patient.getSocialData().getExpertiseDegree());
         patient.setSocialData(socialDataRepository.save(patient.getSocialData()));
 
         patient = patientRepository.save(patient);
 
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setPatient(patient);
-        medicalRecord.setRegistrationDate(Date.valueOf(LocalDate.now()));
+//        medicalRecord.setRegistrationDate(Date.valueOf(LocalDate.now()));
 
         GeneralMedicalData generalMedicalData = new GeneralMedicalData();
         generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);

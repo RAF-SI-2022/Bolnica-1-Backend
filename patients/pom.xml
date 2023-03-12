@@ -59,6 +59,23 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		Testiranje-->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+<!--			<version>5.9.2</version>-->
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Vezbe 2 -->
+		<!-- Mockito Inline - koristi se za mockovanje statickih metoda -->
+		<!-- Preporuceno je dodati ovaj dependency u vase projekte, tj. u svaki mikroservis -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+<!--			<version>3.8.0</version>-->
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

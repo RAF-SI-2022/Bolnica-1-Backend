@@ -22,7 +22,7 @@ public class PatientMapper {
         patient.setSurname(dto.getSurname());
         patient.setGender(dto.getGender());
         patient.setDateOfBirth(Date.valueOf(dto.getDateOfBirth()));
-        if(!dto.getDateAndTimeOfDeath().equals(""))
+        if(dto.getDateAndTimeOfDeath() != null && !dto.getDateAndTimeOfDeath().equals(""))
             patient.setDateAndTimeOfDeath(Timestamp.valueOf(dto.getDateAndTimeOfDeath()));
         patient.setBirthPlace(dto.getBirthPlace());
         patient.setPlaceOfLiving(dto.getPlaceOfLiving());
