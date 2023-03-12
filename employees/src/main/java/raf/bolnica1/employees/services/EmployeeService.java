@@ -11,7 +11,7 @@ public interface EmployeeService {
 
     EmployeeMessageDto softDeleteEmployee(String lbz);
 
-    EmployeeMessageDto passwordReset(EmployeeUpdateDto employeeUpdateDto, String lbz);
+    EmployeeMessageDto passwordReset(PasswordResetDto passwordResetDto, String lbz);
 
     EmployeeDto passwordResetToken(String lbz, String token);
 

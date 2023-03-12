@@ -11,10 +11,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.checking.CheckEmployee;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
+import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.dto.employee.*;
+import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.services.EmployeeService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -49,8 +52,8 @@ public class EmployeeController {
 
     @PutMapping(path = "/password_reset/{lbz}")
     @CheckEmployee
-    public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody EmployeeUpdateDto employeeUpdateDto, @PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
-        return new ResponseEntity<>(employeeService.passwordReset(employeeUpdateDto, lbz), HttpStatus.ACCEPTED);
+    public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody PasswordResetDto passwordResetDto, @PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
+        return new ResponseEntity<>(employeeService.passwordReset(passwordResetDto, lbz), HttpStatus.ACCEPTED);
     }
 
     @GetMapping(path = "/password_reset/{lbz}/{token}")
