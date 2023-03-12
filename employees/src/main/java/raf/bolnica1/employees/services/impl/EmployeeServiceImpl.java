@@ -59,13 +59,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeMessageDto passwordReset(EmployeeUpdateDto employeeUpdateDto, String lbz) {
+    public EmployeeMessageDto passwordReset(PasswordResetDto passwordResetDto, String lbz) {
         Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz)));
 
-        if(!passwordEncoder.matches(employeeUpdateDto.getOldPassword(), employee.getPassword()))
+        if(!passwordEncoder.matches(passwordResetDto.getOldPassword(), employee.getPassword()))
             throw new EmployeePasswordException("The password you entered does not match your current password.");
 
-        employee.setNewPassword(passwordEncoder.encode(employeeUpdateDto.getNewPassword()));
+        employee.setNewPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
         employee.setResetPassword(UUID.randomUUID().toString() + employee.getId());
 
         return new EmployeeMessageDto(String.format("http://localhost:8080/api/employee/password_reset/%s/%s", lbz, employeeRepository.save(employee).getResetPassword()));
@@ -113,7 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeePasswordException(("The password you entered does not match your current password."));
         }
 
-        employee.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        passwordReset(new PasswordResetDto(dto.getOldPassword(), dto.getNewPassword()), lbz);
         // treba odraditi proveru za broj telefona po regexu
         employee.setPhone(dto.getPhone());
 
