@@ -47,14 +47,14 @@ public class PatientServiceUnitTest {
         Patient patient = createPatient(dto);
         given(patientRepository.save(patient)).willReturn(patient);
 
-        SocialData sd = new SocialData();
-        sd.setProfession("");
-        sd.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
-        sd.setMaritalStatus(MaritalStatus.SAMAC_SAMICA);
-        sd.setNumOfChildren(0);
-        sd.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
+//        SocialData sd = new SocialData();
+//        sd.setProfession("");
+//        sd.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
+//        sd.setMaritalStatus(MaritalStatus.SAMAC_SAMICA);
+//        sd.setNumOfChildren(0);
+//        sd.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
 //        SocialData sd = patient.getSocialData();
-        given(socialDataRepository.save(sd)).willReturn(sd);
+        given(socialDataRepository.save(patient.getSocialData())).willReturn(patient.getSocialData());
 
         GeneralMedicalData gmd = new GeneralMedicalData();
         given(generalMedicalDataRepository.save(gmd)).willReturn(gmd);

@@ -59,7 +59,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
 <!--		Testiranje-->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -77,7 +76,7 @@
 <!--			<version>3.8.0</version>-->
 			<scope>test</scope>
 		</dependency>
-=======
+
 		<!--SWAGGER-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -91,7 +90,6 @@
 			<version>1.6.15</version>
 		</dependency>
 		<!--SWAGGER-->
->>>>>>> afc33143ff0b7683ce586f33f8c068b1d07e5224
 	</dependencies>
 
 	<build>
