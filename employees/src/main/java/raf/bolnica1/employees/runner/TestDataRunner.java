@@ -71,8 +71,13 @@ public class TestDataRunner implements CommandLineRunner {
         privilege2.setName("Korisnik");
         privilege2.setPrivilegeShort(PrivilegeShort.MED_SESTRA);
 
+        Privilege privilege3 = new Privilege();
+        privilege3.setName("Specijalista");
+        privilege3.setPrivilegeShort(PrivilegeShort.DR_SPEC);
+
         privilegeRepository.save(privilege1);
         privilegeRepository.save(privilege2);
+        privilegeRepository.save(privilege3);
 
         // employees
 

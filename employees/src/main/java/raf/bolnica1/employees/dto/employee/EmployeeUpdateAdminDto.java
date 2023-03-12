@@ -46,7 +46,6 @@ public class EmployeeUpdateAdminDto {
     @Pattern(regexp = "^[a-zA-Z0-9_.-]{5,30}$")
     /// Password can have letters, numbers and special characters like _ . - length should be between 5 and 30
     private String password;
-    @NotEmpty
     private boolean deleted;
     private Title title;
     private Profession profession;
