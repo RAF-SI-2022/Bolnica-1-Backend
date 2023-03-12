@@ -30,8 +30,6 @@ public class SpringSecurityConfig {
     private final JwtFilter jwtFilter;
     private final AuthFilter authFilter;
 
-    private final EmployeeRepository employeeRepository;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -60,24 +58,6 @@ public class SpringSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                Optional<Employee> emp = employeeRepository.findByUsername(username);
-                if(emp.isPresent()) {
-                    return org.springframework.security.core.userdetails.User
-                            .withUsername(username)
-                            .password(emp.get().getPassword())
-//                    .roles(emp.get().getRole().toString())
-                            .roles(" ")
-                            .build();
-                }
-                throw new UsernameNotFoundException("User not found with this username: " + username);
-            }
-        };
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
