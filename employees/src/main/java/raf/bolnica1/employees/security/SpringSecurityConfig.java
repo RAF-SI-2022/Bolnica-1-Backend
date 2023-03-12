@@ -50,6 +50,7 @@ public class SpringSecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
+                .antMatchers("/v3/api-docs", "/swagger-ui/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/employee/admin/**").hasAuthority("ADMIN")
