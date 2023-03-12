@@ -1,2 +1,5 @@
 ###INTELLIJ IDEA
 .idea/
+
+###MAC-OS FILE
+.DS_Store
