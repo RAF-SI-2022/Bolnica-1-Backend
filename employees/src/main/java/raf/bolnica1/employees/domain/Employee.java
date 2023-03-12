@@ -28,6 +28,8 @@ public class Employee {
     private String email;
     private String username;
     private String password;
+    private String newPassword = "NO";
+    private String resetPassword = "NO";
     private boolean deleted = false;
     @Enumerated(EnumType.STRING)
     private Title title;
