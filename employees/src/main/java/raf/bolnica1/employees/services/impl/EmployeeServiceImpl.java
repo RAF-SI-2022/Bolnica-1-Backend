@@ -102,8 +102,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz));
         }
         // mozda treba raditi neke provere
-        employeeRepository.save(employeeMapper.toEntity(dto, employee));
-        return employeeMapper.toDto(employee);
+        Employee updated = employeeRepository.save(employeeMapper.toEntity(dto, employee));
+        return employeeMapper.toDto(updated);
     }
 
 }
