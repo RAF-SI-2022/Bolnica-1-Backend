@@ -69,7 +69,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         Privilege privilege2 = new Privilege();
         privilege2.setName("Korisnik");
-        privilege2.setPrivilegeShort(PrivilegeShort.MED_SETSRA);
+        privilege2.setPrivilegeShort(PrivilegeShort.MED_SESTRA);
 
         privilegeRepository.save(privilege1);
         privilegeRepository.save(privilege2);

@@ -8,8 +8,10 @@ import raf.bolnica1.employees.domain.Profession;
 import raf.bolnica1.employees.domain.Title;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class EmployeeCreateDto {
     private String name;
     @NotEmpty
     private String surname;
-    @NotEmpty
+    @NotNull
     private Date dateOfBirth;
     @NotEmpty
     private String gender;
@@ -37,10 +39,10 @@ public class EmployeeCreateDto {
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$")
     private String email;
-    @NotEmpty
     private Title title;
-    @NotEmpty
     private Profession profession;
     @NotEmpty
-    private Long department;
+    private String departmentPbo;
+    @NotEmpty
+    private List<String> permissions;
 }
