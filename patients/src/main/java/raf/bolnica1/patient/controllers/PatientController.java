@@ -7,23 +7,19 @@ import org.springframework.web.bind.annotation.*;
 
 import raf.bolnica1.patient.dto.MedicalRecordDto;
 
-import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
 
 import raf.bolnica1.patient.dto.PatientDto;
 import raf.bolnica1.patient.dto.PatientDtoDesease;
 import raf.bolnica1.patient.dto.PatientDtoReport;
-import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.MediaType;
+import raf.bolnica1.patient.services.PatientService;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 
 
