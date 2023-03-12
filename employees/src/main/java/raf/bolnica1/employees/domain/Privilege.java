@@ -14,5 +14,5 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String shortName;
+    private PrivilegeShort privilegeShort;
 }
