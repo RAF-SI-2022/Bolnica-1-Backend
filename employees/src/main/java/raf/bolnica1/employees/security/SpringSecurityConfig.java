@@ -21,6 +21,7 @@ import raf.bolnica1.employees.services.JwtUserDetailService;
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
+
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
     @Autowired
@@ -58,5 +59,4 @@ public class SpringSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 }

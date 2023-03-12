@@ -128,6 +128,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz));
         }
         // mozda treba raditi neke provere
+
         Employee employeeChanged = employeeMapper.toEntity(dto, employee);
         employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
         employeeRepository.save(employeeChanged);
