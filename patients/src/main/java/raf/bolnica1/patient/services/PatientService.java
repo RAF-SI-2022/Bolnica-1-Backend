@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import raf.bolnica1.patient.domain.*;
 
 import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.PatientDtoDesease;
+import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalRecordMapper;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
@@ -169,7 +171,7 @@ public class PatientService {
 
 
     //Dobijanje istorije bolesti pacijenta
-    public Optional<List<MedicalHistory>> hisotryOfDeseasePatient(String  lbp, String mkb10){
+    public List<PatientDtoDesease> hisotryOfDeseasePatient(String  lbp, Long mkb10){
         //Dohvatanje konkretnog pacijenta preko lbp-a
         Optional<Patient> patient;
         patient = patientRepository.findByLbp(lbp);
@@ -182,9 +184,9 @@ public class PatientService {
         Optional<List<MedicalHistory>> history;
         history = medicalHistoryRepository.findByMedicalRecord_IdAndDiagnosisCode_Id(medical.get().getId(), Long.valueOf(mkb10));
 
-        //Provera da li postoji bolest ako postoji onda vraca bolest ili vise bolesti ako ne onda vraca null
+        //Provera da li postoji bolest ako postoji onda mapiramo na dto koji vracamo na front, ako ne postoji onda vracamo null
         if(history.isPresent()){
-            return history;
+            return MedicalHistoryMapper.allToDto(history.get());
         }
 
         return null;
@@ -233,6 +235,7 @@ public class PatientService {
         //Provera da li postoje izvestaji pregleda, ako postoje vracamo ih ako ne onda vracamo null
         if(examination.isPresent()){
             return examination;
+
         }
 
         return null;

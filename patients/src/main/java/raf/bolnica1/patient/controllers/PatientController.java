@@ -106,10 +106,11 @@ public class PatientController {
     }
 
     //Dobijanje istorije bolesti pacijenta
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
-    public ResponseEntity<?> hisotryOfDeseasePatient(@Valid @RequestBody PatientDtoDesease patient){
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
+    public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@Param("lbp")String lbp,
+                                                                           @Param("mkb10")Long mkb10){
         //Dohvatanje istorija bolesti preko lbpa-a pacijenta i preko mkb10 (dijagnoza)
-        Optional<List<MedicalHistory>> medicalHistory = patientService.hisotryOfDeseasePatient(patient.getLbp(),patient.getMkb10());
+        List<PatientDtoDesease> medicalHistory = patientService.hisotryOfDeseasePatient(lbp,mkb10);
 
         //Provera da li postoji bolest
         if( medicalHistory != null){
