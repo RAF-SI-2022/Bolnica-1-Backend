@@ -9,8 +9,10 @@ import raf.bolnica1.employees.domain.Profession;
 import raf.bolnica1.employees.domain.Title;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class EmployeeUpdateAdminDto {
     private String name;
     @NotEmpty
     private String surname;
-    @NotEmpty
+    @NotNull
     private Date dateOfBirth;
     @NotEmpty
     private String gender;
@@ -44,12 +46,11 @@ public class EmployeeUpdateAdminDto {
     @Pattern(regexp = "^[a-zA-Z0-9_.-]{5,30}$")
     /// Password can have letters, numbers and special characters like _ . - length should be between 5 and 30
     private String password;
-    @NotEmpty
     private boolean deleted;
-    @NotEmpty
     private Title title;
-    @NotEmpty
     private Profession profession;
     @NotEmpty
-    private Department department;
+    private String departmentPbo;
+    @NotEmpty
+    private List<String> permissions;
 }

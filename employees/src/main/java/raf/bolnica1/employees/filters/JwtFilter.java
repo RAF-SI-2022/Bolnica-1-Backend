@@ -7,7 +7,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
-import raf.bolnica1.employees.services.JwtUserDetailService;
+import raf.bolnica1.employees.services.auth.JwtUserDetailService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

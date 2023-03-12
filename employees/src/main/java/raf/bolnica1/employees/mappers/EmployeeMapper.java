@@ -35,7 +35,7 @@ public class EmployeeMapper {
 
         employee.setTitle(employeeDto.getTitle());
         employee.setProfession(employeeDto.getProfession());
-        Department department = departmentRepository.findById(employeeDto.getDepartment()).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with id <%s> not found.", employeeDto.getDepartment())));
+        Department department = departmentRepository.findByPbo(employeeDto.getDepartmentPbo()).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with pbo <%s> not found.", employeeDto.getDepartmentPbo())));
         employee.setDepartment(department);
         return employee;
     }
@@ -77,7 +77,8 @@ public class EmployeeMapper {
         employee.setPassword(dto.getPassword());
         employee.setTitle(dto.getTitle());
         employee.setProfession(dto.getProfession());
-        employee.setDepartment(dto.getDepartment());
+        Department department = departmentRepository.findByPbo(dto.getDepartmentPbo()).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with pbo <%s> not found.", dto.getDepartmentPbo())));
+        employee.setDepartment(department);
         return employee;
     }
 }

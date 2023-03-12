@@ -16,10 +16,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
 import raf.bolnica1.employees.domain.Employee;
+import raf.bolnica1.employees.dto.privilege.PermissionsCheckDto;
 import raf.bolnica1.employees.dto.token.TokenRequest;
 import raf.bolnica1.employees.dto.token.TokenResponse;
 import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.services.EmployeeService;
+import raf.bolnica1.employees.services.auth.AuthService;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,8 +31,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     private TokenService tokenService;
     private EmployeeService employeeService;
+    private AuthService authService;
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest){
         try {
@@ -45,5 +47,10 @@ public class AuthController {
             e.printStackTrace();
             return new ResponseEntity<TokenResponse>(new TokenResponse("Invalid username/password"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/check_permission")
+    public ResponseEntity<Boolean> checkPermission(@RequestHeader("Authorization") String authorization, @RequestBody PermissionsCheckDto permissions) {
+        return new ResponseEntity<>(authService.checkPermission(permissions, tokenService.parseToken(authorization.substring(7)).get("lbz", String.class)), HttpStatus.OK);
     }
 }
