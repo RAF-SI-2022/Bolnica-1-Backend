@@ -7,13 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.checking.CheckEmployee;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
+import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.dto.employee.*;
+import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.services.EmployeeService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -23,42 +27,49 @@ public class EmployeeController {
     private EmployeeService employeeService;
     private TokenService tokenService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(@Valid @RequestBody EmployeeCreateDto dto) {
         return new ResponseEntity<>(employeeService.createEmployee(dto), HttpStatus.CREATED);
     }
 
     //pen - personal employee number
-    @PutMapping(path = "/edit/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/edit/{lbz}")
     public ResponseEntity<EmployeeDto> editEmployeeInfo(@PathVariable String lbz, @RequestHeader("Authorization") String authorization, @Valid @RequestBody EmployeeUpdateDto dto) {
         // aspect
         return new ResponseEntity<>(employeeService.editEmployeeInfo(dto, lbz), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/edit/admin/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/edit/admin/{lbz}")
     public ResponseEntity<EmployeeDto> editEmployeeInfoByAdmin(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateAdminDto dto) {
         // aspect
         return new ResponseEntity<>(employeeService.editEmployeeInfoByAdmin(dto, lbz), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/delete/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = "/delete/{lbz}")
     public ResponseEntity<EmployeeMessageDto> softDeleteEmployee(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.softDeleteEmployee(lbz), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/password_reset", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> passwordReset(@Valid @RequestBody Object object) {
-        return null;
+    @PutMapping(path = "/password_reset/{lbz}")
+    @CheckEmployee
+    public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody PasswordResetDto passwordResetDto, @PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
+        return new ResponseEntity<>(employeeService.passwordReset(passwordResetDto, lbz), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(path = "/find/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/password_reset/{lbz}/{token}")
+    public ResponseEntity<EmployeeDto> passwordResetToken(@PathVariable("lbz") String lbz, @PathVariable("token") String token) {
+        return new ResponseEntity<>(employeeService.passwordResetToken(lbz, token), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/find/{lbz}")
     @CheckEmployee
-    public ResponseEntity<Object> findEmployeeInfo(@PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<EmployeeDto> findEmployeeInfo(@PathVariable String lbz, @RequestHeader("Authorization") String authorization) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
 
-    @GetMapping(path = "/find/admin/{lbz}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findEmployeeInfoByAdmin(@PathVariable String lbz) {
+    @GetMapping(path = "/admin/find/{lbz}")
+    @PreAuthorize("ADMIN")
+    public ResponseEntity<EmployeeDto> findEmployeeInfoByAdmin(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
 

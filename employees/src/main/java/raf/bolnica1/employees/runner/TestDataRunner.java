@@ -65,11 +65,11 @@ public class TestDataRunner implements CommandLineRunner {
 
         Privilege privilege1 = new Privilege();
         privilege1.setName("Administrator");
-        privilege1.setShortName("Admin");
+        privilege1.setPrivilegeShort(PrivilegeShort.ADMIN);
 
         Privilege privilege2 = new Privilege();
         privilege2.setName("Korisnik");
-        privilege2.setShortName("Kor");
+        privilege2.setPrivilegeShort(PrivilegeShort.MED_SETSRA);
 
         privilegeRepository.save(privilege1);
         privilegeRepository.save(privilege2);
@@ -88,7 +88,7 @@ public class TestDataRunner implements CommandLineRunner {
         employee1.setPhone("123-456-7890");
         employee1.setEmail("john.doe@example.com");
         employee1.setUsername("johndoe");
-        employee1.setPassword(passwordEncoder.encode("password"));
+        employee1.setPassword(passwordEncoder.encode("password1"));
         employee1.setTitle(Title.DR_MED_SPEC);
         employee1.setProfession(Profession.MED_SESTRA);
         employee1.setDepartment(department1);
@@ -103,18 +103,19 @@ public class TestDataRunner implements CommandLineRunner {
         employee2.setAddress("123 Main St");
         employee2.setPlaceOfLiving("City");
         employee2.setPhone("123-456-7890");
-        employee2.setEmail("john.doe@example.com");
-        employee2.setDeleted(true);
+        employee2.setEmail("john@example.com");
+        employee2.setDeleted(false);
         employee2.setUsername("johndoe1");
-        employee2.setPassword(passwordEncoder.encode("password"));
+        employee2.setPassword(passwordEncoder.encode("password2"));
         employee2.setTitle(Title.DR_MED_SPEC);
         employee2.setProfession(Profession.MED_SESTRA);
         employee2.setDepartment(department2);
 
-        employeeRepository.save(employee1);
-        employeeRepository.save(employee2);
 
+        employeeRepository.save(employee2);
+        employeeRepository.save(employee1);
         // employees privilege
+
 
         EmployeesPrivilege employeesPrivilege1 = new EmployeesPrivilege();
         employeesPrivilege1.setEmployee(employee1);
@@ -126,7 +127,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         EmployeesPrivilege employeesPrivilege3 = new EmployeesPrivilege();
         employeesPrivilege3.setEmployee(employee2);
-        employeesPrivilege3.setPrivilege(privilege1);
+        employeesPrivilege3.setPrivilege(privilege2);
 
         employeesPrivilegeRepository.save(employeesPrivilege1);
         employeesPrivilegeRepository.save(employeesPrivilege2);
