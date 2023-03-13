@@ -63,8 +63,9 @@ public class PatientService {
         medicalRecord.setRegistrationDate(Date.valueOf(LocalDate.now()));
 
         GeneralMedicalData generalMedicalData = new GeneralMedicalData();
+        generalMedicalData.setBloodType("A");
+        generalMedicalData.setRH("+");
         generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
-        //nzm sta da dodajem kod generalMedicalData, pa sam ostavio sve prazno
 
         medicalRecord.setGeneralMedicalData(generalMedicalData);
         medicalRecordRepository.save(medicalRecord);

@@ -41,7 +41,7 @@ public class PatientController {
 
     //Registracija pacijenta
     //priv: visa med sesta, med sestra
-    @CheckPermission(permissions = {"MED_SESTRA, VISA_MED_SESTRA"})
+    @CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
     @RequestMapping(value="/register",
                     method = RequestMethod.POST,
                     consumes = "application/json",
@@ -56,7 +56,7 @@ public class PatientController {
 
     //Azuriranje podataka pacijenta
     //visa med sestra, med sestra
-    @CheckPermission(permissions = {"MED_SESTRA, VISA_MED_SESTRA"})
+    @CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
     @RequestMapping(method = RequestMethod.PUT,
                     consumes = "application/json",
                     produces = "application/json")
@@ -83,7 +83,7 @@ public class PatientController {
 
 
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom, visa med sestra, med sestra
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV, VISA_MED_SESTRA, MED_SESTRA"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV", "VISA_MED_SESTRA", "MED_SESTRA"})
     @RequestMapping(value = "/filter",
                     method = RequestMethod.GET,
                     produces = "application/json")
@@ -106,7 +106,7 @@ public class PatientController {
 
     //Pretraga pacijenta preko LBP-a
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/find/{lbp}")
     public ResponseEntity<Patient> findPatientLBP(@RequestHeader("Authorization") String authorization,
                                                   @PathVariable("lbp") String lbp){// @Valid @RequestBody Object object
@@ -123,7 +123,7 @@ public class PatientController {
 
     //Dobijanje istorije bolesti pacijenta
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
     public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@RequestHeader("Authorization") String authorization,
                                                                            @Param("lbp")String lbp,
@@ -143,7 +143,7 @@ public class PatientController {
 
     //Svi izvestaji
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
     public ResponseEntity<?> findReportPatient(@RequestHeader("Authorization") String authorization,
                                                @Param("lbp") String lbp,
@@ -182,7 +182,7 @@ public class PatientController {
 
     //Svi kartoni
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
     @GetMapping(
             path = "/findMedicalRecord/{ppn}",
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -197,7 +197,7 @@ public class PatientController {
 
     //Krvne grupe
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
     public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
         return null;

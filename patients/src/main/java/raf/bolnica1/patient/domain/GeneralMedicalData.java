@@ -17,5 +17,5 @@ public class GeneralMedicalData {
     @Pattern(regexp = "^(A|B|AB|O)$")
     private String bloodType;
     @Pattern(regexp = "[+-]")
-    private char rH;
+    private String rH;
 }

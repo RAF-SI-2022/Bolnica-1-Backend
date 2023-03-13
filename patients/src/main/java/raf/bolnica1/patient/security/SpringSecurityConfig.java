@@ -24,9 +24,9 @@ public class SpringSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/v3/api-docs", "/swagger-ui/**","/swagger-ui/**", "/bus/v3/api-docs/**").permitAll()
                 .antMatchers("/h2-console/").permitAll()
-                .anyRequest().permitAll()
-                .and().csrf().ignoringAntMatchers("/h2-console/")
-                .and().headers().frameOptions().sameOrigin();
+                .anyRequest().permitAll();
+//                .and().csrf().ignoringAntMatchers("/h2-console/")
+//                .and().headers().frameOptions().sameOrigin();
 
 
         http.sessionManagement()
