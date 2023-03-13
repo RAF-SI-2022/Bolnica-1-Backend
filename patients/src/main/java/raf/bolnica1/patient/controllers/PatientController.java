@@ -6,25 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import raf.bolnica1.patient.checking.CheckPermission;
-import raf.bolnica1.patient.dto.MedicalRecordDto;
+import raf.bolnica1.patient.dto.*;
 
-import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
 
-import raf.bolnica1.patient.dto.PatientDto;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
-import raf.bolnica1.patient.dto.PatientDtoReport;
+
 import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.MediaType;
+import raf.bolnica1.patient.services.PatientService;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 
 
@@ -189,24 +184,29 @@ public class PatientController {
     public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
                                                                          @PathVariable("ppn") String lbp){
 
-        //provera jwt tokena zbog privilegija
-
         return ResponseEntity.ok(patientService.findMedicalRecordByLbp(lbp));
     }
 
 
     //Krvne grupe
-    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC, DR_SPEC_POV"})
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
-    public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
-        return null;
+    @GetMapping(
+            path = "/findDetails/{ppn}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDetailsDto> findPatientDetails(@PathVariable("ppn") String lbp){
+
+        return ResponseEntity.ok(patientService.findPatientDetails(lbp));
+
     }
 
     @GetMapping("/admin/test")
     @CheckPermission(permissions = {"ADMIN", "MED_SESTRA"})
     public ResponseEntity<String> getMess(@RequestHeader("Authorization") String authorization){
         return new ResponseEntity<>("super radi!", HttpStatus.OK);
+    }
+
+    @GetMapping("/findDetails/{lbp}")
+    public ResponseEntity<GeneralMedicalDataDto> getGeneralMedicalDataByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findGeneralMedicalDataByLbp(lbp),HttpStatus.OK);
     }
 
 }
