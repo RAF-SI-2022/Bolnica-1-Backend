@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import raf.bolnica1.patient.checking.CheckPermission;
 import raf.bolnica1.patient.dto.MedicalRecordDto;
 
 import raf.bolnica1.patient.domain.Patient;
@@ -174,7 +175,10 @@ public class PatientController {
         return null;
     }
 
-
-
+    @GetMapping("/admin/test")
+    @CheckPermission(permissions = {"ADMIN", "MED_SESTRA"})
+    public ResponseEntity<String> getMess(@RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<>("super radi!", HttpStatus.OK);
+    }
 
 }

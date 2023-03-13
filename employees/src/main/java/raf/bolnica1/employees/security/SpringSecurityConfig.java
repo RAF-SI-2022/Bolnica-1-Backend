@@ -1,7 +1,5 @@
 package raf.bolnica1.employees.security;
 
-import lombok.AllArgsConstructor;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,10 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
 import raf.bolnica1.employees.filters.JwtFilter;
-import raf.bolnica1.employees.services.JwtUserDetailService;
-
-import java.util.Arrays;
-import java.util.List;
+import raf.bolnica1.employees.services.auth.JwtUserDetailService;
 
 @Configuration
 @EnableWebSecurity

@@ -390,7 +390,7 @@ public class EmployeeServiceTest {
         dto.setEmail("johndoe@ibis.rs");
         dto.setTitle(Title.MR);
         dto.setProfession(Profession.MED_SESTRA);
-        dto.setDepartment(1L);
+        dto.setDepartmentPbo("12345");
         return dto;
     }
 
@@ -440,7 +440,7 @@ public class EmployeeServiceTest {
         Department department = new Department();
         department.setId(1L);
         department.setName("Department");
-        employeeUpdateAdminDto.setDepartment(department);
+        employeeUpdateAdminDto.setDepartmentPbo(department.getPbo());
         return employeeUpdateAdminDto;
     }
 
