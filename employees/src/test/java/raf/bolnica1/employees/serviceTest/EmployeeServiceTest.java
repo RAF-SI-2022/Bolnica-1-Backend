@@ -156,7 +156,7 @@ public class EmployeeServiceTest {
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), departmentName.toLowerCase(), hospitalShortName.toLowerCase())).thenReturn(employeePage);
+        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, departmentName, hospitalShortName)).thenReturn(employeePage);
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
 
         Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
@@ -182,7 +182,7 @@ public class EmployeeServiceTest {
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), departmentName.toLowerCase(), hospitalShortName.toLowerCase())).thenReturn(employeePage);
+        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, departmentName, hospitalShortName)).thenReturn(employeePage);
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
 
         Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
@@ -207,14 +207,14 @@ public class EmployeeServiceTest {
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), true, departmentName.toLowerCase(), hospitalShortName.toLowerCase())).thenReturn(employeePage);
+        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, true, departmentName, hospitalShortName)).thenReturn(employeePage);
         when(employeeMapper.toDto(employee)).thenReturn(new EmployeeDto());
 
         Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        verify(employeeRepository).listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), true, departmentName.toLowerCase(), hospitalShortName.toLowerCase());
+        verify(employeeRepository).listEmployeesWithFilters(pageable, name, surname, true, departmentName, hospitalShortName);
         verify(employeeMapper).toDto(employee);
     }
 
@@ -234,7 +234,7 @@ public class EmployeeServiceTest {
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), false, departmentName.toLowerCase(), hospitalShortName.toLowerCase())).thenReturn(employeePage);
+        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, false, departmentName, hospitalShortName)).thenReturn(employeePage);
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
 
         Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
