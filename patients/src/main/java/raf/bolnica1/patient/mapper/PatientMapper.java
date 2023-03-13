@@ -16,13 +16,15 @@ public class PatientMapper {
 
         if(dto.getId() != null)
             patient.setId(dto.getId());
+        if(dto.getLbp() != null && !dto.getLbp().equals(""))
+            patient.setLbp(dto.getLbp());
         patient.setJmbg(dto.getJmbg());
         patient.setName(dto.getName());
         patient.setParentName(dto.getParentName());
         patient.setSurname(dto.getSurname());
         patient.setGender(dto.getGender());
         patient.setDateOfBirth(Date.valueOf(dto.getDateOfBirth()));
-        if(!dto.getDateAndTimeOfDeath().equals(""))
+        if(dto.getDateAndTimeOfDeath() != null && !dto.getDateAndTimeOfDeath().equals(""))
             patient.setDateAndTimeOfDeath(Timestamp.valueOf(dto.getDateAndTimeOfDeath()));
         patient.setBirthPlace(dto.getBirthPlace());
         patient.setPlaceOfLiving(dto.getPlaceOfLiving());

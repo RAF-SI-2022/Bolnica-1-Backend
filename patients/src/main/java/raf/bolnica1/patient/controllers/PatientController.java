@@ -32,11 +32,14 @@ public class PatientController {
     }
 
     //Registracija pacijenta
+    //priv: visa med sesta, med sestra
+    @CheckPermission(permissions = {"MED_SESTRA, VISA_MED_SESTRA"})
     @RequestMapping(value="/register",
                     method = RequestMethod.POST,
                     consumes = "application/json",
                     produces = "application/json")
-    public ResponseEntity<PatientDto> registerPatient(@RequestBody PatientDto patient){
+    public ResponseEntity<PatientDto> registerPatient(@RequestHeader("Authorization") String authorization,
+                                                      @RequestBody PatientDto patient){
         patient = patientService.registerPatient(patient);
         if(patient != null)
             return ResponseEntity.ok(patient);
@@ -44,11 +47,13 @@ public class PatientController {
     }
 
     //Azuriranje podataka pacijenta
-
+    //visa med sestra, med sestra
+    @CheckPermission(permissions = {"MED_SESTRA, VISA_MED_SESTRA"})
     @RequestMapping(method = RequestMethod.PUT,
                     consumes = "application/json",
                     produces = "application/json")
-    public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patient){
+    public ResponseEntity<PatientDto> updatePatient(@RequestHeader("Authorization") String authorization,
+                                                    @RequestBody PatientDto patient){
         patient = patientService.updatePatient(patient);
         if(patient != null)
             return ResponseEntity.ok(patient);
@@ -57,29 +62,34 @@ public class PatientController {
 
 
     //Brisanje pacijenta
-
+//    priv: visa med sestra
+    @CheckPermission(permissions = {"VISA_MED_SESTRA"})
     @RequestMapping(value = "/delete/{lbp}",
             method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletePatient(@PathVariable String lbp){
+    public ResponseEntity<?> deletePatient(@RequestHeader("Authorization") String authorization,
+                                           @PathVariable String lbp){
         if(patientService.deletePatient(lbp))
             return ResponseEntity.ok().build();
         return ResponseEntity.badRequest().build();
     }
 
 
-
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom, visa med sestra, med sestra
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV, VISA_MED_SESTRA, MED_SESTRA"})
     @RequestMapping(value = "/filter",
                     method = RequestMethod.GET,
                     produces = "application/json")
-    public ResponseEntity<List<PatientDto>> filterPatients(@Param("lbp")String lbp,
-                                                        @Param("jmbg")String jmbg,
-                                                        @Param("name")String name,
-                                                        @Param("surname")String surname){
+    public ResponseEntity<List<PatientDto>> filterPatients(@RequestHeader("Authorization") String authorization,
+                                                            @Param("lbp")String lbp,
+                                                            @Param("jmbg")String jmbg,
+                                                            @Param("name")String name,
+                                                            @Param("surname")String surname){
         List<PatientDto> patients = patientService.filterPatients(lbp, jmbg, name, surname);
         return ResponseEntity.ok(patients);
     }
 
     //Pretraga pacijenta
+    //priv:
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/find")
     public ResponseEntity<Object> findPatient(@Valid @RequestBody Object object){
         return null;
@@ -87,8 +97,11 @@ public class PatientController {
 
 
     //Pretraga pacijenta preko LBP-a
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/find/{lbp}")
-    public ResponseEntity<Patient> findPatientLBP(@PathVariable("lbp") String lbp){// @Valid @RequestBody Object object
+    public ResponseEntity<Patient> findPatientLBP(@RequestHeader("Authorization") String authorization,
+                                                  @PathVariable("lbp") String lbp){// @Valid @RequestBody Object object
         //Dohvatanje konkretnog pacijenta preko lbp-a
         Patient patient = patientService.findPatientLBP(lbp);
 
@@ -101,8 +114,11 @@ public class PatientController {
     }
 
     //Dobijanje istorije bolesti pacijenta
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
-    public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@Param("lbp")String lbp,
+    public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@RequestHeader("Authorization") String authorization,
+                                                                           @Param("lbp")String lbp,
                                                                            @Param("mkb10")Long mkb10){
         //Dohvatanje istorija bolesti preko lbpa-a pacijenta i preko mkb10 (dijagnoza)
         List<PatientDtoDesease> medicalHistory = patientService.hisotryOfDeseasePatient(lbp,mkb10);
@@ -118,8 +134,11 @@ public class PatientController {
 
 
     //Svi izvestaji
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
-    public ResponseEntity<?> findReportPatient(@Param("lbp") String lbp,
+    public ResponseEntity<?> findReportPatient(@RequestHeader("Authorization") String authorization,
+                                               @Param("lbp") String lbp,
                                                @Param("currDate") Date currDate,
                                                @Param("fromDate") Date fromDate,
                                                @Param("toDate") Date toDate){
@@ -154,10 +173,13 @@ public class PatientController {
 
 
     //Svi kartoni
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(
             path = "/findMedicalRecord/{ppn}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@PathVariable("ppn") String lbp){
+    public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
+                                                                         @PathVariable("ppn") String lbp){
 
         //provera jwt tokena zbog privilegija
 
@@ -166,6 +188,8 @@ public class PatientController {
 
 
     //Krvne grupe
+    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
     public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
         return null;
