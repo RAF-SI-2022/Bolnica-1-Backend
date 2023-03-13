@@ -25,6 +25,7 @@ public class AuthService {
         List<EmployeesPrivilege> employeesPrivilegeList = this.employeesPrivilegeRepository.findByEmployee(employee);
         for(String neededPermission : permissions.getPermissionsCheckDtoList()) {
           for (EmployeesPrivilege employeesPrivilege : employeesPrivilegeList) {
+              System.out.println("POREDIM " + neededPermission + " VS " + employeesPrivilege.getPrivilege().getPrivilegeShort().name());
             if (employeesPrivilege.getPrivilege().getPrivilegeShort().name().equals(neededPermission))
               return true;
           }
