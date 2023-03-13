@@ -45,6 +45,25 @@ public interface PatientService {
 
 
     //Registracija pacijenta
+    public PatientDto registerPatient(PatientDto dto){
+        Patient patient = PatientMapper.patientDtoToPatient(dto);
+        patient.setLbp(UUID.randomUUID().toString());
+
+        patient.setSocialData(socialDataRepository.save(patient.getSocialData()));
+
+        patient = patientRepository.save(patient);
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setPatient(patient);
+        medicalRecord.setRegistrationDate(Date.valueOf(LocalDate.now()));
+
+        GeneralMedicalData generalMedicalData = new GeneralMedicalData();
+        generalMedicalData.setBloodType("A");
+        generalMedicalData.setRH("+");
+        generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
+}
+
+    //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto);
 
     //Azuriranje podataka pacijenta
