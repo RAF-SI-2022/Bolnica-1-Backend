@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.checking.CheckPermission;
 import raf.bolnica1.patient.dto.*;
 
-import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
+
 
 import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.MediaType;
+import raf.bolnica1.patient.services.PatientService;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 
 
@@ -203,6 +201,11 @@ public class PatientController {
     @CheckPermission(permissions = {"ADMIN", "MED_SESTRA"})
     public ResponseEntity<String> getMess(@RequestHeader("Authorization") String authorization){
         return new ResponseEntity<>("super radi!", HttpStatus.OK);
+    }
+
+    @GetMapping("/findDetails/{lbp}")
+    public ResponseEntity<GeneralMedicalDataDto> getGeneralMedicalDataByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findGeneralMedicalDataByLbp(lbp),HttpStatus.OK);
     }
 
 }
