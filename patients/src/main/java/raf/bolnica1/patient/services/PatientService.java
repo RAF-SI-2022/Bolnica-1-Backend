@@ -1,10 +1,7 @@
 package raf.bolnica1.patient.services;
 
 import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.dto.MedicalRecordDto;
-import raf.bolnica1.patient.dto.PatientDto;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
-import raf.bolnica1.patient.dto.PatientDtoReport;
+import raf.bolnica1.patient.dto.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -45,6 +42,7 @@ public interface PatientService {
     //Krvne grupe
     public Object findDetailsPatient(Object object);
 
-
+    //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
+    public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp);
 
 }

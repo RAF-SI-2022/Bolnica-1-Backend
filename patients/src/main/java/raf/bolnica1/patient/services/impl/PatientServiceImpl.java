@@ -6,17 +6,11 @@ import org.springframework.stereotype.Service;
 import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.dto.MedicalRecordDto;
+import raf.bolnica1.patient.dto.*;
 
 import raf.bolnica1.patient.domain.*;
 
-import raf.bolnica1.patient.dto.PatientDto;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
-import raf.bolnica1.patient.dto.PatientDtoReport;
-import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalRecordMapper;
-import raf.bolnica1.patient.mapper.PatientMapper;
+import raf.bolnica1.patient.mapper.*;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.PatientService;
 
@@ -38,14 +32,28 @@ public class PatientServiceImpl implements PatientService {
     private ExaminationHistoryRepository examinationHistoryRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
     private SocialDataRepository socialDataRepository;
+    private VaccinationDataRepository vaccinationDataRepository;
+    private AllergyDataRepository allergyDataRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository, GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository, MedicalHistoryRepository medicalHistoryRepository, ExaminationHistoryRepository examinationHistoryRepository) {
+
+    private GeneralMedicalDataMapper generalMedicalDataMapper;
+
+
+    public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository,
+                              GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,
+                              MedicalHistoryRepository medicalHistoryRepository, ExaminationHistoryRepository examinationHistoryRepository,
+                              ///VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
+                              GeneralMedicalDataMapper generalMedicalDataMapper
+    ) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.generalMedicalDataRepository = generalMedicalDataRepository;
         this.socialDataRepository = socialDataRepository;
         this.medicalHistoryRepository = medicalHistoryRepository;
         this.examinationHistoryRepository = examinationHistoryRepository;
+        this.vaccinationDataRepository=vaccinationDataRepository;
+        this.allergyDataRepository=allergyDataRepository;
+        this.generalMedicalDataMapper=generalMedicalDataMapper;
     }
 
     //Registracija pacijenta
@@ -260,6 +268,23 @@ public class PatientServiceImpl implements PatientService {
     //Krvne grupe
     public Object findDetailsPatient(Object object){
         return null;
+    }
+
+
+
+    public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp) {
+
+        MedicalRecord medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp).get();
+        if(medicalRecord==null)return null;
+        GeneralMedicalData generalMedicalData=medicalRecord.getGeneralMedicalData();
+        if(generalMedicalData==null)return null;
+
+        List<Vaccination> vaccinations=vaccinationDataRepository.findVaccinationsByGeneralMedicalData(generalMedicalData);
+        List<Allergy> allergies=allergyDataRepository.findAllergiesByGeneralMedicalData(generalMedicalData);
+
+        GeneralMedicalDataDto dto=generalMedicalDataMapper.toDto(generalMedicalData,vaccinations,allergies);
+
+        return dto;
     }
 
 }

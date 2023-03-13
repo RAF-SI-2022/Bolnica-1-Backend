@@ -4,6 +4,9 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Allergy;
 import raf.bolnica1.patient.dto.AllergyDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class AllergyMapper {
 
@@ -13,6 +16,16 @@ public class AllergyMapper {
         AllergyDto dto=new AllergyDto();
 
         dto.setName(allergy.getName());
+
+        return dto;
+    }
+
+    public List<AllergyDto> toDto(List<Allergy> allergies){
+        if(allergies==null)return null;
+
+        List<AllergyDto> dto=new ArrayList<>();
+        for(Allergy allergy:allergies)
+            dto.add(toDto(allergy));
 
         return dto;
     }

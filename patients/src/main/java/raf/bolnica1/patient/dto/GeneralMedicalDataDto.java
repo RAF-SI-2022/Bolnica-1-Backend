@@ -14,7 +14,7 @@ public class GeneralMedicalDataDto {
 
     private String bloodType;
     private char rH;
-    private List<VaccinationDto> vaccinationData;
-    private List<AllergyDto> allergyData;
+    private List<VaccinationDto> vaccinationDtos;
+    private List<AllergyDto> allergyDtos;
 
 }
