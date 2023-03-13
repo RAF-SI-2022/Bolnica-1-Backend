@@ -189,7 +189,7 @@ public class PatientController {
 
     //Krvne grupe
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = ("DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"))
+    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
     public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
         return null;
