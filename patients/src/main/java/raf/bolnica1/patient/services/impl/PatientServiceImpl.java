@@ -42,7 +42,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository,
                               GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,
                               MedicalHistoryRepository medicalHistoryRepository, ExaminationHistoryRepository examinationHistoryRepository,
-                              ///VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
+                              VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
                               GeneralMedicalDataMapper generalMedicalDataMapper
     ) {
         this.patientRepository = patientRepository;
