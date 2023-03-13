@@ -177,7 +177,7 @@ public class PatientController {
         return new ResponseEntity<>("super radi!", HttpStatus.OK);
     }
 
-    @GetMapping("/getGMD/{lbp}")
+    @GetMapping("/findDetails/{lbp}")
     public ResponseEntity<GeneralMedicalDataDto> getGeneralMedicalDataByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(patientService.findGeneralMedicalDataByLbp(lbp),HttpStatus.OK);
     }
