@@ -11,10 +11,16 @@ import raf.bolnica1.patient.domain.GeneralMedicalData;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface AllergyDataRepository extends JpaRepository<AllergyData, Long> {
 
     @Query("SELECT r.allergy FROM AllergyData r WHERE r.generalMedicalData=:gmd")
     public List<Allergy> findAllergiesByGeneralMedicalData(@Param("gmd") GeneralMedicalData generalMedicalData);
+
+
+    List<AllergyData> findAllByGeneralMedicalDataId(Long id);
 
 }

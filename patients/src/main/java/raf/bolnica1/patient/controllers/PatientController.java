@@ -10,6 +10,9 @@ import raf.bolnica1.patient.dto.*;
 
 import raf.bolnica1.patient.domain.Patient;
 
+
+import raf.bolnica1.patient.services.PatientService;
+
 //import java.util.Date;
 import java.sql.Date;
 import java.util.List;
@@ -181,18 +184,17 @@ public class PatientController {
     public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
                                                                          @PathVariable("ppn") String lbp){
 
-        //provera jwt tokena zbog privilegija
-
         return ResponseEntity.ok(patientService.findMedicalRecordByLbp(lbp));
     }
 
 
     //Krvne grupe
-    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA, DR_SPEC, DR_SPEC_POV"})
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
-    public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
-        return null;
+    @GetMapping(
+            path = "/findDetails/{ppn}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDetailsDto> findPatientDetails(@PathVariable("ppn") String lbp){
+
+        return ResponseEntity.ok(patientService.findPatientDetails(lbp));
     }
 
     @GetMapping("/admin/test")
