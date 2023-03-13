@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
+import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.services.DepartmentService;
 
 import java.util.List;
@@ -21,5 +22,10 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<List<DepartmentDto>> getAll(){
         return new ResponseEntity<>(departmentService.listAllDepartments(), HttpStatus.OK);
+    }
+
+    @GetMapping("/hospital")
+    public ResponseEntity<List<HospitalDto>> getAllHospitals(){
+        return new ResponseEntity<>(departmentService.listAllHospitals(), HttpStatus.OK);
     }
 }

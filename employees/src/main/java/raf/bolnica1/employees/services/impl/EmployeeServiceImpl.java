@@ -113,14 +113,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if(deleted == null || deleted.equals("")){
             return employeeRepository
-                    .listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), departmentName.toLowerCase(), hospitalShortName.toLowerCase())
+                    .listEmployeesWithFilters(pageable, name, surname, departmentName, hospitalShortName)
                     .map(employeeMapper::toDto);
         }
         if(!deleted.equals("false") && !deleted.equals("true")){
             throw new RuntimeException("Nije dobar parametar <deleted>");
         }
         return employeeRepository
-                .listEmployeesWithFilters(pageable, name.toLowerCase(), surname.toLowerCase(), Boolean.parseBoolean(deleted), departmentName.toLowerCase(), hospitalShortName.toLowerCase())
+                .listEmployeesWithFilters(pageable, name, surname, Boolean.parseBoolean(deleted), departmentName, hospitalShortName)
                 .map(employeeMapper::toDto);
     }
 
