@@ -6,21 +6,19 @@ import org.springframework.stereotype.Service;
 import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.dto.MedicalRecordDto;
+import raf.bolnica1.patient.dto.*;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import raf.bolnica1.patient.domain.*;
 
-import raf.bolnica1.patient.dto.PatientDto;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
-import raf.bolnica1.patient.dto.PatientDtoReport;
 import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalRecordMapper;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
 
+import javax.swing.text.html.Option;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,14 +37,18 @@ public class PatientService {
     private ExaminationHistoryRepository examinationHistoryRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
     private SocialDataRepository socialDataRepository;
+    private AllergyDataRepository allergyDataRepository;
+    private VaccinationDataRepository vaccinationDataRepository;
 
-    public PatientService(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository, GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,MedicalHistoryRepository medicalHistoryRepository,ExaminationHistoryRepository examinationHistoryRepository) {
+    public PatientService(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository, GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,MedicalHistoryRepository medicalHistoryRepository,ExaminationHistoryRepository examinationHistoryRepository, AllergyDataRepository allergyDataRepository, VaccinationDataRepository vaccinationDataRepository) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.generalMedicalDataRepository = generalMedicalDataRepository;
         this.socialDataRepository = socialDataRepository;
         this.medicalHistoryRepository = medicalHistoryRepository;
         this.examinationHistoryRepository = examinationHistoryRepository;
+        this.allergyDataRepository = allergyDataRepository;
+        this.vaccinationDataRepository = vaccinationDataRepository;
     }
 
     //Registracija pacijenta
@@ -245,7 +247,6 @@ public class PatientService {
 
 
     //Svi kartoni
-    //m22
     public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp) {
 
         Optional<List<MedicalRecord>> list = medicalRecordRepository.findByPatientLbp(lbp);
@@ -259,8 +260,45 @@ public class PatientService {
 
 
     //Krvne grupe
-    public Object findDetailsPatient(Object object){
-        return null;
+    public PatientDetailsDto findPatientDetails(String lbp){
+
+        Optional<Patient> patient = patientRepository.findByLbp(lbp);
+        Optional<List<MedicalRecord>> medicalRecordList = medicalRecordRepository.findByPatientLbp(patient.get().getLbp());
+
+        List<GeneralMedicalData> generalMedicalDataList = new ArrayList<>();
+        for (MedicalRecord medicalRecord : medicalRecordList.get()){
+            generalMedicalDataList.add(medicalRecord.getGeneralMedicalData());
+        }
+
+
+        List<AllergyData> allergyDataList = new ArrayList<>();
+        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
+            allergyDataList.addAll(allergyDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
+        }
+
+        List<Allergy> allergyList = new ArrayList<>();
+        for(AllergyData allergyData : allergyDataList){
+            allergyList.add(allergyData.getAllergy());
+        }
+
+
+        List<VaccinationData> vaccinationDataList = new ArrayList<>();
+        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
+            vaccinationDataList.addAll( vaccinationDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
+        }
+
+        List<Vaccination> vaccinationList = new ArrayList<>();
+        for(VaccinationData vaccinationData : vaccinationDataList){
+            vaccinationList.add(vaccinationData.getVaccination());
+        }
+
+        PatientDetailsDto patientDetailsDto = new PatientDetailsDto();
+        patientDetailsDto.setAllergies(allergyList);
+        patientDetailsDto.setVaccinations(vaccinationList);
+        patientDetailsDto.setRH(generalMedicalDataList.get(0).getRH());
+        patientDetailsDto.setBloodType(generalMedicalDataList.get(0).getBloodType());
+
+        return patientDetailsDto;
     }
 
 }

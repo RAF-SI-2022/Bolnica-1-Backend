@@ -6,15 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import raf.bolnica1.patient.checking.CheckPermission;
-import raf.bolnica1.patient.dto.MedicalRecordDto;
+import raf.bolnica1.patient.dto.*;
 
 import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.Patient;
 
-import raf.bolnica1.patient.dto.PatientDto;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
-import raf.bolnica1.patient.dto.PatientDtoReport;
 import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
@@ -167,16 +164,17 @@ public class PatientController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@PathVariable("ppn") String lbp){
 
-        //provera jwt tokena zbog privilegija
-
         return ResponseEntity.ok(patientService.findMedicalRecordByLbp(lbp));
     }
 
 
     //Krvne grupe
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDetails/{ppn}")
-    public ResponseEntity<Object> findDetailsPatient(@PathVariable("ppn") Long ppn, @Valid @RequestBody Object object){
-        return null;
+    @GetMapping(
+            path = "/findDetails/{ppn}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PatientDetailsDto> findPatientDetails(@PathVariable("ppn") String lbp){
+
+        return ResponseEntity.ok(patientService.findPatientDetails(lbp));
     }
 
     @GetMapping("/admin/test")
