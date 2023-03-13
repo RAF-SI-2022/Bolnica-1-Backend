@@ -6,7 +6,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
@@ -28,7 +27,7 @@ public class EmployeeSecurityAspect {
     private ObjectMapper objectMapper;
     private RestTemplate userServiceRestTemplate;
 
-    public EmployeeSecurityAspect(TokenService tokenService, @Qualifier("userRestTemplate") RestTemplate userServiceRestTemplate){
+    public EmployeeSecurityAspect(TokenService tokenService, RestTemplate userServiceRestTemplate){
         this.tokenService = tokenService;
         this.objectMapper = new ObjectMapper();
         this.userServiceRestTemplate = userServiceRestTemplate;
