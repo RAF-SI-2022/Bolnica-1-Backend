@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.services;
+package raf.bolnica1.employees.services.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.EmployeesPrivilege;
 import raf.bolnica1.employees.repository.EmployeesPrivilegeRepository;
+import raf.bolnica1.employees.services.EmployeeService;
 
 import java.util.Collection;
 import java.util.HashSet;

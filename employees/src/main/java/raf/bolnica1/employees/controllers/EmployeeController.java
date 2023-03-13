@@ -13,7 +13,9 @@ import raf.bolnica1.employees.checking.CheckEmployee;
 import raf.bolnica1.employees.checking.jwtService.TokenService;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.dto.employee.*;
+import raf.bolnica1.employees.dto.privilege.PrivilegeDto;
 import raf.bolnica1.employees.repository.EmployeeRepository;
+import raf.bolnica1.employees.services.EmployeePrivilegeService;
 import raf.bolnica1.employees.services.EmployeeService;
 
 import javax.validation.Valid;
@@ -25,6 +27,7 @@ import java.util.List;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+    private EmployeePrivilegeService employeePrivilegeService;
     private TokenService tokenService;
 
     @PostMapping
@@ -92,5 +95,10 @@ public class EmployeeController {
         String token = tokenService.generateToken(claims);
         System.out.println(token);
         return new ResponseEntity<String>(token, HttpStatus.OK);
+    }
+
+    @GetMapping("/permissions/{lbz}")
+    public ResponseEntity<List<PrivilegeDto>> getAllEmployeePermissions(@PathVariable String lbz){
+        return new ResponseEntity<>(employeePrivilegeService.privilegeForEmployee(lbz), HttpStatus.OK);
     }
 }
