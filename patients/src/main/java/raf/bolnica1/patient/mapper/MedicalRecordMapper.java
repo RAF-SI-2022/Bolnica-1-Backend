@@ -41,7 +41,7 @@ public class MedicalRecordMapper {
         medicalRecord.setGeneralMedicalData(medicalRecordDto.getGeneralMedicalData());
         medicalRecord.setDeleted(medicalRecordDto.isDeleted());
 
-        return null;
+        return medicalRecord;
     }
 
     public static List<MedicalRecord> allToEntity(List<MedicalRecordDto> listDto){
