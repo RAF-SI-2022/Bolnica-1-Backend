@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.config;
+package raf.bolnica1.employees.appConfig;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
