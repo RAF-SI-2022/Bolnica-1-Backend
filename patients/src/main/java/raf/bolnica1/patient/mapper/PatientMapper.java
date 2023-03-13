@@ -16,6 +16,8 @@ public class PatientMapper {
 
         if(dto.getId() != null)
             patient.setId(dto.getId());
+        if(dto.getLbp() != null && !dto.getLbp().equals(""))
+            patient.setLbp(dto.getLbp());
         patient.setJmbg(dto.getJmbg());
         patient.setName(dto.getName());
         patient.setParentName(dto.getParentName());
