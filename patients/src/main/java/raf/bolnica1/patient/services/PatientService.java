@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.services;
 
+import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.*;
 
@@ -52,6 +53,8 @@ public interface PatientService {
     public List<OperationDto> findOperationsByLbp(String lbp);
 
     ///Dohvatanje liste MedicalHistory po LBP
-    public List<MedicalHistoryDto> findMedicalHystoryByLbp(String lbp);
+    public List<MedicalHistoryDto> findMedicalHistoryByLbp(String lbp);
 
+    ///Dohvatanje liste ExaminationHistory po LBP
+    public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
 }

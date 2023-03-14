@@ -1,40 +1,53 @@
 package raf.bolnica1.patient.mapper;
 
+import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.dto.PatientDtoReport;
+import raf.bolnica1.patient.dto.AnamnesisDto;
+import raf.bolnica1.patient.dto.ExaminationHistoryDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ExaminationHistoryMapper {
 
-    public static PatientDtoReport toDto(ExaminationHistory examinationHistory){
+    private DiagnosisCodeMapper diagnosisCodeMapper;
+    private TherapyMapper therapyMapper;
+    private AnamnesisMapper anamnesisMapper;
 
-        PatientDtoReport dto = new PatientDtoReport();
+    public ExaminationHistoryMapper(DiagnosisCodeMapper diagnosisCodeMapper,TherapyMapper therapyMapper,
+                                    AnamnesisMapper anamnesisMapper){
+        this.diagnosisCodeMapper=diagnosisCodeMapper;
+        this.therapyMapper=therapyMapper;
+        this.anamnesisMapper=anamnesisMapper;
+    }
 
-       dto.setId(examinationHistory.getId());
-       dto.setAdvice(examinationHistory.getAdvice());
-       dto.setAnamnesis(examinationHistory.getAnamnesis());
-       dto.setExamDate(examinationHistory.getExamDate());
-       dto.setLbz(examinationHistory.getLbz());
-       dto.setConfidential(examinationHistory.isConfidential());
-       dto.setObjectiveFinding(examinationHistory.getObjectiveFinding());
-       dto.setDiagnosisCode(examinationHistory.getDiagnosisCode());
-       dto.setTherapy(examinationHistory.getTherapy());
+    public ExaminationHistoryDto toDto(ExaminationHistory entity){
+        if(entity==null)return null;
 
+        ExaminationHistoryDto dto=new ExaminationHistoryDto();
+
+        dto.setAdvice(entity.getAdvice());
+        dto.setConfidential(entity.isConfidential());
+        dto.setLbz(entity.getLbz());
+        dto.setObjectiveFinding(entity.getObjectiveFinding());
+        dto.setExamDate(entity.getExamDate());
+        dto.setAnamnesisDto(anamnesisMapper.toDto(entity.getAnamnesis()));
+        dto.setTherapyDto(therapyMapper.toDto(entity.getTherapy()));
+        dto.setDiagnosisCodeDto(diagnosisCodeMapper.toDto(entity.getDiagnosisCode()));
 
         return dto;
     }
 
-    public static List<PatientDtoReport> allToDto(List<ExaminationHistory> list){
+    public List<ExaminationHistoryDto> toDto(List<ExaminationHistory> examinationHistories){
+        if(examinationHistories==null)return null;
 
-        List<PatientDtoReport> listDto = new ArrayList<>();
+        List<ExaminationHistoryDto> dto=new ArrayList<>();
 
-        for(ExaminationHistory examinationHistory: list){
-            listDto.add(toDto(examinationHistory));
-        }
+        for(ExaminationHistory examinationHistory:examinationHistories)
+            dto.add(toDto(examinationHistory));
 
-        return listDto;
+        return dto;
     }
 
 }

@@ -40,6 +40,7 @@ public class PatientServiceImpl implements PatientService {
     private GeneralMedicalDataMapper generalMedicalDataMapper;
     private OperationMapper operationMapper;
     private MedicalHistoryMapper medicalHistoryMapper;
+    private ExaminationHistoryMapper examinationHistoryMapper;
 
 
     public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository,
@@ -47,7 +48,8 @@ public class PatientServiceImpl implements PatientService {
                               MedicalHistoryRepository medicalHistoryRepository, ExaminationHistoryRepository examinationHistoryRepository,
                               VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
                               GeneralMedicalDataMapper generalMedicalDataMapper, OperationRepository operationRepository,
-                              OperationMapper operationMapper, MedicalHistoryMapper medicalHistoryMapper
+                              OperationMapper operationMapper, MedicalHistoryMapper medicalHistoryMapper,
+                              ExaminationHistoryMapper examinationHistoryMapper
     ) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
@@ -61,6 +63,7 @@ public class PatientServiceImpl implements PatientService {
         this.operationRepository=operationRepository;
         this.operationMapper=operationMapper;
         this.medicalHistoryMapper=medicalHistoryMapper;
+        this.examinationHistoryMapper=examinationHistoryMapper;
     }
 
     //Registracija pacijenta
@@ -229,7 +232,7 @@ public class PatientServiceImpl implements PatientService {
 
         //Provera da li postoje izvestaji pregleda, ako postoje mapiramo na dto koji vracamo na front ako ne postoji onda vracamo null
         if(examination.isPresent()){
-            return ExaminationHistoryMapper.allToDto(examination.get());
+            return PatientReportMapper.allToDto(examination.get());
         }
 
 
@@ -253,7 +256,7 @@ public class PatientServiceImpl implements PatientService {
 
         //Provera da li postoje izvestaji pregleda, ako postoje mapiramo na dto koji vracamo na front ako ne postoji onda vracamo null
         if(examination.isPresent()){
-            return ExaminationHistoryMapper.allToDto(examination.get());
+            return PatientReportMapper.allToDto(examination.get());
         }
 
         return null;
@@ -306,7 +309,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     ///Dohvatanje liste MedicalHistory po LBP
-    public List<MedicalHistoryDto> findMedicalHystoryByLbp(String lbp) {
+    public List<MedicalHistoryDto> findMedicalHistoryByLbp(String lbp) {
 
         Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
         if(!medicalRecord.isPresent())return null;
@@ -316,5 +319,16 @@ public class PatientServiceImpl implements PatientService {
         return medicalHistoryMapper.toDto(medicalHistories);
     }
 
+    ///Dohvatanje liste ExaminationHistory po LBP
+    public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp){
+
+        Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
+        if(!medicalRecord.isPresent())return null;
+
+        List<ExaminationHistory> examinationHistories=examinationHistoryRepository.findExaminationHistoryByMedicalRecord(medicalRecord.get());
+
+        return examinationHistoryMapper.toDto(examinationHistories);
+
+    }
 
 }
