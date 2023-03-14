@@ -103,7 +103,7 @@ public class PatientServiceUnitTest {
         md1.setPatient(patient);
         md1.setRegistrationDate(Date.valueOf(LocalDate.now()));
         GeneralMedicalData gmd1 = new GeneralMedicalData();
-        gmd1.setRH('+');
+        gmd1.setRH("+");
         gmd1.setBloodType("A");
         md1.setGeneralMedicalData(gmd1);
 
@@ -111,7 +111,7 @@ public class PatientServiceUnitTest {
         md2.setDeleted(false);
         md2.setRegistrationDate(Date.valueOf(LocalDate.now()));
         GeneralMedicalData gmd2 = new GeneralMedicalData();
-        gmd2.setRH('+');
+        gmd2.setRH("+");
         gmd2.setBloodType("A");
         md2.setGeneralMedicalData(gmd2);
 
