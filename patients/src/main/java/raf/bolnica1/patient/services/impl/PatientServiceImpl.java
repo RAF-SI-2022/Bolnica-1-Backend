@@ -77,6 +77,8 @@ public class PatientServiceImpl implements PatientService {
         medicalRecord.setGeneralMedicalData(generalMedicalData);
         medicalRecordRepository.save(medicalRecord);
 
+        dto.setLbp(patient.getLbp());
+        dto.setId(patient.getId());
         return dto;
     }
 

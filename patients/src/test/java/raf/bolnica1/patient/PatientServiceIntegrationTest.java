@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import raf.bolnica1.patient.domain.constants.*;
 import raf.bolnica1.patient.dto.PatientDto;
@@ -39,8 +41,23 @@ public class PatientServiceIntegrationTest {
 
     @Test
     void testDeletePatient() throws Exception{
-        mockMvc.perform(delete("/patient/delete/"+UUID.randomUUID().toString())
+
+        PatientDto dto = createDto();
+        dto.setName("Testoslav");
+        dto.setSurname("Pacijentic");
+        dto.setJmbg("6549873210");
+
+        ResultActions resultActions = mockMvc.perform(post("/patient/register")
                         .contentType("application/json")
+                        .header("Authorization", "Bearer " + token)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+        MvcResult mvcResult = resultActions.andReturn();
+
+        String loginResponse = mvcResult.getResponse().getContentAsString();
+        PatientDto patientDto = objectMapper.readValue(loginResponse, PatientDto.class);
+
+        mockMvc.perform(delete("/patient/delete/"+patientDto.getLbp())
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
@@ -48,22 +65,34 @@ public class PatientServiceIntegrationTest {
     @Test
     void testUpdatePatient() throws Exception{
         PatientDto dto = createDto();
-        dto.setName("Perica");
-        dto.setSurname("Mali");
 
-        mockMvc.perform(put("/patient")
+        ResultActions resultActions = mockMvc.perform(post("/patient/register")
                         .contentType("application/json")
                         .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+        MvcResult mvcResult = resultActions.andReturn();
+
+        String loginResponse = mvcResult.getResponse().getContentAsString();
+        PatientDto patientDto = objectMapper.readValue(loginResponse, PatientDto.class);
+
+        patientDto.setName("Perica");
+        patientDto.setSurname("Mali");
+
+        //azuriramo pacijenta koji ima id pacijenta koji je kreiran iznad
+        mockMvc.perform(put("/patient")
+                        .contentType("application/json")
+                        .header("Authorization", "Bearer " + token)
+                        .content(objectMapper.writeValueAsString(patientDto)))
                 .andExpect(status().isOk());
     }
 
     @Test
     void testFilterPatients() throws Exception{
 
-        String jmbg = "";
+        String jmbg = "12345678910";
         String lbp = "";
-        String name = "zeljko";
+        String name = "Marko";
         String surname = "";
 
         mockMvc.perform(get("/patient/filter?lbp="+lbp+"&jmbg="+jmbg+"&name="+name+"&surname="+surname)
@@ -76,7 +105,6 @@ public class PatientServiceIntegrationTest {
     private PatientDto createDto(){
         PatientDto dto = new PatientDto();
         dto.setLbp(UUID.randomUUID().toString());
-        dto.setId(Long.parseLong("1"));
         dto.setName("Petar");
         dto.setSurname("Petrovic");
         dto.setCitizenship(CountryCode.SRB);

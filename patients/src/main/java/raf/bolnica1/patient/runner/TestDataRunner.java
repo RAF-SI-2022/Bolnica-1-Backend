@@ -36,7 +36,7 @@ public class TestDataRunner implements CommandLineRunner {
         Patient patient2 = createEntity();
         Patient patient3 = createEntity();
 
-        patient2.setLbp(UUID.randomUUID().toString());
+        patient2.setLbp("testLBP");
         patient2.setName("Igor");
         patient2.setSurname("Igorovic");
         patient2.setJmbg("10987654321");
