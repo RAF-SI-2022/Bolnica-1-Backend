@@ -33,7 +33,17 @@ public class GeneralMedicalDataMapper {
         return dto;
     }
 
-    public GeneralMedicalDataDto toDto(GeneralMedicalData generalMedicalData, List<Vaccination> vaccinations, List<Allergy> allergies){
+    /*public GeneralMedicalDataDto toDto(GeneralMedicalData generalMedicalData, List<Vaccination> vaccinations, List<Allergy> allergies){
+        GeneralMedicalDataDto dto= toDto(generalMedicalData);
+        if(dto==null)return null;
+
+        dto.setVaccinationDtos(vaccinationMapper.toDto(vaccinations));
+        dto.setAllergyDtos(allergyMapper.toDto(allergies));
+
+        return dto;
+    }*/
+
+    public GeneralMedicalDataDto toDto(GeneralMedicalData generalMedicalData, List<Object[]> vaccinations, List<Allergy> allergies) {
         GeneralMedicalDataDto dto= toDto(generalMedicalData);
         if(dto==null)return null;
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class GeneralMedicalDataDto {
 
     private String bloodType;
-    private char rH;
+    private String rH;
     private List<VaccinationDto> vaccinationDtos;
     private List<AllergyDto> allergyDtos;
 
