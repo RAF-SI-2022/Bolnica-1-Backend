@@ -9,5 +9,7 @@ public interface DepartmentService {
 
      List<DepartmentDto> listAllDepartments();
 
+     DepartmentDto getEmployeesDepartment(String pbo);
+
      List<HospitalDto> listAllHospitals();
 }

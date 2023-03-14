@@ -183,11 +183,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeChanged = employeeMapper.toEntity(dto, employee);
         employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
         employeeChanged = employeeRepository.save(employeeChanged);
+        System.out.println("Proveraaa ");
         changePermissions(employeeChanged, dto.getPermissions());
         return employeeMapper.toDto(employeeChanged);
     }
 
     private void changePermissions(Employee employeeChanged, List<String> permissions) {
+        for(EmployeesPrivilege employeesPrivilege : employeesPrivilegeRepository.findByEmployee(employeeChanged)){
+            employeesPrivilegeRepository.delete(employeesPrivilege);
+        }
+        System.out.println("Dodajem");
         employeesPrivilegeRepository.deleteAll(employeesPrivilegeRepository.findByEmployee(employeeChanged));
         addEmployeePermission(employeeChanged, permissions);
     }
