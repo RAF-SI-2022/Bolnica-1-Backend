@@ -34,16 +34,20 @@ public class PatientServiceImpl implements PatientService {
     private SocialDataRepository socialDataRepository;
     private VaccinationDataRepository vaccinationDataRepository;
     private AllergyDataRepository allergyDataRepository;
+    private OperationRepository operationRepository;
 
 
     private GeneralMedicalDataMapper generalMedicalDataMapper;
+    private OperationMapper operationMapper;
+    private MedicalHistoryMapper medicalHistoryMapper;
 
 
     public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository,
                               GeneralMedicalDataRepository generalMedicalDataRepository, SocialDataRepository socialDataRepository,
                               MedicalHistoryRepository medicalHistoryRepository, ExaminationHistoryRepository examinationHistoryRepository,
                               VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
-                              GeneralMedicalDataMapper generalMedicalDataMapper
+                              GeneralMedicalDataMapper generalMedicalDataMapper, OperationRepository operationRepository,
+                              OperationMapper operationMapper, MedicalHistoryMapper medicalHistoryMapper
     ) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
@@ -54,6 +58,9 @@ public class PatientServiceImpl implements PatientService {
         this.vaccinationDataRepository=vaccinationDataRepository;
         this.allergyDataRepository=allergyDataRepository;
         this.generalMedicalDataMapper=generalMedicalDataMapper;
+        this.operationRepository=operationRepository;
+        this.operationMapper=operationMapper;
+        this.medicalHistoryMapper=medicalHistoryMapper;
     }
 
     //Registracija pacijenta
@@ -197,7 +204,7 @@ public class PatientServiceImpl implements PatientService {
 
         //Provera da li postoji bolest ako postoji onda mapiramo na dto koji vracamo na front, ako ne postoji onda vracamo null
         if(history.isPresent()){
-            return MedicalHistoryMapper.allToDto(history.get());
+            return PatientDeseaseMapper.allToDto(history.get());
         }
 
         return null;
@@ -254,19 +261,20 @@ public class PatientServiceImpl implements PatientService {
 
 
 
-    ///TODO:prepraviti da bude samo jedan record, i verovatno da vrati ceo medical record
     //Svi kartoni
     //m22
-    public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp) {
+    public MedicalRecordDto findMedicalRecordByLbp(String lbp) {
 
-        Optional<List<MedicalRecord>> list = medicalRecordRepository.findByPatientLbp(lbp);
+        Optional<MedicalRecord> list = medicalRecordRepository.findByPatient_Lbp(lbp);
 
         if(list.isPresent()){
-            return MedicalRecordMapper.allToDto(list.get());
+            return MedicalRecordMapper.toDto(list.get());
         } else {
             return null;
         }
     }
+
+
 
 
 
@@ -285,5 +293,28 @@ public class PatientServiceImpl implements PatientService {
 
         return dto;
     }
+
+    ///Dohvatanje liste operacije koje odgovaraju LBP
+    public List<OperationDto> findOperationsByLbp(String lbp) {
+
+        Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
+        if(!medicalRecord.isPresent())return null;
+
+        List<Operation> operations=operationRepository.findOperationsByMedicalRecord(medicalRecord.get());
+
+        return operationMapper.toDto(operations);
+    }
+
+    ///Dohvatanje liste MedicalHistory po LBP
+    public List<MedicalHistoryDto> findMedicalHystoryByLbp(String lbp) {
+
+        Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
+        if(!medicalRecord.isPresent())return null;
+
+        List<MedicalHistory> medicalHistories=medicalHistoryRepository.findMedicalHistoryByMedicalRecord(medicalRecord.get());
+
+        return medicalHistoryMapper.toDto(medicalHistories);
+    }
+
 
 }

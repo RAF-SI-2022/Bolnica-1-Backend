@@ -181,7 +181,7 @@ public class PatientController {
     @GetMapping(
             path = "/findMedicalRecord/{ppn}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MedicalRecordDto>> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
+    public ResponseEntity<MedicalRecordDto> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
                                                                          @PathVariable("ppn") String lbp){
 
         return ResponseEntity.ok(patientService.findMedicalRecordByLbp(lbp));

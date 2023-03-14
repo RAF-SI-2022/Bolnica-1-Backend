@@ -4,18 +4,6 @@ import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.*;
 
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import raf.bolnica1.patient.domain.*;
-
-import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalRecordMapper;
-import raf.bolnica1.patient.mapper.PatientMapper;
-import raf.bolnica1.patient.repository.*;
-
-
-import javax.swing.text.html.Option;
 import java.sql.Date;
 import java.util.List;
 
@@ -54,10 +42,16 @@ public interface PatientService {
     //Svi kartoni
 
     //m22
-    public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp);
+    public MedicalRecordDto findMedicalRecordByLbp(String lbp);
 
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
     public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp);
+
+    ///Dohvatanje liste operacije po LBP
+    public List<OperationDto> findOperationsByLbp(String lbp);
+
+    ///Dohvatanje liste MedicalHistory po LBP
+    public List<MedicalHistoryDto> findMedicalHystoryByLbp(String lbp);
 
 }
