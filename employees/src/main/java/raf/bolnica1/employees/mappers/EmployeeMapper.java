@@ -59,7 +59,6 @@ public class EmployeeMapper {
         dto.setProfession(entity.getProfession());
         dto.setDepartment(entity.getDepartment());
         return dto;
-
     }
 
     public Employee toEntity(EmployeeUpdateAdminDto dto, Employee employee) {

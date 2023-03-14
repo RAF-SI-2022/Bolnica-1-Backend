@@ -71,7 +71,7 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/admin/find/{lbz}")
-    @PreAuthorize("ADMIN")
+    // @PreAuthorize("ADMIN")
     public ResponseEntity<EmployeeDto> findEmployeeInfoByAdmin(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
