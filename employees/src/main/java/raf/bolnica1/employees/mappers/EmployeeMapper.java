@@ -73,7 +73,7 @@ public class EmployeeMapper {
         employee.setEmail(dto.getEmail());
         employee.setDeleted(dto.isDeleted());
         employee.setUsername(dto.getUsername());
-        if(!(dto.getPassword() == null || dto.getPassword().equals("")))
+        if(dto.getPassword() != null && !dto.getPassword().equals(""))
             employee.setPassword(dto.getPassword());
         employee.setTitle(dto.getTitle());
         employee.setProfession(dto.getProfession());
