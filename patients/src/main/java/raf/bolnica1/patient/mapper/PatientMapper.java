@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.mapper;
 
+import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.SocialData;
 import raf.bolnica1.patient.dto.PatientDto;
@@ -9,9 +10,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class PatientMapper {
 
-    public static Patient patientDtoToPatient(PatientDto dto){
+    public Patient patientDtoToPatient(PatientDto dto){
         Patient patient = new Patient();
 
         if(dto.getId() != null)
@@ -47,7 +49,7 @@ public class PatientMapper {
         return patient;
     }
 
-    public static PatientDto patientToPatientDto(Patient patient){
+    public PatientDto patientToPatientDto(Patient patient){
         PatientDto dto = new PatientDto();
 
         if(patient.getId() != null)
@@ -79,7 +81,7 @@ public class PatientMapper {
         return dto;
     }
 
-    public static List<PatientDto> allToDto(List<Patient> entityList){
+    public List<PatientDto> allToDto(List<Patient> entityList){
         List<PatientDto> dtoList = new ArrayList<>();
         for(Patient patient: entityList){
             dtoList.add(patientToPatientDto(patient));
@@ -87,7 +89,7 @@ public class PatientMapper {
         return dtoList;
     }
 
-    public static List<Patient> allToEntity(List<PatientDto> dtoList){
+    public List<Patient> allToEntity(List<PatientDto> dtoList){
         List<Patient> entityList = new ArrayList<>();
         for(PatientDto dto: dtoList){
             entityList.add(patientDtoToPatient(dto));
@@ -96,7 +98,7 @@ public class PatientMapper {
     }
 
 
-    public static void compareAndSet(PatientDto dto, Patient patient){
+    public void compareAndSet(PatientDto dto, Patient patient){
         if(dto.getJmbg() != null && !dto.getJmbg().equals(""))
             patient.setJmbg(dto.getJmbg());
         if(dto.getName() != null && !dto.getName().equals(""))

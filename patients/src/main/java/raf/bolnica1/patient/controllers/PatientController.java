@@ -18,7 +18,6 @@ import java.sql.Date;
 import java.util.List;
 
 import org.springframework.http.MediaType;
-import raf.bolnica1.patient.services.PatientService;
 
 import javax.validation.Valid;
 
@@ -106,7 +105,7 @@ public class PatientController {
     public ResponseEntity<Patient> findPatientLBP(@RequestHeader("Authorization") String authorization,
                                                   @PathVariable("lbp") String lbp){// @Valid @RequestBody Object object
         //Dohvatanje konkretnog pacijenta preko lbp-a
-        Patient patient = patientService.findPatientLBP(lbp);
+        Patient patient = patientService.findDomainPatientLBP(lbp);
 
         //Provera da li pacijent postoji
         if( patient != null){
@@ -181,10 +180,10 @@ public class PatientController {
     @GetMapping(
             path = "/findMedicalRecord/{ppn}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MedicalRecordDto> findMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
-                                                                         @PathVariable("ppn") String lbp){
+    public ResponseEntity<LightMedicalRecordDto> findLightMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
+                                                                        @PathVariable("ppn") String lbp){
 
-        return ResponseEntity.ok(patientService.findMedicalRecordByLbp(lbp));
+        return ResponseEntity.ok(patientService.findLightMedicalRecordByLbp(lbp));
     }
 
 

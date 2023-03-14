@@ -41,6 +41,8 @@ public class PatientServiceImpl implements PatientService {
     private OperationMapper operationMapper;
     private MedicalHistoryMapper medicalHistoryMapper;
     private ExaminationHistoryMapper examinationHistoryMapper;
+    private MedicalRecordMapper medicalRecordMapper;
+    private PatientMapper patientMapper;
 
 
     public PatientServiceImpl(PatientRepository patientRepository, MedicalRecordRepository medicalRecordRepository,
@@ -49,7 +51,8 @@ public class PatientServiceImpl implements PatientService {
                               VaccinationDataRepository vaccinationDataRepository,AllergyDataRepository allergyDataRepository,
                               GeneralMedicalDataMapper generalMedicalDataMapper, OperationRepository operationRepository,
                               OperationMapper operationMapper, MedicalHistoryMapper medicalHistoryMapper,
-                              ExaminationHistoryMapper examinationHistoryMapper
+                              ExaminationHistoryMapper examinationHistoryMapper,MedicalRecordMapper medicalRecordMapper,
+                              PatientMapper patientMapper
     ) {
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
@@ -64,11 +67,13 @@ public class PatientServiceImpl implements PatientService {
         this.operationMapper=operationMapper;
         this.medicalHistoryMapper=medicalHistoryMapper;
         this.examinationHistoryMapper=examinationHistoryMapper;
+        this.medicalRecordMapper=medicalRecordMapper;
+        this.patientMapper=patientMapper;
     }
 
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto){
-        Patient patient = PatientMapper.patientDtoToPatient(dto);
+        Patient patient = patientMapper.patientDtoToPatient(dto);
         patient.setLbp(UUID.randomUUID().toString());
 
         patient.setSocialData(socialDataRepository.save(patient.getSocialData()));
@@ -95,7 +100,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto updatePatient(PatientDto dto){
         Optional<Patient> patient = patientRepository.findById(dto.getId());
         if(patient.isPresent()){
-            PatientMapper.compareAndSet(dto, patient.get());
+            patientMapper.compareAndSet(dto, patient.get());
             socialDataRepository.save(patient.get().getSocialData());
             patientRepository.save(patient.get());
             return dto;
@@ -166,7 +171,7 @@ public class PatientServiceImpl implements PatientService {
         //izbacujemo sve pacijente koji su "obrisani"
         patients.removeIf(p -> p.isDeleted());
 
-        return PatientMapper.allToDto(patients);
+        return patientMapper.allToDto(patients);
     }
 
     //Pretraga pacijenta
@@ -176,7 +181,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     //Pretraga pacijenta preko LBP-a
-    public Patient findPatientLBP(String lbp){
+    public Patient findDomainPatientLBP(String lbp){
 
         Optional<Patient> patient;
         patient = patientRepository.findByLbp(lbp);
@@ -266,12 +271,12 @@ public class PatientServiceImpl implements PatientService {
 
     //Svi kartoni
     //m22
-    public MedicalRecordDto findMedicalRecordByLbp(String lbp) {
+    public LightMedicalRecordDto findLightMedicalRecordByLbp(String lbp) {
 
         Optional<MedicalRecord> list = medicalRecordRepository.findByPatient_Lbp(lbp);
 
         if(list.isPresent()){
-            return MedicalRecordMapper.toDto(list.get());
+            return LightMedicalRecordMapper.toDto(list.get());
         } else {
             return null;
         }
@@ -329,6 +334,27 @@ public class PatientServiceImpl implements PatientService {
 
         return examinationHistoryMapper.toDto(examinationHistories);
 
+    }
+
+    ///Dohvatanje Patient po LBP
+    public PatientDto findPatientByLBP(String lbp){
+
+        Optional<Patient> patient=patientRepository.findByLbp(lbp);
+        if(!patient.isPresent())return null;
+
+        return patientMapper.patientToPatientDto(patient.get());
+    }
+
+    ///Dohvatanje CELOG MedicalRecord po LBP
+    public MedicalRecordDto findMedicalRecordByLbp(String lbp){
+
+        Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
+        if(!medicalRecord.isPresent())return null;
+
+        return medicalRecordMapper.toDto(medicalRecord.get(),findPatientByLBP(lbp),
+                findGeneralMedicalDataByLbp(lbp),findOperationsByLbp(lbp),findMedicalHistoryByLbp(lbp),
+                findExaminationHistoryByLbp(lbp)
+        );
     }
 
 }

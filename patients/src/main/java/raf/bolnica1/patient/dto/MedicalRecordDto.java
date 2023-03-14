@@ -2,15 +2,18 @@ package raf.bolnica1.patient.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import raf.bolnica1.patient.domain.GeneralMedicalData;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
 public class MedicalRecordDto {
-    private Long id;
+
     private Date registrationDate;
-    private boolean deleted;
-    private GeneralMedicalData generalMedicalData;
+    private PatientDto patient;
+    private GeneralMedicalDataDto generalMedicalDataDto;
+    private List<OperationDto> operationDtos;
+    private List<MedicalHistoryDto> medicalHistoryDtos;
+    private List<ExaminationHistoryDto> examinationHistoryDtos;
 }

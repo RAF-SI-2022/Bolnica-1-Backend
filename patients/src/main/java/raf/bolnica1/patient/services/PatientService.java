@@ -1,6 +1,5 @@
 package raf.bolnica1.patient.services;
 
-import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.*;
 
@@ -28,7 +27,7 @@ public interface PatientService {
     public Object findPatient(Object object);
 
     //Pretraga pacijenta preko LBP-a
-    public Patient findPatientLBP(String lbp);
+    public Patient findDomainPatientLBP(String lbp);
 
     //Dobijanje istorije bolesti pacijenta
     public List<PatientDtoDesease> hisotryOfDeseasePatient(String  lbp, Long mkb10);
@@ -43,7 +42,7 @@ public interface PatientService {
     //Svi kartoni
 
     //m22
-    public MedicalRecordDto findMedicalRecordByLbp(String lbp);
+    public LightMedicalRecordDto findLightMedicalRecordByLbp(String lbp);
 
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
@@ -57,4 +56,10 @@ public interface PatientService {
 
     ///Dohvatanje liste ExaminationHistory po LBP
     public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
+
+    ///Dohvatanje Patient po LBP
+    public PatientDto findPatientByLBP(String lbp);
+
+    ///Dohvatanje CELOG MedicalRecord po LBP
+    public MedicalRecordDto findMedicalRecordByLbp(String lbp);
 }
