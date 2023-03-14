@@ -337,7 +337,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     ///Dohvatanje Patient po LBP
-    public PatientDto findPatientByLBP(String lbp){
+    public PatientDto findPatientByLbp(String lbp){
 
         Optional<Patient> patient=patientRepository.findByLbp(lbp);
         if(!patient.isPresent())return null;
@@ -351,7 +351,7 @@ public class PatientServiceImpl implements PatientService {
         Optional<MedicalRecord> medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp);
         if(!medicalRecord.isPresent())return null;
 
-        return medicalRecordMapper.toDto(medicalRecord.get(),findPatientByLBP(lbp),
+        return medicalRecordMapper.toDto(medicalRecord.get(),findPatientByLbp(lbp),
                 findGeneralMedicalDataByLbp(lbp),findOperationsByLbp(lbp),findMedicalHistoryByLbp(lbp),
                 findExaminationHistoryByLbp(lbp)
         );

@@ -194,9 +194,35 @@ public class PatientController {
         return new ResponseEntity<>("super radi!", HttpStatus.OK);
     }
 
-    @GetMapping("/findDetails/{lbp}")
+    @GetMapping("/myFindGMD/{lbp}")
     public ResponseEntity<GeneralMedicalDataDto> getGeneralMedicalDataByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(patientService.findGeneralMedicalDataByLbp(lbp),HttpStatus.OK);
     }
+
+    @GetMapping("/myFindOperations/{lbp}")
+    public ResponseEntity<List<OperationDto>> getOperationsByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findOperationsByLbp(lbp),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindMedicalHistories/{lbp}")
+    public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoryByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findMedicalHistoryByLbp(lbp),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindExaminationHistories/{lbp}")
+    public ResponseEntity<List<ExaminationHistoryDto>> getExaminationHistoryByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findExaminationHistoryByLbp(lbp),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindPatient/{lbp}")
+    public ResponseEntity<PatientDto> getPatientByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findPatientByLbp(lbp),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindMedicalRecord/{lbp}")
+    public ResponseEntity<MedicalRecordDto> getMedicalRecordByLbp(@PathVariable String lbp){
+        return new ResponseEntity<>(patientService.findMedicalRecordByLbp(lbp),HttpStatus.OK);
+    }
+
 
 }

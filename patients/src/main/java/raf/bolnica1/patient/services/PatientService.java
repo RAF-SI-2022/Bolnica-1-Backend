@@ -58,7 +58,7 @@ public interface PatientService {
     public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
 
     ///Dohvatanje Patient po LBP
-    public PatientDto findPatientByLBP(String lbp);
+    public PatientDto findPatientByLbp(String lbp);
 
     ///Dohvatanje CELOG MedicalRecord po LBP
     public MedicalRecordDto findMedicalRecordByLbp(String lbp);
