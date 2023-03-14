@@ -56,6 +56,7 @@ public class PatientServiceImpl implements PatientService {
         this.generalMedicalDataMapper=generalMedicalDataMapper;
     }
 
+    ///TODO: vrv izmeniti dto podatke da ne sadrze Domain klase
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto){
         Patient patient = PatientMapper.patientDtoToPatient(dto);
@@ -80,6 +81,7 @@ public class PatientServiceImpl implements PatientService {
         return dto;
     }
 
+
     //Azuriranje podataka pacijenta
     public PatientDto updatePatient(PatientDto dto){
         Optional<Patient> patient = patientRepository.findById(dto.getId());
@@ -92,6 +94,8 @@ public class PatientServiceImpl implements PatientService {
         return null;
     }
 
+
+    ///TODO: uzasno neefikasan kveri izbacivanja medicalRecorda
     //Brisanje pacijenta
     public boolean deletePatient(String lbp){
         Optional<Patient> patient = patientRepository.findByLbp(lbp);
@@ -113,6 +117,7 @@ public class PatientServiceImpl implements PatientService {
         }
         return false;
     }
+
 
 
     public List<PatientDto> filterPatients(String lbp, String jmbg, String name, String surname){
@@ -180,6 +185,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
+    ///TODO: pretraga medicalHystory nije dobra, DiagnosisCode_Id(id polje generisano u bazi) nije isto sto i mkb10 vrv
     //Dobijanje istorije bolesti pacijenta
     public List<PatientDtoDesease> hisotryOfDeseasePatient(String  lbp, Long mkb10){
         //Dohvatanje konkretnog pacijenta preko lbp-a

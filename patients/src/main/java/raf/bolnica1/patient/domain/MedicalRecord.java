@@ -14,7 +14,7 @@ public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="lbp", referencedColumnName="lbp")
     private Patient patient;
     private Date registrationDate;
