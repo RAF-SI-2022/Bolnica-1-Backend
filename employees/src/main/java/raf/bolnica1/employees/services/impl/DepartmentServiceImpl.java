@@ -7,6 +7,7 @@ import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Hospital;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
+import raf.bolnica1.employees.exceptions.department.DepartmentNotFoundException;
 import raf.bolnica1.employees.repository.DepartmentRepository;
 import raf.bolnica1.employees.repository.HospitalRepository;
 import raf.bolnica1.employees.services.DepartmentService;
@@ -30,6 +31,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return departmentDtos;
     }
+
+    @Override
+    public DepartmentDto getEmployeesDepartment(String pbo) {
+        Department department = departmentRepository.findByPbo(pbo).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with pbo %s not found", pbo)));
+        return new DepartmentDto(department.getId(), department.getPbo(), department.getName(), department.getHospital().getShortName());
+    }
+
 
     @Override
     public List<HospitalDto> listAllHospitals() {

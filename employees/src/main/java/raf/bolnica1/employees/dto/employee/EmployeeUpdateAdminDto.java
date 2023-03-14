@@ -42,8 +42,7 @@ public class EmployeeUpdateAdminDto {
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}$")
     /// Username can start with letter only, can have numbers, and length must be between 5 and 30
     private String username;
-    @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9_.-]{5,30}$")
+    @Pattern(regexp = "^(?:[a-zA-Z0-9_.-]{5,30})?$")
     /// Password can have letters, numbers and special characters like _ . - length should be between 5 and 30
     private String password;
     private boolean deleted;
