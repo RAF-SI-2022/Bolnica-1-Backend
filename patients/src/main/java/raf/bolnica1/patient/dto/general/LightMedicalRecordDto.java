@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class MedicalRecordDto {
+public class LightMedicalRecordDto {
     private Long id;
     private Date registrationDate;
     private boolean deleted;

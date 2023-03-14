@@ -3,7 +3,7 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Vaccination;
-import raf.bolnica1.patient.dto.VaccinationDto;
+import raf.bolnica1.patient.dto.general.VaccinationDto;
 
 import java.sql.Date;
 import java.util.ArrayList;

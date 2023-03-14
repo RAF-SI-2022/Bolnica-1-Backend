@@ -6,4 +6,5 @@ import raf.bolnica1.patient.domain.DiagnosisCode;
 
 @Repository
 public interface DiagnosisCodeRepository extends JpaRepository<DiagnosisCode, Long> {
+    DiagnosisCode findByCode(String code);
 }

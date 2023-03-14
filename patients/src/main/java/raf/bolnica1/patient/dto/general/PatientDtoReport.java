@@ -1,13 +1,10 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.patient.domain.Anamnesis;
 import raf.bolnica1.patient.domain.DiagnosisCode;
 
-import raf.bolnica1.patient.domain.Therapy;
 
-
-import javax.persistence.ManyToOne;
 import java.sql.Date;
 @Getter
 @Setter
@@ -21,7 +18,6 @@ public class PatientDtoReport {
     private String advice;
     private DiagnosisCode diagnosisCode;
     private Anamnesis anamnesis;
-    private Therapy therapy;
 
     }
 
