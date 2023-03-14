@@ -153,6 +153,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeChanged = employeeMapper.toEntity(dto, employee);
         employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
         employeeChanged = employeeRepository.save(employeeChanged);
+        System.out.println("Proveraaa ");
         changePermissions(employeeChanged, dto.getPermissions());
         return employeeMapper.toDto(employee);
     }
@@ -161,6 +162,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         for(EmployeesPrivilege employeesPrivilege : employeesPrivilegeRepository.findByEmployee(employeeChanged)){
             employeesPrivilegeRepository.delete(employeesPrivilege);
         }
+        System.out.println("Dodajem");
         addEmployeePermission(employeeChanged, permissions);
     }
 

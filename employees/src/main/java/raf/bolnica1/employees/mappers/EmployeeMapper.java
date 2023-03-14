@@ -74,7 +74,8 @@ public class EmployeeMapper {
         employee.setEmail(dto.getEmail());
         employee.setDeleted(dto.isDeleted());
         employee.setUsername(dto.getUsername());
-        employee.setPassword(dto.getPassword());
+        if(!(dto.getPassword() == null || dto.getPassword().equals("")))
+            employee.setPassword(dto.getPassword());
         employee.setTitle(dto.getTitle());
         employee.setProfession(dto.getProfession());
         Department department = departmentRepository.findByPbo(dto.getDepartmentPbo()).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with pbo <%s> not found.", dto.getDepartmentPbo())));
