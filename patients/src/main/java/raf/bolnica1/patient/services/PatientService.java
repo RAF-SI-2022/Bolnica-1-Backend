@@ -56,11 +56,6 @@ public interface PatientService {
     //m22
     public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp);
 
-    //Krvne grupe
-    public Object findDetailsPatient(Object object);
-
-    //Krvne grupe
-    public PatientDetailsDto findPatientDetails(String lbp);
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
     public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp);

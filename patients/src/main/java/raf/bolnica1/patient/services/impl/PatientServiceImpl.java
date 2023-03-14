@@ -258,6 +258,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
+
+    ///TODO:prepraviti da bude samo jedan record, i verovatno da vrati ceo medical record
     //Svi kartoni
     //m22
     public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp) {
@@ -271,53 +273,6 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
-
-    public Object findDetailsPatient(Object object) {
-        return null;
-    }
-
-
-    //Krvne grupe
-    public PatientDetailsDto findPatientDetails(String lbp){
-
-        Optional<Patient> patient = patientRepository.findByLbp(lbp);
-        Optional<List<MedicalRecord>> medicalRecordList = medicalRecordRepository.findByPatientLbp(patient.get().getLbp());
-
-        List<GeneralMedicalData> generalMedicalDataList = new ArrayList<>();
-        for (MedicalRecord medicalRecord : medicalRecordList.get()){
-            generalMedicalDataList.add(medicalRecord.getGeneralMedicalData());
-        }
-
-
-        List<AllergyData> allergyDataList = new ArrayList<>();
-        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
-            allergyDataList.addAll(allergyDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
-        }
-
-        List<Allergy> allergyList = new ArrayList<>();
-        for(AllergyData allergyData : allergyDataList){
-            allergyList.add(allergyData.getAllergy());
-        }
-
-
-        List<VaccinationData> vaccinationDataList = new ArrayList<>();
-        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
-            vaccinationDataList.addAll( vaccinationDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
-        }
-
-        List<Vaccination> vaccinationList = new ArrayList<>();
-        for(VaccinationData vaccinationData : vaccinationDataList){
-            vaccinationList.add(vaccinationData.getVaccination());
-        }
-
-        PatientDetailsDto patientDetailsDto = new PatientDetailsDto();
-        patientDetailsDto.setAllergies(allergyList);
-        patientDetailsDto.setVaccinations(vaccinationList);
-        patientDetailsDto.setRH(generalMedicalDataList.get(0).getRH());
-        patientDetailsDto.setBloodType(generalMedicalDataList.get(0).getBloodType());
-
-        return patientDetailsDto;
-    }
 
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
