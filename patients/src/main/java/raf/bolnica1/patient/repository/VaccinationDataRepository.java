@@ -22,8 +22,8 @@ import java.util.List;
 public interface VaccinationDataRepository extends JpaRepository<VaccinationData, Long> {
 
 
-    @Query("SELECT r.vaccination FROM VaccinationData r WHERE r.generalMedicalData=:gmd")
-    public List<Vaccination> findVaccinationsByGeneralMedicalData(@Param("gmd")GeneralMedicalData generalMedicalData);
+    @Query("SELECT r.vaccination,r.vaccinationDate FROM VaccinationData r WHERE r.generalMedicalData=:gmd")
+    public List<Object[]> findVaccinationsByGeneralMedicalData(@Param("gmd")GeneralMedicalData generalMedicalData);
 
 
     List<VaccinationData> findAllByGeneralMedicalDataId(Long id);

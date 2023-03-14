@@ -70,8 +70,9 @@ public class PatientServiceImpl implements PatientService {
         medicalRecord.setRegistrationDate(Date.valueOf(LocalDate.now()));
 
         GeneralMedicalData generalMedicalData = new GeneralMedicalData();
+        generalMedicalData.setBloodType("A");
+        generalMedicalData.setRH("+");
         generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
-        //nzm sta da dodajem kod generalMedicalData, pa sam ostavio sve prazno
 
         medicalRecord.setGeneralMedicalData(generalMedicalData);
         medicalRecordRepository.save(medicalRecord);
@@ -265,13 +266,55 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
-    //Krvne grupe
-    public Object findDetailsPatient(Object object){
+    public Object findDetailsPatient(Object object) {
         return null;
     }
 
 
+    //Krvne grupe
+    public PatientDetailsDto findPatientDetails(String lbp){
 
+        Optional<Patient> patient = patientRepository.findByLbp(lbp);
+        Optional<List<MedicalRecord>> medicalRecordList = medicalRecordRepository.findByPatientLbp(patient.get().getLbp());
+
+        List<GeneralMedicalData> generalMedicalDataList = new ArrayList<>();
+        for (MedicalRecord medicalRecord : medicalRecordList.get()){
+            generalMedicalDataList.add(medicalRecord.getGeneralMedicalData());
+        }
+
+
+        List<AllergyData> allergyDataList = new ArrayList<>();
+        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
+            allergyDataList.addAll(allergyDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
+        }
+
+        List<Allergy> allergyList = new ArrayList<>();
+        for(AllergyData allergyData : allergyDataList){
+            allergyList.add(allergyData.getAllergy());
+        }
+
+
+        List<VaccinationData> vaccinationDataList = new ArrayList<>();
+        for (GeneralMedicalData generalMedicalData : generalMedicalDataList) {
+            vaccinationDataList.addAll( vaccinationDataRepository.findAllByGeneralMedicalDataId(generalMedicalData.getId()));
+        }
+
+        List<Vaccination> vaccinationList = new ArrayList<>();
+        for(VaccinationData vaccinationData : vaccinationDataList){
+            vaccinationList.add(vaccinationData.getVaccination());
+        }
+
+        PatientDetailsDto patientDetailsDto = new PatientDetailsDto();
+        patientDetailsDto.setAllergies(allergyList);
+        patientDetailsDto.setVaccinations(vaccinationList);
+        patientDetailsDto.setRH(generalMedicalDataList.get(0).getRH());
+        patientDetailsDto.setBloodType(generalMedicalDataList.get(0).getBloodType());
+
+        return patientDetailsDto;
+    }
+
+
+    //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
     public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp) {
 
         MedicalRecord medicalRecord=medicalRecordRepository.findByPatient_Lbp(lbp).get();
@@ -279,10 +322,10 @@ public class PatientServiceImpl implements PatientService {
         GeneralMedicalData generalMedicalData=medicalRecord.getGeneralMedicalData();
         if(generalMedicalData==null)return null;
 
-        List<Vaccination> vaccinations=vaccinationDataRepository.findVaccinationsByGeneralMedicalData(generalMedicalData);
+        List<Object[]> vaccinationsAndDates=vaccinationDataRepository.findVaccinationsByGeneralMedicalData(generalMedicalData);
         List<Allergy> allergies=allergyDataRepository.findAllergiesByGeneralMedicalData(generalMedicalData);
 
-        GeneralMedicalDataDto dto=generalMedicalDataMapper.toDto(generalMedicalData,vaccinations,allergies);
+        GeneralMedicalDataDto dto=generalMedicalDataMapper.toDto(generalMedicalData,vaccinationsAndDates,allergies);
 
         return dto;
     }
