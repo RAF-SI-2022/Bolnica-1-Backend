@@ -3,11 +3,8 @@ package raf.bolnica1.patient.mapper;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Allergy;
 import raf.bolnica1.patient.domain.GeneralMedicalData;
-import raf.bolnica1.patient.domain.Vaccination;
-import raf.bolnica1.patient.domain.VaccinationData;
-import raf.bolnica1.patient.dto.AllergyDto;
-import raf.bolnica1.patient.dto.GeneralMedicalDataDto;
-import raf.bolnica1.patient.dto.VaccinationDto;
+import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
+import raf.bolnica1.patient.dto.general.GeneralMedicalDataDto;
 
 import java.util.List;
 
@@ -53,13 +50,13 @@ public class GeneralMedicalDataMapper {
         return dto;
     }
 
-    public GeneralMedicalData toEntity(GeneralMedicalDataDto generalMedicalDataDto){
-        if(generalMedicalDataDto==null)return null;
+    public GeneralMedicalData toEntity(GeneralMedicalDataCreateDto generalMedicalDataCreateDto){
+        if(generalMedicalDataCreateDto ==null)return null;
 
         GeneralMedicalData entity=new GeneralMedicalData();
 
-        entity.setBloodType(generalMedicalDataDto.getBloodType());
-        entity.setRH(generalMedicalDataDto.getRH());
+        entity.setBloodType(generalMedicalDataCreateDto.getBloodType());
+        entity.setRH(generalMedicalDataCreateDto.getRH());
 
         return entity;
     }

@@ -1,7 +1,10 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
+import raf.bolnica1.patient.dto.create.OperationCreateDto;
 
 import java.sql.Date;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @Setter
 public class MedicalRecordDto {
 
+    private Long id;
     private Date registrationDate;
     private PatientDto patient;
     private GeneralMedicalDataDto generalMedicalDataDto;

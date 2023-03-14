@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class DiagnosisCodeDto {
 
+    private String code;
     private String description;
     private String latinDescription;
 }

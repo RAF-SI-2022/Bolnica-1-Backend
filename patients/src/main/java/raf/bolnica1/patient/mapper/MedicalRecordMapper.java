@@ -2,7 +2,10 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.MedicalRecord;
-import raf.bolnica1.patient.dto.*;
+import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
+import raf.bolnica1.patient.dto.create.OperationCreateDto;
+import raf.bolnica1.patient.dto.general.*;
 
 import java.util.List;
 
@@ -27,5 +30,4 @@ public class MedicalRecordMapper {
 
         return dto;
     }
-
 }

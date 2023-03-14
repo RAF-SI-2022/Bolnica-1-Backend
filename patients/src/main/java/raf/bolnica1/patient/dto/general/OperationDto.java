@@ -1,17 +1,15 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
-import raf.bolnica1.patient.domain.MedicalRecord;
 
-import javax.persistence.ManyToOne;
 import java.sql.Date;
 
 @Getter
 @Setter
 public class OperationDto {
 
+    private Long id;
     private Date operationDate;
     private Long hospitalId;
     private Long departmentId;

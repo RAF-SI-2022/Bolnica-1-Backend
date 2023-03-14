@@ -2,7 +2,7 @@ package raf.bolnica1.patient.mapper;
 
 
 import raf.bolnica1.patient.domain.MedicalHistory;
-import raf.bolnica1.patient.dto.PatientDtoDesease;
+import raf.bolnica1.patient.dto.general.PatientDtoDesease;
 
 import java.util.ArrayList;
 import java.util.List;

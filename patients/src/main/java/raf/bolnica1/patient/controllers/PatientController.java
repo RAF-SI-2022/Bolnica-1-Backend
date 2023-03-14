@@ -1,16 +1,21 @@
 package raf.bolnica1.patient.controllers;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import raf.bolnica1.patient.checking.CheckPermission;
-import raf.bolnica1.patient.dto.*;
 
 import raf.bolnica1.patient.domain.Patient;
 
 
+import raf.bolnica1.patient.dto.create.PatientCreateDto;
+import raf.bolnica1.patient.dto.create.PatientGeneralDto;
+import raf.bolnica1.patient.dto.create.PatientUpdateDto;
+import raf.bolnica1.patient.dto.general.*;
+import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
@@ -24,58 +29,41 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/patient")
+@AllArgsConstructor
 public class PatientController {
 
-
     private PatientService patientService;
-
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
-    }
+    private PatientCrudService patientCrudService;
 
     //Registracija pacijenta
     //priv: visa med sesta, med sestra
-    @CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
-    @RequestMapping(value="/register",
-                    method = RequestMethod.POST,
-                    consumes = "application/json",
-                    produces = "application/json")
+    //@CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
+    @PostMapping("/register")
     public ResponseEntity<PatientDto> registerPatient(@RequestHeader("Authorization") String authorization,
-                                                      @RequestBody PatientDto patient){
-        patient = patientService.registerPatient(patient);
-        if(patient != null)
-            return ResponseEntity.ok(patient);
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                                                      @RequestBody PatientCreateDto patient){
+        return new ResponseEntity<>(this.patientCrudService.registerPatient(patient), HttpStatus.OK);
     }
 
     //Azuriranje podataka pacijenta
     //visa med sestra, med sestra
-    @CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
-    @RequestMapping(method = RequestMethod.PUT,
-                    consumes = "application/json",
-                    produces = "application/json")
+    //@CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
+    @PutMapping
     public ResponseEntity<PatientDto> updatePatient(@RequestHeader("Authorization") String authorization,
-                                                    @RequestBody PatientDto patient){
-        patient = patientService.updatePatient(patient);
-        if(patient != null)
-            return ResponseEntity.ok(patient);
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                                                    @RequestBody PatientUpdateDto patientCreateDto){
+        return new ResponseEntity<>(this.patientCrudService.updatePatient(patientCreateDto), HttpStatus.OK);
     }
 
 
     //Brisanje pacijenta
 //    priv: visa med sestra
-    @CheckPermission(permissions = {"VISA_MED_SESTRA"})
-    @RequestMapping(value = "/delete/{lbp}",
-            method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletePatient(@RequestHeader("Authorization") String authorization,
+    /// @CheckPermission(permissions = {"VISA_MED_SESTRA"})
+    @DeleteMapping("/delete/{lbp}")
+    public ResponseEntity<MessageDto> deletePatient(@RequestHeader("Authorization") String authorization,
                                            @PathVariable String lbp){
-        if(patientService.deletePatient(lbp))
-            return ResponseEntity.ok().build();
-        return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(patientCrudService.deletePatient(lbp), HttpStatus.OK);
     }
 
-
+/**
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom, visa med sestra, med sestra
     @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC", "DR_SPEC_POV", "VISA_MED_SESTRA", "MED_SESTRA"})
     @RequestMapping(value = "/filter",
@@ -181,7 +169,7 @@ public class PatientController {
             path = "/findMedicalRecord/{ppn}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LightMedicalRecordDto> findLightMedicalRecordByLbp(@RequestHeader("Authorization") String authorization,
-                                                                        @PathVariable("ppn") String lbp){
+                                                                             @PathVariable("ppn") String lbp){
 
         return ResponseEntity.ok(patientService.findLightMedicalRecordByLbp(lbp));
     }
@@ -223,6 +211,6 @@ public class PatientController {
     public ResponseEntity<MedicalRecordDto> getMedicalRecordByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(patientService.findMedicalRecordByLbp(lbp),HttpStatus.OK);
     }
-
+*/
 
 }

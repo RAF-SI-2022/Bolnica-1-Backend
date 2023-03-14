@@ -1,7 +1,7 @@
 package raf.bolnica1.patient.mapper;
 
 import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.dto.PatientDtoReport;
+import raf.bolnica1.patient.dto.general.PatientDtoReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class PatientReportMapper {
        dto.setConfidential(examinationHistory.isConfidential());
        dto.setObjectiveFinding(examinationHistory.getObjectiveFinding());
        dto.setDiagnosisCode(examinationHistory.getDiagnosisCode());
-       dto.setTherapy(examinationHistory.getTherapy());
+       //dto.setTherapy(examinationHistory.getTherapy());
 
 
         return dto;

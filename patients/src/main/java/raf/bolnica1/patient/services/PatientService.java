@@ -1,7 +1,7 @@
 package raf.bolnica1.patient.services;
 
 import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.dto.*;
+import raf.bolnica1.patient.dto.general.*;
 
 
 import java.sql.Date;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PatientService {
 
-
+/**
 
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto);
@@ -62,4 +62,5 @@ public interface PatientService {
 
     ///Dohvatanje CELOG MedicalRecord po LBP
     public MedicalRecordDto findMedicalRecordByLbp(String lbp);
+*/
 }

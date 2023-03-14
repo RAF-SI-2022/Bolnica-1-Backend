@@ -2,7 +2,7 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Anamnesis;
-import raf.bolnica1.patient.dto.AnamnesisDto;
+import raf.bolnica1.patient.dto.general.AnamnesisDto;
 
 @Component
 public class AnamnesisMapper {
@@ -19,6 +19,17 @@ public class AnamnesisMapper {
         dto.setPatientOpinion(entity.getPatientOpinion());
 
         return dto;
+    }
+
+    public Anamnesis toEntity(AnamnesisDto anamnesisDto){
+        Anamnesis anamnesis = new Anamnesis();
+        anamnesis.setCurrDisease(anamnesisDto.getCurrDisease());
+        anamnesis.setPersonalAnamnesis(anamnesisDto.getPersonalAnamnesis());
+        anamnesis.setFamilyAnamnesis(anamnesisDto.getFamilyAnamnesis());
+        anamnesis.setMainProblems(anamnesisDto.getMainProblems());
+        anamnesis.setPatientOpinion(anamnesisDto.getPatientOpinion());
+
+        return anamnesis;
     }
 
 }

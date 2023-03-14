@@ -2,8 +2,8 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.ExaminationHistory;
-import raf.bolnica1.patient.dto.AnamnesisDto;
-import raf.bolnica1.patient.dto.ExaminationHistoryDto;
+import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
+import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,11 @@ import java.util.List;
 public class ExaminationHistoryMapper {
 
     private DiagnosisCodeMapper diagnosisCodeMapper;
-    private TherapyMapper therapyMapper;
     private AnamnesisMapper anamnesisMapper;
 
-    public ExaminationHistoryMapper(DiagnosisCodeMapper diagnosisCodeMapper,TherapyMapper therapyMapper,
+    public ExaminationHistoryMapper(DiagnosisCodeMapper diagnosisCodeMapper,
                                     AnamnesisMapper anamnesisMapper){
         this.diagnosisCodeMapper=diagnosisCodeMapper;
-        this.therapyMapper=therapyMapper;
         this.anamnesisMapper=anamnesisMapper;
     }
 
@@ -33,7 +31,7 @@ public class ExaminationHistoryMapper {
         dto.setObjectiveFinding(entity.getObjectiveFinding());
         dto.setExamDate(entity.getExamDate());
         dto.setAnamnesisDto(anamnesisMapper.toDto(entity.getAnamnesis()));
-        dto.setTherapyDto(therapyMapper.toDto(entity.getTherapy()));
+        dto.setTherapy(entity.getTherapy());
         dto.setDiagnosisCodeDto(diagnosisCodeMapper.toDto(entity.getDiagnosisCode()));
 
         return dto;
@@ -48,6 +46,18 @@ public class ExaminationHistoryMapper {
             dto.add(toDto(examinationHistory));
 
         return dto;
+    }
+
+    public ExaminationHistory toEntity(ExaminationHistoryCreateDto examinationHistoryCreateDto){
+        ExaminationHistory examinationHistory = new ExaminationHistory();
+        examinationHistory.setLbz(examinationHistoryCreateDto.getLbz());
+        examinationHistory.setExamDate(examinationHistoryCreateDto.getExamDate());
+        examinationHistory.setObjectiveFinding(examinationHistoryCreateDto.getObjectiveFinding());
+        examinationHistory.setAdvice(examinationHistoryCreateDto.getAdvice());
+        examinationHistory.setConfidential(examinationHistoryCreateDto.isConfidential());
+        examinationHistory.setTherapy(examinationHistoryCreateDto.getTherapy());
+
+        return examinationHistory;
     }
 
 }

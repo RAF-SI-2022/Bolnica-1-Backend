@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,6 @@ public class MedicalHistoryDto {
     private Date validFrom;
     private Date validTo = Date.valueOf("9999-12-31");
     private boolean valid;
-
     private DiagnosisCodeDto diagnosisCodeDto;
 
 }

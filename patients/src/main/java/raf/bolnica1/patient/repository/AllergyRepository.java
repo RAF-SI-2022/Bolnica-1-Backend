@@ -6,4 +6,5 @@ import raf.bolnica1.patient.domain.Allergy;
 
 @Repository
 public interface AllergyRepository extends JpaRepository<Allergy, Long> {
+    Allergy findByName(String name);
 }

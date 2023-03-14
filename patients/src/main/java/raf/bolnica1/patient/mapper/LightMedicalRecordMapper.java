@@ -1,7 +1,7 @@
 package raf.bolnica1.patient.mapper;
 
 import raf.bolnica1.patient.domain.MedicalRecord;
-import raf.bolnica1.patient.dto.LightMedicalRecordDto;
+import raf.bolnica1.patient.dto.general.LightMedicalRecordDto;
 
 import java.sql.Date;
 import java.util.ArrayList;

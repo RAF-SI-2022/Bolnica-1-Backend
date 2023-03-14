@@ -1,8 +1,10 @@
 package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
+import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Operation;
-import raf.bolnica1.patient.dto.OperationDto;
+import raf.bolnica1.patient.dto.create.OperationCreateDto;
+import raf.bolnica1.patient.dto.general.OperationDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class OperationMapper {
 
         OperationDto dto=new OperationDto();
 
+        dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
         dto.setOperationDate(entity.getOperationDate());
         dto.setDepartmentId(entity.getDepartmentId());
@@ -35,7 +38,7 @@ public class OperationMapper {
     }
 
 
-    public Operation toEntity(OperationDto dto){
+    public Operation toEntity(OperationCreateDto dto, MedicalRecord medicalRecord){
         if(dto==null)return null;
 
         Operation entity=new Operation();
@@ -44,6 +47,7 @@ public class OperationMapper {
         entity.setDescription(dto.getDescription());
         entity.setOperationDate(dto.getOperationDate());
         entity.setHospitalId(dto.getHospitalId());
+        entity.setMedicalRecord(medicalRecord);
 
         return entity;
     }

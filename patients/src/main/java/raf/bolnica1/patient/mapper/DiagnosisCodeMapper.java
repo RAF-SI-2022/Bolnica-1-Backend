@@ -2,7 +2,7 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.DiagnosisCode;
-import raf.bolnica1.patient.dto.DiagnosisCodeDto;
+import raf.bolnica1.patient.dto.general.DiagnosisCodeDto;
 
 @Component
 public class DiagnosisCodeMapper {
@@ -23,6 +23,7 @@ public class DiagnosisCodeMapper {
 
         DiagnosisCode entity=new DiagnosisCode();
 
+        entity.setCode(dto.getCode());
         entity.setDescription(dto.getDescription());
         entity.setLatinDescription(dto.getLatinDescription());
 
