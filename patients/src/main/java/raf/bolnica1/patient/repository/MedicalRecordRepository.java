@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
 
-    Optional<List<MedicalRecord>> findByPatientLbp(String lbp);
+
     Optional<MedicalRecord> findByPatient_Lbp(String  lbp);
 
 }

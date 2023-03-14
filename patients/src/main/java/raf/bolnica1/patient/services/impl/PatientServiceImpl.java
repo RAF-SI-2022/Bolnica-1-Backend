@@ -56,7 +56,6 @@ public class PatientServiceImpl implements PatientService {
         this.generalMedicalDataMapper=generalMedicalDataMapper;
     }
 
-    ///TODO: vrv izmeniti dto podatke da ne sadrze Domain klase
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto){
         Patient patient = PatientMapper.patientDtoToPatient(dto);
@@ -95,7 +94,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
-    ///TODO: uzasno neefikasan kveri izbacivanja medicalRecorda
     //Brisanje pacijenta
     public boolean deletePatient(String lbp){
         Optional<Patient> patient = patientRepository.findByLbp(lbp);
@@ -105,15 +103,12 @@ public class PatientServiceImpl implements PatientService {
         }
         else
              return false;
-        List<MedicalRecord> medicalRecords = medicalRecordRepository.findAll();
-        if(!medicalRecords.isEmpty()){
-            for(MedicalRecord mr: medicalRecords){
-                if(mr.getPatient().getLbp().equals(lbp)){
-                    mr.setDeleted(true);
-                    medicalRecordRepository.save(mr);
-                    return true;
-                }
-            }
+
+        Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findByPatient_Lbp(lbp);
+        if(medicalRecord.isPresent()){
+            medicalRecord.get().setDeleted(true);
+            medicalRecordRepository.save(medicalRecord.get());
+            return true;
         }
         return false;
     }
