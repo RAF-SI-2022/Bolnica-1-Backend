@@ -1,7 +1,6 @@
 package raf.bolnica1.employees.services;
 
 import org.springframework.data.domain.Page;
-import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.dto.employee.*;
 
 public interface EmployeeService {
@@ -20,6 +19,4 @@ public interface EmployeeService {
     EmployeeDto editEmployeeInfo(EmployeeUpdateDto dto, String lbz);
 
     EmployeeDto editEmployeeInfoByAdmin(EmployeeUpdateAdminDto dto, String lbz);
-
-    Employee getUserByUsername(String username);
 }

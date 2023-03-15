@@ -2,13 +2,14 @@ package raf.bolnica1.employees.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
+
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.sql.Date;
 
 @Entity
-@Table(name = "employee", indexes = {@Index(name="uniqueIndex1", columnList = "lbz"), @Index(columnList = "username, password")})
+@Table(name = "employee", indexes = {@Index(name = "uniqueIndex1", columnList = "lbz"), @Index(columnList = "username, password")})
 @Getter
 @Setter
 public class Employee {
@@ -37,7 +38,6 @@ public class Employee {
     private Profession profession;
     @ManyToOne
     private Department department;
-    
 
 
 }

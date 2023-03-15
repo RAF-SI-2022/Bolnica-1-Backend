@@ -7,7 +7,7 @@ import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.dto.employee.EmployeeCreateDto;
 import raf.bolnica1.employees.dto.employee.EmployeeDto;
 import raf.bolnica1.employees.dto.employee.EmployeeUpdateAdminDto;
-import raf.bolnica1.employees.exceptions.department.DepartmentNotFoundException;
+import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
 import raf.bolnica1.employees.repository.DepartmentRepository;
 
 @Component
@@ -73,7 +73,7 @@ public class EmployeeMapper {
         employee.setEmail(dto.getEmail());
         employee.setDeleted(dto.isDeleted());
         employee.setUsername(dto.getUsername());
-        if(dto.getPassword() != null && !dto.getPassword().equals(""))
+        if (dto.getPassword() != null && !dto.getPassword().equals(""))
             employee.setPassword(dto.getPassword());
         employee.setTitle(dto.getTitle());
         employee.setProfession(dto.getProfession());

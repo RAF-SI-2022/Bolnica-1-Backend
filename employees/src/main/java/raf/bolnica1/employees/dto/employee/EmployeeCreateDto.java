@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raf.bolnica1.employees.domain.Profession;
-import raf.bolnica1.employees.domain.Title;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,31 +18,31 @@ import java.util.List;
 @Getter
 @Setter
 public class EmployeeCreateDto {
-    @NotEmpty
+    @NotEmpty(message = "LBZ ne sme biti prazan.")
     private String lbz;
-    @NotEmpty
+    @NotEmpty(message = "Ime ne sme biti prazno.")
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Prezime ne sme biti prazno.")
     private String surname;
-    @NotNull
+    @NotNull(message = "Datum rođenja ne sme biti prazan.")
     private Date dateOfBirth;
-    @NotEmpty
+    @NotEmpty(message = "Pol ne sme biti prazan.")
     private String gender;
-    @NotEmpty
+    @NotEmpty(message = "JMBG ne sme biti prazan.")
     private String jmbg;
-    @NotEmpty
+    @NotEmpty(message = "Adresa ne sme biti prazna.")
     private String address;
-    @NotEmpty
+    @NotEmpty(message = "Mesto stanovanja ne sme biti prazno.")
     private String placeOfLiving;
-    @NotEmpty
+    @NotEmpty(message = "Broj telefona ne sme biti prazan.")
     private String phone;
-    @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$")
+    @NotEmpty(message = "Email ne sme biti prazan.")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$", message = "Email adresa nije u ispravnom formatu.")
     private String email;
     private Title title;
     private Profession profession;
-    @NotEmpty
+    @NotEmpty(message = "PBO odeljenje ne sme biti prazno.")
     private String departmentPbo;
-    @NotEmpty
+    @NotEmpty(message = "Dozvole ne smeju biti prazne.")
     private List<String> permissions;
 }

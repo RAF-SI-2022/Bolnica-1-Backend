@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.employees.domain.Department;
-import raf.bolnica1.employees.domain.Profession;
-import raf.bolnica1.employees.domain.Title;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
 
 import java.sql.Date;
 
