@@ -1,28 +1,16 @@
 package raf.bolnica1.patient.services;
 
 import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.dto.*;
+import raf.bolnica1.patient.dto.general.*;
 
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import raf.bolnica1.patient.domain.*;
-
-import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalRecordMapper;
-import raf.bolnica1.patient.mapper.PatientMapper;
-import raf.bolnica1.patient.repository.*;
-
-
-import javax.swing.text.html.Option;
 import java.sql.Date;
 import java.util.List;
 
 
 public interface PatientService {
 
-
+/**
 
     //Registracija pacijenta
     public PatientDto registerPatient(PatientDto dto);
@@ -39,7 +27,7 @@ public interface PatientService {
     public Object findPatient(Object object);
 
     //Pretraga pacijenta preko LBP-a
-    public Patient findPatientLBP(String lbp);
+    public Patient findDomainPatientLBP(String lbp);
 
     //Dobijanje istorije bolesti pacijenta
     public List<PatientDtoDesease> hisotryOfDeseasePatient(String  lbp, Long mkb10);
@@ -54,15 +42,25 @@ public interface PatientService {
     //Svi kartoni
 
     //m22
-    public List<MedicalRecordDto> findMedicalRecordByLbp(String lbp);
+    public LightMedicalRecordDto findLightMedicalRecordByLbp(String lbp);
 
-    //Krvne grupe
-    public Object findDetailsPatient(Object object);
-
-    //Krvne grupe
-    public PatientDetailsDto findPatientDetails(String lbp);
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
     public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp);
 
+    ///Dohvatanje liste operacije po LBP
+    public List<OperationDto> findOperationsByLbp(String lbp);
+
+    ///Dohvatanje liste MedicalHistory po LBP
+    public List<MedicalHistoryDto> findMedicalHistoryByLbp(String lbp);
+
+    ///Dohvatanje liste ExaminationHistory po LBP
+    public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
+
+    ///Dohvatanje Patient po LBP
+    public PatientDto findPatientByLbp(String lbp);
+
+    ///Dohvatanje CELOG MedicalRecord po LBP
+    public MedicalRecordDto findMedicalRecordByLbp(String lbp);
+*/
 }

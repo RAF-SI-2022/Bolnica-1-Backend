@@ -19,12 +19,11 @@ public class ExaminationHistory {
     private boolean confidential;
     private String objectiveFinding;
     private String advice;
+    private String therapy;
     @ManyToOne
     private DiagnosisCode diagnosisCode;
     @ManyToOne
     private Anamnesis anamnesis;
-    @ManyToOne
-    private Therapy therapy;
     @ManyToOne
     private MedicalRecord medicalRecord;
 }

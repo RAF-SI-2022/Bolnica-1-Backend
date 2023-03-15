@@ -26,7 +26,7 @@ public class SpringSecurityConfig {
                 .antMatchers("/h2-console/").permitAll()
                 .anyRequest().permitAll();
 //                .and().csrf().ignoringAntMatchers("/h2-console/")
-//                .and().headers().frameOptions().sameOrigin();
+        http.headers().frameOptions().disable();
 
 
         http.sessionManagement()

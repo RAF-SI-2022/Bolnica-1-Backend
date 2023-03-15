@@ -2,7 +2,7 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Allergy;
-import raf.bolnica1.patient.dto.AllergyDto;
+import raf.bolnica1.patient.dto.general.AllergyDto;
 
 import java.util.ArrayList;
 import java.util.List;

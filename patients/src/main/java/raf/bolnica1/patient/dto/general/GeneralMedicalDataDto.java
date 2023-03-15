@@ -1,10 +1,7 @@
-package raf.bolnica1.patient.dto;
+package raf.bolnica1.patient.dto.general;
 
 import lombok.Getter;
 import lombok.Setter;
-import raf.bolnica1.patient.domain.AllergyData;
-import raf.bolnica1.patient.domain.GeneralMedicalData;
-import raf.bolnica1.patient.domain.VaccinationData;
 
 import java.util.List;
 
@@ -12,6 +9,7 @@ import java.util.List;
 @Setter
 public class GeneralMedicalDataDto {
 
+    private Long id;
     private String bloodType;
     private String rH;
     private List<VaccinationDto> vaccinationDtos;

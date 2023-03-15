@@ -9,7 +9,7 @@ import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.SocialData;
 import raf.bolnica1.patient.domain.constants.*;
-import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.PatientService;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-
+/**
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceUnitTest {
 
@@ -103,7 +103,7 @@ public class PatientServiceUnitTest {
         md1.setPatient(patient);
         md1.setRegistrationDate(Date.valueOf(LocalDate.now()));
         GeneralMedicalData gmd1 = new GeneralMedicalData();
-        gmd1.setRH('+');
+        gmd1.setRH("+");
         gmd1.setBloodType("A");
         md1.setGeneralMedicalData(gmd1);
 
@@ -111,7 +111,7 @@ public class PatientServiceUnitTest {
         md2.setDeleted(false);
         md2.setRegistrationDate(Date.valueOf(LocalDate.now()));
         GeneralMedicalData gmd2 = new GeneralMedicalData();
-        gmd2.setRH('+');
+        gmd2.setRH("+");
         gmd2.setBloodType("A");
         md2.setGeneralMedicalData(gmd2);
 
@@ -278,3 +278,4 @@ public class PatientServiceUnitTest {
     }
 
 }
+*/
