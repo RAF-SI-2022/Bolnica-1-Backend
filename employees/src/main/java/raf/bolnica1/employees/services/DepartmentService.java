@@ -11,11 +11,7 @@ public interface DepartmentService {
 
     DepartmentDto getEmployeesDepartment(String pbo);
 
-<<<<<<< HEAD
-     List<HospitalDto> listAllHospitals();
-
-     List<DepartmentDto> getDepartments(String pbb);
-=======
     List<HospitalDto> listAllHospitals();
->>>>>>> 07cda1985b946f47ae423802e15156289d7b9190
+
+    List<DepartmentDto> getDepartments(String pbb);
 }
