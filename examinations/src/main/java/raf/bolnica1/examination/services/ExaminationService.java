@@ -2,31 +2,20 @@ package raf.bolnica1.examination.services;
 
 import org.springframework.stereotype.Service;
 
-@Service
-public class ExaminationService {
+
+public interface ExaminationService {
 
     //Pretraga zakazanih pregleda
-    public Object findScheduledExamination(Object object){
-        return null;
-    }
-
+    public Object findScheduledExamination(Object object);
     // Azuriranje statusa o prispecu pacijenta
-    public Object updatePatientArrivalStatus(Object object){
-        return null;
-    }
+    public Object updatePatientArrivalStatus(Object object);
 
     // Azuriranje statusa pregleda
-    public Object updateExaminationStatus(Object object){
-        return null;
-    }
+    public Object updateExaminationStatus(Object object);
 
     //Brisanje zakazanog pregleda
-    public Object deleteScheduledExamination(Object object){
-        return null;
-    }
+    public Object deleteScheduledExamination(Object object);
 
     // Pretraga lekara specijalista na odeljenju
-    public Object findDoctorSpecByDepartment(Object object){
-        return null;
-    }
+    public Object findDoctorSpecByDepartment(Object object);
 }

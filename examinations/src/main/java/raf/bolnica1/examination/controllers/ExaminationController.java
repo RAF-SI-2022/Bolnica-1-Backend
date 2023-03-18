@@ -1,17 +1,14 @@
 package raf.bolnica1.examination.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.examination.services.ExaminationService;
 
 import javax.validation.Valid;
-import java.util.Date;
 
 @RestController
-@RequestMapping("/examination")
+@RequestMapping("/examinations")
 public class ExaminationController {
 
     private ExaminationService service;
@@ -21,11 +18,16 @@ public class ExaminationController {
         this.service = examinationService;
     }
 
+    //Kreiranje zakazanog pregleda
+    @PostMapping(path = "/create")
+    public ResponseEntity<Object> createScheduledExamination(@RequestBody Object object) {
+
+        return null;
+    }
+
     //Pretraga zakazanih pregleda
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/find")
-    public ResponseEntity<Object> findScheduledExamination(@RequestParam("LBZ") Long lbz,
-                                                           @Nullable @RequestParam("examinationDate") Date examinationDate,
-                                                           @Valid @RequestBody Object object){
+    @PostMapping(path = "/find")
+    public ResponseEntity<Object> findScheduledExamination(@Valid @RequestBody Object object) {
         // find all examinations based on LBZ
         // check whether examinationDate exists
         // if yes return only examinations on that date ( or none if they don't exist )
@@ -45,8 +47,8 @@ public class ExaminationController {
     }
 
     // Azuriranje statusa pacijenta
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,path = "/patient/{id}")
-    public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id, @RequestParam("status") String status, @Valid @RequestBody Object object){
+    @PutMapping(path = "/patient/{id}")
+    public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id, @Valid @RequestBody Object object){
         // find examination based on id from path
         // update status based on status string from path
         // if status == "Otkazao"
@@ -63,8 +65,8 @@ public class ExaminationController {
     }
 
     // Azuriranje statusa pregelda
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,path = "/{id}")
-    public ResponseEntity<Object> updateExaminationStatus(@PathVariable("id") Long id, @RequestParam("status") String status, @Valid @RequestBody Object object){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<Object> updateExaminationStatus(@PathVariable("id") Long id, @Valid @RequestBody Object object){
         // find examination based on id from path
         // update status based on status string from path
         // if status == "U toku"
@@ -100,8 +102,8 @@ public class ExaminationController {
     }
 
     //Pretraga lekara po odeljenju
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/findDoctorByDepartment/{PBO}")
-    public ResponseEntity<Object> findDoctorSpecByDepartment(@PathVariable("PBO") Long pbo, @Valid @RequestBody Object object){
+    @GetMapping(path = "/find_doctor_by_department/{pbo}")
+    public ResponseEntity<Object> findDoctorSpecByDepartment(@PathVariable("pbo") Long pbo, @Valid @RequestBody Object object){
         // Return a list of doctors specialists that are employed at the given department
         // Department is found by PBO ( unique department id )
         /*
