@@ -15,10 +15,12 @@ import raf.bolnica1.employees.domain.*;
 import raf.bolnica1.employees.domain.constants.Profession;
 import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.domain.constants.Title;
+import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.employee.*;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeAlreadyExistsException;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeePasswordException;
+import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.EmployeeMapper;
 import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.repository.EmployeesRoleRepository;
@@ -44,6 +46,8 @@ public class EmployeeServiceTest {
     @Mock
     private EmployeeMapper employeeMapper;
     @Mock
+    private DepartmentMapper departmentMapper;
+    @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
     private MessageSource messageSource;
@@ -62,8 +66,9 @@ public class EmployeeServiceTest {
         EmployeeCreateDto employeeCreateDto = EmployeeServiceTest.createEmployeeCreateDto();
 
         Employee employee = EmployeeServiceTest.createEmployee();
+        DepartmentDto departmentDto = EmployeeServiceTest.createDepartment();
 
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
         when(employeeMapper.toEntity(any(EmployeeCreateDto.class))).thenReturn(employee);
@@ -100,7 +105,7 @@ public class EmployeeServiceTest {
     @Test
     void findEmployeeInfo_whenEmployeeExists_shouldReturnEmployeeDto() {
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
@@ -155,7 +160,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -181,7 +186,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -233,7 +238,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -284,7 +289,7 @@ public class EmployeeServiceTest {
 
         assertNotNull(result);
         assertEquals(EMPLOYEE_LBZ, result.getLbz());
-        verify(employeeRepository, times(2)).save(employee);
+        verify(employeeRepository).save(employee);
         verify(employeeMapper).toDto(employee);
     }
 
@@ -324,7 +329,7 @@ public class EmployeeServiceTest {
         EmployeeUpdateAdminDto employeeUpdateAdminDto = EmployeeServiceTest.createEmployeeUpdateByAdminDto();
         Employee employee = EmployeeServiceTest.createEmployee();
         Employee updatedEmployee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
         when(employeeMapper.toEntity(employeeUpdateAdminDto, employee)).thenReturn(updatedEmployee);
@@ -378,7 +383,7 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findByLbz(EMPLOYEE_LBZ);
         verify(employeeRepository).save(employee);
 
-        String expectedPattern = String.format("http://localhost:8080/api/employee/password_reset/%s/[a-z0-9-]+", EMPLOYEE_LBZ);
+        String expectedPattern = String.format("http://localhost:8080/api/employee/password-reset/%s/[a-z0-9-]+/", EMPLOYEE_LBZ);
         assertTrue(actualResult.getMessage().matches(expectedPattern));
         assertTrue(passwordEncoder.matches(passwordResetDto.getNewPassword(), employee.getNewPassword()));
     }
@@ -492,7 +497,7 @@ public class EmployeeServiceTest {
         EMPLOYEE_PERMISSIONS.add(RoleShort.ROLE_DR_SPEC.name());
     }
 
-    private static Employee createEmployee() {
+    public static Employee createEmployee() {
         Employee employee = new Employee();
         employee.setId(EMPLOYEE_ID);
         employee.setLbz(EMPLOYEE_LBZ);
@@ -513,7 +518,7 @@ public class EmployeeServiceTest {
         return employee;
     }
 
-    private static EmployeeCreateDto createEmployeeCreateDto() {
+    public static EmployeeCreateDto createEmployeeCreateDto() {
         EmployeeCreateDto dto = new EmployeeCreateDto();
         dto.setLbz(EMPLOYEE_LBZ);
         dto.setName(EMPLOYEE_NAME);
@@ -532,7 +537,7 @@ public class EmployeeServiceTest {
         return dto;
     }
 
-    private static EmployeeDto createEmployeeDto() {
+    public static EmployeeDto createEmployeeDto(DepartmentDto departmentDto) {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(EMPLOYEE_ID);
         employeeDto.setLbz(EMPLOYEE_LBZ);
@@ -547,11 +552,11 @@ public class EmployeeServiceTest {
         employeeDto.setEmail(EMPLOYEE_EMAIL);
         employeeDto.setTitle(EMPLOYEE_TITLE);
         employeeDto.setProfession(EMPLOYEE_PROFESSION);
-        employeeDto.setDepartment(DEPARTMENT);
+        employeeDto.setDepartment(createDepartment());
         return employeeDto;
     }
 
-    private static EmployeeUpdateDto createEmployeeUpdateDto(String oldPassword, String newPassword, String phone) {
+    public static EmployeeUpdateDto createEmployeeUpdateDto(String oldPassword, String newPassword, String phone) {
         EmployeeUpdateDto employeeUpdateDto = new EmployeeUpdateDto();
         employeeUpdateDto.setOldPassword(oldPassword);
         employeeUpdateDto.setNewPassword(newPassword);
@@ -559,7 +564,7 @@ public class EmployeeServiceTest {
         return employeeUpdateDto;
     }
 
-    private static EmployeeUpdateAdminDto createEmployeeUpdateByAdminDto() {
+    public static EmployeeUpdateAdminDto createEmployeeUpdateByAdminDto() {
         EmployeeUpdateAdminDto employeeUpdateAdminDto = new EmployeeUpdateAdminDto();
         employeeUpdateAdminDto.setName(EMPLOYEE_NAME);
         employeeUpdateAdminDto.setSurname(EMPLOYEE_SURNAME);
@@ -575,6 +580,14 @@ public class EmployeeServiceTest {
         employeeUpdateAdminDto.setDepartmentPbo(DEPARTMENT.getPbo());
         employeeUpdateAdminDto.setPermissions(EMPLOYEE_PERMISSIONS);
         return employeeUpdateAdminDto;
+    }
+
+    public static DepartmentDto createDepartment(){
+        DepartmentDto dto = new DepartmentDto();
+        dto.setPbo(DEPARTMENT_PBO);
+        dto.setHospitalName(HOSPITAL_SHORTNAME);
+        dto.setName(DEPARTMENT_NAME);
+        return dto;
     }
 
 }

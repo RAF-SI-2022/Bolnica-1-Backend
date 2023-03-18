@@ -37,7 +37,7 @@ public class EmployeeCreateDto {
     @NotEmpty(message = "Broj telefona ne sme biti prazan.")
     private String phone;
     @NotEmpty(message = "Email ne sme biti prazan.")
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$", message = "Email adresa nije u ispravnom formatu.")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@[a-zA-Z]{3,10}\\.[a-zA-Z]{2,10}$", message = "Email adresa nije u ispravnom formatu.")
     private String email;
     private Title title;
     private Profession profession;

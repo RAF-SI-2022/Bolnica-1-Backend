@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.security.controller;
+package raf.bolnica1.employees.security.controller_dep;
 
 
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import raf.bolnica1.employees.security.dto.TokenRequest;
-import raf.bolnica1.employees.security.dto.TokenResponse;
-import raf.bolnica1.employees.security.service.SecurityService;
+import raf.bolnica1.employees.security.dto_dep.TokenRequest;
+import raf.bolnica1.employees.security.dto_dep.TokenResponse;
+import raf.bolnica1.employees.security.service_dep.SecurityService;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

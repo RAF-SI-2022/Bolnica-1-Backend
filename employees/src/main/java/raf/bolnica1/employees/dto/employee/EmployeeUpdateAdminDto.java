@@ -35,7 +35,7 @@ public class EmployeeUpdateAdminDto {
     @NotEmpty
     private String phone;
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@[a-zA-Z]{3,10}\\.[a-zA-Z]{2,10}$")
     private String email;
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}$")

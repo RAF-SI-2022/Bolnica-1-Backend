@@ -1,4 +1,5 @@
-package raf.bolnica1.employees.security.domain;
+package raf.bolnica1.employees.security.domain_dep;
+
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,4 +72,9 @@ public class SecurityEmployee implements UserDetails, UserDetailsPasswordService
         employee.setPassword(newPassword);
         return this;
     }
+
+    public String getLbz() {
+        return employee.getLbz();
+    }
+
 }

@@ -1,4 +1,5 @@
-package raf.bolnica1.employees.security.domain;
+package raf.bolnica1.employees.security.domain_dep;
+
 
 import org.springframework.security.core.GrantedAuthority;
 import raf.bolnica1.employees.domain.Role;

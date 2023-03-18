@@ -1,11 +1,12 @@
-package raf.bolnica1.employees.security.dto;
+package raf.bolnica1.employees.security.dto_dep;
+
 
 import lombok.Data;
 
 @Data
 public class TokenResponse {
 
-    String message;
+    private String message;
 
     public TokenResponse(String message) {
         this.message = message;

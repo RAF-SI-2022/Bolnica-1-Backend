@@ -16,6 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import raf.bolnica1.employees.security.config.filter.SecurityFilter;
 import raf.bolnica1.employees.security.config.handler.CustomAuthenticationEntryPoint;
 
+import java.util.Arrays;
+
 @Configuration
 @AllArgsConstructor
 @EnableMethodSecurity
@@ -39,7 +41,7 @@ public class SpringSecurityConfig {
                     .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**").permitAll()
                     .antMatchers("/auth/**").permitAll()
                     .antMatchers("/h2-console/**").permitAll()
-                    .antMatchers("/employee/admin/**").hasAuthority("ADMIN")
+                    .antMatchers("/employee/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -53,7 +55,7 @@ public class SpringSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","http://localhost:8083"));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);

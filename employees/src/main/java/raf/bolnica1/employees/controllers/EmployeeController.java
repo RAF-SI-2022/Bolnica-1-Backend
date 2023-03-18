@@ -19,24 +19,23 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private EmployeeService employeeService;
-    private EmployeeRoleService employeeRoleService;
+    private final EmployeeService employeeService;
+    private final EmployeeRoleService employeeRoleService;
 
-    @PostMapping(headers = {"Authorization"})
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<EmployeeDto> createEmployee(@Valid @RequestBody EmployeeCreateDto dto) {
         EmployeeDto createdEmployee = employeeService.createEmployee(dto);
         return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
     }
 
-    //pen - personal employee number
     @PutMapping(path = "/edit/{lbz}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<EmployeeDto> editEmployeeInfo(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateDto dto) {
+    public ResponseEntity<?> editEmployeeInfo(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateDto dto) {
         return new ResponseEntity<>(employeeService.editEmployeeInfo(dto, lbz), HttpStatus.OK);
     }
 
     @PutMapping(path = "/edit/admin/{lbz}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<EmployeeDto> editEmployeeInfoByAdmin(@PathVariable String lbz, @Valid @RequestBody EmployeeUpdateAdminDto dto) {
         return new ResponseEntity<>(employeeService.editEmployeeInfoByAdmin(dto, lbz), HttpStatus.OK);
     }
@@ -46,28 +45,32 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.softDeleteEmployee(lbz), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/password_reset/{lbz}")
+    @PutMapping(path = "/password-reset/{lbz}")
+    @PreAuthorize("#lbz == authentication.principal.lbz")
     public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody PasswordResetDto passwordResetDto, @PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.passwordReset(passwordResetDto, lbz), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(path = "/password_reset/{lbz}/{token}")
-    public ResponseEntity<EmployeeDto> passwordResetToken(@PathVariable("lbz") String lbz, @PathVariable("token") String token) {
+    @GetMapping(path = "/password-reset/{lbz}/{token}/{jwt}")
+    @PreAuthorize("#lbz == authentication.principal.lbz")
+    public ResponseEntity<EmployeeDto> passwordResetToken(@PathVariable("lbz") String lbz, @PathVariable("token") String token, @PathVariable String jwt) {
         return new ResponseEntity<>(employeeService.passwordResetToken(lbz, token), HttpStatus.OK);
     }
 
     @GetMapping(path = "/find/{lbz}")
+    @PreAuthorize("#lbz == authentication.principal.lbz")
     public ResponseEntity<EmployeeDto> findEmployeeInfo(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
 
     @GetMapping(path = "/admin/find/{lbz}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<EmployeeDto> findEmployeeInfoByAdmin(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
 
     @GetMapping(path = "/list")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<EmployeeDto>> listEmployeesWithFilters(
             @RequestParam String name,
             @RequestParam(required = false) String surname,

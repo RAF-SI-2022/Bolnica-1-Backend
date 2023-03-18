@@ -5,6 +5,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import raf.bolnica1.employees.mappers.EmployeeMapper;
 import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.repository.EmployeesRoleRepository;
 import raf.bolnica1.employees.repository.RoleRepository;
+import raf.bolnica1.employees.security.util.JwtUtils;
 import raf.bolnica1.employees.services.EmployeeService;
 
 import java.util.List;
@@ -38,13 +42,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Qualifier("exceptionsMessageSource")
     private final MessageSource messageSource;
 
-    public EmployeeServiceImpl(PasswordEncoder passwordEncoder, EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, EmployeesRoleRepository employeesRoleRepository, RoleRepository roleRepository, MessageSource messageSource) {
+    private final JwtUtils jwtUtils;
+
+    public EmployeeServiceImpl(PasswordEncoder passwordEncoder, EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, EmployeesRoleRepository employeesRoleRepository, RoleRepository roleRepository, MessageSource messageSource, JwtUtils jwtUtils) {
         this.passwordEncoder = passwordEncoder;
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.employeesRoleRepository = employeesRoleRepository;
         this.roleRepository = roleRepository;
         this.messageSource = messageSource;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -118,8 +125,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setNewPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
         employee.setResetPassword(UUID.randomUUID().toString() + employee.getId());
-
-        return new EmployeeMessageDto(String.format("http://localhost:8080/api/employee/password_reset/%s/%s", lbz, employeeRepository.save(employee).getResetPassword()));
+        String jwt = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                jwt = jwtUtils.generateToken(userDetails);
+            }
+        }
+        return new EmployeeMessageDto(String.format("http://localhost:8080/api/employee/password-reset/%s/%s/%s", lbz, employeeRepository.save(employee).getResetPassword(), jwt));
     }
 
     @Override
@@ -172,8 +187,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!passwordEncoder.matches(dto.getOldPassword(), employee.getPassword())) {
             throw new EmployeePasswordException(("The password you entered does not match your current password."));
         }
-
-        passwordReset(new PasswordResetDto(dto.getOldPassword(), dto.getNewPassword()), lbz);
+        // ? Zasto passwordReset ovde
+        // passwordReset(new PasswordResetDto(dto.getOldPassword(), dto.getNewPassword()), lbz);
+        // employee.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         employee.setPhone(dto.getPhone());
         Employee saved = employeeRepository.save(employee);
         return employeeMapper.toDto(saved);
@@ -188,8 +204,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 )
         );
         Employee employeeChanged = employeeMapper.toEntity(dto, employee);
-        if (dto.getPassword() != null && !dto.getPassword().equals(""))
-            employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
+        employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
         employeeChanged = employeeRepository.save(employeeChanged);
         changePermissions(employeeChanged, dto.getPermissions());
         return employeeMapper.toDto(employeeChanged);

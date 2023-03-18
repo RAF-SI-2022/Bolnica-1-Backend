@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.security.service;
+package raf.bolnica1.employees.security.service_dep;
 
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
 import raf.bolnica1.employees.repository.EmployeeRepository;
-import raf.bolnica1.employees.security.domain.SecurityEmployee;
+import raf.bolnica1.employees.security.domain_dep.SecurityEmployee;
 import raf.bolnica1.employees.security.util.JwtUtils;
 import raf.bolnica1.employees.services.EmployeeRoleService;
 

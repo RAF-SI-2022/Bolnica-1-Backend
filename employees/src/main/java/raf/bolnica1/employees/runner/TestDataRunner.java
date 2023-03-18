@@ -53,12 +53,12 @@ public class TestDataRunner implements CommandLineRunner {
         // departments
         Department department1 = new Department();
         department1.setName("Department1");
-        department1.setPbo("12345");
+        department1.setPbo("001");
         department1.setHospital(hospital1);
 
         Department department2 = new Department();
         department2.setName("Department2");
-        department2.setPbo("123456");
+        department2.setPbo("002");
         department2.setHospital(hospital2);
 
         departmentRepository.save(department1);
@@ -94,9 +94,9 @@ public class TestDataRunner implements CommandLineRunner {
         employee1.setAddress("123 Main St");
         employee1.setPlaceOfLiving("City");
         employee1.setPhone("123-456-7890");
-        employee1.setEmail("john.doe@example.com");
-        employee1.setUsername("johndoe");
-        employee1.setPassword(passwordEncoder.encode("password1"));
+        employee1.setEmail("admin@example.com");
+        employee1.setUsername("admin");
+        employee1.setPassword(passwordEncoder.encode("admin"));
         employee1.setTitle(Title.DR_MED_SPEC);
         employee1.setProfession(Profession.MED_SESTRA);
         employee1.setDepartment(department1);
@@ -113,8 +113,8 @@ public class TestDataRunner implements CommandLineRunner {
         employee2.setPhone("123-456-7890");
         employee2.setEmail("john@example.com");
         employee2.setDeleted(false);
-        employee2.setUsername("johndoe1");
-        employee2.setPassword(passwordEncoder.encode("password2"));
+        employee2.setUsername("user");
+        employee2.setPassword(passwordEncoder.encode("password"));
         employee2.setTitle(Title.DR_MED_SPEC);
         employee2.setProfession(Profession.MED_SESTRA);
         employee2.setDepartment(department2);
@@ -122,9 +122,8 @@ public class TestDataRunner implements CommandLineRunner {
 
         employeeRepository.save(employee2);
         employeeRepository.save(employee1);
+
         // employees privilege
-
-
         EmployeesRole employeesRole1 = new EmployeesRole();
         employeesRole1.setEmployee(employee1);
         employeesRole1.setRole(role1);

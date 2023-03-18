@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import raf.bolnica1.employees.exceptionHandler.exceptions.jwt.CantParseJwtException;
-import raf.bolnica1.employees.security.service.SecurityService;
+import raf.bolnica1.employees.security.service_dep.SecurityService;
 import raf.bolnica1.employees.security.util.JwtUtils;
 import raf.bolnica1.employees.util.JsonBuilder;
 
@@ -37,13 +37,24 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
-            final String tokenHeader = request.getHeader("Authorization");
+            // for password reset
+            String tokenHeader = extractJwtToken(request.getRequestURI());
+            boolean param = true;
+
+            if(tokenHeader == null || tokenHeader.equals("")){
+                tokenHeader = request.getHeader("Authorization");
+                param = false;
+            }
 
             String email = null;
             String jwtToken = null;
 
-            if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
-                jwtToken = tokenHeader.substring(7);
+            if (tokenHeader != null && (tokenHeader.startsWith("Bearer ") || param)) {
+                if(param){
+                    jwtToken = tokenHeader;
+                }else{
+                    jwtToken = tokenHeader.substring(7);
+                }
                 email = jwtUtils.getUsernameFromToken(jwtToken);
             }
 
@@ -83,6 +94,20 @@ public class SecurityFilter extends OncePerRequestFilter {
         String jsonResponse = objectMapper.writeValueAsString(json);
         response.getWriter().write(jsonResponse);
         response.getWriter().flush();
+    }
+
+    private String extractJwtToken(String requestUri) {
+        String[] uriParts = requestUri.split("/");
+        String jwtToken = null;
+
+        for (int i = 0; i < uriParts.length; i++) {
+            if (uriParts[i].equals("password-reset") && i < uriParts.length - 2 && uriParts.length == i + 4) {
+                jwtToken = uriParts[i + 3];
+                break;
+            }
+        }
+
+        return jwtToken;
     }
 
 }

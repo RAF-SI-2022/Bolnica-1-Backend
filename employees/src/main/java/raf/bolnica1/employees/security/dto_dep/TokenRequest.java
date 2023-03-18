@@ -1,4 +1,5 @@
-package raf.bolnica1.employees.security.dto;
+package raf.bolnica1.employees.security.dto_dep;
+
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.exceptionHandler.controller;
+package raf.bolnica1.employees.exceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,7 +37,7 @@ public class ExceptionHandlerController {
         return getJson(exception);
     }
 
-    private ErrorResponse getJson(Exception exception){
+    private ErrorResponse getJson(Exception exception) {
         Map<String, Object> json = new JsonBuilder()
                 .put("timestamp", Date.from(Instant.now()).toString())
                 .put("error", exception.getMessage())
