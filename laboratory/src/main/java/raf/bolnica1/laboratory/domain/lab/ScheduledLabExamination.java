@@ -5,7 +5,7 @@ import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Getter
@@ -16,15 +16,15 @@ public class ScheduledLabExamination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @NotBlank
     private Long departmentId;
-    @NotEmpty
+    @NotBlank
     private Long lbp;
-    @NotEmpty
+    @NotBlank
     private Date scheduledDate;
     @Enumerated(EnumType.STRING)
     private ExaminationStatus examinationStatus = ExaminationStatus.ZAKAZANO;
     private String note;
-    @NotEmpty
+    @NotBlank
     private Long lbz;
 }

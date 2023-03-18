@@ -5,7 +5,7 @@ import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 @Getter
@@ -16,16 +16,16 @@ public class LabWorkOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @NotBlank
     @ManyToOne
     private Prescription prescription;
-    @NotEmpty
+    @NotBlank
     private Long lbp;
-    @NotEmpty
+    @NotBlank
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.NEOBRADJEN;
-    @NotEmpty
+    @NotBlank
     private Long technicianLbz;
     private Long biochemistLbz = null;
 }

@@ -3,9 +3,10 @@ package raf.bolnica1.laboratory.domain.lab;
 import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
+import raf.bolnica1.laboratory.domain.constants.validation.EnumNotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -15,9 +16,9 @@ public class Parameter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @NotBlank
     private String parameterName;
-    @NotEmpty
+    @EnumNotBlank
     @Enumerated(EnumType.STRING)
     private ParameterValueType type;
     private String unitOfMeasure;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
@@ -15,9 +16,7 @@ public class AnalysisParameter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @NotEmpty
     private LabAnalysis labAnalysis;
     @ManyToOne
-    @NotEmpty
     private Parameter parameter;
 }

@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
+import raf.bolnica1.laboratory.domain.constants.validation.EnumNotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 @Getter
@@ -17,18 +18,18 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @EnumNotBlank
     @Enumerated(EnumType.STRING)
     private PrescriptionType type;
-    @NotEmpty
+    @NotBlank
     private Long doctorId;
-    @NotEmpty
+    @NotBlank
     private Long departmentFromId;
-    @NotEmpty
+    @NotBlank
     private Long departmentToId;
-    @NotEmpty
+    @NotBlank
     private Long lbp;
-    @NotEmpty
+    @NotBlank
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private PrescriptionStatus status = PrescriptionStatus.NEREALIZOVAN;
