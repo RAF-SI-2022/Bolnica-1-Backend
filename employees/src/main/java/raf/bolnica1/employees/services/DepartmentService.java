@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface DepartmentService {
 
-     List<DepartmentDto> listAllDepartments();
+    List<DepartmentDto> listAllDepartments();
 
-     DepartmentDto getEmployeesDepartment(String pbo);
+    DepartmentDto getEmployeesDepartment(String pbo);
+
 
      List<HospitalDto> listAllHospitals();
 

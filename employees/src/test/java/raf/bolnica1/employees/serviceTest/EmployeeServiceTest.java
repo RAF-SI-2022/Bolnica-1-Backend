@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -13,12 +12,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import raf.bolnica1.employees.domain.*;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.RoleShort;
+import raf.bolnica1.employees.domain.constants.Title;
+import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.employee.*;
-import raf.bolnica1.employees.exceptions.employee.EmployeeAlreadyExistsException;
-import raf.bolnica1.employees.exceptions.employee.EmployeeNotFoundException;
-import raf.bolnica1.employees.exceptions.employee.EmployeePasswordException;
+import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeAlreadyExistsException;
+import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
+import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeePasswordException;
+import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.EmployeeMapper;
-import raf.bolnica1.employees.repository.*;
+import raf.bolnica1.employees.repository.EmployeeRepository;
+import raf.bolnica1.employees.repository.EmployeesRoleRepository;
+import raf.bolnica1.employees.repository.RoleRepository;
 import raf.bolnica1.employees.services.impl.EmployeeServiceImpl;
 
 import java.sql.Date;
@@ -34,11 +40,13 @@ public class EmployeeServiceTest {
     @Mock
     private EmployeeRepository employeeRepository;
     @Mock
-    private PrivilegeRepository privilegeRepository;
+    private RoleRepository roleRepository;
     @Mock
-    private EmployeesPrivilegeRepository employeesPrivilegeRepository;
+    private EmployeesRoleRepository employeesRoleRepository;
     @Mock
     private EmployeeMapper employeeMapper;
+    @Mock
+    private DepartmentMapper departmentMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -58,17 +66,18 @@ public class EmployeeServiceTest {
         EmployeeCreateDto employeeCreateDto = EmployeeServiceTest.createEmployeeCreateDto();
 
         Employee employee = EmployeeServiceTest.createEmployee();
+        DepartmentDto departmentDto = EmployeeServiceTest.createDepartment();
 
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
         when(employeeMapper.toEntity(any(EmployeeCreateDto.class))).thenReturn(employee);
         when(passwordEncoder.encode(employeeCreateDto.getEmail().split("@")[0])).thenReturn("encodedPassword");
         when(employeeRepository.save(employee)).thenReturn(employee);
 
-        Privilege privilege = new Privilege();
-        privilege.setPrivilegeShort(PrivilegeShort.DR_SPEC);
-        when(privilegeRepository.findByprivilegeShort(PrivilegeShort.DR_SPEC)).thenReturn(Optional.of(privilege));
+        Role role = new Role();
+        role.setRoleShort(RoleShort.ROLE_DR_SPEC);
+        when(roleRepository.findByRoleShort(RoleShort.ROLE_DR_SPEC)).thenReturn(Optional.of(role));
 
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
 
@@ -78,7 +87,7 @@ public class EmployeeServiceTest {
         assertNotNull(result);
         assertEquals(EMPLOYEE_LBZ, result.getLbz());
         //assertEquals(result.getPermissions(), employeeCreateDto.getPermissions()); // Da li treba u dto da vratimo i permisije
-        verify(employeesPrivilegeRepository).save(any(EmployeesPrivilege.class));
+        verify(employeesRoleRepository).save(any(EmployeesRole.class));
     }
 
     @Test
@@ -96,7 +105,7 @@ public class EmployeeServiceTest {
     @Test
     void findEmployeeInfo_whenEmployeeExists_shouldReturnEmployeeDto() {
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
         when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
@@ -151,7 +160,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -177,7 +186,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -229,7 +238,7 @@ public class EmployeeServiceTest {
         int size = 2;
 
         Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         Pageable pageable = PageRequest.of(page, size);
         PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
@@ -280,7 +289,7 @@ public class EmployeeServiceTest {
 
         assertNotNull(result);
         assertEquals(EMPLOYEE_LBZ, result.getLbz());
-        verify(employeeRepository,times(2)).save(employee);
+        verify(employeeRepository).save(employee);
         verify(employeeMapper).toDto(employee);
     }
 
@@ -320,16 +329,16 @@ public class EmployeeServiceTest {
         EmployeeUpdateAdminDto employeeUpdateAdminDto = EmployeeServiceTest.createEmployeeUpdateByAdminDto();
         Employee employee = EmployeeServiceTest.createEmployee();
         Employee updatedEmployee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto();
+        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
 
         when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
         when(employeeMapper.toEntity(employeeUpdateAdminDto, employee)).thenReturn(updatedEmployee);
         when(employeeRepository.save(updatedEmployee)).thenReturn(updatedEmployee);
         when(employeeMapper.toDto(updatedEmployee)).thenReturn(employeeDto);
 
-        Privilege privilege = new Privilege();
-        privilege.setPrivilegeShort(PrivilegeShort.DR_SPEC);
-        when(privilegeRepository.findByprivilegeShort(PrivilegeShort.DR_SPEC)).thenReturn(Optional.of(privilege));
+        Role role = new Role();
+        role.setRoleShort(RoleShort.ROLE_DR_SPEC);
+        when(roleRepository.findByRoleShort(RoleShort.ROLE_DR_SPEC)).thenReturn(Optional.of(role));
         when(employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ)).thenReturn(employeeDto);
         EmployeeDto result = employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ);
 
@@ -348,6 +357,7 @@ public class EmployeeServiceTest {
 
         assertThrows(EmployeeNotFoundException.class, () -> employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ));
     }
+
     // password reset
     @Test
     public void passwordReset_whenEmployeeExistsAndOldPasswordMatches_shouldReturnEmployeeMessageDto() {
@@ -373,7 +383,7 @@ public class EmployeeServiceTest {
         verify(employeeRepository).findByLbz(EMPLOYEE_LBZ);
         verify(employeeRepository).save(employee);
 
-        String expectedPattern = String.format("http://localhost:8080/api/employee/password_reset/%s/[a-z0-9-]+", EMPLOYEE_LBZ);
+        String expectedPattern = String.format("http://localhost:8080/api/employee/password-reset/%s/[a-z0-9-]+/", EMPLOYEE_LBZ);
         assertTrue(actualResult.getMessage().matches(expectedPattern));
         assertTrue(passwordEncoder.matches(passwordResetDto.getNewPassword(), employee.getNewPassword()));
     }
@@ -471,7 +481,7 @@ public class EmployeeServiceTest {
     private static final String HOSPITAL_FULLNAME = "Hospital1";
     private static final String HOSPITAL_SHORTNAME = "H1";
 
-    static{
+    static {
         HOSPITAL = new Hospital();
         HOSPITAL.setId(HOSPITAL_ID);
         HOSPITAL.setFullName(HOSPITAL_FULLNAME);
@@ -484,10 +494,10 @@ public class EmployeeServiceTest {
         DEPARTMENT.setHospital(HOSPITAL);
 
         EMPLOYEE_PERMISSIONS = new ArrayList<>();
-        EMPLOYEE_PERMISSIONS.add(PrivilegeShort.DR_SPEC.name());
+        EMPLOYEE_PERMISSIONS.add(RoleShort.ROLE_DR_SPEC.name());
     }
 
-    private static Employee createEmployee(){
+    public static Employee createEmployee() {
         Employee employee = new Employee();
         employee.setId(EMPLOYEE_ID);
         employee.setLbz(EMPLOYEE_LBZ);
@@ -508,7 +518,7 @@ public class EmployeeServiceTest {
         return employee;
     }
 
-    private static EmployeeCreateDto createEmployeeCreateDto(){
+    public static EmployeeCreateDto createEmployeeCreateDto() {
         EmployeeCreateDto dto = new EmployeeCreateDto();
         dto.setLbz(EMPLOYEE_LBZ);
         dto.setName(EMPLOYEE_NAME);
@@ -527,7 +537,7 @@ public class EmployeeServiceTest {
         return dto;
     }
 
-    private static EmployeeDto createEmployeeDto(){
+    public static EmployeeDto createEmployeeDto(DepartmentDto departmentDto) {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(EMPLOYEE_ID);
         employeeDto.setLbz(EMPLOYEE_LBZ);
@@ -542,11 +552,11 @@ public class EmployeeServiceTest {
         employeeDto.setEmail(EMPLOYEE_EMAIL);
         employeeDto.setTitle(EMPLOYEE_TITLE);
         employeeDto.setProfession(EMPLOYEE_PROFESSION);
-        employeeDto.setDepartment(DEPARTMENT);
+        employeeDto.setDepartment(createDepartment());
         return employeeDto;
     }
 
-    private static EmployeeUpdateDto createEmployeeUpdateDto(String oldPassword, String newPassword, String phone){
+    public static EmployeeUpdateDto createEmployeeUpdateDto(String oldPassword, String newPassword, String phone) {
         EmployeeUpdateDto employeeUpdateDto = new EmployeeUpdateDto();
         employeeUpdateDto.setOldPassword(oldPassword);
         employeeUpdateDto.setNewPassword(newPassword);
@@ -554,7 +564,7 @@ public class EmployeeServiceTest {
         return employeeUpdateDto;
     }
 
-    private static EmployeeUpdateAdminDto createEmployeeUpdateByAdminDto(){
+    public static EmployeeUpdateAdminDto createEmployeeUpdateByAdminDto() {
         EmployeeUpdateAdminDto employeeUpdateAdminDto = new EmployeeUpdateAdminDto();
         employeeUpdateAdminDto.setName(EMPLOYEE_NAME);
         employeeUpdateAdminDto.setSurname(EMPLOYEE_SURNAME);
@@ -570,6 +580,14 @@ public class EmployeeServiceTest {
         employeeUpdateAdminDto.setDepartmentPbo(DEPARTMENT.getPbo());
         employeeUpdateAdminDto.setPermissions(EMPLOYEE_PERMISSIONS);
         return employeeUpdateAdminDto;
+    }
+
+    public static DepartmentDto createDepartment(){
+        DepartmentDto dto = new DepartmentDto();
+        dto.setPbo(DEPARTMENT_PBO);
+        dto.setHospitalName(HOSPITAL_SHORTNAME);
+        dto.setName(DEPARTMENT_NAME);
+        return dto;
     }
 
 }
