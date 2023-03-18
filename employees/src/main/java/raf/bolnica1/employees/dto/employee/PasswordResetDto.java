@@ -13,10 +13,9 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 public class PasswordResetDto {
-    @NotEmpty
+    @NotEmpty(message = "Stara lozinka ne sme biti prazna.")
     private String oldPassword;
-    @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9_.-]{5,30}$")
-    /// Password can have letters, numbers and special characters like _ . - length should be between 5 and 30
+    @NotEmpty(message = "Nova lozinka ne sme biti prazna.")
+    @Pattern(regexp = "^[a-zA-Z0-9_.-]{5,30}$", message = "Nova lozinka može da sadrži slova, brojeve i specijalne karaktere [_,.,-] i mora da bude dužine između 5 i 30 karaktera.")
     private String newPassword;
 }

@@ -21,12 +21,12 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public ResponseEntity<List<DepartmentDto>> getAll(){
+    public ResponseEntity<List<DepartmentDto>> getAll() {
         return new ResponseEntity<>(departmentService.listAllDepartments(), HttpStatus.OK);
     }
 
     @GetMapping("/{pbo}")
-    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable String pbo){
+    public ResponseEntity<DepartmentDto> getDepartment(@PathVariable String pbo) {
         return new ResponseEntity<>(departmentService.getEmployeesDepartment(pbo), HttpStatus.OK);
     }
 
@@ -36,7 +36,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/hospital")
-    public ResponseEntity<List<HospitalDto>> getAllHospitals(){
+    public ResponseEntity<List<HospitalDto>> getAllHospitals() {
         return new ResponseEntity<>(departmentService.listAllHospitals(), HttpStatus.OK);
     }
 }

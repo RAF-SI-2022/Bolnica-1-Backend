@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raf.bolnica1.employees.domain.Department;
-import raf.bolnica1.employees.domain.Profession;
-import raf.bolnica1.employees.domain.Title;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -36,7 +35,7 @@ public class EmployeeUpdateAdminDto {
     @NotEmpty
     private String phone;
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@ibis\\.rs$")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@[a-zA-Z]{3,10}\\.[a-zA-Z]{2,10}$")
     private String email;
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}$")

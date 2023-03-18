@@ -2,6 +2,7 @@ package raf.bolnica1.employees.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity

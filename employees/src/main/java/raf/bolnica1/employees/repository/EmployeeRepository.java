@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findByUsername(String username);
+
     Optional<Employee> findByLbz(String lbz);
 
     @Query("SELECT e FROM Employee e JOIN Department d " +
@@ -24,11 +25,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "(:hospitalShortName IS NULL OR d.hospital.shortName LIKE %:hospitalShortName%) AND " +
             "(:deleted IS NULL OR e.deleted=:deleted)")
     Page<Employee> listEmployeesWithFilters(Pageable pageable,
-                                 @Param("name") String name,
-                                 @Param("surname") String surname,
-                                 @Param("deleted") boolean deleted,
-                                 @Param("departmentName") String departmentName,
-                                 @Param("hospitalShortName") String hospitalShortName);
+                                            @Param("name") String name,
+                                            @Param("surname") String surname,
+                                            @Param("deleted") boolean deleted,
+                                            @Param("departmentName") String departmentName,
+                                            @Param("hospitalShortName") String hospitalShortName);
 
     @Query("SELECT e FROM Employee e JOIN Department d " +
             "ON e.department.id = d.id " +
