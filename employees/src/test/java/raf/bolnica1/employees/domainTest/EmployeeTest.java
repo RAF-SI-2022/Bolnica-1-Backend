@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
-import raf.bolnica1.employees.domain.Profession;
-import raf.bolnica1.employees.domain.Title;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;

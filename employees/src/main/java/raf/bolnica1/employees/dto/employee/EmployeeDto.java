@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.employees.domain.Department;
-import raf.bolnica1.employees.domain.Profession;
-import raf.bolnica1.employees.domain.Title;
+import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.Title;
+import raf.bolnica1.employees.dto.department.DepartmentDto;
 
 import java.sql.Date;
 
@@ -30,5 +31,5 @@ public class EmployeeDto {
     private boolean deleted;
     private Title title;
     private Profession profession;
-    private Department department;
+    private DepartmentDto department;
 }
