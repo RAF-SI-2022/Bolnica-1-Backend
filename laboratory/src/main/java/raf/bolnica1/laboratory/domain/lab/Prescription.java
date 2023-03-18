@@ -1,0 +1,40 @@
+package raf.bolnica1.laboratory.domain.lab;
+
+import lombok.Getter;
+import lombok.Setter;
+import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
+import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
+import raf.bolnica1.laboratory.domain.constants.validation.EnumNotBlank;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "prescription", indexes = {@Index(columnList = "doctorId, departmentFromId")})
+public class Prescription {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @EnumNotBlank
+    @Enumerated(EnumType.STRING)
+    private PrescriptionType type;
+    @NotBlank
+    private Long doctorId;
+    @NotBlank
+    private Long departmentFromId;
+    @NotBlank
+    private Long departmentToId;
+    @NotBlank
+    private Long lbp;
+    @NotBlank
+    private Timestamp creationDateTime;
+    @Enumerated(EnumType.STRING)
+    private PrescriptionStatus status = PrescriptionStatus.NEREALIZOVAN;
+    private String requestedTests;
+    private String comment;
+    private String referralDiagnosis;
+    private String referralReason;
+}
