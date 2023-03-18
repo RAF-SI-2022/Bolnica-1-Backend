@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     // Ovo treba da se promeni u naziv mikroservisa.
-    private final String APP_TITLE = "Laboratory service";
+    private final String APP_TITLE = "Employee service";
     // Ovo treba da se promeni u neki opis mikroservisa.
-    private final String APP_DESCRIPTION = "API za Laboratorijski servis";
+    private final String APP_DESCRIPTION = "API za korisnicki servis";
 
     // Ovo ispod ostavite kako jeste.
     private final String APP_API_VERSION = "1.0";
     private final String APP_LICENSE = "Licenca";
-    private final String APP_LICENSE_URL = "";
+    private final String APP_LICENSE_URL = "Licenca";
 
     @Bean
     public OpenAPI openAPI() {
