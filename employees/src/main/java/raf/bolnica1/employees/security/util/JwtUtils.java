@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.exceptionHandler.exceptions.jwt.CantParseJwtException;
+import raf.bolnica1.employees.security.domain_dep.SecurityEmployee;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -37,7 +38,7 @@ public class JwtUtils {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
-        return generateToken(claims, userDetails.getUsername());
+        return generateToken(claims, ((SecurityEmployee) userDetails).getLbz());
     }
 
     public String getUsernameFromToken(String jwtToken) throws CantParseJwtException {
@@ -88,11 +89,11 @@ public class JwtUtils {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    private String generateToken(Map<String, Object> claims, String subject) {
+    private String generateToken(Map<String, Object> claims, String lbz) {
         Instant instant = Instant.now();
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(lbz)
                 .setIssuedAt(Date.from(instant))
                 .setExpiration(Date.from(instant.plus(TOKEN_EXPIRATION_MIN, ChronoUnit.MINUTES)))
                 .signWith(getKey())

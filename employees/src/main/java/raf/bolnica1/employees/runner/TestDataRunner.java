@@ -13,6 +13,7 @@ import raf.bolnica1.employees.domain.constants.Title;
 import raf.bolnica1.employees.repository.*;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 @Profile({"default"})
 @Component
@@ -28,7 +29,9 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // hospitals
+
+        defaultData();
+       /* // hospitals
         Hospital hospital1 = new Hospital();
         hospital1.setShortName("H1");
         hospital1.setFullName("Hospital1");
@@ -138,6 +141,88 @@ public class TestDataRunner implements CommandLineRunner {
 
         employeesRoleRepository.save(employeesRole1);
         employeesRoleRepository.save(employeesRole2);
-        employeesRoleRepository.save(employeesRole3);
+        employeesRoleRepository.save(employeesRole3);*/
+    }
+
+    private void defaultData() {
+        Hospital hospital = new Hospital();
+        hospital.setPbb("H123");
+        hospital.setFullName("General Hospital");
+        hospital.setShortName("GH");
+        hospital.setPlace("City Center");
+        hospital.setAddress("123 Main St");
+        hospital.setDateOfEstablishment(Date.valueOf("1995-04-05"));
+        hospital.setActivity("Healthcare");
+
+        hospitalRepository.save(hospital);
+
+        Department department1 = new Department();
+        department1.setPbo("D001");
+        department1.setName("Cardiology");
+        department1.setHospital(hospital);
+
+        Department department2 = new Department();
+        department2.setPbo("D002");
+        department2.setName("Neurology");
+        department2.setHospital(hospital);
+
+        Department department3 = new Department();
+        department3.setPbo("D003");
+        department3.setName("Gastroenterology");
+        department3.setHospital(hospital);
+
+        Department department4 = new Department();
+        department4.setPbo("D004");
+        department4.setName("Urology");
+        department4.setHospital(hospital);
+
+        departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4));
+
+        createEmployee("E0001", "John", "Doe", "M", RoleShort.ROLE_ADMIN, Title.PROF_DR_MED, Profession.MED_SESTRA, department1);
+        createEmployee("E0002", "Jane", "Smith", "Z", RoleShort.ROLE_DR_SPEC_ODELJENJA, Title.DR_MED_SPEC, Profession.SPEC_KARDIOLOG, department1);
+        createEmployee("E0003", "Mike", "Brown", "M", RoleShort.ROLE_DR_SPEC, Title.DR_SCI_ME, Profession.SPEC_NEUROLOG, department2);
+        createEmployee("E0004", "Mary", "Johnson", "Z", RoleShort.ROLE_DR_SPEC_POV, Title.DIPL_FARM, Profession.SPEC_GASTROENTEROLOG, department3);
+        createEmployee("E0005", "James", "Williams", "M", RoleShort.ROLE_MED_SESTRA, Title.MAG_FARM, Profession.SPEC_UROLOG, department4);
+        createEmployee("E0006", "Lisa", "Jones", "Z", RoleShort.ROLE_VISA_MED_SESTRA, Title.MR, Profession.SPEC_ENDOKRINOLOG, department4);
+        createEmployee("E0007", "Nancy", "Miller", "Z", RoleShort.ROLE_VISI_LAB_TEHNICAR, Title.DR_MED_SPEC, Profession.SPEC_BIOHEMICAR, department1);
+        createEmployee("E0008", "Paul", "Davis", "M", RoleShort.ROLE_LAB_TEHNICAR, Title.DIPL_FARM, Profession.SPEC_BIOHEMICAR, department2);
+        createEmployee("E0009", "Linda", "Garcia", "Z", RoleShort.ROLE_MED_BIOHEMICAR, Title.MAG_FARM, Profession.SPEC_BIOHEMICAR, department3);
+        createEmployee("E0010", "Steven", "Taylor", "M", RoleShort.ROLE_SPEC_MED_BIOHEMIJE, Title.MR, Profession.SPEC_BIOHEMICAR, department4);
+
+    }
+
+    private Employee createEmployee(String lbz, String name, String surname, String gender, RoleShort roleShort, Title title, Profession profession, Department department) {
+        Employee employee = new Employee();
+        employee.setLbz(lbz);
+        employee.setName(name);
+        employee.setSurname(surname);
+        employee.setDateOfBirth(Date.valueOf("1992-05-04"));
+        employee.setGender(gender);
+        employee.setJmbg("123456789");
+        employee.setAddress("Some Street");
+        employee.setPlaceOfLiving("Some City");
+        employee.setPhone("000-000-0000");
+        employee.setEmail(name.toLowerCase() + "." + surname.toLowerCase() + "@hospital.com");
+        employee.setUsername(name.toLowerCase() + "." + surname.toLowerCase());
+        employee.setPassword(passwordEncoder.encode("password"));
+        employee.setTitle(title);
+        employee.setProfession(profession);
+        employee.setDepartment(department);
+
+        employeeRepository.save(employee);
+
+        Role role = new Role();
+        role.setName(roleShort.name());
+        role.setRoleShort(roleShort);
+
+        roleRepository.save(role);
+
+        EmployeesRole employeesRole = new EmployeesRole();
+        employeesRole.setEmployee(employee);
+        employeesRole.setRole(role);
+
+        employeesRoleRepository.save(employeesRole);
+
+        return employee;
     }
 }
