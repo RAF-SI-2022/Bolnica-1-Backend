@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.domain.employee;
+package raf.bolnica1.laboratory.dto.employee;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

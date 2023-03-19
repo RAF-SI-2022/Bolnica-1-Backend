@@ -1,6 +1,6 @@
 package raf.bolnica1.laboratory.services.lab;
 
-public interface LaboratoryExaminationsService {
+public interface LabExaminationsService {
 
     Object createScheduledExamination(Object object);
 

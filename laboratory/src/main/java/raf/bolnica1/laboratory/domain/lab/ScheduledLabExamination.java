@@ -26,5 +26,5 @@ public class ScheduledLabExamination {
     private ExaminationStatus examinationStatus = ExaminationStatus.ZAKAZANO;
     private String note;
     @NotBlank
-    private Long lbz;
+    private String lbz;
 }
