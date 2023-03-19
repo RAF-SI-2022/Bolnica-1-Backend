@@ -11,5 +11,8 @@ public interface DepartmentService {
 
     DepartmentDto getEmployeesDepartment(String pbo);
 
-    List<HospitalDto> listAllHospitals();
+
+     List<HospitalDto> listAllHospitals();
+
+     List<DepartmentDto> getDepartments(String pbb);
 }

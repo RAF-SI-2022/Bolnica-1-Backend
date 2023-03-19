@@ -30,6 +30,11 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.getEmployeesDepartment(pbo), HttpStatus.OK);
     }
 
+    @GetMapping("/hospital/{pbb}")
+    public ResponseEntity<List<DepartmentDto>> getDepartments(@PathVariable String pbb){
+        return new ResponseEntity<>(departmentService.getDepartments(pbb), HttpStatus.OK);
+    }
+
     @GetMapping("/hospital")
     public ResponseEntity<List<HospitalDto>> getAllHospitals() {
         return new ResponseEntity<>(departmentService.listAllHospitals(), HttpStatus.OK);

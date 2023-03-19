@@ -38,6 +38,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         return new DepartmentDto(department.getId(), department.getPbo(), department.getName(), department.getHospital().getShortName());
     }
 
+    @Override
+    public List<DepartmentDto> getDepartments(String pbb) {
+        List<DepartmentDto> departmentDtos = new ArrayList<>();
+        List<Department> departments= departmentRepository.findByHostpitalPbb(pbb);
+        for(Department department: departments){
+            departmentDtos.add(new DepartmentDto(department.getId(), department.getPbo(), department.getName(), department.getHospital().getFullName()));
+        }
+        return departmentDtos;
+    }
 
     @Override
     public List<HospitalDto> listAllHospitals() {
