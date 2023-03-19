@@ -1,10 +1,10 @@
 package raf.bolnica1.laboratory.services.lab.impl;
 
 import org.springframework.stereotype.Service;
-import raf.bolnica1.laboratory.services.lab.LaboratoryExaminationsService;
+import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
 
 @Service
-public class LaboratoryExaminationsServiceImpl implements LaboratoryExaminationsService {
+public class LabExaminationsServiceImpl implements LabExaminationsService {
 
     @Override
     public Object createScheduledExamination(Object object) {

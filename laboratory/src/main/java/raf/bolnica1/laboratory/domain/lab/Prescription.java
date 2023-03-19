@@ -8,6 +8,7 @@ import raf.bolnica1.laboratory.domain.constants.validation.EnumNotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Getter
@@ -21,15 +22,15 @@ public class Prescription {
     @EnumNotBlank
     @Enumerated(EnumType.STRING)
     private PrescriptionType type;
-    @NotBlank
+    @NotNull
     private Long doctorId;
-    @NotBlank
+    @NotNull
     private Long departmentFromId;
-    @NotBlank
+    @NotNull
     private Long departmentToId;
     @NotBlank
-    private Long lbp;
-    @NotBlank
+    private String lbp;
+    @NotNull
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private PrescriptionStatus status = PrescriptionStatus.NEREALIZOVAN;

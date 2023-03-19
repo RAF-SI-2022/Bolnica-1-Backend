@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import raf.bolnica1.laboratory.dto.response.ErrorResponse;
-import raf.bolnica1.laboratory.exceptions.employee.EmployeeAlreadyExistsException;
-import raf.bolnica1.laboratory.exceptions.employee.EmployeeNotFoundException;
-import raf.bolnica1.laboratory.exceptions.employee.EmployeePasswordException;
+import raf.bolnica1.laboratory.exceptions.parameterAnalysisResult.NoParameterAnalysisResultsForWorkOrder;
+import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
+import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
+import raf.bolnica1.laboratory.exceptions.workOrder.NoParameterAnalysisResultFound;
+import raf.bolnica1.laboratory.exceptions.workOrder.NotAuthenticatedException;
 import raf.bolnica1.laboratory.util.JsonBuilder;
 
 import java.sql.Date;
@@ -17,9 +19,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionHandlerController {
     @ExceptionHandler({
-            EmployeeNotFoundException.class,
-            EmployeePasswordException.class,
-            EmployeeAlreadyExistsException.class
+            NoParameterAnalysisResultsForWorkOrder.class,
+            CantVerifyLabWorkOrderException.class,
+            LabWorkOrderNotFoundException.class,
+            NoParameterAnalysisResultFound.class,
+            NotAuthenticatedException.class,
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleCustomExceptions(Exception exception) {

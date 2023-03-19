@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
-import raf.bolnica1.laboratory.domain.lab.AnalysisParameter;
-import raf.bolnica1.laboratory.domain.lab.LabAnalysis;
-import raf.bolnica1.laboratory.domain.lab.Parameter;
-import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
-import raf.bolnica1.laboratory.repository.LabAnalysisRepository;
-import raf.bolnica1.laboratory.repository.ParameterRepository;
+import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
+import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
+import raf.bolnica1.laboratory.domain.lab.*;
+import raf.bolnica1.laboratory.repository.*;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 @Profile({"default"})
@@ -23,6 +23,11 @@ public class TestDataRunner implements CommandLineRunner {
     private final LabAnalysisRepository labAnalysisRepository;
     private final ParameterRepository parameterRepository;
     private final AnalysisParameterRepository analysisParameterRepository;
+
+    private final PrescriptionRepository prescriptionRepository;
+    private final LabWorkOrderRepository labWorkOrderRepository;
+
+    private final ParameterAnalysisResultRepository parameterAnalysisResultRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -603,13 +608,84 @@ public class TestDataRunner implements CommandLineRunner {
                 ap13, ap14, ap15, ap16, ap17, ap19, ap20)
         );
 
+        // prescriptions
+        Prescription prescription1 = new Prescription();
+        prescription1.setId(1L);
+        prescription1.setType(PrescriptionType.LABORATORIJA); // Replace SOME_TYPE with the appropriate PrescriptionType
+        prescription1.setDoctorId(101L);
+        prescription1.setDepartmentFromId(201L);
+        prescription1.setDepartmentToId(202L);
+        prescription1.setLbp("10001L");
+        prescription1.setCreationDateTime(Timestamp.valueOf("2023-03-18 10:00:00"));
+        prescription1.setStatus(PrescriptionStatus.NEREALIZOVAN);
+        prescription1.setRequestedTests("Test 1, Test 2");
+        prescription1.setComment("Urgent");
+        prescription1.setReferralDiagnosis("Diagnosis");
+        prescription1.setReferralReason("Reason");
+
+        Prescription prescription2 = new Prescription();
+        prescription2.setId(2L);
+        prescription2.setType(PrescriptionType.DIJAGNOSTIKA); // Replace ANOTHER_TYPE with the appropriate PrescriptionType
+        prescription2.setDoctorId(102L);
+        prescription2.setDepartmentFromId(203L);
+        prescription2.setDepartmentToId(204L);
+        prescription2.setLbp("10002L");
+        prescription2.setCreationDateTime(Timestamp.valueOf("2023-03-18 11:00:00"));
+        prescription2.setStatus(PrescriptionStatus.NEREALIZOVAN);
+        prescription2.setRequestedTests("Test 3, Test 4");
+        prescription2.setComment("Regular");
+        prescription2.setReferralDiagnosis("Another Diagnosis");
+        prescription2.setReferralReason("Another Reason");
+
+        prescriptionRepository.saveAll(Arrays.asList(prescription1, prescription2));
+
+        // work orders
+        LabWorkOrder labWorkOrder1 = new LabWorkOrder();
+        labWorkOrder1.setId(1L);
+        labWorkOrder1.setPrescription(prescription1);
+        labWorkOrder1.setLbp("20001L");
+        labWorkOrder1.setCreationDateTime(Timestamp.valueOf("2023-03-18 12:00:00"));
+        labWorkOrder1.setStatus(OrderStatus.NEOBRADJEN);
+        labWorkOrder1.setTechnicianLbz("ABC123");
+        //labWorkOrder1.setBiochemistLbz("Biochemist 1");
+
+        LabWorkOrder labWorkOrder2 = new LabWorkOrder();
+        labWorkOrder2.setId(2L);
+        labWorkOrder2.setPrescription(prescription2);
+        labWorkOrder2.setLbp("20002L");
+        labWorkOrder2.setCreationDateTime(Timestamp.valueOf("2023-03-18 13:00:00"));
+        labWorkOrder2.setStatus(OrderStatus.NEOBRADJEN);
+        labWorkOrder2.setTechnicianLbz("ABC1233");
+        //labWorkOrder2.setBiochemistLbz("Biochemist 2");
+
+        labWorkOrderRepository.saveAll(Arrays.asList(labWorkOrder1, labWorkOrder2));
+
+        // parameter analysis result
+        ParameterAnalysisResult parameterAnalysisResult1 = new ParameterAnalysisResult();
+        parameterAnalysisResult1.setId(1L);
+        parameterAnalysisResult1.setLabWorkOrder(labWorkOrder1); // Assuming labWorkOrder1 is defined
+        parameterAnalysisResult1.setAnalysisParameter(ap1);
+        parameterAnalysisResult1.setResult("15.5");
+        parameterAnalysisResult1.setDateTime(Timestamp.valueOf("2023-03-18 14:00:00"));
+        parameterAnalysisResult1.setBiochemistLbz("Biochemist 1");
+
+        ParameterAnalysisResult parameterAnalysisResult2 = new ParameterAnalysisResult();
+        parameterAnalysisResult2.setId(2L);
+        parameterAnalysisResult2.setLabWorkOrder(labWorkOrder1); // Assuming labWorkOrder2 is defined
+        parameterAnalysisResult2.setAnalysisParameter(ap2);
+        parameterAnalysisResult2.setResult("5.0");
+        parameterAnalysisResult2.setDateTime(Timestamp.valueOf("2023-03-18 15:00:00"));
+        parameterAnalysisResult2.setBiochemistLbz("Biochemist 2");
+
+        parameterAnalysisResultRepository.saveAll(Arrays.asList(parameterAnalysisResult1, parameterAnalysisResult2));
+
     }
 
     private void makeThemRelatable(LabAnalysis la, int i) {
         AnalysisParameter ap = new AnalysisParameter();
         ap.setLabAnalysis(la);
-        Parameter p = parameterRepository.findById((long) i).isPresent()? parameterRepository.findById((long) i).get(): null;
-        if(p == null){
+        Parameter p = parameterRepository.findById((long) i).isPresent() ? parameterRepository.findById((long) i).get() : null;
+        if (p == null) {
             throw new RuntimeException("Parameter p" + i + "=null");
         }
         ap.setParameter(p);

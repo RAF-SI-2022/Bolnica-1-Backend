@@ -13,5 +13,10 @@ public enum Profession {
     SPEC_PULMOLOG,
     SPEC_UROLOG,
     SPEC_HEMATOLOG,
-    SPEC_HIRURG
+    SPEC_HIRURG,
+
+    // laboratorija
+    LAB_TEHNICAR,
+    MED_BIOHEMICAR
+
 }

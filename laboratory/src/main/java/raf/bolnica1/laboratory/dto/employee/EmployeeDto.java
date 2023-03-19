@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.Profession;
 import raf.bolnica1.laboratory.domain.constants.Title;
-import raf.bolnica1.laboratory.domain.employee.DepartmentDto;
 
 import java.sql.Date;
 

@@ -5,5 +5,6 @@ public enum Title {
     DR_MED_SPEC,
     DR_SCI_ME,
     DIPL_FARM,
-    MAG_FARM, MR;
+    MAG_FARM,
+    MR
 }

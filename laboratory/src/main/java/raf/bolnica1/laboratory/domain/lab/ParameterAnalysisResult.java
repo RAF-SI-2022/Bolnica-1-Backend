@@ -15,10 +15,10 @@ public class ParameterAnalysisResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private LabWorkOrder workOrder;
+    private LabWorkOrder labWorkOrder;
     @ManyToOne
     private AnalysisParameter analysisParameter;
     private String result = null;
     private Timestamp dateTime = null;
-    private Integer lbzBiochemist = null;
+    private String biochemistLbz = null;
 }
