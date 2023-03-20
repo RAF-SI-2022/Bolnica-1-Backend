@@ -1,6 +1,9 @@
 package raf.bolnica1.laboratory.services.lab.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -106,8 +109,10 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
-    public Object findWorkOrdersByLab(Object object) {
-        return null;
+    public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, String fromDate, String toDate, OrderStatus status, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, fromDate, toDate, status);
     }
 
     @Override
