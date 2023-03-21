@@ -157,7 +157,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return lbz;
     }
 
-    private Date lastSecondOfTheDay(Date date) {
+    public Date lastSecondOfTheDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 23);
