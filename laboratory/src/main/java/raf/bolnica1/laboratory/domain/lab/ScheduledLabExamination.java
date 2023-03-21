@@ -6,7 +6,7 @@ import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class ScheduledLabExamination {
     @NotBlank
     private Long departmentId;
     @NotBlank
-    private Long lbp;
+    private String lbp;
     @NotBlank
     private Date scheduledDate;
     @Enumerated(EnumType.STRING)

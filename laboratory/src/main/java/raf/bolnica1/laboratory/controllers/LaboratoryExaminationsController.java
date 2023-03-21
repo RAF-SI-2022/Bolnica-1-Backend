@@ -1,14 +1,19 @@
 package raf.bolnica1.laboratory.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.dto.employee.EmployeeDto;
+import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.services.employee.EmployeeService;
+import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
 
 @RestController
 @RequestMapping("/examinations")
@@ -16,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LaboratoryExaminationsController {
 
     private final EmployeeService employeeService;
+    private LabExaminationsService labExaminationsService;
 
     /**
      * Test za komunikaciju
@@ -29,10 +35,11 @@ public class LaboratoryExaminationsController {
 
     //////////////////
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<?> createScheduledExamination() {
-        return null;
+    @PreAuthorize("hasAnyRole('LAB_TEHNICAR','VISI_LAB_TEHNICAR')")
+    public ResponseEntity<MessageDto> createScheduledExamination(@RequestParam("lbp")String lbp, @RequestParam("date")Date scheduledDate,@RequestParam("note")String note,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.createScheduledExamination(lbp, scheduledDate, note,request.getHeader("Authorization")),HttpStatus.OK);
     }
 
     @PutMapping("/update-status")
