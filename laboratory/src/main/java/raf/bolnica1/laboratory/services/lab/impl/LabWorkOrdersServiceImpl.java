@@ -1,6 +1,9 @@
 package raf.bolnica1.laboratory.services.lab.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,7 @@ import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAnalysisResultMessageDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.*;
-import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
-import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
-import raf.bolnica1.laboratory.exceptions.workOrder.NoParameterAnalysisResultFound;
-import raf.bolnica1.laboratory.exceptions.workOrder.NotAuthenticatedException;
+import raf.bolnica1.laboratory.exceptions.workOrder.*;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderMapper;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderWithAnalysisMapper;
 import raf.bolnica1.laboratory.mappers.ParameterAnalysisResultMapper;
@@ -24,7 +24,10 @@ import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
 import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -106,8 +109,22 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
-    public Object findWorkOrdersByLab(Object object) {
-        return null;
+    public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, String fromDate, String toDate, OrderStatus status, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Date from = null;
+        Date to = null;
+
+        if(fromDate != null && toDate != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                from = dateFormat.parse(fromDate);
+                to = lastSecondOfTheDay(dateFormat.parse(toDate));
+            } catch (Exception e) {
+                throw new DateParseException(String.format("Given date is not parsed correctly: %s or %s", fromDate, toDate));
+            }
+        }
+        return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, from, to, status);
     }
 
     @Override
@@ -140,4 +157,14 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return lbz;
     }
 
+    public Date lastSecondOfTheDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        return calendar.getTime();
+    }
 }

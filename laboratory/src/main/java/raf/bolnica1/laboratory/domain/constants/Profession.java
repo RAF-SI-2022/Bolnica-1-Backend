@@ -17,6 +17,6 @@ public enum Profession {
 
     // laboratorija
     LAB_TEHNICAR,
-    MED_BIOHEMICAR
-
+    MED_BIOHEMICAR,
+    VISI_LAB_TEHNICAR
 }
