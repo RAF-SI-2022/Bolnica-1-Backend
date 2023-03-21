@@ -658,7 +658,16 @@ public class TestDataRunner implements CommandLineRunner {
         labWorkOrder2.setTechnicianLbz("ABC1233");
         //labWorkOrder2.setBiochemistLbz("Biochemist 2");
 
-        labWorkOrderRepository.saveAll(Arrays.asList(labWorkOrder1, labWorkOrder2));
+        LabWorkOrder labWorkOrder3 = new LabWorkOrder();
+        labWorkOrder3.setId(3L);
+        labWorkOrder3.setPrescription(prescription2);
+        labWorkOrder3.setLbp("20001L");
+        labWorkOrder3.setCreationDateTime(Timestamp.valueOf("2023-03-19 13:00:00"));
+        labWorkOrder3.setStatus(OrderStatus.NEOBRADJEN);
+        labWorkOrder3.setTechnicianLbz("ABC1233");
+        //labWorkOrder3.setBiochemistLbz("Biochemist 3");
+
+        labWorkOrderRepository.saveAll(Arrays.asList(labWorkOrder1, labWorkOrder2, labWorkOrder3));
 
         // parameter analysis result
         ParameterAnalysisResult parameterAnalysisResult1 = new ParameterAnalysisResult();

@@ -32,11 +32,11 @@ public class LaboratoryWorkOrdersController {
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR', 'ROLE_VISI_LAB_TEHNICAR', 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_BIOHEMICAR')")
     public ResponseEntity<Page<LabWorkOrder>> findWorkOrdersByLab(
             @RequestParam String lbp,
-            @RequestParam String fromDate,
-            @RequestParam String toDate,
-            @RequestParam OrderStatus status,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) OrderStatus status,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "2") Integer size)  {
+            @RequestParam(defaultValue = "2") Integer size) {
         return new ResponseEntity<>(labWorkOrdersService.findWorkOrdersByLab(lbp, fromDate, toDate, status, page, size), HttpStatus.OK);
     }
 
