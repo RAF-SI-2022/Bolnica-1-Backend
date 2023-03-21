@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -30,7 +32,6 @@ import java.util.Map;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final SecurityService securityService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -59,11 +60,12 @@ public class SecurityFilter extends OncePerRequestFilter {
             }
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = securityService.loadUserByUsername(email);
 
-                if (jwtUtils.validateToken(jwtToken, userDetails)) {
+                if (jwtUtils.validateToken(jwtToken)) {
+                    List<GrantedAuthority> authorities = jwtUtils.getAuthoritiesFromToken(jwtToken);
+
                     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
+                            email, null, authorities
                     );
                     token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(token);
