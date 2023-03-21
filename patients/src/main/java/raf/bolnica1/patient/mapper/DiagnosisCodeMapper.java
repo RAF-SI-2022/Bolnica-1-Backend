@@ -13,6 +13,7 @@ public class DiagnosisCodeMapper {
         DiagnosisCodeDto dto=new DiagnosisCodeDto();
 
         dto.setDescription(entity.getDescription());
+        dto.setCode(entity.getCode());
         dto.setLatinDescription(entity.getLatinDescription());
 
         return dto;

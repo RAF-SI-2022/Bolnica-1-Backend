@@ -21,6 +21,7 @@ public class MedicalRecordMapper {
 
         MedicalRecordDto dto=new MedicalRecordDto();
 
+        dto.setId(medicalRecord.getId());
         dto.setOperationDtos(operationDtoList);
         dto.setMedicalHistoryDtos(medicalHistoryDtos);
         dto.setExaminationHistoryDtos(examinationHistoryDtos);

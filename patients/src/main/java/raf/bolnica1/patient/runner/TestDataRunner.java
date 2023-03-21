@@ -9,7 +9,7 @@ import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.constants.*;
-import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.GeneralMedicalDataRepository;
 import raf.bolnica1.patient.repository.MedicalRecordRepository;
@@ -29,6 +29,9 @@ public class TestDataRunner implements CommandLineRunner {
     private SocialDataRepository socialDataRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
+
+    private PatientMapper patientMapper;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -104,7 +107,7 @@ public class TestDataRunner implements CommandLineRunner {
         dto.setBirthPlace("Beograd");
         dto.setJmbg("11111112345");
         dto.setGender(Gender.MUSKO);
-        dto.setDateOfBirth("2011-11-11");
+        dto.setDateOfBirth(Date.valueOf("2011-11-11"));
         dto.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
         dto.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
         dto.setGuardianJmbg("20030612345");
@@ -116,6 +119,6 @@ public class TestDataRunner implements CommandLineRunner {
         dto.setProfession("");
         dto.setPlaceOfLiving("Beograd");
 
-        return PatientMapper.patientDtoToPatient(dto);
+        return patientMapper.patientDtoToPatient(dto);
     }
 }
