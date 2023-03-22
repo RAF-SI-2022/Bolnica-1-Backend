@@ -46,19 +46,19 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "/password-reset/{lbz}")
-    @PreAuthorize("#lbz == authentication.principal.lbz")
+    @PreAuthorize("#lbz == authentication.principal")
     public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody PasswordResetDto passwordResetDto, @PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.passwordReset(passwordResetDto, lbz), HttpStatus.ACCEPTED);
     }
 
     @GetMapping(path = "/password-reset/{lbz}/{token}/{jwt}")
-    @PreAuthorize("#lbz == authentication.principal.lbz")
+    @PreAuthorize("#lbz == authentication.principal")
     public ResponseEntity<EmployeeDto> passwordResetToken(@PathVariable("lbz") String lbz, @PathVariable("token") String token, @PathVariable String jwt) {
         return new ResponseEntity<>(employeeService.passwordResetToken(lbz, token), HttpStatus.OK);
     }
 
     @GetMapping(path = "/find/{lbz}")
-    @PreAuthorize("#lbz == authentication.principal.lbz")
+    @PreAuthorize("#lbz == authentication.principal")
     public ResponseEntity<EmployeeDto> findEmployeeInfo(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }
