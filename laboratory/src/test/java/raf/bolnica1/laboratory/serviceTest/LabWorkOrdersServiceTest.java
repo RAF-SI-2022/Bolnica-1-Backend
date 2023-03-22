@@ -50,6 +50,18 @@ public class LabWorkOrdersServiceTest {
     }
 
     @Test
+    void historyLabWorkOrders_whenDatePassedInWrongFormat_shouldThrowDateParseException() {
+        String lbp = "L0001";
+        String fromDate = "201804-18";
+        String toDate = "invalid date format";
+        OrderStatus status = OrderStatus.NEOBRADJEN;
+        int page = 0;
+        int size = 2;
+
+        assertThrows(DateParseException.class, () -> labWorkOrdersService.findWorkOrdersByLab(lbp, fromDate, toDate, status, page, size));
+    }
+
+    @Test
     void findLabWorkOrders_whenAllArgumentsExist_shouldGiveResults() {
 
         List<LabWorkOrder> workOrders = generateLabWorkOrders();
@@ -72,6 +84,32 @@ public class LabWorkOrdersServiceTest {
         given(labWorkOrderRepository.findWorkOrdersByLab(PageRequest.of(page, size), lbp, fromDate, toDate, status)).willReturn(p);
 
         assertEquals(labWorkOrdersService.findWorkOrdersByLab(lbp, "2020-01-01", "2020-01-03", status, page, size).getContent(), workOrders);
+    }
+
+    @Test
+    void historyLabWorkOrders_whenAllArgumentsExist_shouldGiveResults() {
+
+        List<LabWorkOrder> workOrders = generateLabWorkOrders();
+        Page<LabWorkOrder> p = new PageImpl<>(workOrders);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String lbp = "L0001";
+        Date fromDate = null;
+        Date toDate = null;
+
+        try {
+            fromDate = dateFormat.parse("2020-01-01");
+            toDate = labWorkOrdersService.lastSecondOfTheDay(dateFormat.parse("2020-01-03"));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        int page = 0;
+        int size = 2;
+
+        given(labWorkOrderRepository.workOrdersHistory(PageRequest.of(page, size), lbp, fromDate, toDate)).willReturn(p);
+
+        assertEquals(labWorkOrdersService.workOrdersHistory(lbp, "2020-01-01", "2020-01-03", page, size).getContent(), workOrders);
     }
 
     @Test

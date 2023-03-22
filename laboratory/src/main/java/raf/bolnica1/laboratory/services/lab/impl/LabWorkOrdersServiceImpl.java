@@ -102,10 +102,22 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return parameterAnalysisResultMapper.toDto(par);
     }
 
+    public Page<LabWorkOrder> workOrdersHistory(String lbp, String fromDate, String toDate, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Date from = null;
+        Date to = null;
 
-    @Override
-    public Object workOrdersHistory(Object object) {
-        return null;
+        if(fromDate != null && toDate != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                from = dateFormat.parse(fromDate);
+                to = lastSecondOfTheDay(dateFormat.parse(toDate));
+            } catch (Exception e) {
+                throw new DateParseException(String.format("Given date is not parsed correctly: %s or %s", fromDate, toDate));
+            }
+        }
+        return labWorkOrderRepository.workOrdersHistory(pageable, lbp, from, to);
     }
 
     @Override

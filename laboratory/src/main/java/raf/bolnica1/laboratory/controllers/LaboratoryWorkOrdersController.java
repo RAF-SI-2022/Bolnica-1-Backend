@@ -23,9 +23,14 @@ public class LaboratoryWorkOrdersController {
         return null;
     }
 
-    @GetMapping("/work-orders-history")
-    public ResponseEntity<?> workOrdersHistory() {
-        return null;
+    @PutMapping("/work-orders-history")
+    public ResponseEntity<Page<LabWorkOrder>> workOrdersHistory(
+            @RequestParam String lbp,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "2") Integer size)  {
+        return new ResponseEntity<>(labWorkOrdersService.workOrdersHistory(lbp, fromDate, toDate, page, size), HttpStatus.OK);
     }
 
     @PutMapping("/find-work-orders")
