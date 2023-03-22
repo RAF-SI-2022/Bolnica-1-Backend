@@ -573,8 +573,9 @@ public class EmployeeServiceTest {
         employeeUpdateAdminDto.setJmbg(EMPLOYEE_JMBG);
         employeeUpdateAdminDto.setAddress(EMPLOYEE_ADDRESS);
         employeeUpdateAdminDto.setPlaceOfLiving(EMPLOYEE_PLACE_OF_LIVING);
+        employeeUpdateAdminDto.setUsername("test.tafsd_a");
         employeeUpdateAdminDto.setPhone(EMPLOYEE_PHONE);
-        employeeUpdateAdminDto.setEmail(EMPLOYEE_EMAIL);
+        employeeUpdateAdminDto.setEmail("test._df@gmasd.casom");
         employeeUpdateAdminDto.setTitle(EMPLOYEE_TITLE);
         employeeUpdateAdminDto.setProfession(EMPLOYEE_PROFESSION);
         employeeUpdateAdminDto.setDepartmentPbo(DEPARTMENT.getPbo());
