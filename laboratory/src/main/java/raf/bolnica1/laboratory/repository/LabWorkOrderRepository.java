@@ -25,4 +25,14 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
             @Param("toDate") Date toDate,
             @Param("status") OrderStatus status);
 
+    @Query("SELECT lw FROM LabWorkOrder lw " +
+            "WHERE (lw.lbp = :lbp) " +
+            "AND (:fromDate IS NULL OR :toDate IS NULL OR lw.creationDateTime BETWEEN :fromDate AND :toDate) " +
+            "AND (lw.status IS 'U_OBRADI' OR lw.status = 'OBRADJEN')")
+    Page<LabWorkOrder> workOrdersHistory(
+            Pageable pageable,
+            @Param("lbp") String lbp,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate);
+
 }

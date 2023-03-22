@@ -16,7 +16,7 @@ public interface LabWorkOrdersService {
 
     UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long parameterAnalysisId, String result);
 
-    Object workOrdersHistory(Object object);
+    Page<LabWorkOrder> workOrdersHistory(String lbp, String fromDate, String toDate, Integer page, Integer size);
 
     Page<LabWorkOrder> findWorkOrdersByLab(String lbp, String fromDate, String toDate, OrderStatus status, Integer page, Integer size);
 
