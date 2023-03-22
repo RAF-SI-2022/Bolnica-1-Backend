@@ -35,10 +35,10 @@ public class EmployeeUpdateAdminDto {
     @NotEmpty
     private String phone;
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}@[a-zA-Z]{3,10}\\.[a-zA-Z]{2,10}$")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,63}$")
     private String email;
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]{4,29}$")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._-]{4,29}$")
     /// Username can start with letter only, can have numbers, and length must be between 5 and 30
     private String username;
     @Pattern(regexp = "^(?:[a-zA-Z0-9_.-]{5,30})?$")
