@@ -43,7 +43,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     private final PrescriptionRepository prescriptionRepository;
 
     @Override
-    public MessageDto createWorkOrder(Long prescriptionId) {
+    public LabWorkOrder createWorkOrder(Long prescriptionId) {
 
         String lbz=getLbzFromAuthentication();
 
@@ -58,9 +58,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
 
 
-
-
-        return new MessageDto(String.format("Uspesno napravljen laboratorijski radni nalog na osonovu uputa %lld",prescriptionId));
+        return labWorkOrder;
     }
 
     @Override

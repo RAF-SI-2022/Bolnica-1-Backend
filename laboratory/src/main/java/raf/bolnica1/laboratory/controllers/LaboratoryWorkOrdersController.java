@@ -16,10 +16,10 @@ public class LaboratoryWorkOrdersController {
     private final LabWorkOrdersService labWorkOrdersService;
 
     //Ovako sam preveo uput posto nisam siguran da li postoji bolji naziv za to u engleskom jeziku
-    @PostMapping("/create/{guidance_id}")
+    /*@PostMapping("/create/{guidance_id}")
     public ResponseEntity<MessageDto> createWorkOrder(@PathVariable("guidance_id") Long id) {
         return new ResponseEntity<>(labWorkOrdersService.createWorkOrder(id),HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping("/work-orders-history")
     public ResponseEntity<?> workOrdersHistory() {

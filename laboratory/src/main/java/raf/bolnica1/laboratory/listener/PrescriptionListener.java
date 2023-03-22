@@ -4,7 +4,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
-import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
