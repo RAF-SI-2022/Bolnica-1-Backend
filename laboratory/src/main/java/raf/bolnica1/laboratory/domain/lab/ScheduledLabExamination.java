@@ -6,6 +6,7 @@ import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Getter
@@ -16,11 +17,11 @@ public class ScheduledLabExamination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+    @NotNull
     private Long departmentId;
     @NotBlank
     private String lbp;
-    @NotBlank
+    @NotNull
     private Date scheduledDate;
     @Enumerated(EnumType.STRING)
     private ExaminationStatus examinationStatus = ExaminationStatus.ZAKAZANO;

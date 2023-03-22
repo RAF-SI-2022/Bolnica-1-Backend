@@ -19,7 +19,6 @@ public class PrescriptionMapper {
         dto.setReferralReason(entity.getReferralReason());
         dto.setReferralDiagnosis(entity.getReferralDiagnosis());
         dto.setCreationDateTime(entity.getCreationDateTime());
-        dto.setRequestedTests(entity.getRequestedTests());
         dto.setDepartmentFromId(entity.getDepartmentFromId()); // naci
         dto.setDepartmentToId(entity.getDepartmentToId()); // naci
         dto.setDoctorId(entity.getDoctorId()); // naci

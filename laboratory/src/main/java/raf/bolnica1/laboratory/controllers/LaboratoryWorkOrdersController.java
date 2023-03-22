@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
 
 @RestController
@@ -16,8 +17,8 @@ public class LaboratoryWorkOrdersController {
 
     //Ovako sam preveo uput posto nisam siguran da li postoji bolji naziv za to u engleskom jeziku
     @PostMapping("/create/{guidance_id}")
-    public ResponseEntity<?> createWorkOrder(@PathVariable("guidance_id") Long id) {
-        return null;
+    public ResponseEntity<MessageDto> createWorkOrder(@PathVariable("guidance_id") Long id) {
+        return new ResponseEntity<>(labWorkOrdersService.createWorkOrder(id),HttpStatus.OK);
     }
 
     @GetMapping("/work-orders-history")

@@ -618,7 +618,6 @@ public class TestDataRunner implements CommandLineRunner {
         prescription1.setLbp("10001L");
         prescription1.setCreationDateTime(Timestamp.valueOf("2023-03-18 10:00:00"));
         prescription1.setStatus(PrescriptionStatus.NEREALIZOVAN);
-        prescription1.setRequestedTests("Test 1, Test 2");
         prescription1.setComment("Urgent");
         prescription1.setReferralDiagnosis("Diagnosis");
         prescription1.setReferralReason("Reason");
@@ -632,7 +631,6 @@ public class TestDataRunner implements CommandLineRunner {
         prescription2.setLbp("10002L");
         prescription2.setCreationDateTime(Timestamp.valueOf("2023-03-18 11:00:00"));
         prescription2.setStatus(PrescriptionStatus.NEREALIZOVAN);
-        prescription2.setRequestedTests("Test 3, Test 4");
         prescription2.setComment("Regular");
         prescription2.setReferralDiagnosis("Another Diagnosis");
         prescription2.setReferralReason("Another Reason");

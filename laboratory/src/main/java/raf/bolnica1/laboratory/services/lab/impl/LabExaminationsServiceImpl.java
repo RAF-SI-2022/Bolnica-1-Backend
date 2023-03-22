@@ -19,6 +19,7 @@ import raf.bolnica1.laboratory.repository.ScheduledLabExaminationRepository;
 import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
 
 import java.sql.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -37,7 +38,7 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
         HttpHeaders httpHeaders=new HttpHeaders();
         httpHeaders.setBearerAuth(token);
         HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
-        ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/employee/department/"+lbz, HttpMethod.GET,httpEntity, Long.class);
+        ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
 
         ScheduledLabExamination scheduledLabExamination=scheduledLabExaminationMapper.toEntity(departmentId.getBody(),lbp,scheduledDate,note,lbz);
         scheduledLabExaminationRepository.save(scheduledLabExamination);
@@ -51,13 +52,26 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
-    public Object listScheduledExaminationsByDay(Object object) {
-        return null;
+    public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Long date,String token) {
+        String lbz=getLbzFromAuthentication();
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.setBearerAuth(token);
+        HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
+        ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
+
+        Date sqlDate=new Date(date);
+        return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDateAndDepartmentId(sqlDate,departmentId.getBody()));
     }
 
     @Override
-    public Object listScheduledExaminations(Object object) {
-        return null;
+    public List<ScheduledLabExaminationDto> listScheduledExaminations(String token) {
+        String lbz=getLbzFromAuthentication();
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.setBearerAuth(token);
+        HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
+        ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
+
+        return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDepartmentId(departmentId.getBody()));
     }
 
     private String getLbzFromAuthentication(){

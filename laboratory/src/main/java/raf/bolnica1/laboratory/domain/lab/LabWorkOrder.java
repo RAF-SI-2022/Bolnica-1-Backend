@@ -18,7 +18,7 @@ public class LabWorkOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @ManyToOne
+    @OneToOne
     private Prescription prescription;
     @NotBlank
     private String lbp;

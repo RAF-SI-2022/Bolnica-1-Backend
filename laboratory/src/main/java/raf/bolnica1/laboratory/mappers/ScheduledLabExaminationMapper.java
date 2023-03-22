@@ -5,6 +5,8 @@ import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ScheduledLabExaminationMapper {
@@ -20,6 +22,18 @@ public class ScheduledLabExaminationMapper {
         dto.setLbp(entity.getLbp());
         dto.setScheduledDate(entity.getScheduledDate());
         dto.setDepartmentId(entity.getDepartmentId());
+
+        return dto;
+    }
+
+    public List<ScheduledLabExaminationDto> toDto(List<ScheduledLabExamination> entity){
+
+        if(entity==null)return null;
+
+        List<ScheduledLabExaminationDto> dto=new ArrayList<>();
+
+        for(ScheduledLabExamination scheduledLabExamination:entity)
+            dto.add(toDto(scheduledLabExamination));
 
         return dto;
     }

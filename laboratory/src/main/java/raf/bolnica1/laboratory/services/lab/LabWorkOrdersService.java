@@ -2,10 +2,11 @@ package raf.bolnica1.laboratory.services.lab;
 
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAnalysisResultMessageDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.*;
+import raf.bolnica1.laboratory.dto.response.MessageDto;
 
 public interface LabWorkOrdersService {
 
-    LabWorkOrderDto createWorkOrder(Object dto);
+    MessageDto createWorkOrder(Long prescriptionId);
 
     LabWorkOrderDto updateWorkOrder(Object dto);
 

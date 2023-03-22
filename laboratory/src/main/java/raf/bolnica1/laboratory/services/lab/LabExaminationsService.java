@@ -5,6 +5,7 @@ import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExami
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 
 import java.sql.Date;
+import java.util.List;
 
 public interface LabExaminationsService {
 
@@ -12,7 +13,7 @@ public interface LabExaminationsService {
 
     Object changeExaminationStatus(Object object);
 
-    Object listScheduledExaminationsByDay(Object object);
+    List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Long date,String token);
 
-    Object listScheduledExaminations(Object object);
+    List<ScheduledLabExaminationDto> listScheduledExaminations(String token);
 }
