@@ -16,6 +16,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     List<Department> findByHospital(Hospital hospital);
 
+
     @Query(value = "select d from Department d where d.hospital.pbb = :pbb")
     List<Department> findByHostpitalPbb(@Param("pbb") String pbb);
 }

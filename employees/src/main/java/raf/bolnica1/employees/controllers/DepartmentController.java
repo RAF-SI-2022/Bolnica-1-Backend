@@ -3,10 +3,7 @@ package raf.bolnica1.employees.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.services.DepartmentService;
@@ -19,6 +16,12 @@ import java.util.List;
 public class DepartmentController {
 
     private DepartmentService departmentService;
+
+
+    @GetMapping("/employee/{lbz}")
+    public ResponseEntity<Long> findDepartmentIdByLbz(@PathVariable("lbz")String lbz){
+        return new ResponseEntity<>(departmentService.findDepartmentIdByLbz(lbz),HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<DepartmentDto>> getAll() {

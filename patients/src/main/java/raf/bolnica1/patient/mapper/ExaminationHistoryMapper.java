@@ -25,6 +25,7 @@ public class ExaminationHistoryMapper {
 
         ExaminationHistoryDto dto=new ExaminationHistoryDto();
 
+        dto.setId(entity.getId());
         dto.setAdvice(entity.getAdvice());
         dto.setConfidential(entity.isConfidential());
         dto.setLbz(entity.getLbz());
