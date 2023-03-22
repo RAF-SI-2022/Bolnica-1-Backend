@@ -4,16 +4,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.employees.domain.Department;
+import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.Hospital;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
+import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
 import raf.bolnica1.employees.repository.DepartmentRepository;
+import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.repository.HospitalRepository;
 import raf.bolnica1.employees.services.DepartmentService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,7 +25,14 @@ import java.util.List;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+    private final EmployeeRepository employeeRepository;
     private final HospitalRepository hospitalRepository;
+
+    @Override
+    public Long findDepartmentIdByLbz(String lbz) {
+        Employee employee=employeeRepository.findByLbz(lbz).orElseThrow(()->new EmployeeNotFoundException(String.format("Employee with lbz %s not found",lbz)));
+        return employee.getDepartment().getId();
+    }
 
     @Override
     public List<DepartmentDto> listAllDepartments() {
