@@ -15,4 +15,5 @@ public interface PrescriptionService {
 
     void updatePrescriptionStatus(Long id, PrescriptionStatus status);
 
+
 }
