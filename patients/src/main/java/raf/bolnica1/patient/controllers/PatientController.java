@@ -78,13 +78,13 @@ public class PatientController {
         return new ResponseEntity<>(patientCrudService.filterPatients(lbp,jmbg,name,surname,page,size),HttpStatus.OK);
     }
 
-/**
 
 
+/*
     //Dobijanje istorije bolesti pacijenta
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC", "DR_SPEC_POV"})
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findByDesease")
+    ///@CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC", "DR_SPEC_POV"})
+    @GetMapping("/findByDesease")
     public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@RequestHeader("Authorization") String authorization,
                                                                            @Param("lbp")String lbp,
                                                                            @Param("mkb10")Long mkb10){
@@ -99,7 +99,7 @@ public class PatientController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
     }
-
+/*
 
     //Svi izvestaji
     //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom

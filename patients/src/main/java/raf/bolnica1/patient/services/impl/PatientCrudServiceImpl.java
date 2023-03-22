@@ -81,4 +81,8 @@ public class PatientCrudServiceImpl implements PatientCrudService{
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         return patientMapper.patientToPatientDto(patient);
     }
+
+
+
+
 }
