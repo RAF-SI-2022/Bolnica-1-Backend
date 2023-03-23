@@ -43,6 +43,22 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     private final PrescriptionRepository prescriptionRepository;
 
     @Override
+    public LabWorkOrder createWorkOrder(Prescription prescription) {
+
+        String lbz=getLbzFromAuthentication();
+
+        LabWorkOrder labWorkOrder=new LabWorkOrder();
+
+        labWorkOrder.setPrescription(prescription);
+        labWorkOrder.setLbp(prescription.getLbp());
+        labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
+        labWorkOrder.setTechnicianLbz(lbz);
+        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+
+        return labWorkOrder;
+    }
+
+    @Override
     public LabWorkOrder createWorkOrder(Long prescriptionId) {
 
         String lbz=getLbzFromAuthentication();
@@ -145,6 +161,12 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         List<ParameterAnalysisResult> parameterAnalysisResults =  parameterAnalysisResultRepository.findParameterAnalysisResultsByWorkOrderIdAndAllowedStatuses(id, allowedStatuses);
 
         return labWorkOrderWithAnalysisMapper.toDto(labWorkOrder, parameterAnalysisResults);
+    }
+
+    @Override
+    public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
+           parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
+           labWorkOrderRepository.delete(labWorkOrder);
     }
 
     private String getLbzFromAuthentication(){

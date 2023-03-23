@@ -2,14 +2,20 @@ package raf.bolnica1.laboratory.mappers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import raf.bolnica1.laboratory.domain.lab.Prescription;
-import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
+import raf.bolnica1.laboratory.domain.lab.*;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
-
+import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
+import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
+import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
+import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 
 @Component
 @AllArgsConstructor
 public class PrescriptionMapper {
+
+    private LabWorkOrderRepository labWorkOrderRepository;
+    private ParameterAnalysisResultRepository parameterAnalysisResultRepository;
+    private AnalysisParameterRepository analysisParameterRepository;
 
     public PrescriptionDto toDto(Prescription entity) {
         PrescriptionDto dto = new PrescriptionDto();
@@ -23,6 +29,7 @@ public class PrescriptionMapper {
         dto.setDepartmentFromId(entity.getDepartmentFromId()); // naci
         dto.setDepartmentToId(entity.getDepartmentToId()); // naci
         dto.setDoctorId(entity.getDoctorId()); // naci
+
         return dto;
     }
 

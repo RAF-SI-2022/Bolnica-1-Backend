@@ -1,6 +1,7 @@
 package raf.bolnica1.laboratory.services.lab;
 
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
+import raf.bolnica1.laboratory.domain.lab.Prescription;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAnalysisResultMessageDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.*;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
@@ -8,6 +9,8 @@ import raf.bolnica1.laboratory.dto.response.MessageDto;
 public interface LabWorkOrdersService {
 
     LabWorkOrder createWorkOrder(Long prescriptionId);
+
+    LabWorkOrder createWorkOrder(Prescription prescription);
 
     LabWorkOrderDto updateWorkOrder(Object dto);
 
@@ -20,5 +23,8 @@ public interface LabWorkOrdersService {
     Object findWorkOrdersByLab(Object object);
 
     LabWorkOrderWithAnalysisDto findParameterAnalysisResultsForWorkOrder(Long id);
+
+    void deleteWorkOrder(LabWorkOrder labWorkOrder);
+
 
 }
