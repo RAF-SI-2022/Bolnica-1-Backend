@@ -9,11 +9,8 @@ import org.springframework.stereotype.Repository;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 
-<<<<<<< HEAD
 import java.util.Optional;
-=======
 import java.util.Date;
->>>>>>> 08bc480b86118ff2048a026d1a56701056e57e59
 
 @Repository
 public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long> {
