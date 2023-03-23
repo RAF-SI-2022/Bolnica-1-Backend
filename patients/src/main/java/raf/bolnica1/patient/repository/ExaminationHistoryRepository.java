@@ -1,5 +1,7 @@
 package raf.bolnica1.patient.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +21,11 @@ public interface ExaminationHistoryRepository extends JpaRepository<ExaminationH
 
     @Query("SELECT eh FROM ExaminationHistory eh WHERE eh.medicalRecord=:mr")
     List<ExaminationHistory> findExaminationHistoryByMedicalRecord(@Param("mr")MedicalRecord medicalRecord);
+
+    @Query("SELECT eh FROM ExaminationHistory eh WHERE eh.medicalRecord=:mr AND eh.examDate>=:sdt AND eh.examDate<=:edt")
+    Page<List<ExaminationHistory>> findExaminationHistoryByMedicalRecordAndDateRange(Pageable pageable,
+                                                                                     @Param("mr") MedicalRecord medicalRecord,
+                                                                                     @Param("sdt") Date startDate,
+                                                                                     @Param("edt") Date endDate);
+
 }
