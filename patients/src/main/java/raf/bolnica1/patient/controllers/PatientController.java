@@ -86,7 +86,7 @@ public class PatientController {
 
 
     @GetMapping("/filter_patients")
-    public ResponseEntity<Page<PatientDto>> findPatientByLbp(@RequestParam("lbp")String lbp,
+    public ResponseEntity<Page<PatientDto>> filterPatients(@RequestParam("lbp")String lbp,
                                                              @RequestParam("jmbg")String jmbg,
                                                              @RequestParam("name")String name,
                                                              @RequestParam("surname")String surname,
@@ -95,70 +95,6 @@ public class PatientController {
     ){
         return new ResponseEntity<>(patientCrudService.filterPatients(lbp,jmbg,name,surname,page,size),HttpStatus.OK);
     }
-
-
-
-/*
-    //Dobijanje istorije bolesti pacijenta
-    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    ///@CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC", "DR_SPEC_POV"})
-    @GetMapping("/findByDesease")
-    public ResponseEntity<List<PatientDtoDesease>> hisotryOfDeseasePatient(@RequestHeader("Authorization") String authorization,
-                                                                           @Param("lbp")String lbp,
-                                                                           @Param("mkb10")Long mkb10){
-        //Dohvatanje istorija bolesti preko lbpa-a pacijenta i preko mkb10 (dijagnoza)
-        List<PatientDtoDesease> medicalHistory = patientService.hisotryOfDeseasePatient(lbp,mkb10);
-
-        //Provera da li postoji bolest
-        if( medicalHistory != null){
-            return ResponseEntity.ok(medicalHistory);
-        }
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-
-    }
-/*
-
-    //Svi izvestaji
-    //priv: nacelnik odeljenja, doktor spec, doktor spec sa poverljivim pristupom
-    @CheckPermission(permissions = {"DR_SPEC_ODELJENJA", "DR_SPEC", "DR_SPEC_POV"})
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/findReport")
-    public ResponseEntity<?> findReportPatient(@RequestHeader("Authorization") String authorization,
-                                               @Param("lbp") String lbp,
-                                               @Param("currDate") Date currDate,
-                                               @Param("fromDate") Date fromDate,
-                                               @Param("toDate") Date toDate){
-
-        //Provera da li se vrsi pretraga preko konkretnog datuma ili preko raspona datuma od-do
-        if(currDate != null && fromDate == null && toDate == null){
-            //Pretraga preko konkretnog datuma i lbp-a pacijenta
-            List<PatientDtoReport> examinationHistory = patientService.findReportPatientByCurrDate(lbp,currDate);
-
-            //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
-            if(examinationHistory != null){
-                return ResponseEntity.ok(examinationHistory);
-            }else{
-                return null;
-            }
-
-
-        }else if(currDate == null && fromDate != null && toDate != null){
-            //Pretraga preko raspona datuma od-do i lbp-a pacijenta
-            List<PatientDtoReport> examinationHistory = patientService.findReportPatientByFromAndToDate(lbp,fromDate,toDate);
-
-            //Provera da li postoji lista izvestaja ako postoji onda ih vracamo ako ne onda vracamo null
-            if(examinationHistory != null){
-                return ResponseEntity.ok(examinationHistory);
-            }else{
-                return null;
-            }
-        }
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    }
-
-
-*/
 
 
     @GetMapping("/admin/test")
