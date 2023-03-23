@@ -19,6 +19,7 @@ public class MedicalHistory {
     @NotNull
     private Date startDate;
     private Date endDate;
+    private boolean confidential;
     @Enumerated(EnumType.STRING)
     private TreatmentResult treatmentResult;
     private String currStateDesc;

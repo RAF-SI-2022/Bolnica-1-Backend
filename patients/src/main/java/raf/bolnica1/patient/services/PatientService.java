@@ -1,14 +1,10 @@
 package raf.bolnica1.patient.services;
-
-import raf.bolnica1.patient.domain.Patient;
+import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.general.*;
 
-
-import java.sql.Date;
-import java.util.List;
-
-
 public interface PatientService {
+
+    ScheduleExamDto shedule(ScheduleExamCreateDto scheduleExamCreateDto);
 
 /**
 
