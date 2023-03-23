@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.services.MedicalExaminationService;
@@ -22,8 +23,8 @@ public class MedicalExaminationController {
     }
 
     @PostMapping("/diagnosis_history/{lbp}")
-    public ResponseEntity<MedicalHistoryDto> createDiagnosisHistory(@PathVariable String lbp, @RequestBody MedicalHistoryDto medicalHistoryDto){
-        return new ResponseEntity<>(medicalExaminationService.addMedicalHistory(lbp, medicalHistoryDto), HttpStatus.OK);
+    public ResponseEntity<MedicalHistoryDto> createDiagnosisHistory(@PathVariable String lbp, @RequestBody MedicalHistoryCreateDto medicalHistoryCreateDto){
+        return new ResponseEntity<>(medicalExaminationService.addMedicalHistory(lbp, medicalHistoryCreateDto), HttpStatus.OK);
     }
 
 

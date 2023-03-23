@@ -1,30 +1,23 @@
 package raf.bolnica1.patient.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import raf.bolnica1.patient.checking.CheckPermission;
-
-import raf.bolnica1.patient.domain.Patient;
-
 
 import raf.bolnica1.patient.dto.create.PatientCreateDto;
-import raf.bolnica1.patient.dto.create.PatientGeneralDto;
 import raf.bolnica1.patient.dto.create.PatientUpdateDto;
+import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.*;
+import raf.bolnica1.patient.dto.prescription.PrescriptionDto;
 import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
-import java.sql.Date;
-import java.util.List;
 
-import org.springframework.http.MediaType;
-
-import javax.validation.Valid;
+import raf.bolnica1.patient.services.PrescriptionService;
 
 
 @RestController
@@ -34,12 +27,13 @@ public class PatientController {
 
     private PatientService patientService;
     private PatientCrudService patientCrudService;
+    private PrescriptionService prescriptionService;
 
     //Registracija pacijenta
     //priv: visa med sesta, med sestra
     //@CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
     @PostMapping("/register")
-    public ResponseEntity<PatientDto> registerPatient(@RequestHeader("Authorization") String authorization,
+    public ResponseEntity<PatientDto> registerPatient(
                                                       @RequestBody PatientCreateDto patient){
         return new ResponseEntity<>(this.patientCrudService.registerPatient(patient), HttpStatus.OK);
     }
@@ -61,6 +55,29 @@ public class PatientController {
     public ResponseEntity<MessageDto> deletePatient(@RequestHeader("Authorization") String authorization,
                                            @PathVariable String lbp){
         return new ResponseEntity<>(patientCrudService.deletePatient(lbp), HttpStatus.OK);
+    }
+
+    @GetMapping("/prescriptions/{lbp}")
+    public ResponseEntity<Page<PrescriptionDto>> getPerscriptions(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
+                                                                  @RequestParam Long doctorId,
+                                                                  @RequestParam(defaultValue = "0") Integer page,
+                                                                  @RequestParam(defaultValue = "10") Integer size){
+        return new ResponseEntity<>(prescriptionService.getPrescriptionsForPatient(doctorId, lbp, authorization, page, size), HttpStatus.OK);
+    }
+
+    @PostMapping("prescription")
+    public ResponseEntity<MessageDto> writePerscription(@RequestBody PrescriptionCreateDto perscriptionCreateDto){
+        return new ResponseEntity<>(prescriptionService.sendPersctiption(perscriptionCreateDto), HttpStatus.OK);
+    }
+
+    @PutMapping("prescription")
+    public ResponseEntity<MessageDto> putPerscription(@RequestBody PrescriptionCreateDto perscriptionCreateDto){
+        return new ResponseEntity<>(prescriptionService.sendPersctiption(perscriptionCreateDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("prescription/{id}")
+    public ResponseEntity<MessageDto> deletePerscription(@RequestHeader("Authorization") String authorization, @PathVariable Long id){
+        return new ResponseEntity<>(prescriptionService.deletePresscription(id, authorization), HttpStatus.OK);
     }
 
 /**

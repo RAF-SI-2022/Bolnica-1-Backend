@@ -48,11 +48,8 @@ public class PatientMapper {
         return patient;
     }
 
-    public Patient patientDtoToPatientGeneralData(PatientGeneralDto dto){
-        Patient patient = new Patient();
+    public Patient patientDtoToPatientGeneralDataUpdate(Patient patient, PatientGeneralDto dto){
 
-
-        patient.setLbp(dto.getLbp());
         patient.setJmbg(dto.getJmbg());
         patient.setName(dto.getName());
         patient.setParentName(dto.getParentName());
@@ -68,16 +65,14 @@ public class PatientMapper {
         patient.setEmail(dto.getEmail());
         patient.setGuardianJmbg(dto.getGuardianJmbg());
         patient.setGuardianNameAndSurname(dto.getGuardianNameAndSurname());
-        patient.setDeleted(false);
-
-        /// patient.setSocialData(socialData);
 
         return patient;
     }
 
-    public Patient patientDtoToPatientGeneralDataUpdate(PatientGeneralDto dto){
+    public Patient patientDtoToPatientGeneralData(PatientGeneralDto dto){
         Patient patient = new Patient();
         patient.setLbp(dto.getLbp());
+        patient.setDeleted(false);
         setPatientGeneralData(dto, patient);
 
         return patient;

@@ -49,6 +49,20 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+		<!-- AMQ -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-broker</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-kahadb-store</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -71,7 +85,6 @@
 <!--			<version>5.9.2</version>-->
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Vezbe 2 -->
 		<!-- Mockito Inline - koristi se za mockovanje statickih metoda -->
 		<!-- Preporuceno je dodati ovaj dependency u vase projekte, tj. u svaki mikroservis -->

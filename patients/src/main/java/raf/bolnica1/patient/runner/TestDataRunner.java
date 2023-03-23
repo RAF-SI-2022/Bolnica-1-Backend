@@ -9,7 +9,7 @@ import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.constants.*;
-import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.GeneralMedicalDataRepository;
 import raf.bolnica1.patient.repository.MedicalRecordRepository;
@@ -32,6 +32,7 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        /**
         Patient patient1 = createEntity();
         Patient patient2 = createEntity();
         Patient patient3 = createEntity();
@@ -91,31 +92,6 @@ public class TestDataRunner implements CommandLineRunner {
 
         md3.setGeneralMedicalData(gmd3);
         medicalRecordRepository.save(md3);
-    }
-
-    private Patient createEntity(){
-
-        PatientDto dto = new PatientDto();
-        dto.setLbp(UUID.randomUUID().toString());
-        dto.setName("Petar");
-        dto.setSurname("Petrovic");
-        dto.setCitizenship(CountryCode.SRB);
-        dto.setEmail("p4c1j3nt@mail.com");
-        dto.setBirthPlace("Beograd");
-        dto.setJmbg("11111112345");
-        dto.setGender(Gender.MUSKO);
-        dto.setDateOfBirth("2011-11-11");
-        dto.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
-        dto.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
-        dto.setGuardianJmbg("20030612345");
-        dto.setMaritalStatus(MaritalStatus.SAMAC_SAMICA);
-        dto.setParentName("Marko");
-        dto.setNumOfChildren(0);
-        dto.setGuardianNameAndSurname("Marko Markovic");
-        dto.setPhone("0630744261");
-        dto.setProfession("");
-        dto.setPlaceOfLiving("Beograd");
-
-        return PatientMapper.patientDtoToPatient(dto);
+        */
     }
 }

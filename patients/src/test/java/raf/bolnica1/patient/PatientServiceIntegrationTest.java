@@ -10,8 +10,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import raf.bolnica1.patient.domain.constants.*;
-import raf.bolnica1.patient.dto.PatientDto;
+import raf.bolnica1.patient.dto.general.PatientDto;
 
+import java.sql.Date;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -112,7 +113,7 @@ public class PatientServiceIntegrationTest {
         dto.setBirthPlace("Beograd");
         dto.setJmbg("11111112345");
         dto.setGender(Gender.MUSKO);
-        dto.setDateOfBirth("2011-11-11");
+        dto.setDateOfBirth(Date.valueOf("2011-11-11"));
         dto.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
         dto.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
         dto.setGuardianJmbg("20030612345");
