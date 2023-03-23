@@ -12,14 +12,21 @@ import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
+import raf.bolnica1.laboratory.domain.lab.Prescription;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAnalysisResultMessageDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.*;
+import raf.bolnica1.laboratory.dto.response.MessageDto;
+import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
+import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
+import raf.bolnica1.laboratory.exceptions.workOrder.NoParameterAnalysisResultFound;
+import raf.bolnica1.laboratory.exceptions.workOrder.NotAuthenticatedException;
 import raf.bolnica1.laboratory.exceptions.workOrder.*;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderMapper;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderWithAnalysisMapper;
 import raf.bolnica1.laboratory.mappers.ParameterAnalysisResultMapper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
+import raf.bolnica1.laboratory.repository.PrescriptionRepository;
 import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
 import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 
@@ -40,10 +47,41 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     private final ParameterAnalysisResultMapper parameterAnalysisResultMapper;
     private final LabWorkOrderMapper labWorkOrderMapper;
     private final PrescriptionService prescriptionService;
+    private final PrescriptionRepository prescriptionRepository;
 
     @Override
-    public LabWorkOrderDto createWorkOrder(Object dto) {
-        return null;
+    public LabWorkOrder createWorkOrder(Prescription prescription) {
+
+        String lbz=getLbzFromAuthentication();
+
+        LabWorkOrder labWorkOrder=new LabWorkOrder();
+
+        labWorkOrder.setPrescription(prescription);
+        labWorkOrder.setLbp(prescription.getLbp());
+        labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
+        labWorkOrder.setTechnicianLbz(lbz);
+        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+
+        return labWorkOrder;
+    }
+
+    @Override
+    public LabWorkOrder createWorkOrder(Long prescriptionId) {
+
+        String lbz=getLbzFromAuthentication();
+
+        Prescription prescription= prescriptionRepository.findPrescriptionById(prescriptionId);
+
+        LabWorkOrder labWorkOrder=new LabWorkOrder();
+
+        labWorkOrder.setPrescription(prescription);
+        labWorkOrder.setLbp(prescription.getLbp());
+        labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
+        labWorkOrder.setTechnicianLbz(lbz);
+        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+
+
+        return labWorkOrder;
     }
 
     @Override
@@ -156,6 +194,12 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         List<ParameterAnalysisResult> parameterAnalysisResults =  parameterAnalysisResultRepository.findParameterAnalysisResultsByWorkOrderIdAndAllowedStatuses(id, allowedStatuses);
 
         return labWorkOrderWithAnalysisMapper.toDto(labWorkOrder, parameterAnalysisResults);
+    }
+
+    @Override
+    public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
+           parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
+           labWorkOrderRepository.delete(labWorkOrder);
     }
 
     private String getLbzFromAuthentication(){

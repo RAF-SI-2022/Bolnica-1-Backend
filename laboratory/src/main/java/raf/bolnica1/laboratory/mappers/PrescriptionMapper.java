@@ -2,13 +2,20 @@ package raf.bolnica1.laboratory.mappers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import raf.bolnica1.laboratory.domain.lab.Prescription;
+import raf.bolnica1.laboratory.domain.lab.*;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
-
+import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
+import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
+import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
+import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 
 @Component
 @AllArgsConstructor
 public class PrescriptionMapper {
+
+    private LabWorkOrderRepository labWorkOrderRepository;
+    private ParameterAnalysisResultRepository parameterAnalysisResultRepository;
+    private AnalysisParameterRepository analysisParameterRepository;
 
     public PrescriptionDto toDto(Prescription entity) {
         PrescriptionDto dto = new PrescriptionDto();
@@ -19,11 +26,27 @@ public class PrescriptionMapper {
         dto.setReferralReason(entity.getReferralReason());
         dto.setReferralDiagnosis(entity.getReferralDiagnosis());
         dto.setCreationDateTime(entity.getCreationDateTime());
-        dto.setRequestedTests(entity.getRequestedTests());
         dto.setDepartmentFromId(entity.getDepartmentFromId()); // naci
         dto.setDepartmentToId(entity.getDepartmentToId()); // naci
         dto.setDoctorId(entity.getDoctorId()); // naci
+
         return dto;
+    }
+
+    public Prescription toEntity(PrescriptionCreateDto prescriptionCreateDto){
+        Prescription prescription = new Prescription();
+        prescription.setStatus(prescriptionCreateDto.getStatus());
+        prescription.setComment(prescriptionCreateDto.getComment());
+        prescription.setCreationDateTime(prescriptionCreateDto.getCreationDateTime());
+        prescription.setDoctorId(prescriptionCreateDto.getDoctorId());
+        prescription.setLbp(prescriptionCreateDto.getLbp());
+        prescription.setReferralDiagnosis(prescriptionCreateDto.getReferralDiagnosis());
+        prescription.setReferralReason(prescriptionCreateDto.getReferralReason());
+        prescription.setDepartmentFromId(prescriptionCreateDto.getDepartmentFromId());
+        prescription.setDepartmentToId(prescriptionCreateDto.getDepartmentToId());
+        prescription.setType(prescriptionCreateDto.getType());
+
+        return prescription;
     }
 
 }

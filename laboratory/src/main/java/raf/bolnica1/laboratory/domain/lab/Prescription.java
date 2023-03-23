@@ -34,7 +34,7 @@ public class Prescription {
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private PrescriptionStatus status = PrescriptionStatus.NEREALIZOVAN;
-    private String requestedTests;
+
     private String comment;
     private String referralDiagnosis;
     private String referralReason;

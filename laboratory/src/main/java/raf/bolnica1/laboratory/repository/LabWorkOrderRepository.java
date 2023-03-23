@@ -9,10 +9,14 @@ import org.springframework.stereotype.Repository;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 
+import java.util.Optional;
 import java.util.Date;
 
 @Repository
 public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long> {
+
+    @Query("SELECT l FROM LabWorkOrder l WHERE l.prescription.id = :id")
+    Optional<LabWorkOrder> findByPrescription(@Param("id") Long id);
 
     @Query("SELECT lw FROM LabWorkOrder lw " +
             "WHERE (lw.lbp = :lbp) " +
