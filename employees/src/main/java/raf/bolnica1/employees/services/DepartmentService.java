@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface DepartmentService {
 
+
+    Long findDepartmentIdByLbz(String lbz);
+
     List<DepartmentDto> listAllDepartments();
 
     DepartmentDto getEmployeesDepartment(String pbo);

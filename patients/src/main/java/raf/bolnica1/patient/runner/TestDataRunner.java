@@ -30,6 +30,9 @@ public class TestDataRunner implements CommandLineRunner {
     private MedicalRecordRepository medicalRecordRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
 
+    private PatientMapper patientMapper;
+
+
     @Override
     public void run(String... args) throws Exception {
         /**
@@ -93,5 +96,31 @@ public class TestDataRunner implements CommandLineRunner {
         md3.setGeneralMedicalData(gmd3);
         medicalRecordRepository.save(md3);
         */
+    }
+
+    private Patient createEntity(){
+
+        PatientDto dto = new PatientDto();
+        dto.setLbp(UUID.randomUUID().toString());
+        dto.setName("Petar");
+        dto.setSurname("Petrovic");
+        dto.setCitizenship(CountryCode.SRB);
+        dto.setEmail("p4c1j3nt@mail.com");
+        dto.setBirthPlace("Beograd");
+        dto.setJmbg("11111112345");
+        dto.setGender(Gender.MUSKO);
+        dto.setDateOfBirth(Date.valueOf("2011-11-11"));
+        dto.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
+        dto.setExpertiseDegree(ExpertiseDegree.BEZ_OSNOVNOG);
+        dto.setGuardianJmbg("20030612345");
+        dto.setMaritalStatus(MaritalStatus.SAMAC_SAMICA);
+        dto.setParentName("Marko");
+        dto.setNumOfChildren(0);
+        dto.setGuardianNameAndSurname("Marko Markovic");
+        dto.setPhone("0630744261");
+        dto.setProfession("");
+        dto.setPlaceOfLiving("Beograd");
+
+        return patientMapper.patientDtoToPatient(dto);
     }
 }

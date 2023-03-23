@@ -24,6 +24,7 @@ public class GeneralMedicalDataMapper {
 
         GeneralMedicalDataDto dto=new GeneralMedicalDataDto();
 
+        dto.setId(generalMedicalData.getId());
         dto.setBloodType(generalMedicalData.getBloodType());
         dto.setRH(generalMedicalData.getRH());
 
