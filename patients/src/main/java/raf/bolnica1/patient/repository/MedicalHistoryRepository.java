@@ -37,9 +37,8 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
     @Query("SELECT mh FROM MedicalHistory mh JOIN DiagnosisCode dc " +
             "ON mh.diagnosisCode.id = dc.id " +
             "WHERE (mh.diagnosisCode.code LIKE %:diagnosis%) AND " +
-            "(mh.startDate > :startDate) AND " +
-            "(mh.valid = true)")
-    Optional<MedicalHistory> findByDiagnosisCodeAndStartDate(@Param("diagnosis") String diagnosis,
-                                                            @Param("startDate") Date startDate);
+            "(mh.medicalRecord.id = :record)")
+    Optional<MedicalHistory> findPrev(@Param("diagnosis") String diagnosis,
+                                      @Param("record") Long recordId);
 
 }

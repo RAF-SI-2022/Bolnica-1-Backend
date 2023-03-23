@@ -35,6 +35,7 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        /**
         Patient patient1 = createEntity();
         Patient patient2 = createEntity();
         Patient patient3 = createEntity();
@@ -94,6 +95,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         md3.setGeneralMedicalData(gmd3);
         medicalRecordRepository.save(md3);
+        */
     }
 
     private Patient createEntity(){
