@@ -16,6 +16,8 @@ public interface FindInfoService {
 
     Page<List<MedicalHistoryDto>> findMedicalHistoryByLbpPaged(String lbp, int page, int size);
 
+    Page<List<MedicalHistoryDto>> findMedicalHistoryByLbpAndDiagnosisCodePaged(String lbp,String code, int page, int size);
+
     List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
 
 }

@@ -83,6 +83,18 @@ public class FindInfoServiceImpl implements FindInfoService {
         return medicalHistories.map(medicalHistoryMapper::toDto);
     }
 
+    @Override
+    public Page<List<MedicalHistoryDto>> findMedicalHistoryByLbpAndDiagnosisCodePaged(String lbp, String code, int page, int size) {
+        Pageable pageable= PageRequest.of(page,size);
+
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord=medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
+
+        Page<List<MedicalHistory>> medicalHistories=medicalHistoryRepository.findMedicalHistoryByMedicalRecordAndDiagnosisCodePaged(pageable,medicalRecord,code);
+
+        return medicalHistories.map(medicalHistoryMapper::toDto);
+    }
+
     ///Dohvatanje liste ExaminationHistory po LBP
     public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp){
 

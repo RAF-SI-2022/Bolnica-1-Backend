@@ -40,6 +40,15 @@ public class InfoController {
         return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbpPaged(lbp,page,size),HttpStatus.OK);
     }
 
+    @GetMapping("/myFindMedicalHistoriesByDiagnosisCodePaged/{lbp}")
+    public ResponseEntity<Page<List<MedicalHistoryDto>>> getMedicalHistoryByLbpAndDiagnosisCodePaged(@PathVariable String lbp,
+                                                                                                     @RequestParam("diagnosisCode") String code,
+                                                                                                     @RequestParam(defaultValue = "0") Integer page,
+                                                                                                     @RequestParam(defaultValue = "2") Integer size
+    ){
+        return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbpAndDiagnosisCodePaged(lbp,code,page,size),HttpStatus.OK);
+    }
+
     @GetMapping("/myFindExaminationHistories/{lbp}")
     public ResponseEntity<List<ExaminationHistoryDto>> getExaminationHistoryByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbp(lbp),HttpStatus.OK);

@@ -23,6 +23,9 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
     @Query("SELECT mh FROM MedicalHistory mh WHERE mh.medicalRecord=:mr")
     Page<List<MedicalHistory>> findMedicalHistoryByMedicalRecordPaged(Pageable pageable, @Param("mr")MedicalRecord medicalRecord);
 
+    @Query("SELECT mh FROM MedicalHistory mh WHERE mh.medicalRecord=:mr AND mh.diagnosisCode.code=:code")
+    Page<List<MedicalHistory>> findMedicalHistoryByMedicalRecordAndDiagnosisCodePaged(Pageable pageable, @Param("mr")MedicalRecord medicalRecord,@Param("code") String code);
+
     @Query("SELECT mh FROM MedicalHistory mh JOIN DiagnosisCode dc " +
             "ON mh.diagnosisCode.id = dc.id " +
             "WHERE (mh.diagnosisCode.code LIKE %:diagnosis%) AND " +
