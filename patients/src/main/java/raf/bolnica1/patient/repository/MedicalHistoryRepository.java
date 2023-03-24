@@ -1,5 +1,7 @@
 package raf.bolnica1.patient.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +19,12 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
 
     @Query("SELECT mh FROM MedicalHistory mh WHERE mh.medicalRecord=:mr")
     List<MedicalHistory> findMedicalHistoryByMedicalRecord(@Param("mr")MedicalRecord medicalRecord);
+
+    @Query("SELECT mh FROM MedicalHistory mh WHERE mh.medicalRecord=:mr")
+    Page<List<MedicalHistory>> findMedicalHistoryByMedicalRecordPaged(Pageable pageable, @Param("mr")MedicalRecord medicalRecord);
+
+    @Query("SELECT mh FROM MedicalHistory mh WHERE mh.medicalRecord=:mr AND mh.diagnosisCode.code=:code")
+    Page<List<MedicalHistory>> findMedicalHistoryByMedicalRecordAndDiagnosisCodePaged(Pageable pageable, @Param("mr")MedicalRecord medicalRecord,@Param("code") String code);
 
     @Query("SELECT mh FROM MedicalHistory mh JOIN DiagnosisCode dc " +
             "ON mh.diagnosisCode.id = dc.id " +

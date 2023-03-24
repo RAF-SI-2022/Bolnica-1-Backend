@@ -1,15 +1,15 @@
 package raf.bolnica1.patient.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.services.FindInfoService;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -33,6 +33,43 @@ public class InfoController {
     public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoryByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbp(lbp),HttpStatus.OK);
     }
+
+    @GetMapping("/myFindMedicalHistoriesPaged/{lbp}")
+    public ResponseEntity<Page<List<MedicalHistoryDto>>> getMedicalHistoryByLbpPaged(@PathVariable String lbp,
+                                                                                     @RequestParam(defaultValue = "0") Integer page,
+                                                                                     @RequestParam(defaultValue = "2") Integer size
+    ){
+        return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbpPaged(lbp,page,size),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindMedicalHistoriesByDiagnosisCodePaged/{lbp}")
+    public ResponseEntity<Page<List<MedicalHistoryDto>>> getMedicalHistoryByLbpAndDiagnosisCodePaged(@PathVariable String lbp,
+                                                                                                     @RequestParam("diagnosisCode") String code,
+                                                                                                     @RequestParam(defaultValue = "0") Integer page,
+                                                                                                     @RequestParam(defaultValue = "2") Integer size
+    ){
+        return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbpAndDiagnosisCodePaged(lbp,code,page,size),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindExaminationHistoriesByLbpAndDatePaged/{lbp}")
+    public ResponseEntity<Page<List<ExaminationHistoryDto>>> getMedicalExaminationByLbpAndDatePaged(@PathVariable String lbp,
+                                                                                                            @RequestParam("date") Date date,
+                                                                                                            @RequestParam(defaultValue = "0") Integer page,
+                                                                                                            @RequestParam(defaultValue = "2") Integer size
+    ){
+        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,date,date,page,size),HttpStatus.OK);
+    }
+
+    @GetMapping("/myFindExaminationHistoriesByLbpAndDateRangePaged/{lbp}")
+    public ResponseEntity<Page<List<ExaminationHistoryDto>>> getMedicalExaminationByLbpAndDateRangePaged(@PathVariable String lbp,
+                                                                                                         @RequestParam("start_date") Date startDate,
+                                                                                                         @RequestParam("end_date") Date endDate,
+                                                                                                         @RequestParam(defaultValue = "0") Integer page,
+                                                                                                         @RequestParam(defaultValue = "2") Integer size
+    ){
+        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,startDate,endDate,page,size),HttpStatus.OK);
+    }
+
 
     @GetMapping("/myFindExaminationHistories/{lbp}")
     public ResponseEntity<List<ExaminationHistoryDto>> getExaminationHistoryByLbp(@PathVariable String lbp){
