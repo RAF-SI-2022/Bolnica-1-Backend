@@ -47,9 +47,23 @@ public class InfirmaryController {
                                                  @Param("courseOfDisease") String courseOfDisease,
                                                  @Param("summary") String summary,
                                                  @Param("therapy") String therapy){
-        //Dohvatanje svih bolnickih soba na osnovu id-a odeljenja
-        //DischargeList list =
-                infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy);
+
+
+        infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy);
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    //Prijem pacijenta na stacionarno lecenje (Pravljenje hospitalizacije)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/pacientAdmission")
+    public ResponseEntity<?> pacientAdmission(@Param("idDepartment") Long idDepartment,
+                                                 @Param("lbp") String lbp,
+                                                 @Param("lbzDoctor") String lbzDoctor,
+                                                 @Param("referralDiagnosis") String referralDiagnosis,
+                                                 @Param("note") String note,
+                                                 @Param("idPrescription") Long idPrescription){
+
+
 
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }

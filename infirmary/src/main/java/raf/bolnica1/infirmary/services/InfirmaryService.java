@@ -4,6 +4,7 @@ import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
+import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
@@ -19,8 +20,9 @@ public class InfirmaryService {
     private HospitalRoomRepository hospitalRoomRepository;
     private DischargeListRepository dischargeListRepository;
     private PrescriptionRepository prescriptionRepository;
-
     private HospitalizationRepository hospitalizationRepository;
+
+
 
 
     public InfirmaryService(HospitalRoomRepository hospitalRoomRepository,DischargeListRepository dischargeListRepository,PrescriptionRepository prescriptionRepository,HospitalizationRepository hospitalizationRepository) {
@@ -43,7 +45,7 @@ public class InfirmaryService {
 
     public void createDischargeList(Long  idDepartment,String lbp,String followingDiagnosis,String anamnesis,String analysis,String courseOfDisease,String summary,String therapy){
         //Dekrementiramo kapacitet sobe
-        hospitalRoomRepository.updateCapasity(idDepartment);
+        hospitalRoomRepository.decrementCapasity(idDepartment);
         //Pronalazimo uput preko lbp-a
         Prescription prescription = prescriptionRepository.findByLbp(lbp);
         //Pronalazimo hospitalizaciju preko uputa
@@ -71,6 +73,37 @@ public class InfirmaryService {
 
         //Sejvujemo otpusnu listu
         dischargeListRepository.save(dischargeList);
+
+    }
+
+    public void pacientAdmission(Long  idDepartment,String lbp,String lbzDoctor,String referralDiagnosis,String note,Long idPrescription){
+        //Inkrementiramo kapacitet sobe
+        hospitalRoomRepository.incrementCapasity(idDepartment);
+
+        //Pronalazimo sobu sa id-jem odeljenja
+        Optional<HospitalRoom> room = hospitalRoomRepository.findByIdDepartment(idDepartment);
+
+        //Pronalazimo uput sa id-jem uputa
+        Optional<Prescription> prescription = prescriptionRepository.findById(idPrescription);
+
+        //Setujemo status uputa na realizovan
+        prescriptionRepository.updatePrescriptionStatus(PrescriptionStatus.REALIZOVAN,idPrescription);
+
+        Hospitalization hospitalization = new Hospitalization();
+        hospitalization.setDischargeDateAndTime(null);
+        hospitalization.setNote(note);
+        hospitalization.setLbzDoctor(lbzDoctor);
+        hospitalization.setPrescription(prescription.get());
+        hospitalization.setHospitalRoom(room.get());
+
+        //Ovo dobijas iz tokena
+        //hospitalization.setLbzRegister();
+
+        Date date = new Date();
+        Timestamp ts=new Timestamp(date.getTime());
+        hospitalization.setPatientAdmission(ts);
+
+        hospitalizationRepository.save(hospitalization);
 
     }
 }

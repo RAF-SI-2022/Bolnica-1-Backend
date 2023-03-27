@@ -15,8 +15,15 @@ import java.util.Optional;
 public interface HospitalRoomRepository extends JpaRepository<HospitalRoom, Long> {
     Optional<List<HospitalRoom>> findAllByIdDepartment(Long idDepartment);
 
+    Optional<HospitalRoom> findByIdDepartment(Long idDepartment);
+
     @Transactional
     @Modifying
     @Query("UPDATE HospitalRoom SET capacity = capacity - 1 WHERE idDepartment = :idDepartment")
-    void updateCapasity(@Param("idDepartment") Long idDepartment);
+    void decrementCapasity(@Param("idDepartment") Long idDepartment);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE HospitalRoom SET capacity = capacity + 1 WHERE idDepartment = :idDepartment")
+    void incrementCapasity(@Param("idDepartment") Long idDepartment);
 }
