@@ -6,4 +6,5 @@ import raf.bolnica1.infirmary.domain.Prescription;
 
 @Repository
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
+    Prescription findByLbp(String lbp);
 }

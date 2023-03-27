@@ -37,4 +37,20 @@ public class InfirmaryController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
+    //Kreiranje otpusne liste
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/createDischargeList")
+    public ResponseEntity<?> createDischargeList(@Param("idDepartment") Long idDepartment,
+                                                 @Param("lbp") String lbp,
+                                                 @Param("followingDiagnosis") String followingDiagnosis,
+                                                 @Param("anamnesis") String anamnesis,
+                                                 @Param("analysis") String analysis,
+                                                 @Param("courseOfDisease") String courseOfDisease,
+                                                 @Param("summary") String summary,
+                                                 @Param("therapy") String therapy){
+        //Dohvatanje svih bolnickih soba na osnovu id-a odeljenja
+        //DischargeList list =
+                infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy);
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
 }
