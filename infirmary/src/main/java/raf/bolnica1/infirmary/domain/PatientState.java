@@ -1,9 +1,13 @@
 package raf.bolnica1.infirmary.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-
+@Getter
+@Setter
 @Entity
 @Table(name="patient_state")
 public class PatientState {
