@@ -37,7 +37,7 @@ public class InfirmaryService {
         Optional<List<HospitalRoom>> rooms;
         rooms = hospitalRoomRepository.findAllByIdDepartment(idDepartment);
 
-        if(!rooms.isPresent()){
+        if(rooms.isPresent()){
             return rooms;
         }
         return null;

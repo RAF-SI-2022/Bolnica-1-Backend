@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
-import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.services.InfirmaryService;
 
