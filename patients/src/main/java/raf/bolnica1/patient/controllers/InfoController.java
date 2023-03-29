@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.services.FindInfoService;
 

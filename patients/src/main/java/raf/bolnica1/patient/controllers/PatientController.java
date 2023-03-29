@@ -2,7 +2,6 @@ package raf.bolnica1.patient.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +12,11 @@ import raf.bolnica1.patient.dto.create.PatientUpdateDto;
 import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.dto.prescription.PrescriptionDto;
-import raf.bolnica1.patient.services.PatientCrudService;
-import raf.bolnica1.patient.services.PatientService;
 
 //import java.util.Date;
 
+import raf.bolnica1.patient.services.PatientCrudService;
+import raf.bolnica1.patient.services.PatientService;
 import raf.bolnica1.patient.services.PrescriptionService;
 
 

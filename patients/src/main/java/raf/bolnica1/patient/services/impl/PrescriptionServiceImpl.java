@@ -1,6 +1,5 @@
 package raf.bolnica1.patient.services.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,8 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
+import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.prescription.PrescriptionDeleteDto;
 import raf.bolnica1.patient.dto.prescription.PrescriptionDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
