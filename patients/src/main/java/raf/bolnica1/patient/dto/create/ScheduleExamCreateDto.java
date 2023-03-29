@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 @Setter
 public class ScheduleExamCreateDto {
     private Timestamp dateAndTime;
-    private boolean arrived;
     private Long doctorId;
     private Long lbz;
     private String lbp;
+    private String note;
 }

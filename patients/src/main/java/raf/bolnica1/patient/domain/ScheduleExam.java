@@ -2,6 +2,8 @@ package raf.bolnica1.patient.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.ExaminationStatus;
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -15,7 +17,9 @@ public class ScheduleExam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp dateAndTime;
-    private boolean arrived;
+    private PatientArrival arrivalStatus;
+    private ExaminationStatus examinationStatus;
+    private String note;
     private Long doctorId;
     private Long lbz;
     @ManyToOne

@@ -2,8 +2,6 @@ package raf.bolnica1.employees.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import raf.bolnica1.employees.domain.constants.Profession;
-import raf.bolnica1.employees.domain.constants.Title;
 
 import javax.persistence.*;
 import java.sql.Date;
