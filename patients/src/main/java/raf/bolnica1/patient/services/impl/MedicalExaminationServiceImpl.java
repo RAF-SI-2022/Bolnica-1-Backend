@@ -8,6 +8,7 @@ import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
+import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.mapper.AnamnesisMapper;
 import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
@@ -21,6 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class MedicalExaminationServiceImpl implements MedicalExaminationService {
 
+
     private PatientRepository patientRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private ExaminationHistoryRepository examinationHistoryRepository;
@@ -30,6 +32,8 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
     private DiagnosisCodeRepository diagnosisCodeRepository;
     private ExaminationHistoryMapper examinationHistoryMapper;
     private MedicalHistoryMapper medicalHistoryMapper;
+
+    private ScheduleExamRepository scheduleExamRepository;
 
     @Override
     public ExaminationHistoryDto addExamination(String lbp, ExaminationHistoryCreateDto examinationHistoryCreateDto) {
@@ -74,4 +78,32 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
         medicalHistory.setMedicalRecord(medicalRecord);
         return medicalHistoryMapper.toDto(medicalHistoryRepository.save(medicalHistory));
     }
+
+    @Override
+    public Object findScheduledExamination(Object object) {
+        return null;
+    }
+
+    @Override
+    public Object updatePatientArrivalStatus(Object object) {
+        return null;
+    }
+
+    @Override
+    public Object updateExaminationStatus(Object object) {
+        return null;
+    }
+
+    @Override
+    public MessageDto deleteScheduledExamination(Long id) {
+        scheduleExamRepository.deleteScheduleExamById(id).orElseThrow(() -> new RuntimeException(String.format("Scheduled exam with id %d not found.", id)));
+        return new MessageDto(String.format("Scheduled exam with id %d deleted",id));
+    }
+
+    @Override
+    public Object findDoctorSpecByDepartment(Object object) {
+        return null;
+    }
+
+
 }

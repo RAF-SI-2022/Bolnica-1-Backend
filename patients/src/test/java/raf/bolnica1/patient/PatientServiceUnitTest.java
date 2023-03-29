@@ -1,29 +1,6 @@
 package raf.bolnica1.patient;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
-import raf.bolnica1.patient.domain.GeneralMedicalData;
-import raf.bolnica1.patient.domain.MedicalRecord;
-import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.domain.SocialData;
-import raf.bolnica1.patient.domain.constants.*;
-import raf.bolnica1.patient.dto.general.PatientDto;
-import raf.bolnica1.patient.mapper.PatientMapper;
-import raf.bolnica1.patient.repository.*;
-import raf.bolnica1.patient.services.PatientService;
-
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 /**
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceUnitTest {

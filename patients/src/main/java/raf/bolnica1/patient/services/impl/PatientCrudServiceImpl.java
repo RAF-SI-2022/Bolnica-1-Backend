@@ -10,7 +10,6 @@ import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.SocialData;
 import raf.bolnica1.patient.dto.create.PatientCreateDto;
-import raf.bolnica1.patient.dto.create.PatientGeneralDto;
 import raf.bolnica1.patient.dto.create.PatientUpdateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.PatientDto;
@@ -24,7 +23,7 @@ import raf.bolnica1.patient.services.PatientCrudService;
 @Service
 @Transactional
 @AllArgsConstructor
-public class PatientCrudServiceImpl implements PatientCrudService{
+public class PatientCrudServiceImpl implements PatientCrudService {
 
     private PatientMapper patientMapper;
     private MedicalRecordMapper medicalRecordMapper;
