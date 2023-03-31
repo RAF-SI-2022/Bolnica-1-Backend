@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import raf.bolnica1.employees.domain.Employee;
+import raf.bolnica1.employees.domain.EmployeesRole;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +18,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByUsername(String username);
 
     Optional<Employee> findByLbz(String lbz);
+
+    @Query("SELECT er FROM EmployeesRole er WHERE (er.role.name = 'ROLE_DR_SPEC_ODELJENJA' OR er.role.name = 'ROLE_DR_SPEC' OR er.role.name = 'ROLE_DR_SPEC_POV') AND er.employee.department.pbo = :pbo")
+    Optional<List<EmployeesRole>> listDoctorsSpecialistsByDepartment(@Param("pbo")String pbo);
 
     @Query("SELECT e FROM Employee e JOIN Department d " +
             "ON e.department.id = d.id " +

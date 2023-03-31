@@ -6,9 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.services.MedicalExaminationService;
+import raf.bolnica1.patient.services.PatientService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/examination")
@@ -16,6 +20,8 @@ import raf.bolnica1.patient.services.MedicalExaminationService;
 public class MedicalExaminationController {
 
     private MedicalExaminationService medicalExaminationService;
+
+    private PatientService patientService;
 
     @PostMapping("/{lbp}")
     public ResponseEntity<ExaminationHistoryDto> createExaminationHistory(@PathVariable String lbp, @RequestBody ExaminationHistoryCreateDto examinationHistoryCreateDto){
@@ -30,7 +36,6 @@ public class MedicalExaminationController {
     //Kreiranje zakazanog pregleda
     @PostMapping(path = "/create")
     public ResponseEntity<Object> createScheduledExamination(@RequestBody Object object) {
-
         return null;
     }
 
@@ -99,23 +104,12 @@ public class MedicalExaminationController {
     //Brisanje zakazanog pregleda
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteScheduledExamination(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(medicalExaminationService.deleteScheduledExamination(id),HttpStatus.OK);
+        return new ResponseEntity<>(patientService.deleteScheduledExamination(id),HttpStatus.OK);
     }
 
     //Pretraga lekara po odeljenju
     @GetMapping(path = "/find_doctor_by_department/{pbo}")
-    public ResponseEntity<Object> findDoctorSpecByDepartment(@PathVariable("pbo") Long pbo, @RequestBody Object object){
-        // Return a list of doctors specialists that are employed at the given department
-        // Department is found by PBO ( unique department id )
-        /*
-            pristup :
-            - Načelnik odeljenja
-            - Doktor spec
-            - Doktor spec. sa poverljivim pristupom
-            - Viša medicinska sestra
-            - Medicinska sestra
-         */
-
-        return null;
+    public ResponseEntity<List<EmployeeDto>> findDoctorSpecByDepartment(@PathVariable("pbo") String pbo, @RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<>(patientService.findDoctorSpecByDepartment(pbo,authorization),HttpStatus.OK);
     }
 }

@@ -59,7 +59,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         ParameterizedTypeReference<Page<PrescriptionDto>> responseType = new ParameterizedTypeReference<Page<PrescriptionDto>>() {};
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.substring(7));
         HttpEntity entity = new HttpEntity(null, httpHeaders);
 
         URI baseUri = URI.create("/prescription/"+doctorId+"/get/"+lbp);

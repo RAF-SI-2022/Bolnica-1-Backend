@@ -12,17 +12,4 @@ public interface MedicalExaminationService {
 
     MedicalHistoryDto addMedicalHistory(String lbp, MedicalHistoryCreateDto medicalHistoryCreateDto);
 
-
-    //Pretraga zakazanih pregleda
-    Object findScheduledExamination(Object object);
-    // Azuriranje statusa o prispecu pacijenta
-    Object updatePatientArrivalStatus(Object object);
-
-    // Azuriranje statusa pregleda
-    Object updateExaminationStatus(Object object);
-
-    MessageDto deleteScheduledExamination(Long id);
-
-    // Pretraga lekara specijalista na odeljenju
-    Object findDoctorSpecByDepartment(Object object);
 }

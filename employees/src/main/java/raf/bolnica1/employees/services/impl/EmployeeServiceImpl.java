@@ -26,10 +26,7 @@ import raf.bolnica1.employees.repository.RoleRepository;
 import raf.bolnica1.employees.security.util.JwtUtils;
 import raf.bolnica1.employees.services.EmployeeService;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -208,6 +205,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeChanged = employeeRepository.save(employeeChanged);
         changePermissions(employeeChanged, dto.getPermissions());
         return employeeMapper.toDto(employeeChanged);
+    }
+
+    @Override
+    public List<EmployeeDto> findDoctorSpecialistsByDepartment(String pbo) {
+        List<EmployeesRole> employeesRolesList = employeeRepository.listDoctorsSpecialistsByDepartment(pbo)
+                .orElseThrow(() -> new RuntimeException(String.format("Doctor specialists for department with pbo %s not found.", pbo)));
+
+        List<EmployeeDto> employees = new ArrayList<>();
+
+        for(EmployeesRole er: employeesRolesList) {
+            employees.add(employeeMapper.toDto(er.getEmployee()));
+        }
+
+        return employees;
     }
 
     private void changePermissions(Employee employeeChanged, List<String> permissions) {
