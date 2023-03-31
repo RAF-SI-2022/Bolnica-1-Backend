@@ -2,6 +2,7 @@ package raf.bolnica1.patient.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.VaccinationType;
 
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ public class Vaccination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String type;
+    private VaccinationType type;
     private String description;
     private String manufacturer;
 }

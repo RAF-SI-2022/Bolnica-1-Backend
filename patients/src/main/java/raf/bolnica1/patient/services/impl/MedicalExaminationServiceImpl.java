@@ -79,31 +79,4 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
         return medicalHistoryMapper.toDto(medicalHistoryRepository.save(medicalHistory));
     }
 
-    @Override
-    public Object findScheduledExamination(Object object) {
-        return null;
-    }
-
-    @Override
-    public Object updatePatientArrivalStatus(Object object) {
-        return null;
-    }
-
-    @Override
-    public Object updateExaminationStatus(Object object) {
-        return null;
-    }
-
-    @Override
-    public MessageDto deleteScheduledExamination(Long id) {
-        scheduleExamRepository.deleteScheduleExamById(id).orElseThrow(() -> new RuntimeException(String.format("Scheduled exam with id %d not found.", id)));
-        return new MessageDto(String.format("Scheduled exam with id %d deleted",id));
-    }
-
-    @Override
-    public Object findDoctorSpecByDepartment(Object object) {
-        return null;
-    }
-
-
 }

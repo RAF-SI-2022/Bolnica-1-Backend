@@ -6,14 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
 import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;
-import raf.bolnica1.patient.dto.general.AllergyDto;
-import raf.bolnica1.patient.dto.general.GeneralMedicalDataDto;
-import raf.bolnica1.patient.dto.general.OperationDto;
-import raf.bolnica1.patient.dto.general.VaccinationDto;
-import raf.bolnica1.patient.mapper.GeneralMedicalDataMapper;
-import raf.bolnica1.patient.mapper.OperationMapper;
+import raf.bolnica1.patient.dto.general.*;
+import raf.bolnica1.patient.mapper.*;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalRecordService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -22,13 +21,21 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private GeneralMedicalDataMapper generalMedicalDataMapper;
     private OperationMapper operationMapper;
+
+    private DiagnosisCodeRepository diagnosisCodeRepository;
     private PatientRepository patientRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
     private AllergyDataRepository allergyDataRepository;
     private VaccinationDataRepository vaccinationDataRepository;
     private AllergyRepository allergyRepository;
+
+    private AllergyMapper allergyMapper;
     private VaccinationRepository vaccinationRepository;
+
+    private VaccinationMapper vaccinationMapper;
+
+    private DiagnosisCodeMapper diagnosisCodeMapper;
     private OperationRepository operationRepository;
 
     @Override
@@ -67,6 +74,36 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         operation = operationRepository.save(operation);
 
         return operationMapper.toDto(operation);
+    }
+
+    @Override
+    public List<AllergyDto> gatherAllergies() {
+        List<Allergy> allergies =  allergyRepository.findAll();
+        List<AllergyDto> allergyDtos = new ArrayList<>();
+        for(Allergy a: allergies) {
+            allergyDtos.add(allergyMapper.toDto(a));
+        }
+        return allergyDtos;
+    }
+
+    @Override
+    public List<VaccinationDto> gatherVaccines() {
+        List<Vaccination> vaccinations =  vaccinationRepository.findAll();
+        List<VaccinationDto> vaccinationDtos = new ArrayList<>();
+        for(Vaccination a: vaccinations) {
+            vaccinationDtos.add(vaccinationMapper.toDto(a));
+        }
+        return vaccinationDtos;
+    }
+
+    @Override
+    public List<DiagnosisCodeDto> gatherDiagnosis() {
+        List<DiagnosisCode> diagnosisCodes =  diagnosisCodeRepository.findAll();
+        List<DiagnosisCodeDto> diagnosisCodeDtos = new ArrayList<>();
+        for(DiagnosisCode a: diagnosisCodes) {
+            diagnosisCodeDtos.add(diagnosisCodeMapper.toDto(a));
+        }
+        return diagnosisCodeDtos;
     }
 
 }

@@ -13,7 +13,6 @@ import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.dto.prescription.PrescriptionDto;
 
-//import java.util.Date;
 
 import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
