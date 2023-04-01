@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.dto.prescription;
+package raf.bolnica1.patient.dto.prescription.lab;
 
 import lombok.Getter;
 import lombok.Setter;

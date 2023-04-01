@@ -46,19 +46,23 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         GeneralMedicalData generalMedicalData = generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto);
         generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
 
-        for(AllergyDto allergyDto : generalMedicalDataCreateDto.getAllergyDtos()){
-            AllergyData allergyData = new AllergyData();
-            allergyData.setAllergy(allergyRepository.findByName(allergyDto.getName()));
-            allergyData.setGeneralMedicalData(generalMedicalData);
-            allergyDataRepository.save(allergyData);
+        if(generalMedicalDataCreateDto.getAllergyDtos() != null) {
+            for (AllergyDto allergyDto : generalMedicalDataCreateDto.getAllergyDtos()) {
+                AllergyData allergyData = new AllergyData();
+                allergyData.setAllergy(allergyRepository.findByName(allergyDto.getName()));
+                allergyData.setGeneralMedicalData(generalMedicalData);
+                allergyDataRepository.save(allergyData);
+            }
         }
 
-        for(VaccinationDto vaccinationDto : generalMedicalDataCreateDto.getVaccinationDtos()){
-            VaccinationData vaccinationData = new VaccinationData();
-            vaccinationData.setVaccination(vaccinationRepository.findByName(vaccinationDto.getName()));
-            vaccinationData.setGeneralMedicalData(generalMedicalData);
-            vaccinationData.setVaccinationDate(vaccinationDto.getVaccinationDate());
-            vaccinationDataRepository.save(vaccinationData);
+        if(generalMedicalDataCreateDto.getVaccinationDtos() != null) {
+            for (VaccinationDto vaccinationDto : generalMedicalDataCreateDto.getVaccinationDtos()) {
+                VaccinationData vaccinationData = new VaccinationData();
+                vaccinationData.setVaccination(vaccinationRepository.findByName(vaccinationDto.getName()));
+                vaccinationData.setGeneralMedicalData(generalMedicalData);
+                vaccinationData.setVaccinationDate(vaccinationDto.getVaccinationDate());
+                vaccinationDataRepository.save(vaccinationData);
+            }
         }
 
         medicalRecord.setGeneralMedicalData(generalMedicalData);
