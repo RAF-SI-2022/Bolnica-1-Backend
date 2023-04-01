@@ -11,7 +11,7 @@ public class RestServiceClientConfig {
     @Qualifier("departmentRestTemplate")
     public RestTemplate userServiceRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department/"));
         return restTemplate;
     }
 }
