@@ -9,7 +9,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 public class RestServiceClientConfig {
     @Bean
     @Qualifier("departmentRestTemplate")
-    public RestTemplate userServiceRestTemplate() {
+    public RestTemplate departmentRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department/"));
         return restTemplate;
