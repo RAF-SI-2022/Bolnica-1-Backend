@@ -41,6 +41,7 @@ public class SpringSecurityConfig {
                     .antMatchers("/h2-console/**").permitAll()
                     .antMatchers("/examinations/**").permitAll()
                     .antMatchers("/work-orders/**").permitAll()
+                    .antMatchers("/prescription/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

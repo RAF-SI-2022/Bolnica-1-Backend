@@ -11,6 +11,8 @@ import raf.bolnica1.laboratory.dto.response.MessageDto;
 
 public interface LabWorkOrdersService {
 
+    MessageDto registerPatient(String lbp);
+
     LabWorkOrder createWorkOrder(Long prescriptionId);
 
     LabWorkOrder createWorkOrder(Prescription prescription);

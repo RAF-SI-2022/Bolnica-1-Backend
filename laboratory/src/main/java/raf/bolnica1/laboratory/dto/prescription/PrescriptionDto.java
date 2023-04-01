@@ -16,10 +16,8 @@ public class PrescriptionDto {
     private Long departmentFromId;
     private Long departmentToId;
     private String lbp;
-    private Long doctorId;
+    private String doctorLbz;
     private String comment;
-    private String referralDiagnosis;
-    private String referralReason;
     private Timestamp creationDateTime;
     private PrescriptionStatus status;
     private List<PrescriptionAnalysisDataDto> prescriptionAnalysisDataDtoList;

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import raf.bolnica1.laboratory.domain.constants.OrderStatus;
+import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.AnalysisParameter;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
@@ -12,6 +14,7 @@ import raf.bolnica1.laboratory.domain.lab.Prescription;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionAnalysisDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionDto;
+import raf.bolnica1.laboratory.dto.prescription.PrescriptionUpdateDto;
 import raf.bolnica1.laboratory.mappers.PrescriptionMapper;
 import raf.bolnica1.laboratory.mappers.PrescriptionRecieveMapper;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
@@ -45,7 +48,6 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         LabWorkOrder labWorkOrder=labWorkOrdersService.createWorkOrder(prescription);
 
         for(PrescriptionAnalysisDto prescriptionAnalysisDto : dto.getPrescriptionAnalysisDtos()){
-            ///System.out.println(prescriptionAnalysisDto.getAnalysisId());
             Long analysisId=prescriptionAnalysisDto.getAnalysisId();
             for(Long parameterId:prescriptionAnalysisDto.getParametersIds()){
                 AnalysisParameter analysisParameter=analysisParameterRepository.findAnalysisParameterByAnalysisIdAndParameterId(analysisId,parameterId);
@@ -53,16 +55,46 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
                 ParameterAnalysisResult parameterAnalysisResult=new ParameterAnalysisResult();
                 parameterAnalysisResult.setAnalysisParameter(analysisParameter);
                 parameterAnalysisResult.setLabWorkOrder(labWorkOrder);
-                parameterAnalysisResult=parameterAnalysisResultRepository.save(parameterAnalysisResult);
+                parameterAnalysisResultRepository.save(parameterAnalysisResult);
             }
         }
     }
 
     @Override
-    public void deletePrescription(Long id) {
+    public void updatePrescription(PrescriptionUpdateDto dto) {
+        Prescription prescription = prescriptionRepository.findById(dto.getId()).orElse(null);
+        if(prescription != null && prescription.getStatus().equals(PrescriptionStatus.NEREALIZOVAN)){
+            prescription = prescriptionMapper.toEntityUpdate(dto, prescription);
+
+            LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
+            if(labWorkOrder != null && labWorkOrder.getStatus().equals(OrderStatus.NEOBRADJEN)){
+                parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
+
+                for(PrescriptionAnalysisDto prescriptionAnalysisDto : dto.getPrescriptionAnalysisDtos()) {
+                    Long analysisId = prescriptionAnalysisDto.getAnalysisId();
+                    for (Long parameterId : prescriptionAnalysisDto.getParametersIds()) {
+                        AnalysisParameter analysisParameter = analysisParameterRepository.findAnalysisParameterByAnalysisIdAndParameterId(analysisId, parameterId);
+
+                        ParameterAnalysisResult parameterAnalysisResult = new ParameterAnalysisResult();
+                        parameterAnalysisResult.setAnalysisParameter(analysisParameter);
+                        parameterAnalysisResult.setLabWorkOrder(labWorkOrder);
+                        parameterAnalysisResultRepository.save(parameterAnalysisResult);
+                    }
+                }
+            }
+            prescriptionRepository.save(prescription);
+        }
+    }
+
+    @Override
+    public void deletePrescription(Long id, String lbz) {
         Prescription prescription = prescriptionRepository.findById(id).orElse(null);
         if(prescription == null)
             return;
+
+        if(!prescription.getDoctorLbz().equals(lbz)){
+            return;
+        }
 
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
         if(labWorkOrder != null) {
@@ -72,15 +104,15 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    public Page<PrescriptionDto> findPrescriptionsForPatient(String lbp, Long doctorId, int page, int size) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorId(lbp, doctorId);
+    public Page<PrescriptionDto> findPrescriptionsForPatient(String lbp, String doctorLbz, int page, int size) {
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz);
         List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
         for(Prescription prescription : prescriptions){
             prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
         }
 
         int startIndex = page * size;
-        int endIndex = Math.min(startIndex + page, prescriptionDtos.size());
+        int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
 
         List<PrescriptionDto> sublist = prescriptionDtos.subList(startIndex, endIndex);
 

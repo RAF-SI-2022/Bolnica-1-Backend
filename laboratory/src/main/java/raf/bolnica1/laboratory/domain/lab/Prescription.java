@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "prescription", indexes = {@Index(columnList = "doctorId, departmentFromId")})
+@Table(name = "prescription", indexes = {@Index(columnList = "doctorLbz, departmentFromId")})
 public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Prescription {
     @Enumerated(EnumType.STRING)
     private PrescriptionType type;
     @NotNull
-    private Long doctorId;
+    private String doctorLbz;
     @NotNull
     private Long departmentFromId;
     @NotNull
@@ -34,8 +34,5 @@ public class Prescription {
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private PrescriptionStatus status = PrescriptionStatus.NEREALIZOVAN;
-
     private String comment;
-    private String referralDiagnosis;
-    private String referralReason;
 }

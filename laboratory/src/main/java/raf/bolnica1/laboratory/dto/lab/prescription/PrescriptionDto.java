@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Setter
 public class PrescriptionDto {
     private PrescriptionType type;
-    private Long doctorId;
+    private String doctorLbz;
     private Long departmentFromId;
     private Long departmentToId;
     private String lbp;

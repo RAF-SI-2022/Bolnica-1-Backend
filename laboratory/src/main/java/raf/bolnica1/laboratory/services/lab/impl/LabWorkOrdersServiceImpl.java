@@ -52,17 +52,28 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     @Override
     public LabWorkOrder createWorkOrder(Prescription prescription) {
 
-        String lbz=getLbzFromAuthentication();
-
         LabWorkOrder labWorkOrder=new LabWorkOrder();
 
         labWorkOrder.setPrescription(prescription);
         labWorkOrder.setLbp(prescription.getLbp());
         labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
-        labWorkOrder.setTechnicianLbz(lbz);
         labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
 
         return labWorkOrder;
+    }
+
+    @Override
+    public MessageDto registerPatient(String lbp) {
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbp(lbp);
+        for(Prescription prescription : prescriptions){
+            LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
+            if(labWorkOrder != null){
+                labWorkOrder.setStatus(OrderStatus.U_OBRADI);
+                labWorkOrder.setTechnicianLbz(getLbzFromAuthentication());
+                labWorkOrderRepository.save(labWorkOrder);
+            }
+        }
+        return new MessageDto("Uspesno izvrseno");
     }
 
     @Override

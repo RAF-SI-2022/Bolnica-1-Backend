@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.laboratory.domain.lab.*;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
+import raf.bolnica1.laboratory.dto.prescription.PrescriptionUpdateDto;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
@@ -23,12 +24,10 @@ public class PrescriptionMapper {
         dto.setStatus(entity.getStatus());
         dto.setComment(entity.getComment());
         dto.setType(entity.getType());
-        dto.setReferralReason(entity.getReferralReason());
-        dto.setReferralDiagnosis(entity.getReferralDiagnosis());
         dto.setCreationDateTime(entity.getCreationDateTime());
         dto.setDepartmentFromId(entity.getDepartmentFromId()); // naci
         dto.setDepartmentToId(entity.getDepartmentToId()); // naci
-        dto.setDoctorId(entity.getDoctorId()); // naci
+        dto.setDoctorLbz(entity.getDoctorLbz()); // naci
 
         return dto;
     }
@@ -38,13 +37,20 @@ public class PrescriptionMapper {
         prescription.setStatus(prescriptionCreateDto.getStatus());
         prescription.setComment(prescriptionCreateDto.getComment());
         prescription.setCreationDateTime(prescriptionCreateDto.getCreationDateTime());
-        prescription.setDoctorId(prescriptionCreateDto.getDoctorId());
+        prescription.setDoctorLbz(prescriptionCreateDto.getDoctorLbz());
         prescription.setLbp(prescriptionCreateDto.getLbp());
-        prescription.setReferralDiagnosis(prescriptionCreateDto.getReferralDiagnosis());
-        prescription.setReferralReason(prescriptionCreateDto.getReferralReason());
         prescription.setDepartmentFromId(prescriptionCreateDto.getDepartmentFromId());
         prescription.setDepartmentToId(prescriptionCreateDto.getDepartmentToId());
         prescription.setType(prescriptionCreateDto.getType());
+
+        return prescription;
+    }
+
+    public Prescription toEntityUpdate(PrescriptionUpdateDto prescriptionUpdateDto, Prescription prescription){
+        prescription.setComment(prescriptionUpdateDto.getComment());
+        prescription.setDepartmentFromId(prescriptionUpdateDto.getDepartmentFromId());
+        prescription.setDepartmentToId(prescriptionUpdateDto.getDepartmentToId());
+        prescription.setCreationDateTime(prescriptionUpdateDto.getCreationDateTime());
 
         return prescription;
     }
