@@ -18,9 +18,13 @@ public class LaboratoryWorkOrdersController {
 
     private final LabWorkOrdersService labWorkOrdersService;
 
+    @PutMapping("/register_patient_arrival")
+    public ResponseEntity<MessageDto> registerPatient(@RequestParam String lbp){
+        return new ResponseEntity<>(labWorkOrdersService.registerPatient(lbp), HttpStatus.OK);
+    }
 
 
-    @PutMapping("/work-orders-history")
+    @GetMapping("/work_orders_history")
     public ResponseEntity<Page<LabWorkOrder>> workOrdersHistory(
             @RequestParam String lbp,
             @RequestParam(required = false) String fromDate,
@@ -30,7 +34,7 @@ public class LaboratoryWorkOrdersController {
         return new ResponseEntity<>(labWorkOrdersService.workOrdersHistory(lbp, fromDate, toDate, page, size), HttpStatus.OK);
     }
 
-    @PutMapping("/find-work-orders")
+    @GetMapping("/find_work_orders")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR', 'ROLE_VISI_LAB_TEHNICAR', 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_BIOHEMICAR')")
     public ResponseEntity<Page<LabWorkOrder>> findWorkOrdersByLab(
             @RequestParam String lbp,

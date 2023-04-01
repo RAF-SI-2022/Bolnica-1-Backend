@@ -15,7 +15,10 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     @Query("SELECT p FROM Prescription p WHERE p.id=:id")
     Prescription findPrescriptionById(@Param("id")Long id);
 
-    @Query("SELECT p FROM Prescription p WHERE p.lbp = :lbp AND p.doctorId = :doctorId")
-    List<Prescription> findPrescriptionsByLbpAndDoctorId(@Param("lbp") String lbp, @Param("doctorId") Long doctorId);
+    @Query("SELECT p FROM Prescription p WHERE p.lbp = :lbp AND p.doctorLbz = :doctorLbz")
+    List<Prescription> findPrescriptionsByLbpAndDoctorLbz(@Param("lbp") String lbp, @Param("doctorLbz") String doctorLbz);
+
+    @Query("SELECT p FROM Prescription p WHERE p.lbp = :lbp")
+    List<Prescription> findPrescriptionsByLbp(@Param("lbp") String lbp);
 
 }

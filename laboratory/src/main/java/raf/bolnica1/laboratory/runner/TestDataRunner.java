@@ -612,28 +612,24 @@ public class TestDataRunner implements CommandLineRunner {
         Prescription prescription1 = new Prescription();
         prescription1.setId(1L);
         prescription1.setType(PrescriptionType.LABORATORIJA); // Replace SOME_TYPE with the appropriate PrescriptionType
-        prescription1.setDoctorId(101L);
+        prescription1.setDoctorLbz("E0003");
         prescription1.setDepartmentFromId(201L);
         prescription1.setDepartmentToId(202L);
         prescription1.setLbp("10001L");
         prescription1.setCreationDateTime(Timestamp.valueOf("2023-03-18 10:00:00"));
         prescription1.setStatus(PrescriptionStatus.NEREALIZOVAN);
         prescription1.setComment("Urgent");
-        prescription1.setReferralDiagnosis("Diagnosis");
-        prescription1.setReferralReason("Reason");
 
         Prescription prescription2 = new Prescription();
         prescription2.setId(2L);
         prescription2.setType(PrescriptionType.DIJAGNOSTIKA); // Replace ANOTHER_TYPE with the appropriate PrescriptionType
-        prescription2.setDoctorId(102L);
+        prescription2.setDoctorLbz("E0003");
         prescription2.setDepartmentFromId(203L);
         prescription2.setDepartmentToId(204L);
         prescription2.setLbp("10002L");
         prescription2.setCreationDateTime(Timestamp.valueOf("2023-03-18 11:00:00"));
         prescription2.setStatus(PrescriptionStatus.NEREALIZOVAN);
         prescription2.setComment("Regular");
-        prescription2.setReferralDiagnosis("Another Diagnosis");
-        prescription2.setReferralReason("Another Reason");
 
         prescriptionRepository.saveAll(Arrays.asList(prescription1, prescription2));
 

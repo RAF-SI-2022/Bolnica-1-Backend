@@ -135,7 +135,7 @@ public class LabWorkOrdersServiceTest {
         Prescription prescription1 = new Prescription();
         prescription1.setId(1L);
         prescription1.setType(PrescriptionType.LABORATORIJA);
-        prescription1.setDoctorId(101L);
+        prescription1.setDoctorLbz("E0003");
         prescription1.setDepartmentFromId(201L);
         prescription1.setDepartmentToId(202L);
         prescription1.setLbp("10001L");
@@ -143,13 +143,11 @@ public class LabWorkOrdersServiceTest {
         prescription1.setStatus(PrescriptionStatus.NEREALIZOVAN);
         ///prescription1.setRequestedTests("Test 1, Test 2");
         prescription1.setComment("Urgent");
-        prescription1.setReferralDiagnosis("Diagnosis");
-        prescription1.setReferralReason("Reason");
 
         Prescription prescription2 = new Prescription();
         prescription2.setId(2L);
         prescription2.setType(PrescriptionType.DIJAGNOSTIKA);
-        prescription2.setDoctorId(102L);
+        prescription2.setDoctorLbz("E0003");
         prescription2.setDepartmentFromId(203L);
         prescription2.setDepartmentToId(204L);
         prescription2.setLbp("10002L");
@@ -157,8 +155,6 @@ public class LabWorkOrdersServiceTest {
         prescription2.setStatus(PrescriptionStatus.NEREALIZOVAN);
         ///prescription2.setRequestedTests("Test 3, Test 4");
         prescription2.setComment("Regular");
-        prescription2.setReferralDiagnosis("Another Diagnosis");
-        prescription2.setReferralReason("Another Reason");
 
         prescriptionRepository.saveAll(Arrays.asList(prescription1, prescription2));
 

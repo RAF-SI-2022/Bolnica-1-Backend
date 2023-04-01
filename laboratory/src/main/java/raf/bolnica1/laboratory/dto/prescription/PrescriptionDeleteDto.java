@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PrescriptionDeleteDto {
     private Long prescriptionId;
-    private String authorization;
+    private String lbz;
 }

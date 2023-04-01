@@ -26,7 +26,6 @@ public class LabWorkOrder {
     private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.NEOBRADJEN;
-    @NotBlank
     private String technicianLbz;
     private String biochemistLbz = null;
 }
