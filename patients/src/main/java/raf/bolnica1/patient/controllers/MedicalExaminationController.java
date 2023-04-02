@@ -3,9 +3,12 @@ package raf.bolnica1.patient.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
@@ -20,7 +23,6 @@ import java.util.List;
 public class MedicalExaminationController {
 
     private MedicalExaminationService medicalExaminationService;
-
     private PatientService patientService;
 
     @PostMapping("/{lbp}")
@@ -35,8 +37,8 @@ public class MedicalExaminationController {
 
     //Kreiranje zakazanog pregleda
     @PostMapping(path = "/create")
-    public ResponseEntity<Object> createScheduledExamination(@RequestBody Object object) {
-        return null;
+    public ResponseEntity<Object> createScheduledExamination(@RequestBody ScheduleExamCreateDto scheduleExamCreateDto) {
+        return new ResponseEntity<>(patientService.schedule(scheduleExamCreateDto), HttpStatus.CREATED);
     }
 
     //Pretraga zakazanih pregleda
@@ -60,23 +62,14 @@ public class MedicalExaminationController {
         return null;
     }
 
+
     // Azuriranje statusa pacijenta
     @PutMapping(path = "/patient/{id}")
-    public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id,@RequestBody Object object){
-        // find examination based on id from path
-        // update status based on status string from path
-        // if status == "Otkazao"
-        // update state of examination to "Otkazano"
-        // use updateExaminationStatus function for this
-        // needs to be implemented
-        /*
-            pristup :
-            - Viša medicinska sestra
-            - Medicinska sestra
-         */
-
-        return null;
+    @PreAuthorize("hasRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
+    public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id,@RequestParam("pa") PatientArrival status){
+        return new ResponseEntity<>(patientService.updatePatientArrivalStatus(id, status), HttpStatus.OK);
     }
+
 
     // Azuriranje statusa pregelda
     @PutMapping(path = "/{id}")

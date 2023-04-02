@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.services;
 
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
@@ -21,4 +22,7 @@ public interface PatientService {
 
     // Pretraga lekara specijalista na odeljenju
     List<EmployeeDto> findDoctorSpecByDepartment(String pbo, String token);
+    // Azuriranje statusa o prispecu pacijenta
+    MessageDto updatePatientArrivalStatus(Long id, PatientArrival object);
+
 }
