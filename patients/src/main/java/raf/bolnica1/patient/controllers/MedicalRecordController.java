@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.domain.DiagnosisCode;
 import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;
+import raf.bolnica1.patient.dto.create.VaccinationDataDto;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.services.MedicalRecordService;
 
@@ -25,8 +26,18 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/operation/{lbp}")
-    public ResponseEntity<OperationDto> createOperation(@PathVariable String lbp, @RequestBody OperationCreateDto operationCreateDto){
+    public ResponseEntity<OperationDto> addOperation(@PathVariable String lbp, @RequestBody OperationCreateDto operationCreateDto){
         return new ResponseEntity<>(medicalRecordService.addOperation(lbp, operationCreateDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/vaccine/{lbp}")
+    public ResponseEntity<MessageDto> addVaccine(@RequestParam String lbp, @RequestBody VaccinationDataDto vaccinationDataDto){
+        return new ResponseEntity<>(medicalRecordService.addVaccine(lbp, vaccinationDataDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/allergy/{lbp}")
+    public ResponseEntity<MessageDto> addAllergy(@RequestParam String lbp, @RequestParam String allergy){
+        return new ResponseEntity<>(medicalRecordService.addAllergy(lbp, allergy), HttpStatus.OK);
     }
 
     @GetMapping("/gather_allergies")
@@ -43,5 +54,7 @@ public class MedicalRecordController {
     public ResponseEntity<List<DiagnosisCodeDto>> gatherDiagnosis(){
         return new ResponseEntity<>(medicalRecordService.gatherDiagnosis(), HttpStatus.OK);
     }
+
+
 
 }
