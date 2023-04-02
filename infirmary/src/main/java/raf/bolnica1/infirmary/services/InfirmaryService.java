@@ -5,12 +5,17 @@ import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
+import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
+import raf.bolnica1.infirmary.dto.dischargeListDto.HospitalizationDto;
+import raf.bolnica1.infirmary.dto.dischargeListDto.PrescriptionDto;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -106,5 +111,97 @@ public class InfirmaryService {
         hospitalizationRepository.save(hospitalization);
 
     }
+
+    public DischargeListDto findDischargeListHistory(String lbp, Date startDate, Date endDate) {
+
+        Prescription prescription = prescriptionRepository.findByLbp(lbp);
+        Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription);
+        DischargeList dischargeList = dischargeListRepository.findByHospitalization(hospitalization);
+
+        if(dischargeList == null) {
+            System.out.println("Discharge list not found");
+            return null;
+        }
+
+        DischargeListDto dischargeListDto = new DischargeListDto();
+
+        if(startDate == null && endDate == null){
+            dischargeListDto.setDischargeList(dischargeList);
+        }
+
+        if(startDate != null && endDate != null){
+            if(dischargeList.getCreation().after(startDate) && dischargeList.getCreation().before(endDate)) {
+                dischargeListDto.setDischargeList(dischargeList);
+            }
+
+            Date date1 = new Date(dischargeList.getCreation().getTime());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = formatter.format(date1);
+            Date dateFormat = null;
+            try {
+                dateFormat = formatter.parse(formattedDate);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if(dateFormat.equals(endDate) || dateFormat.equals(startDate)){
+                dischargeListDto.setDischargeList(dischargeList);
+            }else{
+                dischargeList = null;
+            }
+        }
+
+        if(startDate == null && endDate != null){
+            Date date1 = new Date(dischargeList.getCreation().getTime());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = formatter.format(date1);
+            Date dateFormat = null;
+            try {
+                dateFormat = formatter.parse(formattedDate);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if(dateFormat.equals(endDate)){
+                dischargeListDto.setDischargeList(dischargeList);
+            }else{
+                dischargeList = null;
+            }
+        }
+
+        if(startDate != null && endDate == null){
+            Date date1 = new Date(dischargeList.getCreation().getTime());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = formatter.format(date1);
+            Date dateFormat = null;
+            try {
+                 dateFormat = formatter.parse(formattedDate);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if(dateFormat.equals(startDate)){
+                dischargeListDto.setDischargeList(dischargeList);
+            }else{
+                dischargeList = null;
+            }
+        }
+
+        if(dischargeList == null) {
+            System.out.println("Discharge list does not exist for the selected date");
+            return null;
+        }
+        dischargeListDto.setHospitalizationDto(new HospitalizationDto(hospitalization.getPatientAdmission(),
+                hospitalization.getDischargeDateAndTime()));
+        dischargeListDto.setPrescriptionDto(new PrescriptionDto(prescription.getReferralDiagnosis()));
+        dischargeListDto.setDischargeList(dischargeList);
+
+//        RestTemplate restTemplate = new RestTemplate();
+//        String doctorLbp = prescription.getLbp();
+//        String url = "https://localhost/api/employee/find/" + doctorlbp;
+//        ResponseEntity<DoctorDto> response = restTemplate.getForEntity(url, DoctorDto.class);
+//
+//        dischargeListDto.setDoctorDto(response.getBody());
+
+        return dischargeListDto;
+    }
+
 }
 
