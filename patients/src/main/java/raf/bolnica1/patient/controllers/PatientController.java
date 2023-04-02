@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import raf.bolnica1.patient.dto.create.PatientCreateDto;
 import raf.bolnica1.patient.dto.create.PatientUpdateDto;
-import raf.bolnica1.patient.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.*;
-import raf.bolnica1.patient.dto.prescription.PrescriptionDto;
+import raf.bolnica1.patient.dto.prescription.general.PrescriptionDto;
 
 
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabUpdateDto;
 import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
 import raf.bolnica1.patient.services.PrescriptionService;
@@ -63,19 +64,19 @@ public class PatientController {
         return new ResponseEntity<>(prescriptionService.getPrescriptionsForPatient(doctorId, lbp, authorization, page, size), HttpStatus.OK);
     }
 
-    @PostMapping("prescription")
-    public ResponseEntity<MessageDto> writePerscription(@RequestBody PrescriptionCreateDto perscriptionCreateDto){
-        return new ResponseEntity<>(prescriptionService.sendPersctiption(perscriptionCreateDto), HttpStatus.OK);
+    @PostMapping("lab_prescription")
+    public ResponseEntity<MessageDto> writeLabPerscription(@RequestBody PrescriptionLabSendDto prescriptionSendDto){
+        return new ResponseEntity<>(prescriptionService.sendPersctiption(prescriptionSendDto), HttpStatus.OK);
     }
 
-    @PutMapping("prescription")
-    public ResponseEntity<MessageDto> putPerscription(@RequestBody PrescriptionCreateDto perscriptionCreateDto){
-        return new ResponseEntity<>(prescriptionService.sendPersctiption(perscriptionCreateDto), HttpStatus.OK);
+    @PutMapping("lab_prescription")
+    public ResponseEntity<MessageDto> putLabPerscription(@RequestBody PrescriptionLabUpdateDto prescriptionLabUpdateDto){
+        return new ResponseEntity<>(prescriptionService.updatePrescription(prescriptionLabUpdateDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("prescription/{id}")
-    public ResponseEntity<MessageDto> deletePerscription(@RequestHeader("Authorization") String authorization, @PathVariable Long id) {
-        return new ResponseEntity<>(prescriptionService.deletePresscription(id, authorization), HttpStatus.OK);
+    @DeleteMapping("lab_prescription/{id}")
+    public ResponseEntity<MessageDto> deleteLabPerscription(@PathVariable Long id) {
+        return new ResponseEntity<>(prescriptionService.deletePresscription(id), HttpStatus.OK);
     }
 
     @GetMapping("/find_patient/{lbp}")
