@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
+import raf.bolnica1.infirmary.dto.PatientDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.services.InfirmaryService;
 
@@ -72,6 +73,16 @@ public class InfirmaryController {
                                                                      @RequestParam(required = false) Date endDate)
     {
         return ResponseEntity.ok(infirmaryService.findDischargeListHistory(lbp, startDate, endDate));
+    }
+
+    @GetMapping(value = "/patients/{pbo}")
+    public ResponseEntity<List<PatientDto>> findHospitalizedPatients(@RequestHeader("Authorization") String authorization,
+                                                                     @PathVariable String pbo,
+                                                                     @RequestParam(value = "lbp") String lbp,
+                                                                     @RequestParam(value = "name") String name,
+                                                                     @RequestParam(value = "surname") String surname,
+                                                                     @RequestParam(value = "jmbg") String jmbg){
+        return new ResponseEntity<>(infirmaryService.findHospitalizedPatients(authorization, pbo, lbp, name, surname, jmbg), HttpStatus.OK);
     }
 
 }

@@ -1,10 +1,22 @@
 package raf.bolnica1.infirmary.services;
+import lombok.AllArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
+import raf.bolnica1.infirmary.dto.PatientDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.HospitalizationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.PrescriptionDto;
@@ -12,30 +24,26 @@ import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
+import raf.bolnica1.infirmary.security.utils.JwtUtils;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class InfirmaryService {
     private HospitalRoomRepository hospitalRoomRepository;
     private DischargeListRepository dischargeListRepository;
     private PrescriptionRepository prescriptionRepository;
     private HospitalizationRepository hospitalizationRepository;
-
-
-
-
-    public InfirmaryService(HospitalRoomRepository hospitalRoomRepository,DischargeListRepository dischargeListRepository,PrescriptionRepository prescriptionRepository,HospitalizationRepository hospitalizationRepository) {
-        this.hospitalRoomRepository = hospitalRoomRepository;
-        this.dischargeListRepository = dischargeListRepository;
-        this.prescriptionRepository = prescriptionRepository;
-        this.hospitalizationRepository = hospitalizationRepository;
-    }
+    private RestTemplate patientRestTemplate;
+    private JwtUtils jwtUtils;
 
     public Optional<List<HospitalRoom>> findHospitalRooms(Long  idDepartment){
         //Dohvatanje svih bolnickih soba sa datim id-jem departmana
@@ -203,5 +211,40 @@ public class InfirmaryService {
         return dischargeListDto;
     }
 
+    public List<PatientDto> findHospitalizedPatients(String authorization, String pbo, String lbp, String name, String surname, String jmbg) {
+        List<PatientDto> res = new ArrayList<>();
+
+        String token = authorization.split(" ")[1];
+        ParameterizedTypeReference<Page<PatientDto>> responseType = new ParameterizedTypeReference<Page<PatientDto>>() {};
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(token);
+        HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+        URI baseUri = URI.create("/filter_patients/");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUri)
+                .queryParam("lbp", lbp)
+                .queryParam("jmbg", jmbg)
+                .queryParam("name", name)
+                .queryParam("surname", surname)
+                .queryParam("page", 0)
+                .queryParam("size", 2000);
+
+        ResponseEntity<Page<PatientDto>> patients = patientRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, responseType);
+        if(patients.getBody().isEmpty())
+            return res;
+
+        List<String> lbps = new ArrayList<>();
+        patients.getBody().forEach(p -> lbps.add(p.getLbp()));
+
+        List<String> foundLbps = hospitalizationRepository.findHospitalizedPatients(pbo, lbps);
+
+        patients.getBody().forEach(p -> {
+            if(foundLbps.contains(p.getLbp()))
+                res.add(p);
+        });
+
+        return res;
+    }
 }
 
