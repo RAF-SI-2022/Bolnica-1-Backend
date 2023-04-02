@@ -52,7 +52,7 @@ public class GeneralMedicalDataMapper {
     }
 
     public GeneralMedicalData toEntity(GeneralMedicalDataCreateDto generalMedicalDataCreateDto){
-        if(generalMedicalDataCreateDto ==null)return null;
+        if(generalMedicalDataCreateDto == null)return null;
 
         GeneralMedicalData entity=new GeneralMedicalData();
 

@@ -4,15 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
-import raf.bolnica1.patient.domain.constants.ExaminationStatus;
-import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
-import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
-import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.mapper.AnamnesisMapper;
 import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
@@ -20,7 +16,6 @@ import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalExaminationService;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -83,30 +78,5 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
         medicalHistory.setMedicalRecord(medicalRecord);
         return medicalHistoryMapper.toDto(medicalHistoryRepository.save(medicalHistory));
     }
-
-    @Override
-    public Object findScheduledExamination(Object object) {
-        return null;
-    }
-
-
-    @Override
-    public Object updateExaminationStatus(Object object) {
-        return null;
-    }
-
-    @Override
-    public MessageDto deleteScheduledExamination(Long id) {
-        scheduleExamRepository.deleteScheduleExamById(id).orElseThrow(() -> new RuntimeException(String.format("Scheduled exam with id %d not found.", id)));
-        return new MessageDto(String.format("Scheduled exam with id %d deleted",id));
-    }
-
-    @Override
-    public Object findDoctorSpecByDepartment(Object object) {
-        return null;
-    }
-
-
-
 
 }

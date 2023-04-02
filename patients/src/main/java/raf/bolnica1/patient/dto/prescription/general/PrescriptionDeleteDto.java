@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.dto.prescription;
+package raf.bolnica1.patient.dto.prescription.general;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PrescriptionDeleteDto {
     private Long prescriptionId;
-    private String authorization;
+    private String lbz;
 }
