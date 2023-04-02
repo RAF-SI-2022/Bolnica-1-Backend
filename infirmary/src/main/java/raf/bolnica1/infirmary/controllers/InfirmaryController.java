@@ -3,14 +3,13 @@ package raf.bolnica1.infirmary.controllers;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
+import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.services.InfirmaryService;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,4 +65,13 @@ public class InfirmaryController {
 
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping(value = "/findDischargeListHistory/{lbp}")
+    public ResponseEntity<DischargeListDto> findDischargeListHistory(@PathVariable String lbp,
+                                                                     @RequestParam(required = false) Date startDate,
+                                                                     @RequestParam(required = false) Date endDate)
+    {
+        return ResponseEntity.ok(infirmaryService.findDischargeListHistory(lbp, startDate, endDate));
+    }
+
 }
