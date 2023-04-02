@@ -10,7 +10,6 @@ import raf.bolnica1.infirmary.dto.ScheduleAppointmentDto;
 import raf.bolnica1.infirmary.services.AppointmentService;
 
 import java.sql.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/appointment")

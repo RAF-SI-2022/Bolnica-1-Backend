@@ -67,7 +67,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Page<ScheduleAppointmentDto> getScheduledAppointments(String authorization, String lbp, Date date, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        System.out.println("here1");
+
         String token = authorization.split(" ")[1];
         String lbz = jwtUtils.getUsernameFromToken(token);
 

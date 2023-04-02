@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import raf.bolnica1.infirmary.domain.ScheduledAppointment;
 
 import java.sql.Date;
-import java.util.List;
 
 @Repository
 public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledAppointment, Long> {

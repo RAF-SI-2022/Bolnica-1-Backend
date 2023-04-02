@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import raf.bolnica1.infirmary.dto.ScheduleAppointmentDto;
 
 import java.sql.Date;
-import java.util.List;
 
 public interface AppointmentService {
 
