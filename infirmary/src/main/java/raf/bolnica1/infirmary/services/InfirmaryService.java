@@ -60,9 +60,11 @@ public class InfirmaryService {
         //Dekrementiramo kapacitet sobe
         hospitalRoomRepository.decrementCapasity(idDepartment);
         //Pronalazimo uput preko lbp-a
-        Prescription prescription = prescriptionRepository.findByLbp(lbp);
+        Optional<Prescription> prescription = prescriptionRepository.findByLbp(lbp);
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with lbp: " + lbp);
         //Pronalazimo hospitalizaciju preko uputa
-        Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription);
+        Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription.get());
 
         //Kreiramo objekat otpusne liste i setujemo podatke
         DischargeList dischargeList = new DischargeList();
@@ -122,8 +124,10 @@ public class InfirmaryService {
 
     public DischargeListDto findDischargeListHistory(String lbp, Date startDate, Date endDate) {
 
-        Prescription prescription = prescriptionRepository.findByLbp(lbp);
-        Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription);
+        Optional<Prescription> prescription = prescriptionRepository.findByLbp(lbp);
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with lbp: " + lbp);
+        Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription.get());
         DischargeList dischargeList = dischargeListRepository.findByHospitalization(hospitalization);
 
         if(dischargeList == null) {
@@ -198,7 +202,7 @@ public class InfirmaryService {
         }
         dischargeListDto.setHospitalizationDto(new HospitalizationDto(hospitalization.getPatientAdmission(),
                 hospitalization.getDischargeDateAndTime()));
-        dischargeListDto.setPrescriptionDto(new PrescriptionDto(prescription.getReferralDiagnosis()));
+        dischargeListDto.setPrescriptionDto(new PrescriptionDto(prescription.get().getReferralDiagnosis()));
         dischargeListDto.setDischargeList(dischargeList);
 
 //        RestTemplate restTemplate = new RestTemplate();

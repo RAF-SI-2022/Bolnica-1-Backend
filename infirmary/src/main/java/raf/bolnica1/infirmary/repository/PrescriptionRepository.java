@@ -11,10 +11,11 @@ import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.dto.PatientDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
-    Prescription findByLbp(String lbp);
+    Optional<Prescription> findByLbp(String lbp);
 
     @Transactional
     @Modifying
