@@ -22,6 +22,7 @@ import raf.bolnica1.infirmary.services.AppointmentService;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -53,13 +54,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(response.getBody() == null)
             throw new RuntimeException("Invalid LPZ!");
 
-        Prescription prescription = new Prescription();
-        prescription.setLbp(appointmentDto.getLbp());
-        prescription.setGetIdDepartmentTo(response.getBody());
+        Optional<Prescription> prescription = prescriptionRepository.findByLbp(appointmentDto.getLbp());
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with lbp: " + appointmentDto.getLbp());
 
-        scheduledAppointment.setPrescription(prescriptionRepository.save(prescription));
+        prescription.get().setGetIdDepartmentTo(response.getBody());
 
+        scheduledAppointment.setPrescription(prescriptionRepository.save(prescription.get()));
         scheduledAppointmentRepository.save(scheduledAppointment);
+
         return "Appointment created successfully!";
     }
 
