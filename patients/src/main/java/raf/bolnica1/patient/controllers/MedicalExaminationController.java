@@ -3,12 +3,19 @@ package raf.bolnica1.patient.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
+import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.services.MedicalExaminationService;
+import raf.bolnica1.patient.services.PatientService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/examination")
@@ -30,9 +37,8 @@ public class MedicalExaminationController {
 
     //Kreiranje zakazanog pregleda
     @PostMapping(path = "/create")
-    public ResponseEntity<Object> createScheduledExamination(@RequestBody Object object) {
-
-        return null;
+    public ResponseEntity<Object> createScheduledExamination(@RequestBody ScheduleExamCreateDto scheduleExamCreateDto) {
+        return new ResponseEntity<>(patientService.schedule(scheduleExamCreateDto), HttpStatus.CREATED);
     }
 
     //Pretraga zakazanih pregleda

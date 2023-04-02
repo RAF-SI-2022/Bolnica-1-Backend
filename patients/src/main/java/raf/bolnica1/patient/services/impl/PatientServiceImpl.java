@@ -1,6 +1,7 @@
 package raf.bolnica1.patient.services.impl;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -27,7 +28,6 @@ import java.util.List;
 
 
 @Service
-@AllArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
     private ScheduleExamRepository scheduleExamRepository;
@@ -82,15 +82,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Object updatePatientArrivalStatus(Long id, PatientArrival status) {
+    public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
         ScheduleExam exam = scheduleExamRepository.getReferenceById(id);
-        System.out.println(exam.getId());
         if(exam == null){
-            System.out.println("u ifu");
             return new MessageDto(String.format("Examination does not exist"));
         }
-
-        System.out.println("posle ifa");
         exam.setArrivalStatus(status);
         if(status == PatientArrival.CANCELED){
             exam.setExaminationStatus(ExaminationStatus.CANCELED);

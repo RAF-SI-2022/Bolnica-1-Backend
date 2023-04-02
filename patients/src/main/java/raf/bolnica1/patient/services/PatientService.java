@@ -23,6 +23,6 @@ public interface PatientService {
     // Pretraga lekara specijalista na odeljenju
     List<EmployeeDto> findDoctorSpecByDepartment(String pbo, String token);
     // Azuriranje statusa o prispecu pacijenta
-    Object updatePatientArrivalStatus(Long id, PatientArrival object);
+    MessageDto updatePatientArrivalStatus(Long id, PatientArrival object);
 
 }
