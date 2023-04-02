@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
+import raf.bolnica1.patient.domain.constants.ExaminationStatus;
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
+import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.mapper.AnamnesisMapper;
 import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
@@ -16,6 +20,7 @@ import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalExaminationService;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -84,10 +89,6 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
         return null;
     }
 
-    @Override
-    public Object updatePatientArrivalStatus(Object object) {
-        return null;
-    }
 
     @Override
     public Object updateExaminationStatus(Object object) {
@@ -104,6 +105,8 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
     public Object findDoctorSpecByDepartment(Object object) {
         return null;
     }
+
+
 
 
 }

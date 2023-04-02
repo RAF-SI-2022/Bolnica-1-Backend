@@ -1,10 +1,13 @@
 package raf.bolnica1.patient.services;
 
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
+import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 
 public interface MedicalExaminationService {
 
@@ -15,8 +18,7 @@ public interface MedicalExaminationService {
 
     //Pretraga zakazanih pregleda
     Object findScheduledExamination(Object object);
-    // Azuriranje statusa o prispecu pacijenta
-    Object updatePatientArrivalStatus(Object object);
+
 
     // Azuriranje statusa pregleda
     Object updateExaminationStatus(Object object);
@@ -25,4 +27,5 @@ public interface MedicalExaminationService {
 
     // Pretraga lekara specijalista na odeljenju
     Object findDoctorSpecByDepartment(Object object);
+
 }
