@@ -9,6 +9,8 @@ import raf.bolnica1.laboratory.mappers.LabAnalysisMapper;
 import raf.bolnica1.laboratory.repository.LabAnalysisRepository;
 import raf.bolnica1.laboratory.services.lab.LabAnalysisService;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class LabAnalysisServiceImpl implements LabAnalysisService {
@@ -50,5 +52,11 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     @Override
     public LabAnalysisDto getLabAnalysis(Long id) {
         return labAnalysisMapper.toDto(labAnalysisRepository.findLabAnalysisById(id));
+    }
+
+    @Override
+    public List<LabAnalysisDto> getAllLabAnalysis() {
+        List<LabAnalysis> labAnalyses=labAnalysisRepository.findAll();
+        return labAnalysisMapper.toDto(labAnalyses);
     }
 }
