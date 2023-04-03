@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,17 +17,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
+import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.general.MessageDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDeleteDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionUpdateDto;
+import raf.bolnica1.patient.dto.prescription.general.*;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionSendDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
 import raf.bolnica1.patient.messaging.helper.MessageHelper;
+import raf.bolnica1.patient.repository.PrescriptionRepository;
 import raf.bolnica1.patient.services.PrescriptionService;
 
 import java.net.URI;
+import java.sql.Date;
 
 @Service
 public class PrescriptionServiceImpl implements PrescriptionService {
@@ -37,13 +39,15 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private MessageHelper messageHelper;
     private PrescriptionMapper prescriptionMapper;
     private RestTemplate labRestTemplate;
+    private PrescriptionRepository prescriptionRepository;
 
     public PrescriptionServiceImpl(JmsTemplate jmsTemplate, MessageHelper messageHelper,
                                    @Value("${destination.send}") String destinationSend,
                                    @Value("${destination.delete}") String destinationDelete,
                                    @Value("${destination.update}") String destinationUpdate,
                                    PrescriptionMapper prescriptionMapper,
-                                   @Qualifier("labRestTemplate") RestTemplate labRestTemplate){
+                                   @Qualifier("labRestTemplate") RestTemplate labRestTemplate,
+                                   PrescriptionRepository prescriptionRepository){
         this.jmsTemplate = jmsTemplate;
         this.destinationSend = destinationSend;
         this.destinationDelete = destinationDelete;
@@ -51,6 +55,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         this.messageHelper = messageHelper;
         this.prescriptionMapper = prescriptionMapper;
         this.labRestTemplate = labRestTemplate;
+        this.prescriptionRepository = prescriptionRepository;
     }
 
     @Override
@@ -89,6 +94,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public MessageDto deletePresscription(Long prescriptionId) {
         jmsTemplate.convertAndSend(destinationDelete , messageHelper.createTextMessage(new PrescriptionDeleteDto(prescriptionId, getLbzFromAuthentication())));
         return new MessageDto("Uspesno poslata poruka za brisanje uputa.");
+    }
+
+    @Override
+    public Page<PrescriptionDoneDto> getAllDonePrescriptionsForPatient(String lbp, Date dateFrom, Date dateTo, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo);
+
+        return prescriptions.map(prescriptionMapper::toDto);
     }
 
     private String getLbzFromAuthentication(){
