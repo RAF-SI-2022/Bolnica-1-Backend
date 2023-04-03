@@ -25,7 +25,7 @@ public class InfirmaryController {
     }
 
     //Pretraga svih bolnickih soba preko id-a odeljenja
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findHospitalRooms")
+    @GetMapping("/findHospitalRooms")
     public ResponseEntity<Optional<List<HospitalRoom>>> findHospitalRooms(@Param("idDepartment") Long idDepartment){
         //Dohvatanje svih bolnickih soba na osnovu id-a odeljenja
         Optional<List<HospitalRoom>> rooms = infirmaryService.findHospitalRooms(idDepartment);
@@ -37,7 +37,7 @@ public class InfirmaryController {
     }
 
     //Kreiranje otpusne liste
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/createDischargeList")
+    @PostMapping("/createDischargeList")
     public ResponseEntity<?> createDischargeList(@Param("idDepartment") Long idDepartment,
                                                  @Param("lbp") String lbp,
                                                  @Param("followingDiagnosis") String followingDiagnosis,
@@ -54,7 +54,7 @@ public class InfirmaryController {
     }
 
     //Prijem pacijenta na stacionarno lecenje (Pravljenje hospitalizacije)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/pacientAdmission")
+    @PostMapping("/pacientAdmission")
     public ResponseEntity<?> pacientAdmission(@Param("idDepartment") Long idDepartment,
                                                  @Param("lbp") String lbp,
                                                  @Param("lbzDoctor") String lbzDoctor,
@@ -67,7 +67,7 @@ public class InfirmaryController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = "/findDischargeListHistory/{lbp}")
+    @GetMapping("/findDischargeListHistory/{lbp}")
     public ResponseEntity<DischargeListDto> findDischargeListHistory(@PathVariable String lbp,
                                                                      @RequestParam(required = false) Date startDate,
                                                                      @RequestParam(required = false) Date endDate)
@@ -75,7 +75,7 @@ public class InfirmaryController {
         return ResponseEntity.ok(infirmaryService.findDischargeListHistory(lbp, startDate, endDate));
     }
 
-    @GetMapping(value = "/patients/{pbo}")
+    @GetMapping("/patients/{pbo}")
     public ResponseEntity<List<PatientDto>> findHospitalizedPatients(@RequestHeader("Authorization") String authorization,
                                                                      @PathVariable String pbo,
                                                                      @RequestParam(value = "lbp") String lbp,
