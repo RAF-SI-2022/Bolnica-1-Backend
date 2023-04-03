@@ -6,12 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.Hospital;
+import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
+import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
 import raf.bolnica1.employees.repository.DepartmentRepository;
 import raf.bolnica1.employees.repository.EmployeeRepository;
+import raf.bolnica1.employees.repository.EmployeesRoleRepository;
 import raf.bolnica1.employees.repository.HospitalRepository;
 import raf.bolnica1.employees.services.DepartmentService;
 
@@ -27,6 +30,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
     private final HospitalRepository hospitalRepository;
+    private final EmployeesRoleRepository employeesRoleRepository;
 
     @Override
     public Long findDepartmentIdByLbz(String lbz) {
@@ -57,6 +61,30 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentDtos.add(new DepartmentDto(department.getId(), department.getPbo(), department.getName(), department.getHospital().getFullName()));
         }
         return departmentDtos;
+    }
+
+    @Override
+    public List<DoctorDepartmentDto> getAllDoctorsByPbo(String pbo) {
+
+        List<RoleShort> roleShortList=new ArrayList<>();
+        roleShortList.add(RoleShort.ROLE_DR_SPEC);
+        roleShortList.add(RoleShort.ROLE_DR_SPEC_ODELJENJA);
+        roleShortList.add(RoleShort.ROLE_DR_SPEC_POV);
+
+        List<Object[]> doctors= employeesRoleRepository.findEmployeesByDepartmentPboAndRoleList(pbo,roleShortList);
+
+        List<DoctorDepartmentDto>doctorDtos=new ArrayList<>();
+        for(Object[] info:doctors){
+            DoctorDepartmentDto doctorDto=new DoctorDepartmentDto();
+            doctorDto.setName((String)info[0]);
+            doctorDto.setSurname((String)info[1]);
+            doctorDto.setLbz((String)info[2]);
+            doctorDto.setDepartmentId((Long)info[3]);
+            doctorDtos.add(doctorDto);
+        }
+
+        return doctorDtos;
+
     }
 
     @Override
