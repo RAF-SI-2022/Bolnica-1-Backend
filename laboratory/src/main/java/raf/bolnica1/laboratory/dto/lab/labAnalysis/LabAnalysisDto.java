@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LabAnalysisDto {
+
+    private Long id;
     private String analysisName;
     private String abbreviation;
 }

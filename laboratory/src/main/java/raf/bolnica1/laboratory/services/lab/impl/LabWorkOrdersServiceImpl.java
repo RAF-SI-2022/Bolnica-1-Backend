@@ -213,6 +213,17 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
            labWorkOrderRepository.delete(labWorkOrder);
     }
 
+    @Override
+    public MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus) {
+        LabWorkOrder labWorkOrder=labWorkOrderRepository.findLabWorkOrderById(id);
+        labWorkOrder.setStatus(orderStatus);
+        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+        return new MessageDto("LabWorkOrder with ID "+labWorkOrder.getId()+" changed OrderStatus to "+orderStatus.toString()+". ");
+    }
+
+
+
+
     private String getLbzFromAuthentication(){
         String lbz = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

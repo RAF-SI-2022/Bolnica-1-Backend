@@ -52,7 +52,13 @@ public class LaboratoryExaminationsController {
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
     @GetMapping("/count-scheduled_examinations/by-day")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<List<ScheduledLabExaminationDto>> listScheduledExaminationsByDay(@RequestParam("date") Long date,HttpServletRequest request) {
+    public ResponseEntity<Integer> countScheduledExaminationsByDay(@RequestParam("date") Date date,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")).size(),HttpStatus.OK);
+    }
+
+    @GetMapping("/list-scheduled_examinations/by-day")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    public ResponseEntity<List<ScheduledLabExaminationDto>> listScheduledExaminationsByDay(@RequestParam("date") Date date,HttpServletRequest request) {
         return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")),HttpStatus.OK);
     }
 

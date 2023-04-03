@@ -39,4 +39,8 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
             @Param("fromDate") Date fromDate,
             @Param("toDate") Date toDate);
 
+
+    @Query("SELECT lwo FROM LabWorkOrder lwo WHERE lwo.id=:id")
+    LabWorkOrder findLabWorkOrderById(@Param("id") Long id);
+
 }
