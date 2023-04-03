@@ -13,7 +13,7 @@ public interface LabExaminationsService {
 
     Object changeExaminationStatus(Object object);
 
-    List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Long date,String token);
+    List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date,String token);
 
     List<ScheduledLabExaminationDto> listScheduledExaminations(String token);
 }

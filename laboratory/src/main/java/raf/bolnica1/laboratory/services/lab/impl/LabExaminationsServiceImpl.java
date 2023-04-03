@@ -52,14 +52,14 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
-    public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Long date,String token) {
+    public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date,String token) {
         String lbz=getLbzFromAuthentication();
         HttpHeaders httpHeaders=new HttpHeaders();
         httpHeaders.setBearerAuth(token);
         HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
         ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
 
-        Date sqlDate=new Date(date);
+        Date sqlDate=date;
         return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDateAndDepartmentId(sqlDate,departmentId.getBody()));
     }
 
