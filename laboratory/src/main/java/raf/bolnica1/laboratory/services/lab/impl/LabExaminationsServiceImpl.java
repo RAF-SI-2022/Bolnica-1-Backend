@@ -10,9 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
+import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
 import raf.bolnica1.laboratory.exceptions.workOrder.NotAuthenticatedException;
 import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.ScheduledLabExaminationRepository;
@@ -36,7 +38,7 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
 
         String lbz=getLbzFromAuthentication();
         HttpHeaders httpHeaders=new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
         ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
 
@@ -47,15 +49,21 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
-    public Object changeExaminationStatus(Object object) {
-        return null;
+    public Object changeExaminationStatus(Long id, ExaminationStatus newStatus)
+    {
+        ScheduledLabExamination scheduledLabExamination= scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
+                new LabWorkOrderNotFoundException(String.format("No examination with id %s", id))
+        );
+        scheduledLabExamination.setExaminationStatus(newStatus);
+        scheduledLabExaminationRepository.save(scheduledLabExamination);
+        return new MessageDto(String.format("Uspesno promenjen status pregleda") );
     }
 
     @Override
     public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date,String token) {
         String lbz=getLbzFromAuthentication();
         HttpHeaders httpHeaders=new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
         ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
 
@@ -67,7 +75,7 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     public List<ScheduledLabExaminationDto> listScheduledExaminations(String token) {
         String lbz=getLbzFromAuthentication();
         HttpHeaders httpHeaders=new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity=new HttpEntity<>(null,httpHeaders);
         ResponseEntity<Long> departmentId=employeeRestTemplate.exchange("/department/employee/"+lbz, HttpMethod.GET,httpEntity, Long.class);
 
