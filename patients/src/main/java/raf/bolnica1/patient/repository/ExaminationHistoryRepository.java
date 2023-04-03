@@ -23,7 +23,7 @@ public interface ExaminationHistoryRepository extends JpaRepository<ExaminationH
     List<ExaminationHistory> findExaminationHistoryByMedicalRecord(@Param("mr")MedicalRecord medicalRecord);
 
     @Query("SELECT eh FROM ExaminationHistory eh WHERE eh.medicalRecord=:mr AND eh.examDate>=:sdt AND eh.examDate<=:edt")
-    Page<List<ExaminationHistory>> findExaminationHistoryByMedicalRecordAndDateRange(Pageable pageable,
+    Page<ExaminationHistory> findExaminationHistoryByMedicalRecordAndDateRange(Pageable pageable,
                                                                                      @Param("mr") MedicalRecord medicalRecord,
                                                                                      @Param("sdt") Date startDate,
                                                                                      @Param("edt") Date endDate);
