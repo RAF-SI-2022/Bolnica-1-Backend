@@ -22,4 +22,6 @@ public class Visit {
     @ManyToOne
     private Hospitalization hospitalization;
 
+    // TODO: Add lbp?
+
 }
