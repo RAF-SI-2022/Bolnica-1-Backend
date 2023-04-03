@@ -21,4 +21,6 @@ public interface PrescriptionService {
     MessageDto deletePresscription(Long prescriptionId);
 
     Page<PrescriptionDoneDto> getAllDonePrescriptionsForPatient(String lbp, Date dateFrom, Date dateTo, int page, int size);
+
+    PrescriptionDoneDto getPrescription(Long prescriptionId, String authorization);
 }

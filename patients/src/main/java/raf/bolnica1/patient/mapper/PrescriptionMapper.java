@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.constants.PrescriptionStatus;
+import raf.bolnica1.patient.domain.prescription.LabPrescription;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.prescription.general.PrescriptionDoneDto;
@@ -40,7 +41,7 @@ public class PrescriptionMapper {
 
     public PrescriptionDoneDto toDto(Prescription prescription){
         PrescriptionDoneDto prescriptionDoneDto = null;
-        if(prescription.getDecriminatorValue().equals("LABORATORIJA")){
+        if(prescription.getDecriminatorValue().equals("LABORATORIJA") && prescription instanceof LabPrescription){
             prescriptionDoneDto = new PrescriptionDoneLabDto();
             prescriptionDoneDto.setDate(prescription.getDate());
             prescriptionDoneDto.setType("LABORATORIJA");
@@ -48,6 +49,8 @@ public class PrescriptionMapper {
             prescriptionDoneDto.setDepartmentToId(prescription.getDepartmentToId());
             prescriptionDoneDto.setDepartmentFromId(prescription.getDepartmentFromId());
             prescriptionDoneDto.setLbp(prescription.getMedicalRecord().getPatient().getLbp());
+            ((PrescriptionDoneLabDto) prescriptionDoneDto).setComment(((LabPrescription) prescription).getComment());
+            prescriptionDoneDto.setPrescriptionStatus(PrescriptionStatus.REALIZOVAN);
             List<String> analysisList = labResultsRepository.findAnalysisForPrescription(prescription.getId());
             for(String analysis : analysisList) {
                 List<LabResults> labResults = labResultsRepository.findResultsForPrescription(prescription.getId(), analysis);
