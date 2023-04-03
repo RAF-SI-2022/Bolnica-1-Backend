@@ -11,6 +11,7 @@ public class ParameterMapper {
 
     public ParameterDto toDto(Parameter entity) {
         ParameterDto dto = new ParameterDto();
+        dto.setId(entity.getId());
         dto.setParameterName(entity.getParameterName());
         dto.setType(entity.getType());
         dto.setUnitOfMeasure(entity.getUnitOfMeasure());
