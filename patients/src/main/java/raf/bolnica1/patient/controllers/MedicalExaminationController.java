@@ -64,6 +64,11 @@ public class MedicalExaminationController {
         return new ResponseEntity<>(patientService.findScheduledExaminationsForDoctor(lbz, page, size), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/find_all_doctor/{lbz}")
+    public ResponseEntity<List<ScheduleExamDto>> findScheduledExaminationForDoctorAll(@PathVariable String lbz) {
+        return new ResponseEntity<>(patientService.findScheduledExaminationsForDoctorAll(lbz), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/find_all_today")
     public ResponseEntity<Page<ScheduleExamDto>> findScheduledExaminationForDay(@RequestParam int page, @RequestParam int size) {
         return new ResponseEntity<>(patientService.findScheduledExaminationsForMedSister(page, size), HttpStatus.OK);
