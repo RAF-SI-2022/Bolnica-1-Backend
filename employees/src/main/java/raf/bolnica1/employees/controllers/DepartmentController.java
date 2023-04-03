@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
+import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.services.DepartmentService;
 
 import java.util.List;
@@ -42,4 +43,10 @@ public class DepartmentController {
     public ResponseEntity<List<HospitalDto>> getAllHospitals() {
         return new ResponseEntity<>(departmentService.listAllHospitals(), HttpStatus.OK);
     }
+
+    @GetMapping("/getAllDoctors/{pbo}")
+    public ResponseEntity<List<DoctorDepartmentDto>> geAllDoctorsByPbo(@PathVariable("pbo") String pbo){
+        return new ResponseEntity<>(departmentService.getAllDoctorsByPbo(pbo),HttpStatus.OK);
+    }
+
 }
