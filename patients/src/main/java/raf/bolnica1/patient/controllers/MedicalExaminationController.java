@@ -1,6 +1,7 @@
 package raf.bolnica1.patient.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
+import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.services.MedicalExaminationService;
 import raf.bolnica1.patient.services.PatientService;
 
@@ -42,8 +44,8 @@ public class MedicalExaminationController {
     }
 
     //Pretraga zakazanih pregleda
-    @PostMapping(path = "/find")
-    public ResponseEntity<Object> findScheduledExamination(@RequestBody Object object) {
+    @GetMapping(path = "/find/{lbz}")
+    public ResponseEntity<Page<ScheduleExamDto>> findScheduledExaminationForDoctor(@PathVariable String lbz, @RequestParam int page, @RequestParam int size) {
         // find all examinations based on LBZ
         // check whether examinationDate exists
         // if yes return only examinations on that date ( or none if they don't exist )
@@ -59,13 +61,17 @@ public class MedicalExaminationController {
             - Viša medicinska sestra
             - Medicinska sestra
          */
-        return null;
+        return new ResponseEntity<>(patientService.findScheduledExaminationsForDoctor(lbz, page, size), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/find_all_today")
+    public ResponseEntity<Page<ScheduleExamDto>> findScheduledExaminationForDay(@RequestParam int page, @RequestParam int size) {
+        return new ResponseEntity<>(patientService.findScheduledExaminationsForMedSister(page, size), HttpStatus.OK);
+    }
 
     // Azuriranje statusa pacijenta
     @PutMapping(path = "/patient/{id}")
-    @PreAuthorize("hasRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
+    /// @PreAuthorize("hasRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
     public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id,@RequestParam("pa") PatientArrival status){
         return new ResponseEntity<>(patientService.updatePatientArrivalStatus(id, status), HttpStatus.OK);
     }
