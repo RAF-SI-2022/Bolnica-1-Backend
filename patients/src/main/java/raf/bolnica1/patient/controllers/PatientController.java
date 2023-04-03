@@ -56,29 +56,6 @@ public class PatientController {
         return new ResponseEntity<>(patientCrudService.deletePatient(lbp), HttpStatus.OK);
     }
 
-    @GetMapping("/prescriptions/{lbp}")
-    public ResponseEntity<Page<PrescriptionDto>> getPerscriptionsForPatientByDoctor(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
-                                                                  @RequestParam Long doctorId,
-                                                                  @RequestParam(defaultValue = "0") Integer page,
-                                                                  @RequestParam(defaultValue = "10") Integer size){
-        return new ResponseEntity<>(prescriptionService.getPrescriptionsForPatient(doctorId, lbp, authorization, page, size), HttpStatus.OK);
-    }
-
-    @PostMapping("lab_prescription")
-    public ResponseEntity<MessageDto> writeLabPerscription(@RequestBody PrescriptionLabSendDto prescriptionSendDto){
-        return new ResponseEntity<>(prescriptionService.sendPersctiption(prescriptionSendDto), HttpStatus.OK);
-    }
-
-    @PutMapping("lab_prescription")
-    public ResponseEntity<MessageDto> putLabPerscription(@RequestBody PrescriptionLabUpdateDto prescriptionLabUpdateDto){
-        return new ResponseEntity<>(prescriptionService.updatePrescription(prescriptionLabUpdateDto), HttpStatus.OK);
-    }
-
-    @DeleteMapping("lab_prescription/{id}")
-    public ResponseEntity<MessageDto> deleteLabPerscription(@PathVariable Long id) {
-        return new ResponseEntity<>(prescriptionService.deletePresscription(id), HttpStatus.OK);
-    }
-
     @GetMapping("/find_patient/{lbp}")
     public ResponseEntity<PatientDto> findPatientByLbp(@PathVariable("lbp")String lbp){
         return new ResponseEntity<>(patientCrudService.findPatient(lbp),HttpStatus.OK);
@@ -95,14 +72,6 @@ public class PatientController {
     ){
         return new ResponseEntity<>(patientCrudService.filterPatients(lbp,jmbg,name,surname,page,size),HttpStatus.OK);
     }
-
-
-    @GetMapping("/admin/test")
-    ///@CheckPermission(permissions = {"ADMIN", "MED_SESTRA"})
-    public ResponseEntity<String> getMess(@RequestHeader("Authorization") String authorization){
-        return new ResponseEntity<>("super radi!", HttpStatus.OK);
-    }
-
 
 
 }

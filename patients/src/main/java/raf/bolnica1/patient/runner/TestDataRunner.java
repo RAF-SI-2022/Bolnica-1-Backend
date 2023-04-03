@@ -2,13 +2,19 @@ package raf.bolnica1.patient.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
-import raf.bolnica1.patient.domain.Allergy;
-import raf.bolnica1.patient.domain.DiagnosisCode;
-import raf.bolnica1.patient.domain.Vaccination;
+import raf.bolnica1.patient.domain.*;
+import raf.bolnica1.patient.domain.constants.CountryCode;
+import raf.bolnica1.patient.domain.constants.Gender;
 import raf.bolnica1.patient.domain.constants.VaccinationType;
+import raf.bolnica1.patient.domain.prescription.LabPrescription;
+import raf.bolnica1.patient.domain.prescription.LabResults;
+import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
+
+import java.sql.Date;
 
 //@Profile({"default"})
 @Component
@@ -26,6 +32,8 @@ public class TestDataRunner implements CommandLineRunner {
 
     private PatientMapper patientMapper;
 
+    private PrescriptionRepository prescriptionRepository;
+    private LabResultsRepository labResultsRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -171,5 +179,70 @@ public class TestDataRunner implements CommandLineRunner {
         d9.setDescription("Kamen u bubregu");
         d9.setLatinDescription("Calculus renis");
         diagnosisCodeRepository.save(d10);
+
+        Patient patient = new Patient();
+        patient.setName("Peter");
+        patient.setSurname("Parker");
+        patient.setDeleted(false);
+        patient.setCitizenship(CountryCode.ITA);
+        patient.setBirthPlace("USA");
+        patient.setDateAndTimeOfDeath(null);
+        patient.setGender(Gender.MUSKO);
+        patient.setEmail("peter.parker@gmail.com");
+        patient.setSocialData(null);
+        patient.setDateOfBirth(Date.valueOf("1999-09-09"));
+        patient.setJmbg("1234567");
+        patient.setPhone("1234567");
+        patient.setParentName("John");
+        patient.setLbp("P0001");
+        patient.setResidenceCountry(CountryCode.ITA);
+        patientRepository.save(patient);
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setGeneralMedicalData(null);
+        medicalRecord.setPatient(patient);
+        medicalRecord.setDeleted(false);
+        medicalRecord.setRegistrationDate(Date.valueOf("2008-08-08"));
+        medicalRecordRepository.save(medicalRecord);
+
+        Prescription prescription = new LabPrescription();
+        prescription.setDate(Date.valueOf("2022-02-02"));
+        prescription.setDepartmentFromId(1L);
+        prescription.setDepartmentToId(2L);
+        prescription.setDoctorLbz("E0003");
+        prescription.setMedicalRecord(medicalRecord);
+        prescriptionRepository.save(prescription);
+
+        LabResults labResults = new LabResults();
+        labResults.setResult("15");
+        labResults.setLowerLimit(0.0);
+        labResults.setUpperLimit(20.0);
+        labResults.setAnalysisName("analiza1");
+        labResults.setParameterName("parametar1");
+        labResults.setUnitOfMeasure("mera");
+        labResults.setLabPrescription((LabPrescription) prescription);
+        labResultsRepository.save(labResults);
+
+        LabResults labResults2 = new LabResults();
+        labResults2.setResult("10");
+        labResults2.setLowerLimit(0.0);
+        labResults2.setUpperLimit(30.0);
+        labResults2.setAnalysisName("analiza1");
+        labResults2.setParameterName("parametar2");
+        labResults2.setUnitOfMeasure("mera");
+        labResults2.setLabPrescription((LabPrescription) prescription);
+        labResultsRepository.save(labResults2);
+
+        LabResults labResults3 = new LabResults();
+        labResults3.setResult("10");
+        labResults3.setLowerLimit(0.0);
+        labResults3.setUpperLimit(30.0);
+        labResults3.setAnalysisName("analiza2");
+        labResults3.setParameterName("parametar2");
+        labResults3.setUnitOfMeasure("mera");
+        labResults3.setLabPrescription((LabPrescription) prescription);
+        labResultsRepository.save(labResults3);
+
+
     }
 }
