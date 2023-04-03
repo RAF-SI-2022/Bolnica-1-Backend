@@ -56,13 +56,11 @@ public class InfirmaryService {
         return null;
     }
 
-    public void createDischargeList(Long  idDepartment,String lbp,String followingDiagnosis,String anamnesis,String analysis,String courseOfDisease,String summary,String therapy){
+    public void createDischargeList(Long  idDepartment,String lbp,String followingDiagnosis,String anamnesis,String analysis,String courseOfDisease,String summary,String therapy,String lbzDepartment){
         //Dekrementiramo kapacitet sobe
         hospitalRoomRepository.decrementCapasity(idDepartment);
         //Pronalazimo uput preko lbp-a
         Optional<Prescription> prescription = prescriptionRepository.findByLbp(lbp);
-        if(!prescription.isPresent())
-            throw new RuntimeException("No prescription for patient with lbp: " + lbp);
         //Pronalazimo hospitalizaciju preko uputa
         Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription.get());
 
@@ -75,12 +73,12 @@ public class InfirmaryService {
         dischargeList.setSummary(summary);
         dischargeList.setTherapy(therapy);
         dischargeList.setHospitalization(hospitalization);
+        dischargeList.setLbzDepartment(lbzDepartment);
 
         //Ovo dobijas iz tokena
         //dischargeList.setLbzPrescribing();
 
-        //Moras da posaljes upit na employees
-        //dischargeList.setLbzDepartment();
+        dischargeList.setLbzPrescribing("1");
 
         Date date = new Date();
         Timestamp ts=new Timestamp(date.getTime());
@@ -91,7 +89,7 @@ public class InfirmaryService {
 
     }
 
-    public void pacientAdmission(Long  idDepartment,String lbp,String lbzDoctor,String referralDiagnosis,String note,Long idPrescription){
+    public void pacientAdmission(Long  idDepartment,String note,String lbzDoctor,String referralDiagnosis,Long idPrescription){
         //Inkrementiramo kapacitet sobe
         hospitalRoomRepository.incrementCapasity(idDepartment);
 
@@ -100,6 +98,8 @@ public class InfirmaryService {
 
         //Pronalazimo uput sa id-jem uputa
         Optional<Prescription> prescription = prescriptionRepository.findById(idPrescription);
+        //Setujemo ReferralDiagnosis
+        prescriptionRepository.setPrescriptionReferralDiagnosis(referralDiagnosis,idPrescription);
 
         //Setujemo status uputa na realizovan
         prescriptionRepository.updatePrescriptionStatus(PrescriptionStatus.REALIZOVAN,idPrescription);
@@ -113,6 +113,8 @@ public class InfirmaryService {
 
         //Ovo dobijas iz tokena
         //hospitalization.setLbzRegister();
+
+        hospitalization.setLbzRegister("1");
 
         Date date = new Date();
         Timestamp ts=new Timestamp(date.getTime());

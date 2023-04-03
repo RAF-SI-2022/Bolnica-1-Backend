@@ -25,7 +25,7 @@ public class InfirmaryController {
     }
 
     //Pretraga svih bolnickih soba preko id-a odeljenja
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/findHospitalRooms")
+    @GetMapping(value = "/findHospitalRooms")
     public ResponseEntity<Optional<List<HospitalRoom>>> findHospitalRooms(@Param("idDepartment") Long idDepartment){
         //Dohvatanje svih bolnickih soba na osnovu id-a odeljenja
         Optional<List<HospitalRoom>> rooms = infirmaryService.findHospitalRooms(idDepartment);
@@ -37,7 +37,7 @@ public class InfirmaryController {
     }
 
     //Kreiranje otpusne liste
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/createDischargeList")
+    @PostMapping(value = "/createDischargeList")
     public ResponseEntity<?> createDischargeList(@Param("idDepartment") Long idDepartment,
                                                  @Param("lbp") String lbp,
                                                  @Param("followingDiagnosis") String followingDiagnosis,
@@ -45,26 +45,26 @@ public class InfirmaryController {
                                                  @Param("analysis") String analysis,
                                                  @Param("courseOfDisease") String courseOfDisease,
                                                  @Param("summary") String summary,
-                                                 @Param("therapy") String therapy){
+                                                 @Param("therapy") String therapy,
+                                                 @Param("lbzDepartment") String lbzDepartment){
 
 
-        infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy);
+        infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy,lbzDepartment);
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
     //Prijem pacijenta na stacionarno lecenje (Pravljenje hospitalizacije)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,value = "/pacientAdmission")
+    @PostMapping(value = "/pacientAdmission")
     public ResponseEntity<?> pacientAdmission(@Param("idDepartment") Long idDepartment,
-                                                 @Param("lbp") String lbp,
-                                                 @Param("lbzDoctor") String lbzDoctor,
-                                                 @Param("referralDiagnosis") String referralDiagnosis,
-                                                 @Param("note") String note,
-                                                 @Param("idPrescription") Long idPrescription){
+                                              @Param("note") String note,
+                                              @Param("lbzDoctor") String lbzDoctor,
+                                              @Param("referralDiagnosis") String referralDiagnosis,
+                                              @Param("idPrescription") Long idPrescription){
 
+        infirmaryService.pacientAdmission(idDepartment,note,lbzDoctor,referralDiagnosis,idPrescription);
 
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/findDischargeListHistory/{lbp}")

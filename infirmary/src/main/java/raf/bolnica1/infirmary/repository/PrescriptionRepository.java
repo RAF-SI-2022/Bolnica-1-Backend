@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
-import raf.bolnica1.infirmary.dto.PatientDto;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +20,11 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     @Query("UPDATE Prescription SET prescriptionStatus = :prescriptionStatus WHERE id = :id")
     void updatePrescriptionStatus(@Param("prescriptionStatus") PrescriptionStatus prescriptionStatus,@Param("id") Long id);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Prescription SET referralDiagnosis = :referralDiagnosis WHERE id = :id")
+    void setPrescriptionReferralDiagnosis(@Param("referralDiagnosis") String referralDiagnosis,@Param("id") Long id);
+
+
 }
+
