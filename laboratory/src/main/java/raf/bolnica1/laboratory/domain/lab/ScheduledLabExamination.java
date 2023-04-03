@@ -28,4 +28,8 @@ public class ScheduledLabExamination {
     private String note;
     @NotBlank
     private String lbz;
+
+    public void setExaminationStatus(ExaminationStatus examinationStatus) {
+        this.examinationStatus = examinationStatus;
+    }
 }

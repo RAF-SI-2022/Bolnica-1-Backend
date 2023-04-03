@@ -31,5 +31,6 @@ public interface LabWorkOrdersService {
 
     void deleteWorkOrder(LabWorkOrder labWorkOrder);
 
+    MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus);
 
 }

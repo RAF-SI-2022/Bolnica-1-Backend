@@ -8,9 +8,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
+import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
 import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.ScheduledLabExaminationRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
@@ -32,13 +34,11 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
 
     @Override
     public MessageDto createScheduledExamination(String lbp, Date scheduledDate, String note, String token) {
-
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
-
         ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationMapper.toEntity(departmentId.getBody(), lbp, scheduledDate, note, lbz);
         scheduledLabExaminationRepository.save(scheduledLabExamination);
 
@@ -46,27 +46,30 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
-    public Object changeExaminationStatus(Object object) {
-        return null;
+    public Object changeExaminationStatus(Long id, ExaminationStatus newStatus)
+    {
+        ScheduledLabExamination scheduledLabExamination= scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
+                new LabWorkOrderNotFoundException(String.format("No examination with id %s", id))
+        );
+        scheduledLabExamination.setExaminationStatus(newStatus);
+        scheduledLabExaminationRepository.save(scheduledLabExamination);
+        return new MessageDto(String.format("Uspesno promenjen status pregleda") );
     }
 
     @Override
-    public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Long date, String token) {
+    public List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date, String token) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
-
-        Date sqlDate = new Date(date);
-        return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDateAndDepartmentId(sqlDate, departmentId.getBody()));
+        return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDateAndDepartmentId(date, departmentId.getBody()));
     }
-
     @Override
     public List<ScheduledLabExaminationDto> listScheduledExaminations(String token) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token);
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
 

@@ -1,21 +1,17 @@
-package raf.bolnica1.laboratory.dto.lab.parameter;
+package raf.bolnica1.laboratory.dto.prescription;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ParameterDto {
-
-    private Long id;
     private String parameterName;
-    private ParameterValueType type;
-    private String unitOfMeasure;
+    private String result;
     private Double lowerLimit;
     private Double upperLimit;
 }
