@@ -19,6 +19,8 @@ import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
 import raf.bolnica1.patient.services.PrescriptionService;
 
+import java.sql.Date;
+
 
 @RestController
 @RequestMapping("/patient")
@@ -54,9 +56,8 @@ public class PatientController {
         return new ResponseEntity<>(patientCrudService.deletePatient(lbp), HttpStatus.OK);
     }
 
-
     @GetMapping("/prescriptions/{lbp}")
-    public ResponseEntity<Page<PrescriptionDto>> getPerscriptions(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
+    public ResponseEntity<Page<PrescriptionDto>> getPerscriptionsForPatientByDoctor(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
                                                                   @RequestParam Long doctorId,
                                                                   @RequestParam(defaultValue = "0") Integer page,
                                                                   @RequestParam(defaultValue = "10") Integer size){

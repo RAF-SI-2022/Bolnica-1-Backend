@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
 import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;
+import raf.bolnica1.patient.dto.create.VaccinationDataDto;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.mapper.*;
 import raf.bolnica1.patient.repository.*;
@@ -108,6 +109,38 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             diagnosisCodeDtos.add(diagnosisCodeMapper.toDto(a));
         }
         return diagnosisCodeDtos;
+    }
+
+    @Override
+    public MessageDto addVaccine(String lbp, VaccinationDataDto vaccinationDataDto) {
+        Vaccination vaccination = vaccinationRepository.findByName(vaccinationDataDto.getVaccinationName());
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElse(null);
+        if(medicalRecord != null){
+            VaccinationData vaccinationData = new VaccinationData();
+            vaccinationData.setVaccination(vaccination);
+            vaccinationData.setGeneralMedicalData(medicalRecord.getGeneralMedicalData());
+            vaccinationData.setDeleted(false);
+            vaccinationData.setVaccinationDate(vaccinationDataDto.getVaccinationDate());
+            vaccinationDataRepository.save(vaccinationData);
+            return new MessageDto("Uspesno dodata vakcina.");
+        }
+        return new MessageDto("Neuspesno dodata vakcina.");
+    }
+
+    @Override
+    public MessageDto addAllergy(String lbp, String allergyName) {
+        Allergy allergy = allergyRepository.findByName(allergyName);
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElse(null);
+        if(medicalRecord != null){
+            AllergyData allergyData = new AllergyData();
+            allergyData.setAllergy(allergy);
+            allergyData.setGeneralMedicalData(medicalRecord.getGeneralMedicalData());
+            allergyDataRepository.save(allergyData);
+            return new MessageDto("Uspesno dodata alergija.");
+        }
+        return new MessageDto("Neuspesno dodata alergija.");
     }
 
 }
