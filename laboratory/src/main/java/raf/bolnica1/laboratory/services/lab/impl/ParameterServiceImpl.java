@@ -18,12 +18,8 @@ public class ParameterServiceImpl implements ParameterService {
 
     public ParameterDto createParameter(ParameterDto parameterDto){
 
-        Parameter parameter=new Parameter();
-        parameter.setParameterName(parameterDto.getParameterName());
-        parameter.setType(parameterDto.getType());
-        parameter.setUpperLimit(parameterDto.getUpperLimit());
-        parameter.setLowerLimit(parameterDto.getLowerLimit());
-        parameter.setUnitOfMeasure(parameterDto.getUnitOfMeasure());
+        Parameter parameter=parameterMapper.toEntity(parameterDto);
+        parameter.setId(null);
 
         parameter=parameterRepository.save(parameter);
 
@@ -32,12 +28,11 @@ public class ParameterServiceImpl implements ParameterService {
 
     public ParameterDto updateParameter(ParameterDto parameterDto){
 
-        Parameter parameter=parameterRepository.findParameterById(parameterDto.getId());
-        parameter.setParameterName(parameterDto.getParameterName());
-        parameter.setType(parameterDto.getType());
-        parameter.setUpperLimit(parameterDto.getUpperLimit());
-        parameter.setLowerLimit(parameterDto.getLowerLimit());
-        parameter.setUnitOfMeasure(parameterDto.getUnitOfMeasure());
+        /// ne moze da update ako se ne nalazi u bazi vec
+        if(parameterRepository.findParameterById(parameterDto.getId())==null)
+            throw new RuntimeException();
+
+        Parameter parameter=parameterMapper.toEntity(parameterDto);
 
         parameter=parameterRepository.save(parameter);
 

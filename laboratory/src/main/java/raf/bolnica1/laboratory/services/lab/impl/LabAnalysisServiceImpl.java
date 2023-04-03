@@ -19,9 +19,8 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     @Override
     public LabAnalysisDto createLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
-        LabAnalysis labAnalysis=new LabAnalysis();
-        labAnalysis.setAnalysisName(labAnalysisDto.getAnalysisName());
-        labAnalysis.setAbbreviation(labAnalysisDto.getAbbreviation());
+        LabAnalysis labAnalysis=labAnalysisMapper.toEntity(labAnalysisDto);
+        labAnalysis.setId(null);
 
         labAnalysis=labAnalysisRepository.save(labAnalysis);
 
@@ -31,10 +30,11 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     @Override
     public LabAnalysisDto updateLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
-        LabAnalysis labAnalysis= labAnalysisRepository.findLabAnalysisById(labAnalysisDto.getId());
+        /// ako ne postoji sa tim ID onda ne moze ni da update-uje
+        if(labAnalysisRepository.findLabAnalysisById(labAnalysisDto.getId())==null)
+            throw new RuntimeException();
 
-        labAnalysis.setAbbreviation(labAnalysisDto.getAbbreviation());
-        labAnalysis.setAnalysisName(labAnalysisDto.getAnalysisName());
+        LabAnalysis labAnalysis=labAnalysisMapper.toEntity(labAnalysisDto);
 
         labAnalysis=labAnalysisRepository.save(labAnalysis);
 

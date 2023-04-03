@@ -17,4 +17,15 @@ public class LabAnalysisMapper {
         return dto;
     }
 
+    public LabAnalysis toEntity(LabAnalysisDto dto){
+
+        LabAnalysis entity=new LabAnalysis();
+
+        entity.setAnalysisName(dto.getAnalysisName());
+        entity.setAbbreviation(dto.getAbbreviation());
+        entity.setId(dto.getId());
+
+        return entity;
+    }
+
 }

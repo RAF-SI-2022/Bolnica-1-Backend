@@ -13,6 +13,7 @@ import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 @AllArgsConstructor
 public class AnalysisParameterDto {
 
+    private Long id;
     private LabAnalysisDto labAnalysis;
     private ParameterDto parameter;
 

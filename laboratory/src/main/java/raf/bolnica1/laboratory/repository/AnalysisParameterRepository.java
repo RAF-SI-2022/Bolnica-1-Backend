@@ -16,5 +16,10 @@ public interface AnalysisParameterRepository extends JpaRepository<AnalysisParam
 
     @Query("SELECT ap.parameter.parameterName FROM AnalysisParameter ap WHERE ap.labAnalysis.id=:analysisId")
     List<String> findAnalysisParameterByAnalysisId(@Param("analysisId")Long analysisId);
+
+    @Query("SELECT ap FROM AnalysisParameter ap WHERE ap.id=:id")
+    AnalysisParameter findAnalysisParameterById(@Param("id")Long id);
+
+
 }
 
