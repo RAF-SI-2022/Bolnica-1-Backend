@@ -52,4 +52,10 @@ public class PrescriptionController {
                                                                                          @RequestParam(defaultValue = "10") Integer size){
         return new ResponseEntity<>(prescriptionService.getAllDonePrescriptionsForPatient(lbp, dateFrom, dateTo, page, size), HttpStatus.OK);
     }
+
+    @GetMapping("/prescription/{id}")
+    public ResponseEntity<PrescriptionDoneDto> getPrescription(@PathVariable("id") Long prescriptionId, @RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<>(prescriptionService.getPrescription(prescriptionId, authorization), HttpStatus.OK);
+    }
+
 }

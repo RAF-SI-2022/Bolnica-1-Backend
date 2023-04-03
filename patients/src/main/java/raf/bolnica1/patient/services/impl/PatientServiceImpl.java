@@ -28,6 +28,7 @@ import raf.bolnica1.patient.services.PatientService;
 
 import java.net.URI;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -108,6 +109,17 @@ public class PatientServiceImpl implements PatientService {
         Pageable pageable = PageRequest.of(page, size);
         Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForMedSister(pageable, new Date(System.currentTimeMillis()), PatientArrival.ZAKAZANO);
         return scheduleExams.map(scheduleExamMapper::toDto);
+    }
+
+    @Override
+    public List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz) {
+        List<ScheduleExam> scheduleExams = scheduleExamRepository.findFromCurrDateAndDoctor(new Date(System.currentTimeMillis()), lbz);
+        List<ScheduleExamDto> scheduleExamDtoList = new ArrayList<>();
+        for(ScheduleExam scheduleExam : scheduleExams){
+            ScheduleExamDto scheduleExamDto = scheduleExamMapper.toDto(scheduleExam);
+            scheduleExamDtoList.add(scheduleExamDto);
+        }
+        return scheduleExamDtoList;
     }
 
     private String getLbzFromAuthentication(){

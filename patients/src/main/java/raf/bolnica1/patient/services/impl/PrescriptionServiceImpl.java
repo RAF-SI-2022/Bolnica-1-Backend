@@ -20,6 +20,7 @@ import raf.bolnica1.patient.domain.constants.PrescriptionType;
 import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.*;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
 import raf.bolnica1.patient.messaging.helper.MessageHelper;
@@ -102,6 +103,17 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo);
 
         return prescriptions.map(prescriptionMapper::toDto);
+    }
+
+    @Override
+    public PrescriptionDoneDto getPrescription(Long prescriptionId, String token) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(token.substring(7));
+        HttpEntity entity = new HttpEntity(null, httpHeaders);
+
+        ResponseEntity<PrescriptionDoneLabDto> prescription = labRestTemplate.exchange("/prescription/"+prescriptionId, HttpMethod.GET, entity, PrescriptionDoneLabDto.class);
+
+        return prescription.getBody();
     }
 
     private String getLbzFromAuthentication(){

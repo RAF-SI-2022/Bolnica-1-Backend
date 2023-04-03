@@ -2,6 +2,7 @@ package raf.bolnica1.patient.dto.prescription.general;
 
 import lombok.Getter;
 import lombok.Setter;
+import raf.bolnica1.patient.domain.constants.PrescriptionStatus;
 
 import java.sql.Date;
 @Getter
@@ -14,4 +15,5 @@ public class PrescriptionDoneDto {
     private String lbp;
     private String doctorLbz;
     private Date date;
+    private PrescriptionStatus prescriptionStatus;
 }

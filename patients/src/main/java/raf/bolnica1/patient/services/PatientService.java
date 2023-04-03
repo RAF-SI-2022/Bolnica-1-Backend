@@ -29,4 +29,6 @@ public interface PatientService {
     Page<ScheduleExamDto> findScheduledExaminationsForDoctor(String lbz, int page, int size);
 
     Page<ScheduleExamDto> findScheduledExaminationsForMedSister(int page, int size);
+
+    List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz);
 }
