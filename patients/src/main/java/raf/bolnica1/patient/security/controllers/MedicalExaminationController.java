@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.controllers;
+package raf.bolnica1.patient.security.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
