@@ -34,7 +34,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindMedicalHistoriesPaged/{lbp}")
-    public ResponseEntity<Page<List<MedicalHistoryDto>>> getMedicalHistoryByLbpPaged(@PathVariable String lbp,
+    public ResponseEntity<Page<MedicalHistoryDto>> getMedicalHistoryByLbpPaged(@PathVariable String lbp,
                                                                                      @RequestParam(defaultValue = "0") Integer page,
                                                                                      @RequestParam(defaultValue = "2") Integer size
     ){
@@ -42,7 +42,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindMedicalHistoriesByDiagnosisCodePaged/{lbp}")
-    public ResponseEntity<Page<List<MedicalHistoryDto>>> getMedicalHistoryByLbpAndDiagnosisCodePaged(@PathVariable String lbp,
+    public ResponseEntity<Page<MedicalHistoryDto>> getMedicalHistoryByLbpAndDiagnosisCodePaged(@PathVariable String lbp,
                                                                                                      @RequestParam("diagnosisCode") String code,
                                                                                                      @RequestParam(defaultValue = "0") Integer page,
                                                                                                      @RequestParam(defaultValue = "2") Integer size
@@ -51,7 +51,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindExaminationHistoriesByLbpAndDatePaged/{lbp}")
-    public ResponseEntity<Page<List<ExaminationHistoryDto>>> getMedicalExaminationByLbpAndDatePaged(@PathVariable String lbp,
+    public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDatePaged(@PathVariable String lbp,
                                                                                                             @RequestParam("date") Date date,
                                                                                                             @RequestParam(defaultValue = "0") Integer page,
                                                                                                             @RequestParam(defaultValue = "2") Integer size
@@ -60,7 +60,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindExaminationHistoriesByLbpAndDateRangePaged/{lbp}")
-    public ResponseEntity<Page<List<ExaminationHistoryDto>>> getMedicalExaminationByLbpAndDateRangePaged(@PathVariable String lbp,
+    public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDateRangePaged(@PathVariable String lbp,
                                                                                                          @RequestParam("start_date") Date startDate,
                                                                                                          @RequestParam("end_date") Date endDate,
                                                                                                          @RequestParam(defaultValue = "0") Integer page,

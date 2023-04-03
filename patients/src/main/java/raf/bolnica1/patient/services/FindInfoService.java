@@ -15,11 +15,11 @@ public interface FindInfoService {
 
     List<MedicalHistoryDto> findMedicalHistoryByLbp(String lbp);
 
-    Page<List<MedicalHistoryDto>> findMedicalHistoryByLbpPaged(String lbp, int page, int size);
+    Page<MedicalHistoryDto> findMedicalHistoryByLbpPaged(String lbp, int page, int size);
 
-    Page<List<MedicalHistoryDto>> findMedicalHistoryByLbpAndDiagnosisCodePaged(String lbp,String code, int page, int size);
+    Page<MedicalHistoryDto> findMedicalHistoryByLbpAndDiagnosisCodePaged(String lbp,String code, int page, int size);
 
-    Page<List<ExaminationHistoryDto>> findExaminationHistoryByLbpAndDateRangePaged(String lbp, Date startDate,Date endDate, int page, int size);
+    Page<ExaminationHistoryDto> findExaminationHistoryByLbpAndDateRangePaged(String lbp, Date startDate,Date endDate, int page, int size);
 
     List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp);
 
