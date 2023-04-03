@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.dto.employee.EmployeeDto;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
@@ -23,6 +24,7 @@ import java.util.List;
 public class LaboratoryExaminationsController {
 
     private final EmployeeService employeeService;
+
     private LabExaminationsService labExaminationsService;
 
     /**
@@ -45,8 +47,9 @@ public class LaboratoryExaminationsController {
     }
 
     @PutMapping("/update-status")
-    public ResponseEntity<?> changeExaminationStatus() {
-        return null;
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    public ResponseEntity<?> changeExaminationStatus(@RequestParam("id")Long id, @RequestParam("newStatus") ExaminationStatus newStatus) {
+        return new ResponseEntity<>(labExaminationsService.changeExaminationStatus(id, newStatus), HttpStatus.OK);
     }
 
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
