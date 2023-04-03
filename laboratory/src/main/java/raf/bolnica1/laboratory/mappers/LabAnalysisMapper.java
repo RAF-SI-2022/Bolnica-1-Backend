@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.laboratory.domain.lab.LabAnalysis;
 import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class LabAnalysisMapper {
@@ -14,6 +17,16 @@ public class LabAnalysisMapper {
         dto.setId(entity.getId());
         dto.setAnalysisName(entity.getAnalysisName());
         dto.setAbbreviation(entity.getAbbreviation());
+        return dto;
+    }
+
+    public List<LabAnalysisDto> toDto(List<LabAnalysis> entity){
+
+        List<LabAnalysisDto>dto=new ArrayList<>();
+
+        for(LabAnalysis labAnalysis:entity)
+            dto.add(toDto(labAnalysis));
+
         return dto;
     }
 
