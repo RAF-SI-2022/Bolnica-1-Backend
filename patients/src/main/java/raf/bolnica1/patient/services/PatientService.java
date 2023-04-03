@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.services;
 
+import org.springframework.data.domain.Page;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
@@ -25,4 +26,9 @@ public interface PatientService {
     // Azuriranje statusa o prispecu pacijenta
     MessageDto updatePatientArrivalStatus(Long id, PatientArrival object);
 
+    Page<ScheduleExamDto> findScheduledExaminationsForDoctor(String lbz, int page, int size);
+
+    Page<ScheduleExamDto> findScheduledExaminationsForMedSister(int page, int size);
+
+    List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz);
 }

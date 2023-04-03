@@ -1,29 +1,34 @@
 package raf.bolnica1.patient.services.impl;
 
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import raf.bolnica1.patient.domain.ScheduleExam;
-import raf.bolnica1.patient.domain.constants.ExaminationStatus;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
+import raf.bolnica1.patient.exceptions.jwt.NotAuthenticatedException;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
-import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.ScheduleExamRepository;
 import raf.bolnica1.patient.services.PatientService;
 
 import java.net.URI;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,9 +48,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
-        ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto);
+        ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());
         scheduleExam = scheduleExamRepository.save(scheduleExam);
-        return new MessageDto("Scheduled examination created");
+        return new MessageDto("Uspesno kreiran zakazani pregled.");
     }
 
     @Override
@@ -85,13 +90,47 @@ public class PatientServiceImpl implements PatientService {
     public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
         ScheduleExam exam = scheduleExamRepository.getReferenceById(id);
         if(exam == null){
-            return new MessageDto(String.format("Examination does not exist"));
+            return new MessageDto(String.format("Pregled nije pronadjen."));
         }
         exam.setArrivalStatus(status);
-        if(status == PatientArrival.CANCELED){
-            exam.setExaminationStatus(ExaminationStatus.CANCELED);
+        scheduleExamRepository.save(exam);
+        return new MessageDto(String.format("Status pregleda promenjen u %s", status));
+    }
+
+    @Override
+    public Page<ScheduleExamDto> findScheduledExaminationsForDoctor(String lbz, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForDoctor(pageable, lbz, PatientArrival.CEKA);
+        return scheduleExams.map(scheduleExamMapper::toDto);
+    }
+
+    @Override
+    public Page<ScheduleExamDto> findScheduledExaminationsForMedSister(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForMedSister(pageable, new Date(System.currentTimeMillis()), PatientArrival.ZAKAZANO);
+        return scheduleExams.map(scheduleExamMapper::toDto);
+    }
+
+    @Override
+    public List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz) {
+        List<ScheduleExam> scheduleExams = scheduleExamRepository.findFromCurrDateAndDoctor(new Date(System.currentTimeMillis()), lbz);
+        List<ScheduleExamDto> scheduleExamDtoList = new ArrayList<>();
+        for(ScheduleExam scheduleExam : scheduleExams){
+            ScheduleExamDto scheduleExamDto = scheduleExamMapper.toDto(scheduleExam);
+            scheduleExamDtoList.add(scheduleExamDto);
         }
-        return new MessageDto(String.format("Arrival status updated into %s", status));
+        return scheduleExamDtoList;
+    }
+
+    private String getLbzFromAuthentication(){
+        String lbz = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            lbz = (String) authentication.getPrincipal();
+        }
+        // temp linija, treba malo refaktorisati
+        if(lbz == null) throw new NotAuthenticatedException("Something went wrong.");
+        return lbz;
     }
 
 

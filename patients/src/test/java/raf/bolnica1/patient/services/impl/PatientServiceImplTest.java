@@ -1,20 +1,14 @@
 package raf.bolnica1.patient.services.impl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.ScheduleExam;
-import raf.bolnica1.patient.domain.constants.ExaminationStatus;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
@@ -47,8 +41,7 @@ class PatientServiceImplTest {
         void setup(){
             exam = new ScheduleExam();
             exam.setId(1l);
-            exam.setArrivalStatus(PatientArrival.SCHEDULE_IN_PROGRESS);
-            exam.setExaminationStatus(ExaminationStatus.SCHEDULED);
+            exam.setArrivalStatus(PatientArrival.ZAVRSENO);
         }
 
         @Test
@@ -56,7 +49,7 @@ class PatientServiceImplTest {
 
             when(scheduleExamRepository.getReferenceById(1l)).thenReturn(null);
 
-            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.WAITING);
+            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.CEKA);
 
             assertEquals("Examination does not exist", res.getMessage());
 
@@ -71,9 +64,9 @@ class PatientServiceImplTest {
 
             when(scheduleExamRepository.getReferenceById(1l)).thenReturn(exam);
 
-            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.WAITING);
+            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.CEKA);
 
-            assertEquals("Arrival status updated into WAITING", res.getMessage());
+            assertEquals("Arrival status updated into CEKA", res.getMessage());
 
             verify(scheduleExamRepository).getReferenceById(1l);
 
@@ -84,10 +77,9 @@ class PatientServiceImplTest {
 
             when(scheduleExamRepository.getReferenceById(1l)).thenReturn(exam);
 
-            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.CANCELED);
+            MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.OTKAZANO);
 
-            assertEquals(ExaminationStatus.CANCELED, exam.getExaminationStatus());
-            assertEquals("Arrival status updated into CANCELED", res.getMessage());
+            assertEquals("Arrival status updated into OTKAZAO", res.getMessage());
 
 
             verify(scheduleExamRepository).getReferenceById(1l);
@@ -104,7 +96,6 @@ class PatientServiceImplTest {
         @BeforeEach
         void setup(){
             scheduleExamCreateDto = new ScheduleExamCreateDto();
-            scheduleExamCreateDto.setLbz(1l);
             scheduleExamCreateDto.setLbp("string");
         }
 
@@ -112,13 +103,13 @@ class PatientServiceImplTest {
         void scheduleSuccessfulTest(){
             ScheduleExam exam = new ScheduleExam();
 
-            when(scheduleExamMapper.toEntity(scheduleExamCreateDto)).thenReturn(exam);
+            when(scheduleExamMapper.toEntity(scheduleExamCreateDto, "E0003")).thenReturn(exam);
 
             MessageDto res = patientService.schedule(scheduleExamCreateDto);
 
             assertEquals("Scheduled examination created", res.getMessage());
 
-            verify(scheduleExamMapper).toEntity(scheduleExamCreateDto);
+            verify(scheduleExamMapper).toEntity(scheduleExamCreateDto, "E003");
             verify(scheduleExamRepository).save(exam);
 
         }
