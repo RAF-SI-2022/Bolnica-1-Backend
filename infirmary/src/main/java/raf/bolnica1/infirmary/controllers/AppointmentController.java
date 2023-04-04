@@ -23,6 +23,15 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentService.createAppointment(authorization, appointmentDto), HttpStatus.OK);
     }
 
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateAppointment(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("status") String status,
+            @RequestParam("id") Integer id
+    ){
+        return new ResponseEntity<>(appointmentService.updateAppointment(authorization, status, id), HttpStatus.OK);
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ScheduleAppointmentDto>> getScheduledAppointments(@RequestHeader("Authorization") String authorization,
                                                                                        @RequestParam("lbp") String lbp,
