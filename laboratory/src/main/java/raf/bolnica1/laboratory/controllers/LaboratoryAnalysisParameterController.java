@@ -39,14 +39,14 @@ public class LaboratoryAnalysisParameterController {
     }
 
     @GetMapping("/getAnalysisParameter")
-    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR','ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC', 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<AnalysisParameterDto> getAnalysisParameter(@RequestParam("id") Long id) {
         return new ResponseEntity<>(analysisParameterService.getAnalysisParameter(id), HttpStatus.OK);
     }
 
 
     @GetMapping("/getParametersByAnalysisId")
-    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR', 'ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC', 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<Page<ParameterDto>> getParameterByAnalysisId(@RequestParam("id") Long id,
                                                                        @RequestParam(defaultValue = "0") Integer page,
                                                                        @RequestParam(defaultValue = "2") Integer size) {
