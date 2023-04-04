@@ -23,5 +23,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     List<Prescription> findPrescriptionsByLbp(@Param("lbp") String lbp);
 
     @Query("SELECT p FROM Prescription p WHERE p.lbp = :lbp AND p.status = :status")
-    List<Prescription> findPrescriptionsByLbpNotRealized(String lbp, PrescriptionStatus nerealizovan);
+    List<Prescription> findPrescriptionsByLbpNotRealized(@Param("lbp") String lbp, @Param("status") PrescriptionStatus status);
+
+    @Query("SELECT p FROM Prescription p WHERE p.status = :status")
+    List<Prescription> findPrescriptionsNotRealized(@Param("status") PrescriptionStatus status);
 }

@@ -1,16 +1,19 @@
 package raf.bolnica1.laboratory.services.lab.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.AnalysisParameter;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 import raf.bolnica1.laboratory.domain.lab.Prescription;
+import raf.bolnica1.laboratory.dto.lab.PatientDto;
 import raf.bolnica1.laboratory.dto.prescription.*;
 import raf.bolnica1.laboratory.mappers.PrescriptionMapper;
 import raf.bolnica1.laboratory.mappers.PrescriptionRecieveMapper;
@@ -184,6 +187,22 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         List<PrescriptionDto> sublist = prescriptionDtos.subList(startIndex, endIndex);
 
         Page<PrescriptionDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), prescriptionDtos.size());
+        return paged;
+    }
+
+    @Override
+    public Page<PatientDto> findPatients(int page, int size) {
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsNotRealized(PrescriptionStatus.NEREALIZOVAN);
+        List<PatientDto> patientDtos = new ArrayList<>();
+        for(Prescription prescription : prescriptions){
+            patientDtos.add(new PatientDto(prescription.getLbp(), prescription.getId()));
+        }
+        int startIndex = page * size;
+        int endIndex = Math.min(startIndex + size, patientDtos.size());
+
+        List<PatientDto> sublist = patientDtos.subList(startIndex, endIndex);
+
+        Page<PatientDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), patientDtos.size());
         return paged;
     }
 }
