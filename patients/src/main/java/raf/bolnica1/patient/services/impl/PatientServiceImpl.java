@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import raf.bolnica1.patient.domain.ScheduleExam;
@@ -30,6 +31,8 @@ import java.net.URI;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -45,7 +48,6 @@ public class PatientServiceImpl implements PatientService {
         this.employeeRestTemplate = employeeRestTemplate;
     }
 
-
     @Override
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
         ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());
@@ -54,8 +56,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<ScheduleExamDto> findScheduledExamination(Object object) {
-        return null;
+    public List<ScheduleExamDto> findScheduledExaminations() {
+        List<ScheduleExamDto> exams = scheduleExamRepository.findAll().stream().map(scheduleExamMapper::toDto).collect(Collectors.toList());
+        return exams;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class PatientServiceImpl implements PatientService {
         return null;
     }
 
+    @Transactional
     @Override
     public MessageDto deleteScheduledExamination(Long id) {
         scheduleExamRepository.deleteScheduleExamById(id).orElseThrow(() -> new RuntimeException(String.format("Scheduled exam with id %d not found.", id)));
@@ -88,12 +92,12 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
-        ScheduleExam exam = scheduleExamRepository.getReferenceById(id);
-        if(exam == null){
-            return new MessageDto(String.format("Pregled nije pronadjen."));
+        Optional<ScheduleExam> exam = scheduleExamRepository.findById(id);
+        if(!exam.isPresent()){
+            return new MessageDto("Pregled nije pronadjen.");
         }
-        exam.setArrivalStatus(status);
-        scheduleExamRepository.save(exam);
+        exam.get().setArrivalStatus(status);
+        scheduleExamRepository.save(exam.get());
         return new MessageDto(String.format("Status pregleda promenjen u %s", status));
     }
 
@@ -129,7 +133,7 @@ public class PatientServiceImpl implements PatientService {
             lbz = (String) authentication.getPrincipal();
         }
         // temp linija, treba malo refaktorisati
-        if(lbz == null) throw new NotAuthenticatedException("Something went wrong.");
+//        if(lbz == null) throw new NotAuthenticatedException("Something went wrong.");
         return lbz;
     }
 
