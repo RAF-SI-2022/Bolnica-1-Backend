@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.PrescriptionDoneDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabUpdateDto;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.services.PrescriptionService;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/prescription")
@@ -22,11 +23,11 @@ public class PrescriptionController {
     private PrescriptionService prescriptionService;
 
     @GetMapping("/prescriptions/{lbp}")
-    public ResponseEntity<Page<PrescriptionDto>> getPerscriptionsForPatientByDoctor(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
-                                                                                    @RequestParam Long doctorId,
-                                                                                    @RequestParam(defaultValue = "0") Integer page,
-                                                                                    @RequestParam(defaultValue = "10") Integer size){
-        return new ResponseEntity<>(prescriptionService.getPrescriptionsForPatient(doctorId, lbp, authorization, page, size), HttpStatus.OK);
+    public ResponseEntity<Page<PrescriptionNewDto>> getPerscriptionsForPatientByDoctor(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
+                                                                                            @RequestParam String lbz,
+                                                                                            @RequestParam(defaultValue = "0") Integer page,
+                                                                                            @RequestParam(defaultValue = "10") Integer size){
+        return new ResponseEntity<>(prescriptionService.getPrescriptionsForPatient(lbz, lbp, authorization, page, size), HttpStatus.OK);
     }
 
     @PostMapping("lab_prescription")
