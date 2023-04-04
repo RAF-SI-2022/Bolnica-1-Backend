@@ -24,7 +24,7 @@ public class PrescriptionController {
     private PrescriptionService prescriptionService;
 
     @GetMapping("/prescriptions/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<Page<PrescriptionNewDto>> getPerscriptionsForPatientByDoctor(@RequestHeader("Authorization") String authorization, @PathVariable String lbp,
                                                                                             @RequestParam String lbz,
                                                                                             @RequestParam(defaultValue = "0") Integer page,
@@ -33,25 +33,25 @@ public class PrescriptionController {
     }
 
     @PostMapping("lab_prescription")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<MessageDto> writeLabPerscription(@RequestBody PrescriptionLabSendDto prescriptionSendDto){
         return new ResponseEntity<>(prescriptionService.sendPersctiption(prescriptionSendDto), HttpStatus.OK);
     }
 
     @PutMapping("lab_prescription")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<MessageDto> putLabPerscription(@RequestBody PrescriptionLabUpdateDto prescriptionLabUpdateDto){
         return new ResponseEntity<>(prescriptionService.updatePrescription(prescriptionLabUpdateDto), HttpStatus.OK);
     }
 
     @DeleteMapping("lab_prescription/{id}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<MessageDto> deleteLabPerscription(@PathVariable Long id) {
         return new ResponseEntity<>(prescriptionService.deletePresscription(id), HttpStatus.OK);
     }
 
     @GetMapping("/done_prescriptions/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<PrescriptionDoneDto>> getAllDonePrescriptionsByDatePeriod(@RequestParam Long dateFrom,
                                                                                          @RequestParam Long dateTo,
                                                                                          @PathVariable String lbp,
@@ -61,7 +61,7 @@ public class PrescriptionController {
     }
 
     @GetMapping("/prescription/{id}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<PrescriptionDoneDto> getPrescription(@PathVariable("id") Long prescriptionId, @RequestHeader("Authorization") String authorization){
         return new ResponseEntity<>(prescriptionService.getPrescription(prescriptionId, authorization), HttpStatus.OK);
     }
