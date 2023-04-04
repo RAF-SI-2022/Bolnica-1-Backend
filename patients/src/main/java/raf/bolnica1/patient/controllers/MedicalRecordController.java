@@ -22,43 +22,43 @@ public class MedicalRecordController {
     private MedicalRecordService medicalRecordService;
 
     @PostMapping("/general_medical_data/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<GeneralMedicalDataDto> createMedicalData(@PathVariable String lbp, @RequestBody GeneralMedicalDataCreateDto generalMedicalDataCreateDto){
         return new ResponseEntity<>(medicalRecordService.addGeneralMedicalData(lbp, generalMedicalDataCreateDto), HttpStatus.OK);
     }
 
     @PostMapping("/operation/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<OperationDto> addOperation(@PathVariable String lbp, @RequestBody OperationCreateDto operationCreateDto){
         return new ResponseEntity<>(medicalRecordService.addOperation(lbp, operationCreateDto), HttpStatus.OK);
     }
 
     @PostMapping("/vaccine/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<MessageDto> addVaccine(@RequestParam String lbp, @RequestBody VaccinationDataDto vaccinationDataDto){
         return new ResponseEntity<>(medicalRecordService.addVaccine(lbp, vaccinationDataDto), HttpStatus.OK);
     }
 
     @PostMapping("/allergy/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<MessageDto> addAllergy(@RequestParam String lbp, @RequestParam String allergy){
         return new ResponseEntity<>(medicalRecordService.addAllergy(lbp, allergy), HttpStatus.OK);
     }
 
     @GetMapping("/gather_allergies")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<AllergyDto>> gatherAllergies(){
         return new ResponseEntity<>(medicalRecordService.gatherAllergies(), HttpStatus.OK);
     }
 
     @GetMapping("/gather_vaccines")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<VaccinationDto>> gatherVaccines(){
         return new ResponseEntity<>(medicalRecordService.gatherVaccines(), HttpStatus.OK);
     }
 
     @GetMapping("/gather_diagnosis")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<DiagnosisCodeDto>> gatherDiagnosis(){
         return new ResponseEntity<>(medicalRecordService.gatherDiagnosis(), HttpStatus.OK);
     }

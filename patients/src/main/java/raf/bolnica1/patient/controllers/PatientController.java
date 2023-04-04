@@ -36,7 +36,7 @@ public class PatientController {
     //priv: visa med sesta, med sestra
     //@CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
     @PostMapping("/register")
-    @PreAuthorize("hasRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<PatientDto> registerPatient(@RequestBody PatientCreateDto patient){
         return new ResponseEntity<>(this.patientCrudService.registerPatient(patient), HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class PatientController {
     //visa med sestra, med sestra
     //@CheckPermission(permissions = {"MED_SESTRA", "VISA_MED_SESTRA"})
     @PutMapping("/update")
-    @PreAuthorize("hasRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientUpdateDto patientCreateDto){
         return new ResponseEntity<>(this.patientCrudService.updatePatient(patientCreateDto), HttpStatus.OK);
     }
@@ -55,20 +55,20 @@ public class PatientController {
 //    priv: visa med sestra
     /// @CheckPermission(permissions = {"VISA_MED_SESTRA"})
     @DeleteMapping("/delete/{lbp}")
-    @PreAuthorize("hasRole( 'ROLE_VISA_MED_SESTRA' )")
+    @PreAuthorize("hasAnyRole( 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<MessageDto> deletePatient(@PathVariable String lbp){
         return new ResponseEntity<>(patientCrudService.deletePatient(lbp), HttpStatus.OK);
     }
 
     @GetMapping("/find_patient/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<PatientDto> findPatientByLbp(@PathVariable("lbp")String lbp){
         return new ResponseEntity<>(patientCrudService.findPatient(lbp),HttpStatus.OK);
     }
 
 
     @GetMapping("/filter_patients")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Page<PatientDto>> filterPatients(@RequestParam("lbp")String lbp,
                                                              @RequestParam("jmbg")String jmbg,
                                                              @RequestParam("name")String name,

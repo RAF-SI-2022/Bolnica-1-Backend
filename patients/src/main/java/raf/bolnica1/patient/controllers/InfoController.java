@@ -20,25 +20,25 @@ public class InfoController {
     private FindInfoService findInfoService;
 
     @GetMapping("/myFindGMD/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<GeneralMedicalDataDto> getGeneralMedicalDataByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findGeneralMedicalDataByLbp(lbp), HttpStatus.OK);
     }
 
     @GetMapping("/myFindOperations/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<OperationDto>> getOperationsByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findOperationsByLbp(lbp),HttpStatus.OK);
     }
 
     @GetMapping("/myFindMedicalHistories/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoryByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findMedicalHistoryByLbp(lbp),HttpStatus.OK);
     }
 
     @GetMapping("/myFindMedicalHistoriesPaged/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<Page<MedicalHistoryDto>> getMedicalHistoryByLbpPaged(@PathVariable String lbp,
                                                                                      @RequestParam(defaultValue = "0") Integer page,
                                                                                      @RequestParam(defaultValue = "2") Integer size
@@ -47,7 +47,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindMedicalHistoriesByDiagnosisCodePaged/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<MedicalHistoryDto>> getMedicalHistoryByLbpAndDiagnosisCodePaged(@PathVariable String lbp,
                                                                                                      @RequestParam("diagnosisCode") String code,
                                                                                                      @RequestParam(defaultValue = "0") Integer page,
@@ -57,7 +57,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindExaminationHistoriesByLbpAndDatePaged/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDatePaged(@PathVariable String lbp,
                                                                                                             @RequestParam("date") Long date,
                                                                                                             @RequestParam(defaultValue = "0") Integer page,
@@ -67,7 +67,7 @@ public class InfoController {
     }
 
     @GetMapping("/myFindExaminationHistoriesByLbpAndDateRangePaged/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDateRangePaged(@PathVariable String lbp,
                                                                                                          @RequestParam("start_date") Long startDate,
                                                                                                          @RequestParam("end_date") Long endDate,
@@ -79,13 +79,13 @@ public class InfoController {
 
 
     @GetMapping("/myFindExaminationHistories/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<List<ExaminationHistoryDto>> getExaminationHistoryByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbp(lbp),HttpStatus.OK);
     }
 
     @GetMapping("/myFindMedicalRecord/{lbp}")
-    @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<MedicalRecordDto> getMedicalRecordByLbp(@PathVariable String lbp){
         return new ResponseEntity<>(findInfoService.findMedicalRecordByLbp(lbp),HttpStatus.OK);
     }
