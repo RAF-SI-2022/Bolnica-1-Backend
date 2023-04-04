@@ -330,7 +330,7 @@ public class TestDataRunner implements CommandLineRunner {
         medicalRecord2.setGeneralMedicalData(generalMedicalData2);
 
         MedicalRecord medicalRecord3 = new MedicalRecord();
-        medicalRecord3.setPatient(patient1);
+        medicalRecord3.setPatient(patient3);
         medicalRecord3.setRegistrationDate(Date.valueOf("2023-03-04"));
         medicalRecord3.setDeleted(false);
         GeneralMedicalData generalMedicalData3 = new GeneralMedicalData();
@@ -339,7 +339,7 @@ public class TestDataRunner implements CommandLineRunner {
         medicalRecord3.setGeneralMedicalData(generalMedicalData3);
 
         MedicalRecord medicalRecord4 = new MedicalRecord();
-        medicalRecord4.setPatient(patient2);
+        medicalRecord4.setPatient(patient4);
         medicalRecord4.setRegistrationDate(Date.valueOf("2023-03-04"));
         medicalRecord4.setDeleted(false);
         GeneralMedicalData generalMedicalData4 = new GeneralMedicalData();
@@ -348,7 +348,7 @@ public class TestDataRunner implements CommandLineRunner {
         medicalRecord4.setGeneralMedicalData(generalMedicalData4);
 
         MedicalRecord medicalRecord5 = new MedicalRecord();
-        medicalRecord5.setPatient(patient1);
+        medicalRecord5.setPatient(patient5);
         medicalRecord5.setRegistrationDate(Date.valueOf("2023-03-04"));
         medicalRecord5.setDeleted(false);
         GeneralMedicalData generalMedicalData5 = new GeneralMedicalData();
