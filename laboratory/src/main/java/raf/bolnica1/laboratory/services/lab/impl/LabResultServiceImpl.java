@@ -9,12 +9,18 @@ import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
+import raf.bolnica1.laboratory.dto.lab.prescription.LabResultDto;
+import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.services.lab.LabResultService;
 import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -38,6 +44,7 @@ public class LabResultServiceImpl implements LabResultService {
         this.labWorkOrdersService = labWorkOrdersService;
         this.jmsTemplate = jmsTemplate;
         this.destination = destination;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -68,7 +75,27 @@ public class LabResultServiceImpl implements LabResultService {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
         if(labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)){
             labWorkOrder.getPrescription().setStatus(PrescriptionStatus.REALIZOVAN);
-            /// jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage());
+            PrescriptionCreateDto prescriptionCreateDto = new PrescriptionCreateDto();
+            prescriptionCreateDto.setComment(labWorkOrder.getPrescription().getComment());
+            prescriptionCreateDto.setDate(new Date(System.currentTimeMillis()));
+            prescriptionCreateDto.setDepartmentFromId(labWorkOrder.getPrescription().getDepartmentFromId());
+            prescriptionCreateDto.setDepartmentToId(labWorkOrder.getPrescription().getDepartmentToId());
+            prescriptionCreateDto.setDoctorLbz(labWorkOrder.getPrescription().getDoctorLbz());
+            prescriptionCreateDto.setLbp(labWorkOrder.getPrescription().getLbp());
+            prescriptionCreateDto.setType("LABORATORIJA");
+            prescriptionCreateDto.setLabResultDtoList(new ArrayList<>());
+            List<ParameterAnalysisResult> parameterAnalysisResultList = parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId());
+            for(ParameterAnalysisResult parameterAnalysisResult : parameterAnalysisResultList){
+                LabResultDto labResultDto = new LabResultDto();
+                labResultDto.setResult(parameterAnalysisResult.getResult());
+                labResultDto.setAnalysisName(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName());
+                labResultDto.setParameterName(parameterAnalysisResult.getAnalysisParameter().getParameter().getParameterName());
+                labResultDto.setLowerLimit(parameterAnalysisResult.getAnalysisParameter().getParameter().getLowerLimit());
+                labResultDto.setUpperLimit(parameterAnalysisResult.getAnalysisParameter().getParameter().getUpperLimit());
+                labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
+                prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
+            }
+            jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
         }
         return null;
     }
