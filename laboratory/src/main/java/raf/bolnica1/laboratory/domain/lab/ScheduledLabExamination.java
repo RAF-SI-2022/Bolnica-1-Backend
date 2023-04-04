@@ -28,6 +28,5 @@ public class ScheduledLabExamination {
     private String note;
     @NotBlank
     private String lbz;
-    @OneToOne
-    private Prescription prescription;
+
 }

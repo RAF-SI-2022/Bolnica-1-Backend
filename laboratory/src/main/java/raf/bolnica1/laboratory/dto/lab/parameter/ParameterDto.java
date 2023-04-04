@@ -11,6 +11,8 @@ import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParameterDto {
+
+    private Long id;
     private String parameterName;
     private ParameterValueType type;
     private String unitOfMeasure;

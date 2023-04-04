@@ -14,19 +14,21 @@ import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 import raf.bolnica1.laboratory.domain.lab.Prescription;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAnalysisResultMessageDto;
-import raf.bolnica1.laboratory.dto.lab.workOrder.*;
+import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
+import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderMessageDto;
+import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderWithAnalysisDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
+import raf.bolnica1.laboratory.exceptions.workOrder.DateParseException;
 import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
 import raf.bolnica1.laboratory.exceptions.workOrder.NoParameterAnalysisResultFound;
-import raf.bolnica1.laboratory.exceptions.workOrder.NotAuthenticatedException;
-import raf.bolnica1.laboratory.exceptions.workOrder.*;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderMapper;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderWithAnalysisMapper;
 import raf.bolnica1.laboratory.mappers.ParameterAnalysisResultMapper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
+import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
 import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
 import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 
@@ -41,6 +43,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
+    private AuthenticationUtils authenticationUtils;
     private final LabWorkOrderRepository labWorkOrderRepository;
     private final ParameterAnalysisResultRepository parameterAnalysisResultRepository;
     private final LabWorkOrderWithAnalysisMapper labWorkOrderWithAnalysisMapper;
@@ -52,12 +55,12 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     @Override
     public LabWorkOrder createWorkOrder(Prescription prescription) {
 
-        LabWorkOrder labWorkOrder=new LabWorkOrder();
+        LabWorkOrder labWorkOrder = new LabWorkOrder();
 
         labWorkOrder.setPrescription(prescription);
         labWorkOrder.setLbp(prescription.getLbp());
         labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
-        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+        labWorkOrder = labWorkOrderRepository.save(labWorkOrder);
 
         return labWorkOrder;
     }
@@ -65,11 +68,11 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     @Override
     public MessageDto registerPatient(String lbp) {
         List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbp(lbp);
-        for(Prescription prescription : prescriptions){
+        for (Prescription prescription : prescriptions) {
             LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
-            if(labWorkOrder != null){
+            if (labWorkOrder != null) {
                 labWorkOrder.setStatus(OrderStatus.U_OBRADI);
-                labWorkOrder.setTechnicianLbz(getLbzFromAuthentication());
+                labWorkOrder.setTechnicianLbz(authenticationUtils.getLbzFromAuthentication());
                 labWorkOrderRepository.save(labWorkOrder);
             }
         }
@@ -79,17 +82,17 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     @Override
     public LabWorkOrder createWorkOrder(Long prescriptionId) {
 
-        String lbz=getLbzFromAuthentication();
+        String lbz = authenticationUtils.getLbzFromAuthentication();
 
-        Prescription prescription= prescriptionRepository.findPrescriptionById(prescriptionId);
+        Prescription prescription = prescriptionRepository.findPrescriptionById(prescriptionId);
 
-        LabWorkOrder labWorkOrder=new LabWorkOrder();
+        LabWorkOrder labWorkOrder = new LabWorkOrder();
 
         labWorkOrder.setPrescription(prescription);
         labWorkOrder.setLbp(prescription.getLbp());
         labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
         labWorkOrder.setTechnicianLbz(lbz);
-        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+        labWorkOrder = labWorkOrderRepository.save(labWorkOrder);
 
 
         return labWorkOrder;
@@ -102,14 +105,14 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     public LabWorkOrderMessageDto verifyWorkOrder(Long id) {
-        String lbz = getLbzFromAuthentication();
+        String lbz = authenticationUtils.getLbzFromAuthentication();
 
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", id))
         );
         // check for results of parameter analysis
         ParameterAnalysisResult par = parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(id).stream().filter(result -> result.getResult() == null).findAny().orElse(null);
-        if(par != null){
+        if (par != null) {
             throw new CantVerifyLabWorkOrderException("Cant verify lab work order, as not all results have been entered.");
         }
 
@@ -127,7 +130,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     @Override
     @Transactional
     public UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long analysisParameterId, String result) {
-        String lbz = getLbzFromAuthentication();
+        String lbz = authenticationUtils.getLbzFromAuthentication();
 
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(workOrderId).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", workOrderId))
@@ -136,7 +139,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         ParameterAnalysisResult par = parameterAnalysisResultRepository.findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameterId).orElseThrow(() ->
                 new NoParameterAnalysisResultFound(String.format("No parameter analysis result found for lab work order id %s and analysis param id %s", workOrderId, analysisParameterId)));
 
-        if(labWorkOrder.getStatus() == OrderStatus.NEOBRADJEN){
+        if (labWorkOrder.getStatus() == OrderStatus.NEOBRADJEN) {
             labWorkOrder.setStatus(OrderStatus.U_OBRADI);
         }
 
@@ -156,7 +159,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         Date from = null;
         Date to = null;
 
-        if(fromDate != null && toDate != null) {
+        if (fromDate != null && toDate != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
@@ -175,7 +178,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         Date from = null;
         Date to = null;
 
-        if(fromDate != null && toDate != null) {
+        if (fromDate != null && toDate != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
@@ -202,26 +205,25 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
                 new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", id))
         );
 
-        List<ParameterAnalysisResult> parameterAnalysisResults =  parameterAnalysisResultRepository.findParameterAnalysisResultsByWorkOrderIdAndAllowedStatuses(id, allowedStatuses);
+        List<ParameterAnalysisResult> parameterAnalysisResults = parameterAnalysisResultRepository.findParameterAnalysisResultsByWorkOrderIdAndAllowedStatuses(id, allowedStatuses);
 
         return labWorkOrderWithAnalysisMapper.toDto(labWorkOrder, parameterAnalysisResults);
     }
 
     @Override
     public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
+        parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
+        labWorkOrderRepository.delete(labWorkOrder);
            parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
            labWorkOrderRepository.delete(labWorkOrder);
     }
 
-    private String getLbzFromAuthentication(){
-        String lbz = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            lbz = (String) authentication.getPrincipal();
-        }
-        // temp linija, treba malo refaktorisati
-        if(lbz == null) throw new NotAuthenticatedException("Something went wrong.");
-        return lbz;
+    @Override
+    public MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus) {
+        LabWorkOrder labWorkOrder=labWorkOrderRepository.findLabWorkOrderById(id);
+        labWorkOrder.setStatus(orderStatus);
+        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
+        return new MessageDto("LabWorkOrder with ID "+labWorkOrder.getId()+" changed OrderStatus to "+orderStatus.toString()+". ");
     }
 
     public Date lastSecondOfTheDay(Date date) {
