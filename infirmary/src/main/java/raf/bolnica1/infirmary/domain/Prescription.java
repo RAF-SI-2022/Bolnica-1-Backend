@@ -27,6 +27,6 @@ public class Prescription {
     private String requestedAnalysis;
     private String comment;
     private String referralDiagnosis;
-    private String getReferralReason;
+    private String ReferralReason;
 
 }

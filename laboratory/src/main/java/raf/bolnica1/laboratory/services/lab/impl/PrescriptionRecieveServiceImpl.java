@@ -103,12 +103,12 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
 
     @Override
     public Page<PrescriptionDto> findPrescriptionsForPatient(String lbp, String doctorLbz, int page, int size) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz);
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
         List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
         for(Prescription prescription : prescriptions){
             prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
         }
-
+        System.out.println(prescriptionDtos.size());
         int startIndex = page * size;
         int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
 
@@ -158,5 +158,15 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         }
         prescriptionDoneDto.setParameters(list);
         return prescriptionDoneDto;
+    }
+
+    @Override
+    public ArrayList<PrescriptionDto> findPrescriptionsForPatientRest(String lbp, String doctorLbz) {
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
+        List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
+        for(Prescription prescription : prescriptions){
+            prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
+        }
+        return (ArrayList<PrescriptionDto>) prescriptionDtos;
     }
 }
