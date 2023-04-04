@@ -19,4 +19,6 @@ public interface PrescriptionRecieveService {
     PrescriptionDoneDto findPrescription(Long id);
 
     ArrayList<PrescriptionDto> findPrescriptionsForPatientRest(String lbp, String doctorLbz);
+
+    Page<PrescriptionDto> findPrescriptionsForPatientNotRealized(String lbp, Integer page, Integer size);
 }

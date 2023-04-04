@@ -169,4 +169,21 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         }
         return (ArrayList<PrescriptionDto>) prescriptionDtos;
     }
+
+    @Override
+    public Page<PrescriptionDto> findPrescriptionsForPatientNotRealized(String lbp, Integer page, Integer size) {
+        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpNotRealized(lbp, PrescriptionStatus.NEREALIZOVAN);
+        List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
+        for(Prescription prescription : prescriptions){
+            prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
+        }
+        System.out.println(prescriptionDtos.size());
+        int startIndex = page * size;
+        int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
+
+        List<PrescriptionDto> sublist = prescriptionDtos.subList(startIndex, endIndex);
+
+        Page<PrescriptionDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), prescriptionDtos.size());
+        return paged;
+    }
 }

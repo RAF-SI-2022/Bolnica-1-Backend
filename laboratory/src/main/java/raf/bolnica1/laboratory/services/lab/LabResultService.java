@@ -7,4 +7,5 @@ public interface LabResultService {
 
     MessageDto updateResults(ResultUpdateDto resultUpdateDto);
 
+    MessageDto commitResults(Long workOrderId);
 }

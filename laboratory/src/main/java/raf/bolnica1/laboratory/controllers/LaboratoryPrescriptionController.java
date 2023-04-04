@@ -25,6 +25,13 @@ public class LaboratoryPrescriptionController {
         return new ResponseEntity<>(prescriptionRecieveService.findPrescriptionsForPatient(lbp, doctorLbz, page, size), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/get/{lbp}")
+    public ResponseEntity<Page<PrescriptionDto>> getPrescriptionsForPatient(@PathVariable("lbp") String lbp,
+                                                                                 @RequestParam(defaultValue = "0") Integer page,
+                                                                                 @RequestParam(defaultValue = "10") Integer size){
+        return new ResponseEntity<>(prescriptionRecieveService.findPrescriptionsForPatientNotRealized(lbp, page, size), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/get_rest/{lbp}")
     public ResponseEntity<ArrayList<PrescriptionDto>> getPrescriptionsForPatientByLbzRest(@PathVariable("id") String doctorLbz, @PathVariable("lbp") String lbp){
         return new ResponseEntity<>(prescriptionRecieveService.findPrescriptionsForPatientRest(lbp, doctorLbz), HttpStatus.OK);
