@@ -63,6 +63,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         scheduledAppointment.setPrescription(prescriptionRepository.save(prescription.get()));
         scheduledAppointmentRepository.save(scheduledAppointment);
 
+
+
         return "Appointment created successfully!";
     }
 
@@ -80,6 +82,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new RuntimeException("Invalid LPZ!");
 
         ScheduledAppointment scheduledAppointment = scheduledAppointmentRepository.findAppointment(id);
+
+        if(scheduledAppointment == null){
+            throw new RuntimeException("Appointment doesn't exist.");
+        }
+
         scheduledAppointment.setAdmissionStatus(AdmissionStatus.valueOf(status));
         scheduledAppointmentRepository.save(scheduledAppointment);
 
