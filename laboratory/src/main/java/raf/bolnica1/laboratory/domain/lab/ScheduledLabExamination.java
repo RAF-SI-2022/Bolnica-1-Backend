@@ -29,7 +29,4 @@ public class ScheduledLabExamination {
     @NotBlank
     private String lbz;
 
-    public void setExaminationStatus(ExaminationStatus examinationStatus) {
-        this.examinationStatus = examinationStatus;
-    }
 }
