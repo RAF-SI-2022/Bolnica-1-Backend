@@ -48,7 +48,7 @@ public class LaboratoryAnalysisController {
     }
 
     @GetMapping("/getAllLabAnalysis")
-    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR','ROLE_DR_SPEC_ODELJENJA','ROLE_DR_SPEC','ROLE_DR_SPEC_POV')")
     public ResponseEntity<List<LabAnalysisDto>> getAllLabAnalysis() {
         return new ResponseEntity<>(labAnalysisService.getAllLabAnalysis(), HttpStatus.OK);
     }
