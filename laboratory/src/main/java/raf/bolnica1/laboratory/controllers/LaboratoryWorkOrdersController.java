@@ -27,23 +27,23 @@ public class LaboratoryWorkOrdersController {
     @GetMapping("/work_orders_history")
     public ResponseEntity<Page<LabWorkOrder>> workOrdersHistory(
             @RequestParam String lbp,
-            @RequestParam(required = false) String fromDate,
-            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) Long fromDate,
+            @RequestParam(required = false) Long toDate,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "2") Integer size)  {
-        return new ResponseEntity<>(labWorkOrdersService.workOrdersHistory(lbp, fromDate, toDate, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(labWorkOrdersService.workOrdersHistory(lbp, new Date(fromDate), new Date(toDate), page, size), HttpStatus.OK);
     }
 
     @GetMapping("/find_work_orders")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR', 'ROLE_VISI_LAB_TEHNICAR', 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_BIOHEMICAR')")
     public ResponseEntity<Page<LabWorkOrder>> findWorkOrdersByLab(
             @RequestParam String lbp,
-            @RequestParam(required = false) String fromDate,
-            @RequestParam(required = false) String toDate,
+            @RequestParam(required = false) Long fromDate,
+            @RequestParam(required = false) Long toDate,
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "2") Integer size) {
-        return new ResponseEntity<>(labWorkOrdersService.findWorkOrdersByLab(lbp, fromDate, toDate, status, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(labWorkOrdersService.findWorkOrdersByLab(lbp, new Date(fromDate), new Date(toDate), status, page, size), HttpStatus.OK);
     }
 
     @PutMapping("/{workOrderId}/{parameterAnalysisId}/update")
