@@ -32,11 +32,9 @@ import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
 import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
 import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -154,41 +152,15 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return parameterAnalysisResultMapper.toDto(par);
     }
 
-    public Page<LabWorkOrder> workOrdersHistory(String lbp, String fromDate, String toDate, Integer page, Integer size) {
+    public Page<LabWorkOrder> workOrdersHistory(String lbp, Date fromDate, Date toDate, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Date from = null;
-        Date to = null;
-
-        if (fromDate != null && toDate != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            try {
-                from = dateFormat.parse(fromDate);
-                to = lastSecondOfTheDay(dateFormat.parse(toDate));
-            } catch (Exception e) {
-                throw new DateParseException(String.format("Given date is not parsed correctly: %s or %s", fromDate, toDate));
-            }
-        }
-        return labWorkOrderRepository.workOrdersHistory(pageable, lbp, from, to);
+        return labWorkOrderRepository.workOrdersHistory(pageable, lbp, fromDate, toDate);
     }
 
     @Override
-    public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, String fromDate, String toDate, OrderStatus status, Integer page, Integer size) {
+    public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, Date fromDate, Date toDate, OrderStatus status, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Date from = null;
-        Date to = null;
-
-        if (fromDate != null && toDate != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            try {
-                from = dateFormat.parse(fromDate);
-                to = lastSecondOfTheDay(dateFormat.parse(toDate));
-            } catch (Exception e) {
-                throw new DateParseException(String.format("Given date is not parsed correctly: %s or %s", fromDate, toDate));
-            }
-        }
-        return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, from, to, status);
+        return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, fromDate, toDate, status);
     }
 
     @Override
@@ -226,6 +198,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return new MessageDto("LabWorkOrder with ID "+labWorkOrder.getId()+" changed OrderStatus to "+orderStatus.toString()+". ");
     }
 
+    /**
     public Date lastSecondOfTheDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -236,4 +209,5 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
         return calendar.getTime();
     }
+     */
 }

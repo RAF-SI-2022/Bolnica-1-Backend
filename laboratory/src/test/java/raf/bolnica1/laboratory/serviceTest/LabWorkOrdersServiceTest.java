@@ -5,10 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
@@ -28,7 +25,6 @@ import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderMessageDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderWithAnalysisDto;
 import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
-import raf.bolnica1.laboratory.exceptions.workOrder.DateParseException;
 import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderMapper;
 import raf.bolnica1.laboratory.mappers.LabWorkOrderWithAnalysisMapper;
@@ -37,7 +33,6 @@ import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 import raf.bolnica1.laboratory.services.lab.impl.LabWorkOrdersServiceImpl;
 import raf.bolnica1.laboratory.services.lab.impl.PrescriptionServiceImpl;
 
@@ -95,30 +90,6 @@ public class LabWorkOrdersServiceTest {
     }
 
     @Test
-    void findLabWorkOrders_whenDatePassedInWrongFormat_shouldThrowDateParseException() {
-        String lbp = "L0001";
-        String fromDate = "2018-04-18";
-        String toDate = "invalid date format";
-        OrderStatus status = OrderStatus.NEOBRADJEN;
-        int page = 0;
-        int size = 2;
-
-        assertThrows(DateParseException.class, () -> labWorkOrdersService.findWorkOrdersByLab(lbp, fromDate, toDate, status, page, size));
-    }
-
-    @Test
-    void historyLabWorkOrders_whenDatePassedInWrongFormat_shouldThrowDateParseException() {
-        String lbp = "L0001";
-        String fromDate = "201804-18";
-        String toDate = "invalid date format";
-        OrderStatus status = OrderStatus.NEOBRADJEN;
-        int page = 0;
-        int size = 2;
-
-        assertThrows(DateParseException.class, () -> labWorkOrdersService.findWorkOrdersByLab(lbp, fromDate, toDate, status, page, size));
-    }
-
-    @Test
     void findLabWorkOrders_whenAllArgumentsExist_shouldGiveResults() {
 
         List<LabWorkOrder> workOrders = generateLabWorkOrders();
@@ -126,21 +97,16 @@ public class LabWorkOrdersServiceTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String lbp = "L0001";
-        Date fromDate = null;
-        Date toDate = null;
-        try {
-            fromDate = dateFormat.parse("2020-01-01");
-            toDate = labWorkOrdersService.lastSecondOfTheDay(dateFormat.parse("2020-01-03"));
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+
         OrderStatus status = OrderStatus.NEOBRADJEN;
         int page = 0;
         int size = 2;
 
-        given(labWorkOrderRepository.findWorkOrdersByLab(PageRequest.of(page, size), lbp, fromDate, toDate, status)).willReturn(p);
+        java.sql.Date dateFrom = java.sql.Date.valueOf("2022-02-02");
+        java.sql.Date dateTo = java.sql.Date.valueOf("2023-02-02");
+        given(labWorkOrderRepository.findWorkOrdersByLab(PageRequest.of(page, size), lbp, dateFrom, dateTo, status)).willReturn(p);
 
-        assertEquals(labWorkOrdersService.findWorkOrdersByLab(lbp, "2020-01-01", "2020-01-03", status, page, size).getContent(), workOrders);
+        assertEquals(labWorkOrdersService.findWorkOrdersByLab(lbp, dateFrom, dateTo, status, page, size).getContent(), workOrders);
     }
 
     @Test
@@ -148,42 +114,17 @@ public class LabWorkOrdersServiceTest {
 
         List<LabWorkOrder> workOrders = generateLabWorkOrders();
         Page<LabWorkOrder> p = new PageImpl<>(workOrders);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String lbp = "L0001";
-        Date fromDate = null;
-        Date toDate = null;
-
-        try {
-            fromDate = dateFormat.parse("2020-01-01");
-            toDate = labWorkOrdersService.lastSecondOfTheDay(dateFormat.parse("2020-01-03"));
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
 
         int page = 0;
         int size = 2;
 
-        given(labWorkOrderRepository.workOrdersHistory(PageRequest.of(page, size), lbp, fromDate, toDate)).willReturn(p);
+        java.sql.Date dateFrom = java.sql.Date.valueOf("2022-02-02");
+        java.sql.Date dateTo = java.sql.Date.valueOf("2023-02-02");
+        given(labWorkOrderRepository.workOrdersHistory(PageRequest.of(page, size), lbp, dateFrom, dateTo)).willReturn(p);
 
-        assertEquals(labWorkOrdersService.workOrdersHistory(lbp, "2020-01-01", "2020-01-03", page, size).getContent(), workOrders);
-    }
-
-    @Test
-    void lastSecondOfTheDay_whenPassedDate_shouldReturnLastMilisecondOfTheDay() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date day = null;
-        try {
-            day = simpleDateFormat.parse("2020-01-01 12:34:56.789");
-        } catch(Exception e) {
-            fail(e.getMessage());
-        }
-
-        try {
-            assertEquals(simpleDateFormat.parse("2020-01-01 23:59:59.999"), labWorkOrdersService.lastSecondOfTheDay(day));
-        } catch(Exception e) {
-            fail(e.getMessage());
-        }
+        assertEquals(labWorkOrdersService.workOrdersHistory(lbp, dateFrom, dateTo, page, size).getContent(), workOrders);
     }
 
 
