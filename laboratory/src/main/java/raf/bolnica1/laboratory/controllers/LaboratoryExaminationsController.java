@@ -42,8 +42,8 @@ public class LaboratoryExaminationsController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<MessageDto> createScheduledExamination(@RequestParam("lbp")String lbp, @RequestParam("date")Date scheduledDate,@RequestParam("note")String note,HttpServletRequest request) {
-        return new ResponseEntity<>(labExaminationsService.createScheduledExamination(lbp, scheduledDate, note,request.getHeader("Authorization")),HttpStatus.OK);
+    public ResponseEntity<MessageDto> createScheduledExamination(@RequestParam("lbp")String lbp, @RequestParam("date")Long scheduledDate,@RequestParam("note")String note,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.createScheduledExamination(lbp, new Date(scheduledDate), note,request.getHeader("Authorization")),HttpStatus.OK);
     }
 
     @PutMapping("/update-status")
@@ -55,14 +55,14 @@ public class LaboratoryExaminationsController {
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
     @GetMapping("/count-scheduled_examinations/by-day")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<Integer> countScheduledExaminationsByDay(@RequestParam("date") Date date,HttpServletRequest request) {
-        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")).size(),HttpStatus.OK);
+    public ResponseEntity<Integer> countScheduledExaminationsByDay(@RequestParam("date") Long date,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(new Date(date),request.getHeader("Authorization")).size(),HttpStatus.OK);
     }
 
     @GetMapping("/list-scheduled_examinations/by-day")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<List<ScheduledLabExaminationDto>> listScheduledExaminationsByDay(@RequestParam("date") Date date,HttpServletRequest request) {
-        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")),HttpStatus.OK);
+    public ResponseEntity<List<ScheduledLabExaminationDto>> listScheduledExaminationsByDay(@RequestParam("date") Long date,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(new Date(date),request.getHeader("Authorization")),HttpStatus.OK);
     }
 
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
