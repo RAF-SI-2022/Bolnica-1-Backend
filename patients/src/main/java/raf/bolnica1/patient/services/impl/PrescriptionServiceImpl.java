@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -22,6 +23,7 @@ import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.*;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
 import raf.bolnica1.patient.messaging.helper.MessageHelper;
 import raf.bolnica1.patient.repository.PrescriptionRepository;
@@ -29,6 +31,7 @@ import raf.bolnica1.patient.services.PrescriptionService;
 
 import java.net.URI;
 import java.sql.Date;
+import java.util.ArrayList;
 
 @Service
 public class PrescriptionServiceImpl implements PrescriptionService {
@@ -67,22 +70,17 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
-    public Page<PrescriptionDto> getPrescriptionsForPatient(Long doctorId, String lbp, String token, int page, int size) {
-
-        ParameterizedTypeReference<Page<PrescriptionDto>> responseType = new ParameterizedTypeReference<Page<PrescriptionDto>>() {};
+    public Page<PrescriptionNewDto> getPrescriptionsForPatient(String lbz, String lbp, String token, int page, int size) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token.substring(7));
         HttpEntity entity = new HttpEntity(null, httpHeaders);
 
-        URI baseUri = URI.create("/prescription/"+doctorId+"/get/"+lbp);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUri)
-                .queryParam("page", page)
-                .queryParam("size", size);
+        ParameterizedTypeReference<ArrayList<PrescriptionNewDto>> type = new ParameterizedTypeReference<ArrayList<PrescriptionNewDto>>() {};
+        ResponseEntity<ArrayList<PrescriptionNewDto>> prescription = labRestTemplate.exchange("/prescription/"+lbz+"/get_rest/"+lbp, HttpMethod.GET, entity, type);
 
-        ResponseEntity<Page<PrescriptionDto>> prescription = labRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, responseType);
-
-        return prescription.getBody();
+        Page<PrescriptionNewDto> prescriptionPage = new PageImpl<>(prescription.getBody().subList(page * size, Math.min((page + 1) * size, prescription.getBody().size())));
+        return prescriptionPage;
     }
 
     @Override
