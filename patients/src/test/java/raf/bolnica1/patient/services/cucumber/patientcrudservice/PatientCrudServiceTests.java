@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.services.cucmber.patientcrudservice;
+package raf.bolnica1.patient.services.cucumber.patientcrudservice;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
