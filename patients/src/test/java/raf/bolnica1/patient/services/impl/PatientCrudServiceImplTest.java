@@ -23,6 +23,7 @@ import raf.bolnica1.patient.repository.SocialDataRepository;
 import raf.bolnica1.patient.services.PatientCrudService;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-/**
+
 @ExtendWith(MockitoExtension.class)
 public class PatientCrudServiceImplTest {
     @Mock
@@ -339,8 +340,13 @@ public class PatientCrudServiceImplTest {
         patientDto2.setJmbg("12345678910");
         patientDto2.setLbp("1234");
 
-        Page<Patient> singelElementPage = new PageImpl<>(List.of(patient));
-        Page<Patient> multiElementPage = new PageImpl<>(List.of(patient, patient2));
+        List<Patient> list1 = new ArrayList<>();
+        list1.add(patient);
+        List<Patient> list2 = new ArrayList<>();
+        list2.add(patient);
+        list2.add(patient2);
+        Page<Patient> singelElementPage = new PageImpl<>(list1);
+        Page<Patient> multiElementPage = new PageImpl<>(list2);
 
         given(patientRepository.listPatientsWithFilters(any(), eq(null), eq(null), eq(null), eq("4321"))).willReturn(singelElementPage);
         given(patientRepository.listPatientsWithFilters(any(), eq(null), eq("Pacijentic"), eq(null), eq(null))).willReturn(multiElementPage);
@@ -417,4 +423,3 @@ public class PatientCrudServiceImplTest {
     }
 
 }
- */
