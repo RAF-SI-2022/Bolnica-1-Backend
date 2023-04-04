@@ -59,22 +59,22 @@ public class InfoController {
     @GetMapping("/myFindExaminationHistoriesByLbpAndDatePaged/{lbp}")
     @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDatePaged(@PathVariable String lbp,
-                                                                                                            @RequestParam("date") Date date,
+                                                                                                            @RequestParam("date") Long date,
                                                                                                             @RequestParam(defaultValue = "0") Integer page,
                                                                                                             @RequestParam(defaultValue = "2") Integer size
     ){
-        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,date,date,page,size),HttpStatus.OK);
+        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,new Date(date),new Date(date),page,size),HttpStatus.OK);
     }
 
     @GetMapping("/myFindExaminationHistoriesByLbpAndDateRangePaged/{lbp}")
     @PreAuthorize("hasRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
     public ResponseEntity<Page<ExaminationHistoryDto>> getMedicalExaminationByLbpAndDateRangePaged(@PathVariable String lbp,
-                                                                                                         @RequestParam("start_date") Date startDate,
-                                                                                                         @RequestParam("end_date") Date endDate,
+                                                                                                         @RequestParam("start_date") Long startDate,
+                                                                                                         @RequestParam("end_date") Long endDate,
                                                                                                          @RequestParam(defaultValue = "0") Integer page,
                                                                                                          @RequestParam(defaultValue = "2") Integer size
     ){
-        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,startDate,endDate,page,size),HttpStatus.OK);
+        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,new Date(startDate),new Date(endDate),page,size),HttpStatus.OK);
     }
 
 
