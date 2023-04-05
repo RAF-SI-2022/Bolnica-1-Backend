@@ -66,7 +66,7 @@ public class InfoController {
                                                                                                          @RequestParam(defaultValue = "0") Integer page,
                                                                                                          @RequestParam(defaultValue = "2") Integer size
     ){
-        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,new Date(tstartDate),new Date(endDate),page,size),HttpStatus.OK);
+        return new ResponseEntity<>(findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp,new Date(startDate),new Date(endDate),page,size),HttpStatus.OK);
     }
 
 
