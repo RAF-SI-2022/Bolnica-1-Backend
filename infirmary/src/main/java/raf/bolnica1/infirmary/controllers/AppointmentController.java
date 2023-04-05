@@ -19,8 +19,8 @@ public class AppointmentController {
     AppointmentService appointmentService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createAppointment(@RequestHeader("Authorization") String authorization, @RequestBody ScheduleAppointmentDto appointmentDto){
-        return new ResponseEntity<>(appointmentService.createAppointment(authorization, appointmentDto), HttpStatus.OK);
+    public ResponseEntity<String> createAppointment(@RequestBody ScheduleAppointmentDto appointmentDto){
+        return new ResponseEntity<>(appointmentService.createAppointment(appointmentDto), HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -33,12 +33,13 @@ public class AppointmentController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<ScheduleAppointmentDto>> getScheduledAppointments(@RequestHeader("Authorization") String authorization,
-                                                                                       @RequestParam("lbp") String lbp,
-                                                                                       @RequestParam(value = "date", defaultValue = "1900-01-01") Date date,
-                                                                                       @RequestParam(defaultValue = "0") Integer page,
-                                                                                       @RequestParam(defaultValue = "10") Integer size){
-        return new ResponseEntity<>(appointmentService.getScheduledAppointments(authorization ,lbp, date, page, size), HttpStatus.OK);
+    public ResponseEntity<Page<ScheduleAppointmentDto>> getScheduledAppointments(
+                                                            @RequestParam("depId") Long depId,
+                                                            @RequestParam("lbp") String lbp,
+                                                            @RequestParam(value = "date", defaultValue = "1900-01-01") Date date,
+                                                            @RequestParam(defaultValue = "0") Integer page,
+                                                            @RequestParam(defaultValue = "10") Integer size){
+        return new ResponseEntity<>(appointmentService.getScheduledAppointments(depId, lbp, date, page, size), HttpStatus.OK);
     }
 
 }
