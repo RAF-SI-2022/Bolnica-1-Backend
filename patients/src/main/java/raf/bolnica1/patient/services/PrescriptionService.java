@@ -1,10 +1,9 @@
 package raf.bolnica1.patient.services;
 
 import org.springframework.data.domain.Page;
+import raf.bolnica1.patient.dto.create.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDoneDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionSendDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionUpdateDto;
+import raf.bolnica1.patient.dto.prescription.general.*;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 
 import java.sql.Date;
@@ -23,4 +22,6 @@ public interface PrescriptionService {
     Page<PrescriptionDoneDto> getAllDonePrescriptionsForPatient(String lbp, Date dateFrom, Date dateTo, int page, int size);
 
     PrescriptionDoneDto getPrescription(Long prescriptionId, String authorization);
+
+    void createPrescription(PrescriptionCreateDto prescriptionCreateDto);
 }

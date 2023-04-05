@@ -86,6 +86,10 @@ public class FindInfoServiceImpl implements FindInfoService {
 
     @Override
     public Page<MedicalHistoryDto> findMedicalHistoryByLbpAndDiagnosisCodePaged(String lbp, String code, int page, int size) {
+
+        if(code==null)
+            return findMedicalHistoryByLbpPaged(lbp,page,size);
+
         Pageable pageable= PageRequest.of(page,size);
 
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));

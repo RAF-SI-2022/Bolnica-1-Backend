@@ -16,9 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
+import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
+import raf.bolnica1.patient.dto.create.LabResultDto;
+import raf.bolnica1.patient.dto.create.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.*;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
@@ -26,10 +29,11 @@ import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
 import raf.bolnica1.patient.messaging.helper.MessageHelper;
+import raf.bolnica1.patient.repository.LabResultsRepository;
+import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.PrescriptionRepository;
 import raf.bolnica1.patient.services.PrescriptionService;
 
-import java.net.URI;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -44,6 +48,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private PrescriptionMapper prescriptionMapper;
     private RestTemplate labRestTemplate;
     private PrescriptionRepository prescriptionRepository;
+    private PatientRepository patientRepository;
+    private LabResultsRepository labResultsRepository;
 
     public PrescriptionServiceImpl(JmsTemplate jmsTemplate, MessageHelper messageHelper,
                                    @Value("${destination.send}") String destinationSend,
@@ -51,7 +57,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                                    @Value("${destination.update}") String destinationUpdate,
                                    PrescriptionMapper prescriptionMapper,
                                    @Qualifier("labRestTemplate") RestTemplate labRestTemplate,
-                                   PrescriptionRepository prescriptionRepository){
+                                   PrescriptionRepository prescriptionRepository,
+                                   PatientRepository patientRepository,
+                                   LabResultsRepository labResultsRepository){
         this.jmsTemplate = jmsTemplate;
         this.destinationSend = destinationSend;
         this.destinationDelete = destinationDelete;
@@ -60,6 +68,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         this.prescriptionMapper = prescriptionMapper;
         this.labRestTemplate = labRestTemplate;
         this.prescriptionRepository = prescriptionRepository;
+        this.patientRepository = patientRepository;
+        this.labResultsRepository = labResultsRepository;
     }
 
     @Override
@@ -112,6 +122,16 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         ResponseEntity<PrescriptionDoneLabDto> prescription = labRestTemplate.exchange("/prescription/"+prescriptionId, HttpMethod.GET, entity, PrescriptionDoneLabDto.class);
 
         return prescription.getBody();
+    }
+
+    @Override
+    public void createPrescription(PrescriptionCreateDto prescriptionCreateDto) {
+        Prescription prescription = prescriptionMapper.toEntity(prescriptionCreateDto);
+        prescription = prescriptionRepository.save(prescription);
+        for(LabResultDto labResultDto : prescriptionCreateDto.getLabResultDtoList()){
+            LabResults labResults = prescriptionMapper.getLabResult(prescription, labResultDto);
+            labResultsRepository.save(labResults);
+        }
     }
 
     private String getLbzFromAuthentication(){

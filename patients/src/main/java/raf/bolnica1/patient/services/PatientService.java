@@ -14,7 +14,7 @@ public interface PatientService {
     MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto);
 
     //Pretraga zakazanih pregleda
-    List<ScheduleExamDto> findScheduledExamination(Object object);
+    List<ScheduleExamDto> findScheduledExaminations();
 
     // Azuriranje statusa pregleda
     MessageDto updateExaminationStatus(Object object);

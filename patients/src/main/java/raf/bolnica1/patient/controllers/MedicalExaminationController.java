@@ -28,23 +28,27 @@ public class MedicalExaminationController {
     private PatientService patientService;
 
     @PostMapping("/{lbp}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<ExaminationHistoryDto> createExaminationHistory(@PathVariable String lbp, @RequestBody ExaminationHistoryCreateDto examinationHistoryCreateDto){
         return new ResponseEntity<>(medicalExaminationService.addExamination(lbp, examinationHistoryCreateDto), HttpStatus.OK);
     }
 
     @PostMapping("/diagnosis_history/{lbp}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<MedicalHistoryDto> createDiagnosisHistory(@PathVariable String lbp, @RequestBody MedicalHistoryCreateDto medicalHistoryCreateDto){
         return new ResponseEntity<>(medicalExaminationService.addMedicalHistory(lbp, medicalHistoryCreateDto), HttpStatus.OK);
     }
 
     //Kreiranje zakazanog pregleda
     @PostMapping(path = "/create")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Object> createScheduledExamination(@RequestBody ScheduleExamCreateDto scheduleExamCreateDto) {
         return new ResponseEntity<>(patientService.schedule(scheduleExamCreateDto), HttpStatus.CREATED);
     }
 
     //Pretraga zakazanih pregleda
     @GetMapping(path = "/find/{lbz}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Page<ScheduleExamDto>> findScheduledExaminationForDoctor(@PathVariable String lbz, @RequestParam int page, @RequestParam int size) {
         // find all examinations based on LBZ
         // check whether examinationDate exists
@@ -65,18 +69,20 @@ public class MedicalExaminationController {
     }
 
     @GetMapping(path = "/find_all_doctor/{lbz}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<List<ScheduleExamDto>> findScheduledExaminationForDoctorAll(@PathVariable String lbz) {
         return new ResponseEntity<>(patientService.findScheduledExaminationsForDoctorAll(lbz), HttpStatus.OK);
     }
 
     @GetMapping(path = "/find_all_today")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Page<ScheduleExamDto>> findScheduledExaminationForDay(@RequestParam int page, @RequestParam int size) {
         return new ResponseEntity<>(patientService.findScheduledExaminationsForMedSister(page, size), HttpStatus.OK);
     }
 
     // Azuriranje statusa pacijenta
     @PutMapping(path = "/patient/{id}")
-    /// @PreAuthorize("hasRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
+    @PreAuthorize("hasAnyRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
     public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id,@RequestParam("pa") PatientArrival status){
         return new ResponseEntity<>(patientService.updatePatientArrivalStatus(id, status), HttpStatus.OK);
     }
@@ -84,6 +90,7 @@ public class MedicalExaminationController {
 
     // Azuriranje statusa pregelda
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Object> updateExaminationStatus(@PathVariable("id") Long id, @RequestBody Object object){
         // find examination based on id from path
         // update status based on status string from path
@@ -107,12 +114,14 @@ public class MedicalExaminationController {
 
     //Brisanje zakazanog pregleda
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<Object> deleteScheduledExamination(@PathVariable("id") Long id) {
         return new ResponseEntity<>(patientService.deleteScheduledExamination(id),HttpStatus.OK);
     }
 
     //Pretraga lekara po odeljenju
     @GetMapping(path = "/find_doctor_by_department/{pbo}")
+    @PreAuthorize("hasAnyRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<List<EmployeeDto>> findDoctorSpecByDepartment(@PathVariable("pbo") String pbo, @RequestHeader("Authorization") String authorization){
         return new ResponseEntity<>(patientService.findDoctorSpecByDepartment(pbo,authorization),HttpStatus.OK);
     }
