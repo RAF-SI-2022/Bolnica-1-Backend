@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
+import raf.bolnica1.infirmary.dto.DtoDischargeList;
 import raf.bolnica1.infirmary.dto.PatientDto;
 import raf.bolnica1.infirmary.dto.PatientInformationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
@@ -40,25 +41,24 @@ public class InfirmaryController {
 
     //Kreiranje otpusne liste
     @PostMapping("/createDischargeList")
-    public ResponseEntity<?> createDischargeList(@Param("idDepartment") Long idDepartment,
-                                                 @Param("lbp") String lbp,
-                                                 @Param("followingDiagnosis") String followingDiagnosis,
-                                                 @Param("anamnesis") String anamnesis,
-                                                 @Param("analysis") String analysis,
-                                                 @Param("courseOfDisease") String courseOfDisease,
-                                                 @Param("summary") String summary,
-                                                 @Param("therapy") String therapy){
+    public ResponseEntity<DtoDischargeList> createDischargeList(@Param("idDepartment") Long idDepartment,
+                                                                @Param("lbp") String lbp,
+                                                                @Param("followingDiagnosis") String followingDiagnosis,
+                                                                @Param("anamnesis") String anamnesis,
+                                                                @Param("analysis") String analysis,
+                                                                @Param("courseOfDisease") String courseOfDisease,
+                                                                @Param("summary") String summary,
+                                                                @Param("therapy") String therapy,
+                                                                @Param("lbzDepartment") String lbzDepartment){
 
 
-        infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy);
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(infirmaryService.createDischargeList(idDepartment,lbp,followingDiagnosis,anamnesis,analysis,courseOfDisease,summary,therapy,lbzDepartment), HttpStatus.OK);
     }
 
     //Prijem pacijenta na stacionarno lecenje (Pravljenje hospitalizacije)
     @PostMapping("/pacientAdmission")
     public ResponseEntity<?> pacientAdmission(@Param("idDepartment") Long idDepartment,
-                                                 @Param("lbp") String lbp,
                                                  @Param("lbzDoctor") String lbzDoctor,
                                                  @Param("referralDiagnosis") String referralDiagnosis,
                                                  @Param("note") String note,
@@ -66,7 +66,7 @@ public class InfirmaryController {
 
 
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(infirmaryService.pacientAdmission(idDepartment,note,lbzDoctor,referralDiagnosis,idPrescription), HttpStatus.OK);
     }
 
     @GetMapping("/findDischargeListHistory/{lbp}")
