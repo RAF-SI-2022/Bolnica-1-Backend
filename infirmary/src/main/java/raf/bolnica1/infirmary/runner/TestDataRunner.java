@@ -31,8 +31,8 @@ public class TestDataRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         createHospitalRooms();
-        createPerscription();
-        //createHospitalization();
+//        createPerscription();
+        createHospitalization();
     }
 
     private void createHospitalRooms() {
@@ -91,7 +91,7 @@ public class TestDataRunner implements CommandLineRunner {
         prescription.setRequestedAnalysis("Neki request analisis");
         prescription.setComment("Neki komentar");
         prescription.setReferralDiagnosis("neki referal diagnostic");
-        prescription.setGetReferralReason("Neki referal reason");
+        prescription.setReferralReason("Neki referal reason");
 
         prescriptionRepository.save(prescription);
     }
@@ -113,7 +113,7 @@ public class TestDataRunner implements CommandLineRunner {
         prescription.setRequestedAnalysis("Neki request analisis");
         prescription.setComment("Neki komentar");
         prescription.setReferralDiagnosis("neki referal diagnostic");
-        prescription.setGetReferralReason("Neki referal reason");
+        prescription.setReferralReason("Neki referal reason");
         prescriptionRepository.save(prescription);
 
         HospitalRoom room1 = new HospitalRoom();

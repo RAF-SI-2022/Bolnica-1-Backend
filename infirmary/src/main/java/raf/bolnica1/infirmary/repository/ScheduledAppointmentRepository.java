@@ -20,4 +20,7 @@ public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledA
             "and (ap.prescription.getIdDepartmentTo = :depId)")
     Page<ScheduledAppointment> findAppointment(Pageable pageRequest, @Param("depId") Long depId, @Param("lbp") String lbp, @Param("scheduleDate")Date date);
 
+    @Query("select ap from ScheduledAppointment ap where (:id = ap.id)")
+    ScheduledAppointment findAppointment(@Param("id") Integer id);
+
 }

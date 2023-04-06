@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import raf.bolnica1.laboratory.dto.response.ErrorResponse;
+import raf.bolnica1.laboratory.exceptions.examinations.ExaminationNotFoundException;
 import raf.bolnica1.laboratory.exceptions.parameterAnalysisResult.NoParameterAnalysisResultsForWorkOrder;
 import raf.bolnica1.laboratory.exceptions.workOrder.CantVerifyLabWorkOrderException;
 import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
@@ -24,6 +25,7 @@ public class ExceptionHandlerController {
             LabWorkOrderNotFoundException.class,
             NoParameterAnalysisResultFound.class,
             NotAuthenticatedException.class,
+            ExaminationNotFoundException.class,
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleCustomExceptions(Exception exception) {

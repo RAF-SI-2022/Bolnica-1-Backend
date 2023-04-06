@@ -8,5 +8,6 @@ import java.sql.Date;
 public interface AppointmentService {
 
     String createAppointment(String authorization, ScheduleAppointmentDto appointmentDto);
+    String updateAppointment(String authorization, String status, Integer id);
     Page<ScheduleAppointmentDto> getScheduledAppointments(String authorization, String lbp, Date date, int page, int size);
 }

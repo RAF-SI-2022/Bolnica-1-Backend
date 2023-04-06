@@ -9,6 +9,8 @@ import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.UpdateParameterAn
 import raf.bolnica1.laboratory.dto.lab.workOrder.*;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 
+import java.sql.Date;
+
 public interface LabWorkOrdersService {
 
     MessageDto registerPatient(String lbp);
@@ -23,13 +25,14 @@ public interface LabWorkOrdersService {
 
     UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long parameterAnalysisId, String result);
 
-    Page<LabWorkOrder> workOrdersHistory(String lbp, String fromDate, String toDate, Integer page, Integer size);
+    Page<LabWorkOrder> workOrdersHistory(String lbp, Date fromDate, Date toDate, Integer page, Integer size);
 
-    Page<LabWorkOrder> findWorkOrdersByLab(String lbp, String fromDate, String toDate, OrderStatus status, Integer page, Integer size);
+    Page<LabWorkOrder> findWorkOrdersByLab(String lbp, Date fromDate, Date toDate, OrderStatus status, Integer page, Integer size);
 
     LabWorkOrderWithAnalysisDto findParameterAnalysisResultsForWorkOrder(Long id);
 
     void deleteWorkOrder(LabWorkOrder labWorkOrder);
 
+    MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus);
 
 }

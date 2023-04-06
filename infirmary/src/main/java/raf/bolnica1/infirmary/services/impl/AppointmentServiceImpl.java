@@ -63,7 +63,34 @@ public class AppointmentServiceImpl implements AppointmentService {
         scheduledAppointment.setPrescription(prescriptionRepository.save(prescription.get()));
         scheduledAppointmentRepository.save(scheduledAppointment);
 
+
+
         return "Appointment created successfully!";
+    }
+
+    public String updateAppointment(String authorization, String status, Integer id) {
+
+        String token = authorization.split(" ")[1];
+        String lbz = jwtUtils.getUsernameFromToken(token);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        HttpEntity<Object> request = new HttpEntity<>(headers);
+        ResponseEntity<Long> response = departmentRestTemplate.exchange("employee/"+lbz, HttpMethod.GET, request, Long.class);
+        if(response.getBody() == null)
+            throw new RuntimeException("Invalid LPZ!");
+
+        ScheduledAppointment scheduledAppointment = scheduledAppointmentRepository.findAppointment(id);
+
+        if(scheduledAppointment == null){
+            throw new RuntimeException("Appointment doesn't exist.");
+        }
+
+        scheduledAppointment.setAdmissionStatus(AdmissionStatus.valueOf(status));
+        scheduledAppointmentRepository.save(scheduledAppointment);
+
+        return "Appointment updated successfully!";
     }
 
     @Override

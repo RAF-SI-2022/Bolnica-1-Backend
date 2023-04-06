@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.dto.employee.EmployeeDto;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
@@ -23,6 +24,7 @@ import java.util.List;
 public class LaboratoryExaminationsController {
 
     private final EmployeeService employeeService;
+
     private LabExaminationsService labExaminationsService;
 
     /**
@@ -40,20 +42,27 @@ public class LaboratoryExaminationsController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<MessageDto> createScheduledExamination(@RequestParam("lbp")String lbp, @RequestParam("date")Date scheduledDate,@RequestParam("note")String note,HttpServletRequest request) {
-        return new ResponseEntity<>(labExaminationsService.createScheduledExamination(lbp, scheduledDate, note,request.getHeader("Authorization")),HttpStatus.OK);
+    public ResponseEntity<MessageDto> createScheduledExamination(@RequestParam("lbp")String lbp, @RequestParam("date")Long scheduledDate,@RequestParam("note")String note,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.createScheduledExamination(lbp, new Date(scheduledDate), note,request.getHeader("Authorization")),HttpStatus.OK);
     }
 
     @PutMapping("/update-status")
-    public ResponseEntity<?> changeExaminationStatus() {
-        return null;
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    public ResponseEntity<?> changeExaminationStatus(@RequestParam("id")Long id, @RequestParam("newStatus") ExaminationStatus newStatus) {
+        return new ResponseEntity<>(labExaminationsService.changeExaminationStatus(id, newStatus), HttpStatus.OK);
     }
 
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
     @GetMapping("/count-scheduled_examinations/by-day")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    public ResponseEntity<Integer> countScheduledExaminationsByDay(@RequestParam("date") Long date,HttpServletRequest request) {
+        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(new Date(date),request.getHeader("Authorization")).size(),HttpStatus.OK);
+    }
+
+    @GetMapping("/list-scheduled_examinations/by-day")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
     public ResponseEntity<List<ScheduledLabExaminationDto>> listScheduledExaminationsByDay(@RequestParam("date") Long date,HttpServletRequest request) {
-        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")),HttpStatus.OK);
+        return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(new Date(date),request.getHeader("Authorization")),HttpStatus.OK);
     }
 
     //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi

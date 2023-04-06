@@ -2,8 +2,6 @@ package raf.bolnica1.infirmary.services;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,10 +14,14 @@ import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
+import raf.bolnica1.infirmary.dto.DtoDischargeList;
+import raf.bolnica1.infirmary.dto.DtoHospitalization;
 import raf.bolnica1.infirmary.dto.PatientDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.HospitalizationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.PrescriptionDto;
+import raf.bolnica1.infirmary.mapper.DischargeListMapper;
+import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
@@ -44,25 +46,32 @@ public class InfirmaryService {
     private HospitalizationRepository hospitalizationRepository;
     private RestTemplate patientRestTemplate;
     private JwtUtils jwtUtils;
+    private DischargeListMapper dischargeListMapper;
+    private HospitalizationMapper hospitalizationMapper;
 
     public Optional<List<HospitalRoom>> findHospitalRooms(Long  idDepartment){
         //Dohvatanje svih bolnickih soba sa datim id-jem departmana
         Optional<List<HospitalRoom>> rooms;
         rooms = hospitalRoomRepository.findAllByIdDepartment(idDepartment);
 
-        if(rooms.isPresent()){
-            return rooms;
-        }
-        return null;
+        if(rooms.get().isEmpty())
+            throw new RuntimeException("No hospitalization rooms with id department : " + idDepartment);
+
+        return rooms;
     }
 
-    public void createDischargeList(Long  idDepartment,String lbp,String followingDiagnosis,String anamnesis,String analysis,String courseOfDisease,String summary,String therapy,String lbzDepartment){
+    public DtoDischargeList createDischargeList(Long  idDepartment, String lbp, String followingDiagnosis, String anamnesis, String analysis, String courseOfDisease, String summary, String therapy, String lbzDepartment){
         //Dekrementiramo kapacitet sobe
         hospitalRoomRepository.decrementCapasity(idDepartment);
         //Pronalazimo uput preko lbp-a
         Optional<Prescription> prescription = prescriptionRepository.findByLbp(lbp);
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with lbp: " + lbp);
+
         //Pronalazimo hospitalizaciju preko uputa
         Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription.get());
+        if(hospitalization == null)
+            throw new RuntimeException("No hospitalization with perscription : " + prescription.get() );
 
         //Kreiramo objekat otpusne liste i setujemo podatke
         DischargeList dischargeList = new DischargeList();
@@ -87,17 +96,24 @@ public class InfirmaryService {
         //Sejvujemo otpusnu listu
         dischargeListRepository.save(dischargeList);
 
+        return dischargeListMapper.toDto(dischargeList);
+
     }
 
-    public void pacientAdmission(Long  idDepartment,String note,String lbzDoctor,String referralDiagnosis,Long idPrescription){
+    public DtoHospitalization pacientAdmission(Long  idDepartment, String note, String lbzDoctor, String referralDiagnosis, Long idPrescription){
         //Inkrementiramo kapacitet sobe
         hospitalRoomRepository.incrementCapasity(idDepartment);
 
         //Pronalazimo sobu sa id-jem odeljenja
         Optional<HospitalRoom> room = hospitalRoomRepository.findByIdDepartment(idDepartment);
+        if(!room.isPresent())
+            throw new RuntimeException("No hospital room for patient with id department : " + idDepartment);
 
         //Pronalazimo uput sa id-jem uputa
         Optional<Prescription> prescription = prescriptionRepository.findById(idPrescription);
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with id prescription: " + idPrescription);
+
         //Setujemo ReferralDiagnosis
         prescriptionRepository.setPrescriptionReferralDiagnosis(referralDiagnosis,idPrescription);
 
@@ -121,6 +137,8 @@ public class InfirmaryService {
         hospitalization.setPatientAdmission(ts);
 
         hospitalizationRepository.save(hospitalization);
+
+        return hospitalizationMapper.toDto(hospitalization);
 
     }
 
