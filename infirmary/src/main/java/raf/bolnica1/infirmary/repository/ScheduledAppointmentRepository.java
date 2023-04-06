@@ -16,8 +16,8 @@ public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledA
     @Query("select ap from ScheduledAppointment ap join Prescription p " +
             "on ap.prescription.id = p.id " +
             "where (:lbp is null or ap.prescription.lbp like %:lbp%) " +
-            "and (:scheduleDate is null or ap.patientAdmission > :scheduleDate)" +
-            "and (ap.prescription.getIdDepartmentTo = :depId)")
+            "and (:scheduleDate is null or :scheduleDate = '1900-01-01' or ap.patientAdmission = :scheduleDate)" +
+            "and (:depId is null or ap.prescription.getIdDepartmentTo = :depId)")
     Page<ScheduledAppointment> findAppointment(Pageable pageRequest, @Param("depId") Long depId, @Param("lbp") String lbp, @Param("scheduleDate")Date date);
 
     @Query("select ap from ScheduledAppointment ap where (:id = ap.id)")

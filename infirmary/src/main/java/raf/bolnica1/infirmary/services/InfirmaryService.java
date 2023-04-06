@@ -17,6 +17,7 @@ import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.dto.PatientDto;
+import raf.bolnica1.infirmary.dto.PatientInformationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.HospitalizationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.PrescriptionDto;
@@ -30,10 +31,7 @@ import java.net.URI;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -215,8 +213,11 @@ public class InfirmaryService {
         return dischargeListDto;
     }
 
-    public List<PatientDto> findHospitalizedPatients(String authorization, String pbo, String lbp, String name, String surname, String jmbg) {
-        List<PatientDto> res = new ArrayList<>();
+    public List<PatientInformationDto> findHospitalizedPatients(String authorization, String pbo, String lbp, String name, String surname, String jmbg) {
+        if(pbo == null || pbo.equals(""))
+            throw new RuntimeException("PBO is required!");
+
+        List<PatientInformationDto> res = new ArrayList<>();
 
         String token = authorization.split(" ")[1];
         ParameterizedTypeReference<Page<PatientDto>> responseType = new ParameterizedTypeReference<Page<PatientDto>>() {};
@@ -241,11 +242,30 @@ public class InfirmaryService {
         List<String> lbps = new ArrayList<>();
         patients.getBody().forEach(p -> lbps.add(p.getLbp()));
 
-        List<String> foundLbps = hospitalizationRepository.findHospitalizedPatients(pbo, lbps);
+        List<Hospitalization> hospitalizations = hospitalizationRepository.findHospitalizations(pbo, lbps);
+
+        Map<String, PatientInformationDto> infoMap = new HashMap<>();
+        for(Hospitalization h: hospitalizations){
+            PatientInformationDto info = new PatientInformationDto();
+            info.setHospitalRoomId(h.getHospitalRoom().getId());
+            info.setRoomNumber(h.getHospitalRoom().getRoomNumber());
+            info.setRoomCapacity(h.getHospitalRoom().getCapacity());
+            info.setPatientAdmissionDate(h.getPatientAdmission());
+            info.setReferralDiagnosis(h.getPrescription().getReferralDiagnosis());
+            info.setLbzDoctor(h.getLbzDoctor());
+            infoMap.put(h.getPrescription().getLbp(), info);
+        }
 
         patients.getBody().forEach(p -> {
-            if(foundLbps.contains(p.getLbp()))
-                res.add(p);
+            PatientInformationDto pat;
+            if((pat = infoMap.get(p.getLbp())) != null){
+                pat.setLbp(p.getLbp());
+                pat.setJmbg(p.getJmbg());
+                pat.setPatientName(p.getName());
+                pat.setPatientSurname(p.getSurname());
+                pat.setDateOfBirth(p.getDateOfBirth());
+                res.add(pat);
+            }
         });
 
         return res;
