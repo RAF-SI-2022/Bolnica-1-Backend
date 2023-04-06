@@ -60,12 +60,6 @@ public class PatientServiceImpl implements PatientService {
         List<ScheduleExamDto> exams = scheduleExamRepository.findAll().stream().map(scheduleExamMapper::toDto).collect(Collectors.toList());
         return exams;
     }
-
-    @Override
-    public MessageDto updateExaminationStatus(Object object) {
-        return null;
-    }
-
     @Transactional
     @Override
     public MessageDto deleteScheduledExamination(Long id) {
