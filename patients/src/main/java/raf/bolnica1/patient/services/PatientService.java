@@ -15,10 +15,6 @@ public interface PatientService {
 
     //Pretraga zakazanih pregleda
     List<ScheduleExamDto> findScheduledExaminations();
-
-    // Azuriranje statusa pregleda
-    MessageDto updateExaminationStatus(Object object);
-
     MessageDto deleteScheduledExamination(Long id);
 
     // Pretraga lekara specijalista na odeljenju
