@@ -8,6 +8,8 @@ import raf.bolnica1.patient.domain.prescription.LabPrescription;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.prescription.general.PrescriptionDoneDto;
+import raf.bolnica1.patient.dto.prescription.general.PrescriptionSendDto;
+import raf.bolnica1.patient.dto.prescription.infirmary.PrescriptionInfirmarySendDto;
 import raf.bolnica1.patient.dto.prescription.lab.ParameterDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionAnalysisNameDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
@@ -25,17 +27,31 @@ public class PrescriptionMapper {
     private PrescriptionRepository prescriptionRepository;
     private LabResultsRepository labResultsRepository;
 
-    public PrescriptionLabSendDto getPrescriptionSendDto(PrescriptionLabSendDto prescriptionCreateDto){
-        PrescriptionLabSendDto prescriptionSendDto = new PrescriptionLabSendDto();
+    private void setFieldsForPrescriptionSend(PrescriptionSendDto prescriptionSendDto,PrescriptionSendDto prescriptionCreateDto){
         prescriptionSendDto.setLbp(prescriptionCreateDto.getLbp());
         prescriptionSendDto.setDepartmentFromId(prescriptionCreateDto.getDepartmentFromId());
         prescriptionSendDto.setDepartmentToId(prescriptionCreateDto.getDepartmentToId());
         prescriptionSendDto.setDoctorLbz(prescriptionCreateDto.getDoctorLbz());
         prescriptionSendDto.setStatus(PrescriptionStatus.NEREALIZOVAN);
         prescriptionSendDto.setType(prescriptionCreateDto.getType());
-        prescriptionSendDto.setComment(prescriptionCreateDto.getComment());
         prescriptionSendDto.setCreationDateTime(prescriptionCreateDto.getCreationDateTime());
-        prescriptionSendDto.setPrescriptionAnalysisDtos(prescriptionCreateDto.getPrescriptionAnalysisDtos());
+    }
+
+    public PrescriptionSendDto getPrescriptionSendDto(PrescriptionSendDto prescriptionCreateDto){
+        PrescriptionSendDto prescriptionSendDto=null;
+
+        if(prescriptionCreateDto instanceof PrescriptionLabSendDto) {
+            prescriptionSendDto = new PrescriptionLabSendDto();
+            setFieldsForPrescriptionSend(prescriptionSendDto,prescriptionCreateDto);
+            ((PrescriptionLabSendDto) prescriptionSendDto).setComment(((PrescriptionLabSendDto) prescriptionCreateDto).getComment());
+            ((PrescriptionLabSendDto) prescriptionSendDto).setPrescriptionAnalysisDtos(((PrescriptionLabSendDto) prescriptionCreateDto).getPrescriptionAnalysisDtos());
+        }
+        else if(prescriptionCreateDto instanceof PrescriptionInfirmarySendDto) {
+            prescriptionSendDto = new PrescriptionInfirmarySendDto();
+            setFieldsForPrescriptionSend(prescriptionSendDto,prescriptionCreateDto);
+            ((PrescriptionInfirmarySendDto) prescriptionSendDto).setReferralDiagnosis(((PrescriptionInfirmarySendDto) prescriptionCreateDto).getReferralDiagnosis());
+            ((PrescriptionInfirmarySendDto) prescriptionSendDto).setReferralReason(((PrescriptionInfirmarySendDto) prescriptionCreateDto).getReferralReason());
+        }
         return prescriptionSendDto;
     }
 
