@@ -68,7 +68,7 @@ class PatientServiceImplTest {
 
             MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.CEKA);
 
-            assertEquals("Examination does not exist", res.getMessage());
+            assertEquals("Pregled nije pronadjen.", res.getMessage());
 
             verify(scheduleExamRepository).getReferenceById(1l);
 
@@ -83,7 +83,7 @@ class PatientServiceImplTest {
 
             MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.CEKA);
 
-            assertEquals("Arrival status updated into CEKA", res.getMessage());
+            assertEquals("Status pregleda promenjen u CEKA", res.getMessage());
 
             verify(scheduleExamRepository).getReferenceById(1l);
 
@@ -96,7 +96,7 @@ class PatientServiceImplTest {
 
             MessageDto res = patientService.updatePatientArrivalStatus(1l, PatientArrival.OTKAZANO);
 
-            assertEquals("Arrival status updated into OTKAZAO", res.getMessage());
+            assertEquals("Status pregleda promenjen u OTKAZANO", res.getMessage());
 
 
             verify(scheduleExamRepository).getReferenceById(1l);
@@ -120,13 +120,13 @@ class PatientServiceImplTest {
         void scheduleSuccessfulTest(){
             ScheduleExam exam = new ScheduleExam();
 
-            when(scheduleExamMapper.toEntity(scheduleExamCreateDto, "E0003")).thenReturn(exam);
+            when(scheduleExamMapper.toEntity(scheduleExamCreateDto, null)).thenReturn(exam);
 
             MessageDto res = patientService.schedule(scheduleExamCreateDto);
 
-            assertEquals("Scheduled examination created", res.getMessage());
+            assertEquals("Uspesno kreiran zakazani pregled.", res.getMessage());
 
-            verify(scheduleExamMapper).toEntity(scheduleExamCreateDto, "E003");
+            verify(scheduleExamMapper).toEntity(scheduleExamCreateDto, null);
             verify(scheduleExamRepository).save(exam);
 
         }

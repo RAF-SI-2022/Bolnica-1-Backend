@@ -14,7 +14,6 @@ import raf.bolnica1.patient.services.FindInfoService;
 
 import java.sql.Date;
 import java.util.List;
-
 @Service
 @Transactional
 @AllArgsConstructor
@@ -142,3 +141,4 @@ public class FindInfoServiceImpl implements FindInfoService {
         );
     }
 }
+

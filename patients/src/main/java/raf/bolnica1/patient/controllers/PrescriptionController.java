@@ -15,7 +15,6 @@ import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.services.PrescriptionService;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/prescription")
