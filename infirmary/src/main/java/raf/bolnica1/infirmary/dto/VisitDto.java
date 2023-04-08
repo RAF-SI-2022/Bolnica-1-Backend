@@ -12,6 +12,5 @@ public class VisitDto {
     private String visitorSurname;
     private String visitorJmbg;
     private String note;
-    private String lbzRegister;
 
 }

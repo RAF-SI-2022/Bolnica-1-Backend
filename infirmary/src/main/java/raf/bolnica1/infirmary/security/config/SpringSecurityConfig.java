@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.security.config;
+package raf.bolnica1.infirmary.security.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import raf.bolnica1.laboratory.security.config.filter.SecurityFilter;
-import raf.bolnica1.laboratory.security.config.handler.CustomAuthenticationEntryPoint;
+import raf.bolnica1.infirmary.security.config.filter.SecurityFilter;
+import raf.bolnica1.infirmary.security.config.handler.CustomAuthenticationEntryPoint;
 
 @Configuration
 @AllArgsConstructor
@@ -39,9 +39,9 @@ public class SpringSecurityConfig {
                     .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**").permitAll()
                     //.antMatchers("/auth/**").permitAll()
                     .antMatchers("/h2-console/**").permitAll()
-//                    .antMatchers("/examinations/**").permitAll()
-//                    .antMatchers("/work-orders/**").permitAll()
-//                    .antMatchers("/prescription/**").permitAll()
+                    .antMatchers("/examinations/**").permitAll()
+                    .antMatchers("/work-orders/**").permitAll()
+                    .antMatchers("/prescription/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

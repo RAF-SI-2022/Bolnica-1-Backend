@@ -9,6 +9,8 @@ import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.exceptions.jwt.CantParseJwtException;
 
@@ -58,12 +60,12 @@ public class JwtUtils {
         }
     }
 
-//    public List<GrantedAuthority> getAuthoritiesFromToken(String jwtToken) throws CantParseJwtException {
-//        List<String> permissions = getClaimFromToken(jwtToken, claims -> claims.get("permissions", List.class));
-//        return permissions.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
+    public List<GrantedAuthority> getAuthoritiesFromToken(String jwtToken) throws CantParseJwtException {
+        List<String> permissions = getClaimFromToken(jwtToken, claims -> claims.get("permissions", List.class));
+        return permissions.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
 
     public java.util.Date getExpirationDateFromToken(String token) throws CantParseJwtException {
         return getClaimFromToken(token, Claims::getExpiration);

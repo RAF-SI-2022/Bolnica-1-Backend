@@ -8,6 +8,7 @@ import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HospitalizationRepository extends JpaRepository<Hospitalization, Long> {
@@ -25,4 +26,10 @@ public interface HospitalizationRepository extends JpaRepository<Hospitalization
             "and (h.prescription.getIdDepartmentTo = :pbo) " +
             "and (h.prescription in :lbps) ")
     List<Hospitalization> findHospitalizations(@Param("pbo") String pbo, @Param("lbps") List<String> lbps);
+
+    @Query("select h from Hospitalization h " +
+            "where (h.dischargeDateAndTime is null) " +
+            "and (h.prescription.lbp = :lbp) ")
+    Optional<Hospitalization> findHospitalizationByLbp(@Param("lbp") String lbp);
+
 }
