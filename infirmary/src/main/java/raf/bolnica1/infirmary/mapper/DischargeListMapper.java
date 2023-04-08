@@ -1,28 +1,55 @@
 package raf.bolnica1.infirmary.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.DischargeList;
-import raf.bolnica1.infirmary.dto.DtoDischargeList;
+import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
+import raf.bolnica1.infirmary.repository.HospitalizationRepository;
+
+@AllArgsConstructor
 @Component
 public class DischargeListMapper {
 
-    public DtoDischargeList toDto(DischargeList dischargeList){
+    public DischargeListDto toDto(DischargeList entity){
+        if(entity==null)return null;
 
+        DischargeListDto dto=new DischargeListDto();
 
-       DtoDischargeList dto = new DtoDischargeList();
-        dto.setId(dischargeList.getId());
-        dto.setFollowingDiagnosis(dischargeList.getFollowingDiagnosis());
-        dto.setAnalysis(dischargeList.getAnalysis());
-        dto.setAnamnesis(dischargeList.getAnamnesis());
-        dto.setCourseOfDisease(dischargeList.getCourseOfDisease());
-        dto.setSummary(dischargeList.getSummary());
-        dto.setTherapy(dischargeList.getTherapy());
-        dto.setLbzDepartment(dischargeList.getLbzDepartment());
-        dto.setLbzPrescribing(dischargeList.getLbzPrescribing());
-        dto.setCreation(dischargeList.getCreation());
-        dto.setHospitalizationId(dischargeList.getHospitalization().getId());
-
+        dto.setId(entity.getId());
+        dto.setAnamnesis(entity.getAnamnesis());
+        dto.setAnalysis(entity.getAnalysis());
+        dto.setCreation(entity.getCreation());
+        dto.setSummary(entity.getSummary());
+        dto.setTherapy(entity.getTherapy());
+        dto.setFollowingDiagnosis(entity.getFollowingDiagnosis());
+        dto.setLbzDepartment(entity.getLbzDepartment());
+        dto.setLbzPrescribing(entity.getLbzPrescribing());
+        dto.setHospitalizationId(entity.getHospitalization().getId());
+        dto.setCourseOfDisease(entity.getCourseOfDisease());
 
         return dto;
     }
+
+
+    /// kreiranje
+    public DischargeList toEntity(DischargeListDto dto, HospitalizationRepository hospitalizationRepository){
+
+        if(dto==null)return null;
+
+        DischargeList entity=new DischargeList();
+
+        entity.setAnamnesis(dto.getAnamnesis());
+        entity.setAnalysis(dto.getAnalysis());
+        entity.setCreation(dto.getCreation());
+        entity.setSummary(dto.getSummary());
+        entity.setTherapy(dto.getTherapy());
+        entity.setFollowingDiagnosis(dto.getFollowingDiagnosis());
+        entity.setLbzDepartment(dto.getLbzDepartment());
+        entity.setLbzPrescribing(dto.getLbzPrescribing());
+        entity.setHospitalization(hospitalizationRepository.findHospitalizationById(dto.getHospitalizationId()));
+        entity.setCourseOfDisease(dto.getCourseOfDisease());
+
+        return entity;
+    }
+
 }

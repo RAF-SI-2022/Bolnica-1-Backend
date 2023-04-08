@@ -1,5 +1,7 @@
 package raf.bolnica1.infirmary.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,17 +15,12 @@ import java.util.Optional;
 
 @Repository
 public interface HospitalRoomRepository extends JpaRepository<HospitalRoom, Long> {
-    Optional<List<HospitalRoom>> findAllByIdDepartment(Long idDepartment);
 
-    Optional<HospitalRoom> findByIdDepartment(Long idDepartment);
+    @Query("SELECT hr FROM HospitalRoom hr WHERE hr.id=:id")
+    HospitalRoom findHospitalRoomById(@Param("id") Long id);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE HospitalRoom SET capacity = capacity - 1 WHERE idDepartment = :idDepartment")
-    void decrementCapasity(@Param("idDepartment") Long idDepartment);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE HospitalRoom SET capacity = capacity + 1 WHERE idDepartment = :idDepartment")
-    void incrementCapasity(@Param("idDepartment") Long idDepartment);
+    @Query("SELECT hr FROM HospitalRoom hr WHERE (:id IS NULL OR hr.idDepartment=:id)")
+    Page<HospitalRoom> findHospitalRoomsByDepartmentId(Pageable pageable,@Param("id") Long departmentId);
+
 }

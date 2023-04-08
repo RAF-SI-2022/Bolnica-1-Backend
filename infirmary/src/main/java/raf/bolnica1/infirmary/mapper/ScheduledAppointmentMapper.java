@@ -1,36 +1,49 @@
 package raf.bolnica1.infirmary.mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.ScheduledAppointment;
-import raf.bolnica1.infirmary.dto.ScheduleAppointmentDto;
-
-import java.util.ArrayList;
-import java.util.List;
+import raf.bolnica1.infirmary.domain.constants.AdmissionStatus;
+import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentCreateDto;
+import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentDto;
+import raf.bolnica1.infirmary.repository.PrescriptionRepository;
+import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
 @Component
+@AllArgsConstructor
 public class ScheduledAppointmentMapper {
 
-    public ScheduleAppointmentDto toDto(ScheduledAppointment entity){
-        if(entity == null)
-            return null;
+    private final AuthenticationUtils authenticationUtils;
 
-        ScheduleAppointmentDto dto = new ScheduleAppointmentDto();
+
+    public ScheduledAppointmentDto toDto(ScheduledAppointment entity){
+        if(entity==null)return null;
+
+        ScheduledAppointmentDto dto=new ScheduledAppointmentDto();
+
+        dto.setId(entity.getId());
         dto.setNote(entity.getNote());
-        dto.setLbp(entity.getPrescription().getLbp());
-        dto.setAppointmentDateAndTime(entity.getPatientAdmission());
+        dto.setLbzScheduler(entity.getLbzScheduler());
+        dto.setAdmissionStatus(entity.getAdmissionStatus());
+        dto.setPrescriptionId(entity.getPrescription().getId());
+        dto.setPatientAdmission(entity.getPatientAdmission());
 
         return dto;
     }
 
-    public List<ScheduleAppointmentDto> allToDto (List<ScheduledAppointment> entities){
-        if(entities == null)
-            return null;
 
-        List<ScheduleAppointmentDto> dtos = new ArrayList<>();
-        for(ScheduledAppointment entity: entities)
-            dtos.add(toDto(entity));
+    /// samo za kreiranje ScheduledAppointment
+    public ScheduledAppointment toEntity(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto, PrescriptionRepository prescriptionRepository){
 
-        return dtos;
+        ScheduledAppointment scheduledAppointment=new ScheduledAppointment();
+
+        scheduledAppointment.setLbzScheduler(authenticationUtils.getLbzFromAuthentication());
+        scheduledAppointment.setAdmissionStatus(AdmissionStatus.ZAKAZAN);
+        scheduledAppointment.setNote(scheduledAppointmentCreateDto.getNote());
+        scheduledAppointment.setPatientAdmission(scheduledAppointmentCreateDto.getPatientAdmission());
+        scheduledAppointment.setPrescription(prescriptionRepository.findPrescriptionById(scheduledAppointmentCreateDto.getPrescriptionId()));
+
+        return scheduledAppointment;
     }
 
 }

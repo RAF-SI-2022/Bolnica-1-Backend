@@ -180,7 +180,6 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         for(Prescription prescription : prescriptions){
             prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
         }
-        System.out.println(prescriptionDtos.size());
         int startIndex = page * size;
         int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
 

@@ -6,21 +6,36 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.ScheduledAppointment;
+import raf.bolnica1.infirmary.domain.constants.AdmissionStatus;
+import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 
 import java.sql.Date;
 
 @Repository
 public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledAppointment, Long> {
 
-    @Query("select ap from ScheduledAppointment ap join Prescription p " +
-            "on ap.prescription.id = p.id " +
-            "where (:lbp is null or ap.prescription.lbp like %:lbp%) " +
-            "and (:scheduleDate is null or :scheduleDate = '1900-01-01' or ap.patientAdmission = :scheduleDate)" +
-            "and (:depId is null or ap.prescription.getIdDepartmentTo = :depId)")
-    Page<ScheduledAppointment> findAppointment(Pageable pageRequest, @Param("depId") Long depId, @Param("lbp") String lbp, @Param("scheduleDate")Date date);
 
-    @Query("select ap from ScheduledAppointment ap where (:id = ap.id)")
-    ScheduledAppointment findAppointment(@Param("id") Integer id);
+    @Query("SELECT sa FROM ScheduledAppointment sa WHERE sa.id=:id")
+    ScheduledAppointment findScheduledAppointmentById(@Param("id") Long id);
+
+
+    @Query("SELECT sa FROM ScheduledAppointment sa WHERE sa.prescription.id=:id")
+    ScheduledAppointment findScheduledAppointmentByPrescriptionId(@Param("id") Long id);
+
+
+    @Query("SELECT sa FROM ScheduledAppointment sa WHERE " +
+            "(:lbp IS NULL OR sa.prescription.lbp=:lbp) AND " +
+            "(:depId IS NULL OR sa.prescription.idDepartmentTo=:depId) AND " +
+            "(:startDate IS NULL OR sa.patientAdmission>=:startDate) AND " +
+            "(:endDate IS NULL OR sa.patientAdmission<=:endDate) AND " +
+            "(:status IS NULL OR sa.admissionStatus=:status)")
+    Page<ScheduledAppointment> findScheduledAppointmentWithFilter(Pageable pageable,
+                                                                  @Param("lbp") String lbp,
+                                                                  @Param("depId") Long departmentId,
+                                                                  @Param("startDate") Date startDate,
+                                                                  @Param("endDate") Date endDate,
+                                                                  @Param("status") AdmissionStatus admissionStatus);
 
 }

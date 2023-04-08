@@ -21,6 +21,9 @@ public class Hospitalization {
     private Timestamp dischargeDateAndTime;
     @OneToOne
     private Prescription prescription;
+    private String name;
+    private String surname;
+    private String jmbg;
     private String note;
 
 }

@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import raf.bolnica1.infirmary.dto.ErrorResponse;
+import raf.bolnica1.infirmary.dto.response.ErrorResponse;
 import raf.bolnica1.infirmary.util.JsonBuilder;
 
 import java.sql.Date;
