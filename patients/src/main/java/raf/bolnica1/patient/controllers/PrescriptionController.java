@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.PrescriptionDoneDto;
+import raf.bolnica1.patient.dto.prescription.infirmary.PrescriptionInfirmarySendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabUpdateDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
@@ -34,6 +35,12 @@ public class PrescriptionController {
     @PostMapping("lab_prescription")
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<MessageDto> writeLabPerscription(@RequestBody PrescriptionLabSendDto prescriptionSendDto){
+        return new ResponseEntity<>(prescriptionService.sendPersctiption(prescriptionSendDto), HttpStatus.OK);
+    }
+
+    @PostMapping("infirmary_prescription")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
+    public ResponseEntity<MessageDto> writeInfirmaryPerscription(@RequestBody PrescriptionInfirmarySendDto prescriptionSendDto){
         return new ResponseEntity<>(prescriptionService.sendPersctiption(prescriptionSendDto), HttpStatus.OK);
     }
 

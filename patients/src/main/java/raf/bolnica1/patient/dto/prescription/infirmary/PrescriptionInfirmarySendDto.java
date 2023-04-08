@@ -7,4 +7,6 @@ import raf.bolnica1.patient.dto.prescription.general.PrescriptionSendDto;
 @Getter
 @Setter
 public class PrescriptionInfirmarySendDto extends PrescriptionSendDto {
+    private String referralDiagnosis;
+    private String referralReason;
 }

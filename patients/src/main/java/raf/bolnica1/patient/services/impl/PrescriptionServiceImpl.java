@@ -24,6 +24,7 @@ import raf.bolnica1.patient.dto.create.LabResultDto;
 import raf.bolnica1.patient.dto.create.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.*;
+import raf.bolnica1.patient.dto.prescription.infirmary.PrescriptionInfirmarySendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
@@ -41,9 +42,10 @@ import java.util.ArrayList;
 public class PrescriptionServiceImpl implements PrescriptionService {
 
     private JmsTemplate jmsTemplate;
-    private String destinationSend;
-    private String destinationDelete;
-    private String destinationUpdate;
+    private String destinationSendLab;
+    private String destinationDeleteLab;
+    private String destinationUpdateLab;
+    private String destinationSendInfirmary;
     private MessageHelper messageHelper;
     private PrescriptionMapper prescriptionMapper;
     private RestTemplate labRestTemplate;
@@ -52,22 +54,24 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private LabResultsRepository labResultsRepository;
 
     public PrescriptionServiceImpl(JmsTemplate jmsTemplate, MessageHelper messageHelper,
-                                   @Value("${destination.send}") String destinationSend,
-                                   @Value("${destination.delete}") String destinationDelete,
-                                   @Value("${destination.update}") String destinationUpdate,
+                                   @Value("${destination.send.lab}") String destinationSendLab,
+                                   @Value("${destination.delete.lab}") String destinationDeleteLab,
+                                   @Value("${destination.update.lab}") String destinationUpdateLab,
+                                   @Value("${destination.send.infirmary}") String destinationSendInfirmary,
                                    PrescriptionMapper prescriptionMapper,
                                    @Qualifier("labRestTemplate") RestTemplate labRestTemplate,
                                    PrescriptionRepository prescriptionRepository,
                                    PatientRepository patientRepository,
                                    LabResultsRepository labResultsRepository){
         this.jmsTemplate = jmsTemplate;
-        this.destinationSend = destinationSend;
-        this.destinationDelete = destinationDelete;
-        this.destinationUpdate = destinationUpdate;
+        this.destinationSendLab = destinationSendLab;
+        this.destinationDeleteLab = destinationDeleteLab;
+        this.destinationUpdateLab = destinationUpdateLab;
         this.messageHelper = messageHelper;
         this.prescriptionMapper = prescriptionMapper;
         this.labRestTemplate = labRestTemplate;
         this.prescriptionRepository = prescriptionRepository;
+        this.destinationSendInfirmary = destinationSendInfirmary;
         this.patientRepository = patientRepository;
         this.labResultsRepository = labResultsRepository;
     }
@@ -75,7 +79,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     public MessageDto sendPersctiption(PrescriptionSendDto prescriptionSendDto) {
         if(prescriptionSendDto.getType().equals(PrescriptionType.LABORATORIJA))
-            jmsTemplate.convertAndSend(destinationSend , messageHelper.createTextMessage(prescriptionMapper.getPrescriptionSendDto((PrescriptionLabSendDto) prescriptionSendDto)));
+            jmsTemplate.convertAndSend(destinationSendLab, messageHelper.createTextMessage((PrescriptionLabSendDto) prescriptionSendDto));
+        if(prescriptionSendDto.getType().equals(PrescriptionType.STACIONAR)){
+            jmsTemplate.convertAndSend(destinationSendInfirmary, messageHelper.createTextMessage((PrescriptionInfirmarySendDto) prescriptionSendDto));
+        }
         return new MessageDto("Uspesno poslat uput");
     }
 
@@ -95,13 +102,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public MessageDto updatePrescription(PrescriptionUpdateDto prescriptionUpdateDto) {
-        jmsTemplate.convertAndSend(destinationUpdate, messageHelper.createTextMessage(prescriptionUpdateDto));
+        jmsTemplate.convertAndSend(destinationUpdateLab, messageHelper.createTextMessage(prescriptionUpdateDto));
         return new MessageDto("Uspesno poslata poruka za azuriranje uputa.");
     }
 
     @Override
     public MessageDto deletePresscription(Long prescriptionId) {
-        jmsTemplate.convertAndSend(destinationDelete , messageHelper.createTextMessage(new PrescriptionDeleteDto(prescriptionId, getLbzFromAuthentication())));
+        jmsTemplate.convertAndSend(destinationDeleteLab, messageHelper.createTextMessage(new PrescriptionDeleteDto(prescriptionId, getLbzFromAuthentication())));
         return new MessageDto("Uspesno poslata poruka za brisanje uputa.");
     }
 
