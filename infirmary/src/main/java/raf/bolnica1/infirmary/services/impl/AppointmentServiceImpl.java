@@ -35,41 +35,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     private ScheduledAppointmentMapper scheduledAppointmentMapper;
 
     @Override
-    public String createAppointment(String authorization, ScheduleAppointmentDto appointmentDto) {
+    public String createAppointment(ScheduleAppointmentDto appointmentDto) {
         ScheduledAppointment scheduledAppointment = new ScheduledAppointment();
         scheduledAppointment.setNote(appointmentDto.getNote());
         scheduledAppointment.setPatientAdmission(appointmentDto.getAppointmentDateAndTime());
         scheduledAppointment.setAdmissionStatus(AdmissionStatus.ZAKAZAN);
-
-        String token = authorization.split(" ")[1];
-        String lbz = jwtUtils.getUsernameFromToken(token);
-
-        scheduledAppointment.setLbzScheduler(lbz);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-
-        HttpEntity<Object> request = new HttpEntity<>(headers);
-        ResponseEntity<Long> response = departmentRestTemplate.exchange("employee/"+lbz, HttpMethod.GET, request, Long.class);
-        if(response.getBody() == null)
-            throw new RuntimeException("Invalid LPZ!");
+        //kada se doda security, zavrsiti set metodu
+//        scheduledAppointment.setLbzScheduler(lbz_ce_biti_u_SecurityContextHolder-u);
 
         Optional<Prescription> prescription = prescriptionRepository.findByLbp(appointmentDto.getLbp());
         if(!prescription.isPresent())
             throw new RuntimeException("No prescription for patient with lbp: " + appointmentDto.getLbp());
 
-        prescription.get().setGetIdDepartmentTo(response.getBody());
-
-        scheduledAppointment.setPrescription(prescriptionRepository.save(prescription.get()));
+        scheduledAppointment.setPrescription(prescription.get());
         scheduledAppointmentRepository.save(scheduledAppointment);
 
         return "Appointment created successfully!";
     }
 
-    @Override
-    public Page<ScheduleAppointmentDto> getScheduledAppointments(String authorization, String lbp, Date date, int page, int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
+    public String updateAppointment(String authorization, String status, Integer id) {
 
         String token = authorization.split(" ")[1];
         String lbz = jwtUtils.getUsernameFromToken(token);
@@ -82,9 +66,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(response.getBody() == null)
             throw new RuntimeException("Invalid LPZ!");
 
-        Page<ScheduledAppointment> listPage =  scheduledAppointmentRepository.findAppointment(pageable, response.getBody(), lbp, date);
+        ScheduledAppointment scheduledAppointment = scheduledAppointmentRepository.findAppointment(id);
+
+        if(scheduledAppointment == null){
+            throw new RuntimeException("Appointment doesn't exist.");
+        }
+
+        scheduledAppointment.setAdmissionStatus(AdmissionStatus.valueOf(status));
+        scheduledAppointmentRepository.save(scheduledAppointment);
+
+        return "Appointment updated successfully!";
+    }
+
+    @Override
+    public Page<ScheduleAppointmentDto> getScheduledAppointments(Long depId, String lbp, Date date, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ScheduledAppointment> listPage =  scheduledAppointmentRepository.findAppointment(pageable, depId, lbp, date);
 
         return listPage.map(scheduledAppointmentMapper::toDto);
-
     }
 }

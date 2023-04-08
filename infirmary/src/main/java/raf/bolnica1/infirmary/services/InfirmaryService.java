@@ -2,8 +2,6 @@ package raf.bolnica1.infirmary.services;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,10 +14,15 @@ import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
+import raf.bolnica1.infirmary.dto.DtoDischargeList;
+import raf.bolnica1.infirmary.dto.DtoHospitalization;
 import raf.bolnica1.infirmary.dto.PatientDto;
+import raf.bolnica1.infirmary.dto.PatientInformationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.DischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.HospitalizationDto;
 import raf.bolnica1.infirmary.dto.dischargeListDto.PrescriptionDto;
+import raf.bolnica1.infirmary.mapper.DischargeListMapper;
+import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
@@ -30,10 +33,7 @@ import java.net.URI;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -44,27 +44,32 @@ public class InfirmaryService {
     private HospitalizationRepository hospitalizationRepository;
     private RestTemplate patientRestTemplate;
     private JwtUtils jwtUtils;
+    private DischargeListMapper dischargeListMapper;
+    private HospitalizationMapper hospitalizationMapper;
 
     public Optional<List<HospitalRoom>> findHospitalRooms(Long  idDepartment){
         //Dohvatanje svih bolnickih soba sa datim id-jem departmana
         Optional<List<HospitalRoom>> rooms;
         rooms = hospitalRoomRepository.findAllByIdDepartment(idDepartment);
 
-        if(rooms.isPresent()){
-            return rooms;
-        }
-        return null;
+        if(rooms.get().isEmpty())
+            throw new RuntimeException("No hospitalization rooms with id department : " + idDepartment);
+
+        return rooms;
     }
 
-    public void createDischargeList(Long  idDepartment,String lbp,String followingDiagnosis,String anamnesis,String analysis,String courseOfDisease,String summary,String therapy){
+    public DtoDischargeList createDischargeList(Long  idDepartment, String lbp, String followingDiagnosis, String anamnesis, String analysis, String courseOfDisease, String summary, String therapy, String lbzDepartment){
         //Dekrementiramo kapacitet sobe
         hospitalRoomRepository.decrementCapasity(idDepartment);
         //Pronalazimo uput preko lbp-a
         Optional<Prescription> prescription = prescriptionRepository.findByLbp(lbp);
         if(!prescription.isPresent())
             throw new RuntimeException("No prescription for patient with lbp: " + lbp);
+
         //Pronalazimo hospitalizaciju preko uputa
         Hospitalization hospitalization = hospitalizationRepository.findByPrescription(prescription.get());
+        if(hospitalization == null)
+            throw new RuntimeException("No hospitalization with perscription : " + prescription.get() );
 
         //Kreiramo objekat otpusne liste i setujemo podatke
         DischargeList dischargeList = new DischargeList();
@@ -75,12 +80,12 @@ public class InfirmaryService {
         dischargeList.setSummary(summary);
         dischargeList.setTherapy(therapy);
         dischargeList.setHospitalization(hospitalization);
+        dischargeList.setLbzDepartment(lbzDepartment);
 
         //Ovo dobijas iz tokena
         //dischargeList.setLbzPrescribing();
 
-        //Moras da posaljes upit na employees
-        //dischargeList.setLbzDepartment();
+        dischargeList.setLbzPrescribing("1");
 
         Date date = new Date();
         Timestamp ts=new Timestamp(date.getTime());
@@ -89,17 +94,26 @@ public class InfirmaryService {
         //Sejvujemo otpusnu listu
         dischargeListRepository.save(dischargeList);
 
+        return dischargeListMapper.toDto(dischargeList);
+
     }
 
-    public void pacientAdmission(Long  idDepartment,String lbp,String lbzDoctor,String referralDiagnosis,String note,Long idPrescription){
+    public DtoHospitalization pacientAdmission(Long  idDepartment, String note, String lbzDoctor, String referralDiagnosis, Long idPrescription){
         //Inkrementiramo kapacitet sobe
         hospitalRoomRepository.incrementCapasity(idDepartment);
 
         //Pronalazimo sobu sa id-jem odeljenja
         Optional<HospitalRoom> room = hospitalRoomRepository.findByIdDepartment(idDepartment);
+        if(!room.isPresent())
+            throw new RuntimeException("No hospital room for patient with id department : " + idDepartment);
 
         //Pronalazimo uput sa id-jem uputa
         Optional<Prescription> prescription = prescriptionRepository.findById(idPrescription);
+        if(!prescription.isPresent())
+            throw new RuntimeException("No prescription for patient with id prescription: " + idPrescription);
+
+        //Setujemo ReferralDiagnosis
+        prescriptionRepository.setPrescriptionReferralDiagnosis(referralDiagnosis,idPrescription);
 
         //Setujemo status uputa na realizovan
         prescriptionRepository.updatePrescriptionStatus(PrescriptionStatus.REALIZOVAN,idPrescription);
@@ -114,11 +128,15 @@ public class InfirmaryService {
         //Ovo dobijas iz tokena
         //hospitalization.setLbzRegister();
 
+        hospitalization.setLbzRegister("1");
+
         Date date = new Date();
         Timestamp ts=new Timestamp(date.getTime());
         hospitalization.setPatientAdmission(ts);
 
         hospitalizationRepository.save(hospitalization);
+
+        return hospitalizationMapper.toDto(hospitalization);
 
     }
 
@@ -215,8 +233,11 @@ public class InfirmaryService {
         return dischargeListDto;
     }
 
-    public List<PatientDto> findHospitalizedPatients(String authorization, String pbo, String lbp, String name, String surname, String jmbg) {
-        List<PatientDto> res = new ArrayList<>();
+    public List<PatientInformationDto> findHospitalizedPatients(String authorization, String pbo, String lbp, String name, String surname, String jmbg) {
+        if(pbo == null || pbo.equals(""))
+            throw new RuntimeException("PBO is required!");
+
+        List<PatientInformationDto> res = new ArrayList<>();
 
         String token = authorization.split(" ")[1];
         ParameterizedTypeReference<Page<PatientDto>> responseType = new ParameterizedTypeReference<Page<PatientDto>>() {};
@@ -241,11 +262,30 @@ public class InfirmaryService {
         List<String> lbps = new ArrayList<>();
         patients.getBody().forEach(p -> lbps.add(p.getLbp()));
 
-        List<String> foundLbps = hospitalizationRepository.findHospitalizedPatients(pbo, lbps);
+        List<Hospitalization> hospitalizations = hospitalizationRepository.findHospitalizations(pbo, lbps);
+
+        Map<String, PatientInformationDto> infoMap = new HashMap<>();
+        for(Hospitalization h: hospitalizations){
+            PatientInformationDto info = new PatientInformationDto();
+            info.setHospitalRoomId(h.getHospitalRoom().getId());
+            info.setRoomNumber(h.getHospitalRoom().getRoomNumber());
+            info.setRoomCapacity(h.getHospitalRoom().getCapacity());
+            info.setPatientAdmissionDate(h.getPatientAdmission());
+            info.setReferralDiagnosis(h.getPrescription().getReferralDiagnosis());
+            info.setLbzDoctor(h.getLbzDoctor());
+            infoMap.put(h.getPrescription().getLbp(), info);
+        }
 
         patients.getBody().forEach(p -> {
-            if(foundLbps.contains(p.getLbp()))
-                res.add(p);
+            PatientInformationDto pat;
+            if((pat = infoMap.get(p.getLbp())) != null){
+                pat.setLbp(p.getLbp());
+                pat.setJmbg(p.getJmbg());
+                pat.setPatientName(p.getName());
+                pat.setPatientSurname(p.getSurname());
+                pat.setDateOfBirth(p.getDateOfBirth());
+                res.add(pat);
+            }
         });
 
         return res;

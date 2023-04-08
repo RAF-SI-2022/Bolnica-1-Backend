@@ -1,9 +1,10 @@
 package raf.bolnica1.laboratory.services.lab;
 
 import org.springframework.data.domain.Page;
-import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
-import raf.bolnica1.laboratory.dto.prescription.PrescriptionDto;
-import raf.bolnica1.laboratory.dto.prescription.PrescriptionUpdateDto;
+import raf.bolnica1.laboratory.dto.lab.PatientDto;
+import raf.bolnica1.laboratory.dto.prescription.*;
+
+import java.util.ArrayList;
 
 public interface PrescriptionRecieveService {
 
@@ -16,4 +17,11 @@ public interface PrescriptionRecieveService {
     Page<PrescriptionDto> findPrescriptionsForPatient(String lbp, String doctorLbz, int page, int size);
 
 
+    PrescriptionDoneDto findPrescription(Long id);
+
+    ArrayList<PrescriptionDto> findPrescriptionsForPatientRest(String lbp, String doctorLbz);
+
+    Page<PrescriptionDto> findPrescriptionsForPatientNotRealized(String lbp, Integer page, Integer size);
+
+    Page<PatientDto> findPatients(int page, int size);
 }

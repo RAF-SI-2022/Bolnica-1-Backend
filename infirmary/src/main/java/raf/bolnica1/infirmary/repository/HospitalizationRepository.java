@@ -18,4 +18,11 @@ public interface HospitalizationRepository extends JpaRepository<Hospitalization
             "and (h.prescription.getIdDepartmentTo = :pbo) " +
             "and h.prescription.lbp in :lbps")
     List<String> findHospitalizedPatients(@Param("pbo") String pbo, @Param("lbps") List<String> lbps);
+
+
+    @Query("select h from Hospitalization h " +
+            "where (h.dischargeDateAndTime is null) " +
+            "and (h.prescription.getIdDepartmentTo = :pbo) " +
+            "and (h.prescription in :lbps) ")
+    List<Hospitalization> findHospitalizations(@Param("pbo") String pbo, @Param("lbps") List<String> lbps);
 }
