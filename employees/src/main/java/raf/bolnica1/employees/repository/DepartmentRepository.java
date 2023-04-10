@@ -1,5 +1,7 @@
 package raf.bolnica1.employees.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,5 +21,9 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     @Query(value = "select d from Department d where d.hospital.pbb = :pbb")
     List<Department> findByHostpitalPbb(@Param("pbb") String pbb);
+
+
+    @Query("SELECT d.hospital FROM Department d WHERE d.name=:name")
+    Page<Hospital> findHospitalsByDepartmentName(Pageable pageable, @Param("name") String departmentName);
 
 }

@@ -23,7 +23,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
             "WHERE (:name IS NULL OR p.name LIKE %:name%) AND " +
             "(:surname IS NULL OR p.surname LIKE %:surname%) AND " +
             "(:jmbg IS NULL OR p.jmbg LIKE %:jmbg%) AND " +
-            "(:lbp IS NULL OR p.lbp LIKE %:lbp%)")
+            "(:lbp IS NULL OR p.lbp LIKE %:lbp%) AND " +
+            "(p.deleted=false)")
     Page<Patient> listPatientsWithFilters(Pageable pageable,
                                           @Param("name") String name,
                                           @Param("surname") String surname,

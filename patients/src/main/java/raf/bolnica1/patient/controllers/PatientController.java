@@ -69,10 +69,10 @@ public class PatientController {
 
     @GetMapping("/filter_patients")
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
-    public ResponseEntity<Page<PatientDto>> filterPatients(@RequestParam("lbp")String lbp,
-                                                             @RequestParam("jmbg")String jmbg,
-                                                             @RequestParam("name")String name,
-                                                             @RequestParam("surname")String surname,
+    public ResponseEntity<Page<PatientDto>> filterPatients(@RequestParam(required = false)String lbp,
+                                                             @RequestParam(required = false)String jmbg,
+                                                             @RequestParam(required = false)String name,
+                                                             @RequestParam(required = false)String surname,
                                                              @RequestParam(defaultValue = "0") Integer page,
                                                              @RequestParam(defaultValue = "2") Integer size
     ){

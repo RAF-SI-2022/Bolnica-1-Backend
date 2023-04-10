@@ -1,8 +1,10 @@
 package raf.bolnica1.employees.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
@@ -47,6 +49,14 @@ public class DepartmentController {
     @GetMapping("/getAllDoctors/{pbo}")
     public ResponseEntity<List<DoctorDepartmentDto>> geAllDoctorsByPbo(@PathVariable("pbo") String pbo){
         return new ResponseEntity<>(departmentService.getAllDoctorsByPbo(pbo),HttpStatus.OK);
+    }
+
+    @GetMapping("/getHospitalsByDepartmentName")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA' , 'ROLE_DR_SPEC_POV')")
+    public ResponseEntity<Page<HospitalDto>> getHospitalsByDepartmentName(@RequestParam String name,
+                                                                          @RequestParam(defaultValue = "0") Integer page,
+                                                                          @RequestParam(defaultValue = "2") Integer size){
+        return new ResponseEntity<>(departmentService.findHospitalsByDepartmentName(name, page, size),HttpStatus.OK);
     }
 
 }
