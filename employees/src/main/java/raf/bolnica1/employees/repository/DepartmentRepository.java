@@ -23,7 +23,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     List<Department> findByHostpitalPbb(@Param("pbb") String pbb);
 
 
-    @Query("SELECT d.hospital FROM Department d WHERE d.name=:name")
+    @Query("SELECT d.hospital FROM Department d WHERE d.name=:name AND d.deleted=false AND d.hospital.deleted=false")
     Page<Hospital> findHospitalsByDepartmentName(Pageable pageable, @Param("name") String departmentName);
 
 }
