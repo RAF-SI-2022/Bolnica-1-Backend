@@ -1,6 +1,9 @@
 package raf.bolnica1.employees.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.employees.domain.Department;
@@ -12,6 +15,7 @@ import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
+import raf.bolnica1.employees.mappers.HospitalMapper;
 import raf.bolnica1.employees.repository.DepartmentRepository;
 import raf.bolnica1.employees.repository.EmployeeRepository;
 import raf.bolnica1.employees.repository.EmployeesRoleRepository;
@@ -31,6 +35,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final EmployeeRepository employeeRepository;
     private final HospitalRepository hospitalRepository;
     private final EmployeesRoleRepository employeesRoleRepository;
+    private final HospitalMapper hospitalMapper;
 
     @Override
     public Long findDepartmentIdByLbz(String lbz) {
@@ -94,5 +99,12 @@ public class DepartmentServiceImpl implements DepartmentService {
             hospitalDtos.add(new HospitalDto(hospital.getId(), hospital.getShortName()));
         }
         return hospitalDtos;
+    }
+
+    @Override
+    public Page<HospitalDto> findHospitalsByDepartmentName(String name, Integer page, Integer size) {
+        Pageable pageable= PageRequest.of(page,size);
+        Page<Hospital> hospitals=departmentRepository.findHospitalsByDepartmentName(pageable,name);
+        return hospitals.map(hospitalMapper::toDto);
     }
 }
