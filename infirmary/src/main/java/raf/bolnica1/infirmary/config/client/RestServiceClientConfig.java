@@ -39,5 +39,13 @@ public class RestServiceClientConfig {
         return restTemplate;
     }
 
+    @Bean
+    @Qualifier("diagnosisCodeRestTemplate")
+    public RestTemplate diagnosisCodeRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/record/gather_diagnosis"));
+        return restTemplate;
+    }
+
 }
 

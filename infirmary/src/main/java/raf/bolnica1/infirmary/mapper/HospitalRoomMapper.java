@@ -7,6 +7,9 @@ import raf.bolnica1.infirmary.dto.hospitalRoom.HospitalRoomCreateDto;
 import raf.bolnica1.infirmary.dto.hospitalRoom.HospitalRoomDto;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class HospitalRoomMapper {
@@ -24,6 +27,18 @@ public class HospitalRoomMapper {
         dto.setOccupancy(entity.getOccupancy());
         dto.setRoomNumber(entity.getRoomNumber());
         dto.setIdDepartment(entity.getIdDepartment());
+
+        return dto;
+    }
+
+    public List<HospitalRoomDto> toDto(List<HospitalRoom> entity){
+
+        if(entity==null)return null;
+
+        List<HospitalRoomDto> dto=new ArrayList<>();
+
+        for(HospitalRoom hospitalRoom:entity)
+            dto.add(toDto(hospitalRoom));
 
         return dto;
     }

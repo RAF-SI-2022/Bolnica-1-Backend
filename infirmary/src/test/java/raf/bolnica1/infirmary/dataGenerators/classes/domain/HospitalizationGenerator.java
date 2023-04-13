@@ -3,9 +3,11 @@ package raf.bolnica1.infirmary.dataGenerators.classes.domain;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
+import raf.bolnica1.infirmary.dataGenerators.primitives.util.PatientGetter;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
+import raf.bolnica1.infirmary.dto.externalPatientService.PatientDto;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
@@ -19,6 +21,7 @@ public class HospitalizationGenerator {
     private final RandomSurnames randomSurnames;
     private final RandomTimestamp randomTimestamp;
     private final RandomJMBG randomJMBG;
+    private final PatientGetter patientGetter;
 
 
     private final HospitalRoomGenerator hospitalRoomGenerator;
@@ -32,9 +35,9 @@ public class HospitalizationGenerator {
 
         Hospitalization ret=new Hospitalization();
 
-        ret.setJmbg(randomJMBG.getFromRandom());
+       /*ret.setJmbg(randomJMBG.getFromRandom());
         ret.setSurname(randomSurnames.getFromRandom());
-        ret.setName(randomNames.getFromRandom());
+        ret.setName(randomNames.getFromRandom());*/
         ret.setHospitalRoom(hospitalRoom);
         ret.setPrescription(prescription);
         ret.setNote(randomString.getString(20));
@@ -42,6 +45,13 @@ public class HospitalizationGenerator {
         ret.setLbzRegister(randomString.getString(10));
         ret.setPatientAdmission(randomTimestamp.getFromRandom());
         ret.setDischargeDateAndTime(randomTimestamp.getFromRandom());
+
+        /// popuni ime i prezime i jmbg
+        String lbp= prescription.getLbp();
+        PatientDto patientDto=patientGetter.getPatientByLbp(lbp).get(0);
+        ret.setJmbg(patientDto.getJmbg());
+        ret.setName(patientDto.getName());
+        ret.setSurname(patientDto.getSurname());
 
         return ret;
     }

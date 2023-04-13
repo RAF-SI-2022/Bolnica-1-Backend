@@ -10,6 +10,7 @@ import raf.bolnica1.infirmary.dto.prescription.PrescriptionReceiveDto;
 import raf.bolnica1.infirmary.dto.visit.VisitCreateDto;
 
 import java.sql.Timestamp;
+import java.util.Random;
 
 @Component
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class PrescriptionReceiveDtoGenerator {
     private final RandomTimestamp randomTimestamp;
     private final RandomJMBG randomJMBG;
     private final RandomLong randomLong;
+    private final RandomLBP randomLBP;
 
 
     public PrescriptionReceiveDto getPrescriptionReceiveDto(){
@@ -31,7 +33,7 @@ public class PrescriptionReceiveDtoGenerator {
         ret.setDoctorLbz(randomString.getString(10));
         ret.setDepartmentToId(randomLong.getLong(10L));
         ret.setDepartmentFromId(randomLong.getLong(10L));
-        ret.setLbp(randomString.getString(10));
+        ret.setLbp(randomLBP.getFromRandom());
         ret.setCreationDateTime(randomTimestamp.getFromRandom());
         ret.setStatus( PrescriptionStatus.values()[ randomLong.getLong(new Long(PrescriptionStatus.values().length)).intValue() ] );
         ret.setReferralDiagnosis(randomString.getString(10));

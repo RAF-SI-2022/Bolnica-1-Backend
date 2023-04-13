@@ -32,4 +32,8 @@ public class JwtTokenGetter {
         return getToken("john.doe","password");
     }
 
+    public String getDrMedSpec(){
+        return getToken("jane.smith","password");
+    }
+
 }

@@ -72,9 +72,7 @@ public class PatientStateIntegrationFilterSteps extends PatientStateIntegrationT
 
 
     @Given("ima {int} zabeleznih stanja za pacijenta i {int} zeljenih filtera")
-    public void ima_zabeleznih_stanja_za_pacijenta_i_zeljenih_filtera(Integer int1, Integer int2) {
-        int stateCount=int1;
-        int filterCount=int2;
+    public void ima_zabeleznih_stanja_za_pacijenta_i_zeljenih_filtera(Integer stateCount, Integer filterCount) {
 
         String token=jwtTokenGetter.getDefaultToken();
         String lbz=tokenSetter.setToken(token);

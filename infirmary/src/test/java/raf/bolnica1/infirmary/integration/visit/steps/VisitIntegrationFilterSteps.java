@@ -81,10 +81,8 @@ public class VisitIntegrationFilterSteps extends VisitIntegrationTestConfig {
 
 
     @Given("izabrali smo {int} filtera {int} poseta zabelezeno")
-    public void izabrali_smo_filtera_poseta_zabelezeno(Integer int1, Integer int2) {
+    public void izabrali_smo_filtera_poseta_zabelezeno(Integer filterCount, Integer visitCount) {
 
-        int filterCount=int1;
-        int visitCount=int2;
 
         /// priprema filtera
         for(int i=0;i<filterCount;i++)
@@ -121,7 +119,7 @@ public class VisitIntegrationFilterSteps extends VisitIntegrationTestConfig {
         try {
             for(int i=0;i<filters.size();i++){
                 VisitFilter f=filters.get(i);
-                List<VisitDto> pom=f.applyFilterToList(results,hospitalizationRepository,objectMapper);
+                List<VisitDto> pom=f.applyFilterToList(results,hospitalizationRepository);
                 List<VisitDto> visitDtos=visitService.getVisitsWithFilter(f.getDepartmentId(),f.getHospitalRoomId(),
                         f.getHospitalizationId(),f.getStartDate(),f.getEndDate(),0,1000000000).getContent();
                 List<VisitDto> mutableVisitDtos=new ArrayList<>(visitDtos);

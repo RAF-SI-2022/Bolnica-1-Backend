@@ -30,7 +30,7 @@ public class VisitFilter {
     private Date endDate;
 
 
-    public boolean applyFilter(VisitDto visitDto, HospitalizationRepository hospitalizationRepository,ObjectMapper objectMapper){
+    public boolean applyFilter(VisitDto visitDto, HospitalizationRepository hospitalizationRepository){
 
         try {
             if (startDate!=null && visitDto.getVisitTime().getTime()<startDate.getTime()) return false;
@@ -46,12 +46,12 @@ public class VisitFilter {
         }
     }
 
-    public List<VisitDto> applyFilterToList(List<VisitDto> visitDtoList,HospitalizationRepository hospitalizationRepository,ObjectMapper objectMapper){
+    public List<VisitDto> applyFilterToList(List<VisitDto> visitDtoList,HospitalizationRepository hospitalizationRepository){
 
         List<VisitDto> ret=new ArrayList<>();
 
         for(VisitDto visitDto:visitDtoList)
-            if(applyFilter(visitDto,hospitalizationRepository,objectMapper))
+            if(applyFilter(visitDto,hospitalizationRepository))
                 ret.add(visitDto);
 
         return ret;
