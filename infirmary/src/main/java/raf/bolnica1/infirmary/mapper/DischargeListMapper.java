@@ -6,6 +6,9 @@ import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Component
 public class DischargeListMapper {
@@ -26,6 +29,18 @@ public class DischargeListMapper {
         dto.setLbzPrescribing(entity.getLbzPrescribing());
         dto.setHospitalizationId(entity.getHospitalization().getId());
         dto.setCourseOfDisease(entity.getCourseOfDisease());
+
+        return dto;
+    }
+
+    public List<DischargeListDto> toDto(List<DischargeList> entity){
+
+        if(entity==null)return null;
+
+        List<DischargeListDto> dto=new ArrayList<>();
+
+        for(DischargeList dischargeList:entity)
+            dto.add(toDto(dischargeList));
 
         return dto;
     }

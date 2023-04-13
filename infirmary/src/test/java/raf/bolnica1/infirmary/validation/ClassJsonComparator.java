@@ -158,8 +158,8 @@ public class ClassJsonComparator {
         }
 
 
-        /*System.out.println(mapA);
-        System.out.println(mapB);*/
+        System.out.println(mapA);
+        System.out.println(mapB);
 
         for(String key:mapA.keySet()){
             if(!mapB.containsKey(key))continue;
