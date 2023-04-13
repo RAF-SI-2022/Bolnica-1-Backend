@@ -1,0 +1,45 @@
+package raf.bolnica1.infirmary.dataGenerators.primitives;
+
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+
+@Component
+public class RandomSurnames {
+
+    private List<String> list;
+    private Random random=new Random();
+
+    public RandomSurnames(){
+
+        list=new ArrayList<>();
+
+        list.add("Smith");
+        list.add("Johnson");
+        list.add("West");
+        list.add("Lucic");
+        list.add("Jovanovic");
+        list.add("Kerestes");
+        list.add("Kostic");
+        list.add("Grahovac");
+        list.add("Siflis");
+        list.add("Najdic");
+        list.add("Markovic");
+
+    }
+
+    public int getSize(){
+        return list.size();
+    }
+
+    public String getFromPos(int pos){
+        return new String(list.get(pos));
+    }
+
+    public String getFromRandom(){
+        return new String(list.get(Math.abs(random.nextInt())%getSize()));
+    }
+}

@@ -19,7 +19,7 @@ public class PrescriptionListener {
     @JmsListener(destination = "${destination.send.infirmary}", concurrency = "5-10")
     public void addPrescription(Message message) throws JMSException {
         PrescriptionReceiveDto prescriptionCreateDto = messageHelper.getMessage(message, PrescriptionReceiveDto.class);
-        prescriptionSendService.createPrescription(prescriptionCreateDto);
+        prescriptionSendService.receivePrescription(prescriptionCreateDto);
     }
 
 }

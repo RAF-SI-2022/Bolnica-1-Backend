@@ -6,8 +6,6 @@ import lombok.Setter;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionType;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.sql.Timestamp;
 
 @Getter
@@ -17,12 +15,12 @@ public class PrescriptionDto {
 
     private Long id;
     private String doctorLbz;
-    private Long idDepartmentFrom;
-    private Long idDepartmentTo;
+    private Long departmentFromId;
+    private Long departmentToId;
     private String lbp;
-    private Timestamp creation;
-    private PrescriptionType prescriptionType;
-    private PrescriptionStatus prescriptionStatus;
+    private Timestamp creationDateTime;
+    private PrescriptionType type;
+    private PrescriptionStatus status;
     private String referralDiagnosis;
     private String referralReason;
 

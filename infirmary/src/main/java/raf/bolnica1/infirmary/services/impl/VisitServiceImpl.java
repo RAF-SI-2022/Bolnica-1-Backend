@@ -36,6 +36,7 @@ public class VisitServiceImpl implements VisitService {
     @Override
     public Page<VisitDto> getVisitsWithFilter(Long departmentId, Long hospitalRoomId, Long hospitalizationId, Date startDate, Date endDate,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
+        if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);
         Page<Visit>visits=visitRepository.findVisitsWithFilter(pageable,departmentId,hospitalRoomId,hospitalizationId,startDate,endDate);
         return visits.map(visitMapper::toDto);
     }

@@ -19,7 +19,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
             "(:hrId IS NULL OR :hrId=v.hospitalization.hospitalRoom.id) AND " +
             "(:hosId IS NULL OR :hosId=v.hospitalization.id) AND " +
             "(:startDate IS NULL OR :startDate<=v.visitTime ) AND " +
-            "(:endDate IS NULL OR :endDate>=v.visitTime )")
+            "(:endDate IS NULL OR :endDate>v.visitTime )")
     Page<Visit> findVisitsWithFilter(Pageable pageable,
                                      @Param("depId") Long departmentId,
                                      @Param("hrId") Long hospitalRoomId,

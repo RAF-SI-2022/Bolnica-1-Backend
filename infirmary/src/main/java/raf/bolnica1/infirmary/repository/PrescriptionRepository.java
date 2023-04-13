@@ -19,8 +19,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
 
     @Query("SELECT p FROM Prescription p WHERE " +
             "(:lbp IS NULL OR p.lbp=:lbp) AND " +
-            "(:depId IS NULL OR p.idDepartmentTo=:depId) AND " +
-            "(:status IS NULL OR p.prescriptionStatus=:status)")
+            "(:depId IS NULL OR p.departmentToId=:depId) AND " +
+            "(:status IS NULL OR p.status=:status)")
     Page<Prescription> findPrescriptionWithFilter(Pageable pageable, @Param("lbp") String lbp, @Param("depId") Long departmentId, @Param("status") PrescriptionStatus prescriptionStatus);
 
 

@@ -9,6 +9,9 @@ import raf.bolnica1.infirmary.dto.patientState.PatientStateDto;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class PatientStateMapper {
@@ -32,6 +35,17 @@ public class PatientStateMapper {
         dto.setSystolicPressure(entity.getSystolicPressure());
         dto.setHospitalizationId(entity.getHospitalization().getId());
         dto.setTimeExamState(entity.getTimeExamState());
+
+        return dto;
+    }
+
+    public List<PatientStateDto> toDto(List<PatientState> entity){
+        if(entity==null)return null;
+
+        List<PatientStateDto> dto=new ArrayList<>();
+
+        for(PatientState patientState:entity)
+            dto.add(toDto(patientState));
 
         return dto;
     }

@@ -16,6 +16,14 @@ public class RestServiceClientConfig {
     }
 
     @Bean
+    @Qualifier("loginRestTemplate")
+    public RestTemplate loginRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/auth/login"));
+        return restTemplate;
+    }
+
+    @Bean
     @Qualifier("patientRestTemplate")
     public RestTemplate patientRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();

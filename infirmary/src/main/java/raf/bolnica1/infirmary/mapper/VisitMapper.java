@@ -8,6 +8,9 @@ import raf.bolnica1.infirmary.dto.visit.VisitDto;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class VisitMapper {
@@ -29,6 +32,18 @@ public class VisitMapper {
         dto.setLbzRegister(entity.getLbzRegister());
         dto.setVisitorName(entity.getVisitorName());
         dto.setVisitorSurname(entity.getVisitorSurname());
+
+        return dto;
+    }
+
+    public List<VisitDto> toDto(List<Visit> entity){
+
+        if(entity==null)return null;
+
+        List<VisitDto> dto=new ArrayList<>();
+
+        for(Visit visit:entity)
+            dto.add(toDto(visit));
 
         return dto;
     }

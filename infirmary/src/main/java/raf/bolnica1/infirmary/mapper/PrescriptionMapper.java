@@ -20,15 +20,15 @@ public class PrescriptionMapper {
         PrescriptionDto dto=new PrescriptionDto();
 
         dto.setId(entity.getId());
-        dto.setCreation(entity.getCreation());
+        dto.setCreationDateTime(entity.getCreationDateTime());
         dto.setLbp(entity.getLbp());
-        dto.setPrescriptionStatus(entity.getPrescriptionStatus());
-        dto.setPrescriptionType(entity.getPrescriptionType());
+        dto.setStatus(entity.getStatus());
+        dto.setType(entity.getType());
         dto.setDoctorLbz(entity.getDoctorLbz());
         dto.setReferralReason(entity.getReferralReason());
         dto.setReferralDiagnosis(entity.getReferralDiagnosis());
-        dto.setIdDepartmentTo(entity.getIdDepartmentTo());
-        dto.setIdDepartmentFrom(entity.getIdDepartmentFrom());
+        dto.setDepartmentToId(entity.getDepartmentToId());
+        dto.setDepartmentFromId(entity.getDepartmentFromId());
 
         return dto;
     }
@@ -49,15 +49,15 @@ public class PrescriptionMapper {
 
         Prescription entity=new Prescription();
 
-        entity.setCreation(dto.getCreationDateTime());
+        entity.setCreationDateTime(dto.getCreationDateTime());
         entity.setDoctorLbz(dto.getDoctorLbz());
         entity.setLbp(dto.getLbp());
-        entity.setPrescriptionStatus(dto.getStatus());
-        entity.setPrescriptionType(dto.getType());
+        entity.setStatus(dto.getStatus());
+        entity.setType(dto.getType());
         entity.setReferralReason(dto.getReferralReason());
         entity.setReferralDiagnosis(dto.getReferralDiagnosis());
-        entity.setIdDepartmentFrom(dto.getDepartmentFromId());
-        entity.setIdDepartmentTo(dto.getDepartmentToId());
+        entity.setDepartmentFromId(dto.getDepartmentFromId());
+        entity.setDepartmentToId(dto.getDepartmentToId());
 
         return entity;
     }

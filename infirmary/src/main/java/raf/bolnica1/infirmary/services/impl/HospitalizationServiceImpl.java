@@ -42,6 +42,7 @@ public class HospitalizationServiceImpl implements HospitalizationService {
     @Override
     public Page<HospitalizationDto> getHospitalizationsWithFilter(String name, String surname, String jmbg, Long departmentId, Long hospitalRoomId, String lbp, Date startDate, Date endDate, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
+        if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);
         Page<Hospitalization>hospitalizations=hospitalizationRepository.findHospitalizationsWithFilter(pageable,name,surname,jmbg,departmentId,hospitalRoomId,lbp,startDate,endDate);
         return hospitalizations.map(hospitalizationMapper::toDto);
     }
