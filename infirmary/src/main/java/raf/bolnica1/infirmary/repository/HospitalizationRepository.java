@@ -35,7 +35,7 @@ public interface HospitalizationRepository extends JpaRepository<Hospitalization
             "(:hrId IS NULL OR :hrId=h.hospitalRoom.id) AND " +
             "(:lbp IS NULL OR :lbp=h.prescription.lbp) AND " +
             "(:startDate IS NULL OR :startDate<=h.patientAdmission ) AND " +
-            "(:endDate IS NULL OR :endDate>=h.patientAdmission )")
+            "(:endDate IS NULL OR :endDate>h.patientAdmission )")
     Page<Hospitalization> findHospitalizationsWithFilter(Pageable pageable,@Param("name") String name,
                                                          @Param("surname") String surname,
                                                          @Param("jmbg") String jmbg,

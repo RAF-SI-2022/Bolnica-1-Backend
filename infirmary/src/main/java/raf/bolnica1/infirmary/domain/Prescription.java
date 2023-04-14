@@ -16,14 +16,14 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String doctorLbz;
-    private Long idDepartmentFrom;
-    private Long idDepartmentTo;
+    private Long departmentFromId;
+    private Long departmentToId;
     private String lbp;
-    private Timestamp creation;
+    private Timestamp creationDateTime;
     @Enumerated(EnumType.STRING)
-    private PrescriptionType prescriptionType;
+    private PrescriptionType type;
     @Enumerated(EnumType.STRING)
-    private PrescriptionStatus prescriptionStatus;
+    private PrescriptionStatus status;
     private String referralDiagnosis;
     private String referralReason;
 

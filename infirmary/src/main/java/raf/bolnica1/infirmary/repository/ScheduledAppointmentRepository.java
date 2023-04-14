@@ -27,9 +27,9 @@ public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledA
 
     @Query("SELECT sa FROM ScheduledAppointment sa WHERE " +
             "(:lbp IS NULL OR sa.prescription.lbp=:lbp) AND " +
-            "(:depId IS NULL OR sa.prescription.idDepartmentTo=:depId) AND " +
+            "(:depId IS NULL OR sa.prescription.departmentToId=:depId) AND " +
             "(:startDate IS NULL OR sa.patientAdmission>=:startDate) AND " +
-            "(:endDate IS NULL OR sa.patientAdmission<=:endDate) AND " +
+            "(:endDate IS NULL OR sa.patientAdmission<:endDate) AND " +
             "(:status IS NULL OR sa.admissionStatus=:status)")
     Page<ScheduledAppointment> findScheduledAppointmentWithFilter(Pageable pageable,
                                                                   @Param("lbp") String lbp,

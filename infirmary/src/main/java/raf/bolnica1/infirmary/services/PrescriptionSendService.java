@@ -5,7 +5,7 @@ import raf.bolnica1.infirmary.dto.prescription.PrescriptionReceiveDto;
 
 public interface PrescriptionSendService {
 
-    void createPrescription(PrescriptionReceiveDto prescriptionReceiveDto);
+    void receivePrescription(PrescriptionReceiveDto prescriptionReceiveDto);
 
     void sendPrescription(PrescriptionCreateDto prescriptionCreateDto);
 

@@ -17,6 +17,9 @@ import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Component
 public class HospitalizationMapper {
@@ -76,6 +79,17 @@ public class HospitalizationMapper {
         dto.setJmbg(entity.getJmbg());
         dto.setSurname(entity.getSurname());
         dto.setDischargeDateAndTime(entity.getDischargeDateAndTime());
+
+        return dto;
+    }
+
+    public List<HospitalizationDto> toDto(List<Hospitalization> entity){
+        if(entity==null)return null;
+
+        List<HospitalizationDto> dto=new ArrayList<>();
+
+        for(Hospitalization p:entity)
+            dto.add(toDto(p));
 
         return dto;
     }

@@ -35,7 +35,7 @@ public class PrescriptionSendServiceImpl implements PrescriptionSendService {
     }
 
     @Override
-    public void createPrescription(PrescriptionReceiveDto prescriptionReceiveDto) {
+    public void receivePrescription(PrescriptionReceiveDto prescriptionReceiveDto) {
         Prescription prescription= prescriptionMapper.toEntity(prescriptionReceiveDto);
         prescriptionRepository.save(prescription);
     }

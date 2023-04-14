@@ -9,6 +9,9 @@ import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentDto;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class ScheduledAppointmentMapper {
@@ -27,6 +30,17 @@ public class ScheduledAppointmentMapper {
         dto.setAdmissionStatus(entity.getAdmissionStatus());
         dto.setPrescriptionId(entity.getPrescription().getId());
         dto.setPatientAdmission(entity.getPatientAdmission());
+
+        return dto;
+    }
+
+    public List<ScheduledAppointmentDto> toDto(List<ScheduledAppointment> entity){
+        if(entity==null)return null;
+
+        List<ScheduledAppointmentDto> dto=new ArrayList<>();
+
+        for(ScheduledAppointment s:entity)
+            dto.add(toDto(s));
 
         return dto;
     }

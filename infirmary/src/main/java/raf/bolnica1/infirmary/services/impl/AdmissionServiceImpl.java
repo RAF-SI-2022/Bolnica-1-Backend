@@ -59,7 +59,7 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     private void setPrescriptionStatusById(Long prescriptionId,PrescriptionStatus prescriptionStatus){
         Prescription prescription= prescriptionRepository.findPrescriptionById(prescriptionId);
-        prescription.setPrescriptionStatus(prescriptionStatus);
+        prescription.setStatus(prescriptionStatus);
         prescriptionRepository.save(prescription);
     }
 
@@ -91,7 +91,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Page<ScheduledAppointmentDto> getScheduledAppointmentsWithFilter(String lbp, Long departmentId, Date startDate, Date endDate, AdmissionStatus admissionStatus,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
-
+        if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);
         Page<ScheduledAppointment> scheduledAppointments=scheduledAppointmentRepository.findScheduledAppointmentWithFilter(pageable,lbp,departmentId,startDate,endDate,admissionStatus);
 
         return scheduledAppointments.map(scheduledAppointmentMapper::toDto);
