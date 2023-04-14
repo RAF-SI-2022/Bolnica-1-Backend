@@ -47,5 +47,13 @@ public class RestServiceClientConfig {
         return restTemplate;
     }
 
+    @Bean
+    @Qualifier("labPrescriptionRestTemplate")
+    public RestTemplate labPrescriptionRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8083/api/laboratory/prescription/get_patient"));
+        return restTemplate;
+    }
+
 }
 

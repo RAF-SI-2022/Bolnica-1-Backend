@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -21,7 +21,7 @@ public class PrescriptionDto {
     private String lbp;
     private String doctorLbz;
     private String comment;
-    private Date creationDate;
+    private Timestamp creationDateTime;
     private PrescriptionStatus status;
     private List<PrescriptionAnalysisDataDto> prescriptionAnalysisDataDtoList;
 }
