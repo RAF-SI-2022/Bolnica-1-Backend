@@ -98,6 +98,7 @@ public class DischargeListIntegrationSteps extends DischargeListIntegrationTestC
 
             DischargeListDto pom=dischargeListService.createDischargeList(dischargeListDto);
 
+            dischargeListDto.setId(pom.getId());
             Assertions.assertTrue(classJsonComparator.compareCommonFields(pom,dischargeListDto));
             dischargeListDto=pom;
 

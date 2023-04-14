@@ -164,7 +164,7 @@ public class ClassJsonComparator {
         for(String key:mapA.keySet()){
             if(!mapB.containsKey(key))continue;
             if(mapB.get(key)==null && mapA.get(key)==null)continue;
-            if(mapB.get(key)==null || mapA.get(key)==null)break;
+            if(mapB.get(key)==null || mapA.get(key)==null)return false;
             if(!mapA.get(key).equals(mapB.get(key)))return false;
         }
 
