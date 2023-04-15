@@ -20,6 +20,12 @@ public class DischargeListDtoGenerator {
     private final RandomTimestamp randomTimestamp;
 
 
+    private static DischargeListDtoGenerator getInstance(){
+        return new DischargeListDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance(),RandomTimestamp.getInstance());
+    }
+
     public DischargeListDto getDischargeListDto(Long hospitalizationId){
 
         DischargeListDto ret=new DischargeListDto();

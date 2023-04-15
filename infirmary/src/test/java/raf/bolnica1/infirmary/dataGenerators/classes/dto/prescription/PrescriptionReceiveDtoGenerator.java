@@ -25,6 +25,12 @@ public class PrescriptionReceiveDtoGenerator {
     private final RandomLBP randomLBP;
 
 
+
+    public static PrescriptionReceiveDtoGenerator getInstance(){
+        return new PrescriptionReceiveDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomLBP.getInstance());
+    }
+
     public PrescriptionReceiveDto getPrescriptionReceiveDto(){
 
         PrescriptionReceiveDto ret=new PrescriptionReceiveDto();

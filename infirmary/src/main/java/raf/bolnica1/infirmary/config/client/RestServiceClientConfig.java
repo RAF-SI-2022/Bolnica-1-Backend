@@ -9,7 +9,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 public class RestServiceClientConfig {
     @Bean
     @Qualifier("departmentRestTemplate")
-    public RestTemplate departmentRestTemplate() {
+    public static RestTemplate departmentRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department"));
         return restTemplate;
@@ -17,7 +17,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("loginRestTemplate")
-    public RestTemplate loginRestTemplate() {
+    public static RestTemplate loginRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/auth/login"));
         return restTemplate;
@@ -25,7 +25,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("patientRestTemplate")
-    public RestTemplate patientRestTemplate() {
+    public static RestTemplate patientRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/patient"));
         return restTemplate;
@@ -33,7 +33,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("infoRestTemplate")
-    public RestTemplate infoRestTemplate() {
+    public static RestTemplate infoRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/info"));
         return restTemplate;
@@ -41,7 +41,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("diagnosisCodeRestTemplate")
-    public RestTemplate diagnosisCodeRestTemplate() {
+    public static RestTemplate diagnosisCodeRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/record/gather_diagnosis"));
         return restTemplate;
@@ -49,7 +49,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("labPrescriptionRestTemplate")
-    public RestTemplate labPrescriptionRestTemplate() {
+    public static RestTemplate labPrescriptionRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8083/api/laboratory/prescription/get_patient"));
         return restTemplate;

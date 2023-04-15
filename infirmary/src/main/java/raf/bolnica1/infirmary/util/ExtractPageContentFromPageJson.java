@@ -20,6 +20,11 @@ public class ExtractPageContentFromPageJson {
 
     private ObjectMapper objectMapper;
 
+    public static ExtractPageContentFromPageJson getInstance(){
+        return new ExtractPageContentFromPageJson(new ObjectMapper());
+    }
+
+
     public <T> List<T> extractPageContentFromPageJson(String pageJson, Class<T> clazz) throws JsonProcessingException {
         JsonNode jsonNode=objectMapper.readTree(pageJson);
         String content=jsonNode.get("content").toString();

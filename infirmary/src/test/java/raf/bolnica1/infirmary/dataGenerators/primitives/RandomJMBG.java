@@ -19,6 +19,13 @@ public class RandomJMBG {
     private List<String> list;
     private Random random=new Random();
 
+
+    public static RandomJMBG getInstance(){
+        RandomJMBG ret=new RandomJMBG(PatientGetter.getInstance());
+        return ret;
+    }
+
+
     public RandomJMBG(PatientGetter patientGetter){
         this.patientGetter=patientGetter;
 

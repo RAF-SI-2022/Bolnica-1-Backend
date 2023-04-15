@@ -21,6 +21,12 @@ public class HospitalizationCreateDtoGenerator {
     private final RandomTimestamp randomTimestamp;
 
 
+    public static HospitalizationCreateDtoGenerator getInstance(){
+        return new HospitalizationCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),RandomTime.getInstance(),
+                RandomTimestamp.getInstance());
+    }
+
     public HospitalizationCreateDto getHospitalizationCreateDto(Long hospitalRoomId,Long prescriptionId){
 
         HospitalizationCreateDto ret=new HospitalizationCreateDto();

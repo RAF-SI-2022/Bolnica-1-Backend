@@ -19,6 +19,12 @@ public class RandomSurnames {
     private List<String> list;
     private Random random=new Random();
 
+
+    public static RandomSurnames getInstance(){
+        return new RandomSurnames(PatientGetter.getInstance());
+    }
+
+
     public RandomSurnames(PatientGetter patientGetter){
         this.patientGetter=patientGetter;
 

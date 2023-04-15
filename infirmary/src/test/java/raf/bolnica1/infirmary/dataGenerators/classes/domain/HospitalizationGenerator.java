@@ -28,6 +28,14 @@ public class HospitalizationGenerator {
     private final PrescriptionGenerator prescriptionGenerator;
 
 
+    public static HospitalizationGenerator getInstance(){
+        return new HospitalizationGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),PatientGetter.getInstance(),
+                HospitalRoomGenerator.getInstance(),PrescriptionGenerator.getInstance());
+    }
+
+
+
     public Hospitalization getHospitalization(HospitalRoom hospitalRoom, Prescription prescription){
 
         if(hospitalRoom==null || prescription==null)

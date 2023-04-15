@@ -24,6 +24,12 @@ public class PatientStateDtoGenerator {
 
 
 
+    public static PatientStateDtoGenerator getInstance(){
+        return new PatientStateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance());
+    }
+
     public PatientStateCreateDto getPatientStateCreateDto(Long hospitalizationId){
 
         if(hospitalizationId==null)

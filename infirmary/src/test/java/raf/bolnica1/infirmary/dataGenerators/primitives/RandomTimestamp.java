@@ -21,6 +21,11 @@ public class RandomTimestamp {
     private Random random=new Random();
     private int numberOfStamps=20;
 
+
+    public static RandomTimestamp getInstance(){
+        return new RandomTimestamp();
+    }
+
     public RandomTimestamp(){
 
         list=new ArrayList<>();

@@ -23,6 +23,11 @@ public class PrescriptionCreateDtoGenerator {
     private final RandomLBP randomLBP;
 
 
+    public static PrescriptionCreateDtoGenerator getInstance(){
+        return new PrescriptionCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomLBP.getInstance());
+    }
+
     public PrescriptionCreateDto getPrescriptionCreateDto(){
 
         PrescriptionCreateDto ret=new PrescriptionCreateDto();

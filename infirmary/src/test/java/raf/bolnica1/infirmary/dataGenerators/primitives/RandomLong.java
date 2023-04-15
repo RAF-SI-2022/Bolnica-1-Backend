@@ -11,6 +11,11 @@ public class RandomLong {
 
     private Random random=new Random();
 
+
+    public static RandomLong getInstance(){
+        return new RandomLong();
+    }
+
     public Long getLong(Long max){
         return Math.abs(random.nextLong())%max;
     }

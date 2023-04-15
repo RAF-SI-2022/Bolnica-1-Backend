@@ -19,6 +19,11 @@ public class ScheduledAppointmentMapper {
     private final AuthenticationUtils authenticationUtils;
 
 
+    public static ScheduledAppointmentMapper getInstance(){
+        return new ScheduledAppointmentMapper(AuthenticationUtils.getInstance());
+    }
+
+
     public ScheduledAppointmentDto toDto(ScheduledAppointment entity){
         if(entity==null)return null;
 

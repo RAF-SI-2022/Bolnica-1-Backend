@@ -18,6 +18,12 @@ public class HospitalRoomCreateDtoGenerator {
     private final RandomDouble randomDouble;
     private final RandomTime randomTime;
 
+
+    public static HospitalRoomCreateDtoGenerator getInstance(){
+        return new HospitalRoomCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),RandomTime.getInstance());
+    }
+
     public HospitalRoomCreateDto getHospitalRoomCreateDto(){
 
         HospitalRoomCreateDto ret=new HospitalRoomCreateDto();

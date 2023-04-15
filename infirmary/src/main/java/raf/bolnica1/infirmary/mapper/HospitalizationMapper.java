@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.infirmary.config.client.RestServiceClientConfig;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationCreateDto;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
@@ -27,6 +28,11 @@ public class HospitalizationMapper {
     private final AuthenticationUtils authenticationUtils;
     @Qualifier("patientRestTemplate")
     private final RestTemplate patientRestTemplate;
+
+
+    public static HospitalizationMapper getInstance(){
+        return new HospitalizationMapper(AuthenticationUtils.getInstance(), RestServiceClientConfig.patientRestTemplate());
+    }
 
 
     /// kreiranje

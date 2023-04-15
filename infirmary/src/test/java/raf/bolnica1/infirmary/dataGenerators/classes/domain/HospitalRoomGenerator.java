@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
+import raf.bolnica1.infirmary.mapper.HospitalRoomMapper;
 import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 
 @Component
@@ -17,6 +18,11 @@ public class HospitalRoomGenerator {
     private final RandomJMBG randomJMBG;
     private final RandomLong randomLong;
 
+
+    public static HospitalRoomGenerator getInstance(){
+        return new HospitalRoomGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance());
+    }
 
     public HospitalRoom generateHospitalRoom(){
 

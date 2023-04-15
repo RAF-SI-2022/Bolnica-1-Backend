@@ -13,6 +13,12 @@ import java.util.List;
 @Component
 public class DischargeListMapper {
 
+
+    public static DischargeListMapper getInstance(){
+        return new DischargeListMapper();
+    }
+
+
     public DischargeListDto toDto(DischargeList entity){
         if(entity==null)return null;
 

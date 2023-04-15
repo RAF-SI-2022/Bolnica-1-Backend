@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.dto.prescription.PrescriptionDto;
 import raf.bolnica1.infirmary.dto.prescription.PrescriptionReceiveDto;
+import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,10 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class PrescriptionMapper {
+
+    public static PrescriptionMapper getInstance(){
+        return new PrescriptionMapper();
+    }
 
 
     public PrescriptionDto toDto(Prescription entity){

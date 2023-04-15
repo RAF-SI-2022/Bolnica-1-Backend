@@ -18,6 +18,12 @@ public class RandomNames {
     private List<String> list;
     private Random random=new Random();
 
+
+    public static RandomNames getInstance(){
+        return new RandomNames(PatientGetter.getInstance());
+    }
+
+
     public RandomNames(PatientGetter patientGetter){
         this.patientGetter=patientGetter;
 

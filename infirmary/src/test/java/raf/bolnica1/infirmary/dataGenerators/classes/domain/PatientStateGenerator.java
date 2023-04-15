@@ -29,6 +29,13 @@ public class PatientStateGenerator {
     private final HospitalizationGenerator hospitalizationGenerator;
 
 
+
+    public static PatientStateGenerator getInstance(){
+        return new PatientStateGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),
+                RandomDouble.getInstance(),RandomTime.getInstance(),HospitalizationGenerator.getInstance());
+    }
+
     public PatientState getPatientState(Hospitalization hospitalization){
 
         if(hospitalization==null)

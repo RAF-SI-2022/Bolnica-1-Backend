@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.infirmary.config.client.RestServiceClientConfig;
 import raf.bolnica1.infirmary.dto.externalPatientService.PatientDto;
 
 @Component
@@ -16,6 +17,12 @@ public class JwtTokenGetter {
 
     @Qualifier("loginRestTemplate")
     private final RestTemplate loginRestTemplate;
+
+
+    public static JwtTokenGetter getInstance(){
+        return new JwtTokenGetter(RestServiceClientConfig.loginRestTemplate());
+    }
+
 
     public String getToken(String username,String password){
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.infirmary.config.client.RestServiceClientConfig;
 import raf.bolnica1.infirmary.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
 import raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord.DiagnosisCodeDto;
@@ -32,6 +33,14 @@ public class DiagnosisCodeDtoGenerator {
     private final JwtTokenGetter jwtTokenGetter;
     @Qualifier("diagnosisCodeRestTemplate")
     private final RestTemplate diagnosisCodeRestTemplate;
+
+
+
+    public static DiagnosisCodeDtoGenerator getInstance(){
+        return new DiagnosisCodeDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance(),JwtTokenGetter.getInstance(), RestServiceClientConfig.diagnosisCodeRestTemplate());
+    }
 
     public DiagnosisCodeDto getDiagnosisCodeDto(){
 

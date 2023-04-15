@@ -16,6 +16,11 @@ public class VisitCreateDtoGenerator {
     private final RandomJMBG randomJMBG;
 
 
+    private static VisitCreateDtoGenerator getInstance(){
+        return new VisitCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance());
+    }
+
     public VisitCreateDto getVisitCreateDto(Long hospitalizationId){
 
         VisitCreateDto ret=new VisitCreateDto();
