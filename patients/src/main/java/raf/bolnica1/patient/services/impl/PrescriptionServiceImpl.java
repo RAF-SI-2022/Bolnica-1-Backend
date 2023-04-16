@@ -1,5 +1,7 @@
 package raf.bolnica1.patient.services.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -39,6 +41,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 @Service
+@Getter
+@Setter
 public class PrescriptionServiceImpl implements PrescriptionService {
 
     private JmsTemplate jmsTemplate;
@@ -79,9 +83,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     public MessageDto sendPersctiption(PrescriptionSendDto prescriptionSendDto) {
         if(prescriptionSendDto.getType().equals(PrescriptionType.LABORATORIJA))
-            jmsTemplate.convertAndSend(destinationSendLab, messageHelper.createTextMessage((PrescriptionLabSendDto) prescriptionSendDto));
+            jmsTemplate.convertAndSend(destinationSendLab, messageHelper.createTextMessage(/*(PrescriptionLabSendDto)*/ prescriptionSendDto));
         if(prescriptionSendDto.getType().equals(PrescriptionType.STACIONAR)){
-            jmsTemplate.convertAndSend(destinationSendInfirmary, messageHelper.createTextMessage((PrescriptionInfirmarySendDto) prescriptionSendDto));
+            jmsTemplate.convertAndSend(destinationSendInfirmary, messageHelper.createTextMessage(/*(PrescriptionInfirmarySendDto)*/ prescriptionSendDto));
         }
         return new MessageDto("Uspesno poslat uput");
     }
@@ -108,7 +112,18 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public MessageDto deletePresscription(Long prescriptionId) {
-        jmsTemplate.convertAndSend(destinationDeleteLab, messageHelper.createTextMessage(new PrescriptionDeleteDto(prescriptionId, getLbzFromAuthentication())));
+
+        String lbz = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            lbz = (String) authentication.getPrincipal();
+        }
+        // temp linija, treba malo refaktorisati
+        if(lbz == null) throw new RuntimeException("Something went wrong.");
+
+
+
+        jmsTemplate.convertAndSend(destinationDeleteLab, messageHelper.createTextMessage(new PrescriptionDeleteDto(prescriptionId, lbz)));
         return new MessageDto("Uspesno poslata poruka za brisanje uputa.");
     }
 
@@ -141,15 +156,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         }
     }
 
-    private String getLbzFromAuthentication(){
-        String lbz = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            lbz = (String) authentication.getPrincipal();
-        }
-        // temp linija, treba malo refaktorisati
-        if(lbz == null) throw new RuntimeException("Something went wrong.");
-        return lbz;
-    }
+
 
 }

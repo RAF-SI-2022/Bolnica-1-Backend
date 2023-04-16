@@ -1,6 +1,5 @@
-package raf.bolnica1.patient.services.cucumber.medicalexaminationservice;
+package cucumber.medicalexaminationservice;
 
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.general.AnamnesisDto;
 import raf.bolnica1.patient.dto.general.DiagnosisCodeDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
-import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.services.MedicalExaminationService;
 
 import java.sql.Date;

@@ -1,18 +1,29 @@
 package raf.bolnica1.patient.services.impl;
 
+
 import io.cucumber.java.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
 import raf.bolnica1.patient.domain.prescription.LabResults;
@@ -20,10 +31,8 @@ import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.create.LabResultDto;
 import raf.bolnica1.patient.dto.create.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDeleteDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionSendDto;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionUpdateDto;
-import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
+import raf.bolnica1.patient.dto.prescription.general.*;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
 import raf.bolnica1.patient.messaging.helper.MessageHelper;
@@ -31,8 +40,7 @@ import raf.bolnica1.patient.repository.LabResultsRepository;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.PrescriptionRepository;
 
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,10 +50,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class PrescriptionServiceImplTest {
 
-    /*@InjectMocks
+    @InjectMocks
     private PrescriptionServiceImpl prescriptionService;
 
     @Mock
@@ -64,249 +74,267 @@ public class PrescriptionServiceImplTest {
     @Mock
     private LabResultsRepository labResultsRepository;
 
+
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+     //   MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testSendPersctiption_LaboratorijaType_Success() {
-        // Arrange
-        PrescriptionSendDto prescriptionSendDto = new PrescriptionLabSendDto();
-        when(prescriptionSendDto.getType()).thenReturn(PrescriptionType.LABORATORIJA);
-        //DORADITI!!!
-        //when(prescriptionMapper.getPrescriptionSendDto(any(PrescriptionLabSendDto.class))).thenReturn("prescriptionBody");
+    private PrescriptionSendDto prescriptionSendDto;
 
-        // Act
-        MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
-
-        // Assert
-        verify(jmsTemplate).convertAndSend(eq("destinationSend"), eq("prescriptionBody"));
-        assertEquals("Uspesno poslat uput", result.getMessage());
+    @BeforeEach
+    public void setup() {
+        prescriptionSendDto = new PrescriptionSendDto();
     }
 
-    @Test
-    public void testSendPersctiption_OtherType_Success() {
-        // Arrange
-        PrescriptionSendDto prescriptionSendDto = new PrescriptionSendDto();
-        when(prescriptionSendDto.getType()).thenReturn(PrescriptionType.OTHER);
 
-        // Act
-        MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
+    @Nested
+    class sendPrescription {
 
-        // Assert
-        verify(jmsTemplate, never()).convertAndSend(anyString(), any());
-        assertEquals("Uspesno poslat uput", result.getMessage());
+        private final String destinationSendLab = "string";
+
+        @Test
+        public void testSendPresctiption_LaboratorijaType_Success() {
+            // Arrange
+            prescriptionSendDto.setType(PrescriptionType.LABORATORIJA);
+            prescriptionService.setDestinationSendLab("des");
+            prescriptionService.setDestinationSendInfirmary("desInfirmary");
+
+            when(messageHelper.createTextMessage(prescriptionSendDto)).thenReturn("true");
+
+
+            MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
+
+
+            assertEquals("Uspesno poslat uput", result.getMessage());
+
+            verify(jmsTemplate).convertAndSend("des", (Object) "true");
+            verify(messageHelper).createTextMessage(prescriptionSendDto);
+            verify(jmsTemplate, never()).convertAndSend("desInfirmary", (Object) "true");
+
+
+        }
+
+
+        @Test
+        public void testSendPresctiption_STACIONARType_Success() {
+            // Arrange
+            prescriptionSendDto.setType(PrescriptionType.STACIONAR);
+            prescriptionService.setDestinationSendLab("des");
+            prescriptionService.setDestinationSendInfirmary("desInfirmary");
+
+            when(messageHelper.createTextMessage(prescriptionSendDto)).thenReturn("true");
+
+
+            MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
+
+
+            assertEquals("Uspesno poslat uput", result.getMessage());
+
+            verify(jmsTemplate).convertAndSend("desInfirmary", (Object) "true");
+            verify(messageHelper).createTextMessage(prescriptionSendDto);
+            verify(jmsTemplate, never()).convertAndSend("des", (Object) "true");
+
+        }
+
+
+
+        @Test
+        public void testSendPresctiption_DIJAGNOSTIKAType_Success() {
+            // Arrange
+            prescriptionSendDto.setType(PrescriptionType.DIJAGNOSTIKA);
+            prescriptionService.setDestinationSendLab("des");
+            prescriptionService.setDestinationSendInfirmary("desInfirmary");
+
+            MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
+
+
+            assertEquals("Uspesno poslat uput", result.getMessage());
+
+            verify(jmsTemplate, never()).convertAndSend("desInfirmary", (Object) "true");
+            verify(messageHelper, never()).createTextMessage(prescriptionSendDto);
+            verify(jmsTemplate, never()).convertAndSend("des", (Object) "true");
+
+        }
+
     }
 
-    @Test
-    public void testSendPersctiption_Success() {
-        // Arrange
-        PrescriptionSendDto prescriptionSendDto = new PrescriptionLabSendDto();
-        prescriptionSendDto.setType(PrescriptionType.LABORATORIJA);
-        String destinationSend = "destinationSend";
-        when(prescriptionMapper.getPrescriptionSendDto(any(PrescriptionLabSendDto.class))).thenReturn(new PrescriptionSendDto());
-        when(messageHelper.createTextMessage(any(PrescriptionSendDto.class))).thenReturn("textMessage");
-
-        // Act
-        MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Uspesno poslat uput", result.getMessage());
-        verify(jmsTemplate, times(1)).convertAndSend(eq(destinationSend), eq("textMessage"));
-    }
 
     @Test
-    public void testSendPersctiption_TypeNotLab_ReturnsNull() {
-        // Arrange
-        PrescriptionSendDto prescriptionSendDto = new PrescriptionSendDto();
-        prescriptionSendDto.setType(PrescriptionType.NEKA_VRSTA);
-        String destinationSend = "destinationSend";
+    public void getPrescriptionsForPatientTest() {
 
-        // Act
-        MessageDto result = prescriptionService.sendPersctiption(prescriptionSendDto);
-
-        // Assert
-        assertNotNull(result);
-        assertNull(result.getMessage());
-        verify(jmsTemplate, times(0)).convertAndSend(eq(destinationSend), any(String.class));
-    }
-
-    @Test
-    public void testGetPrescriptionsForPatient_Success() {
-        // Arrange
-        String lbz = "lbz";
-        String lbp = "lbp";
-        String token = "token";
+        String lbz = "some_lbz";
+        String lbp = "some_lbp";
+        String token = "Bearer some_token";
         int page = 0;
         int size = 10;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token.substring(7));
-        HttpEntity entity = new HttpEntity(null, httpHeaders);
-        ArrayList<PrescriptionNewDto> prescriptionList = new ArrayList<>();
-        prescriptionList.add(new PrescriptionNewDto());
-        ParameterizedTypeReference<ArrayList<PrescriptionNewDto>> type = new ParameterizedTypeReference<ArrayList<PrescriptionNewDto>>() {};
-        ResponseEntity<ArrayList<PrescriptionNewDto>> responseEntity = new ResponseEntity<>(prescriptionList, HttpStatus.OK);
-        when(labRestTemplate.exchange(anyString(), eq(HttpMethod.GET), eq(entity), eq(type))).thenReturn(responseEntity);
-
-        // Act
+        List<PrescriptionNewDto> prescriptionDtos = new ArrayList<>();
+        prescriptionDtos.add(new PrescriptionNewDto());
+        prescriptionDtos.add(new PrescriptionNewDto());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth("some_token");
+        when(labRestTemplate.exchange(eq("/prescription/" + lbz + "/get_rest/" + lbp), eq(HttpMethod.GET), eq(new HttpEntity<>(null, headers)), any(ParameterizedTypeReference.class)))
+                .thenReturn(ResponseEntity.ok(prescriptionDtos));
+        // act
         Page<PrescriptionNewDto> result = prescriptionService.getPrescriptionsForPatient(lbz, lbp, token, page, size);
+        // assert
+        assertEquals(2, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+        assertEquals(2, result.getTotalElements());
+        assertEquals(0, result.getNumber());
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(prescriptionList.size(), result.getContent().size());
-        verify(labRestTemplate, times(1)).exchange(eq("/prescription/"+lbz+"/get_rest/"+lbp), eq(HttpMethod.GET), eq(entity), eq(type));
+
     }
 
-    private String destinationSend = "destinationSend";
-    private String destinationDelete = "destinationDelete";
-    private String destinationUpdate = "destinationUpdate";
 
     @Test
     public void testUpdatePrescription() {
         // Prepare test data
         PrescriptionUpdateDto prescriptionUpdateDto = new PrescriptionUpdateDto();
+        prescriptionService.setDestinationUpdateLab("dest");
         // Mock the JmsTemplate and MessageHelper
-        when(jmsTemplate.convertAndSend(eq(destinationUpdate), any(Message.class))).thenReturn(null);
-        when(messageHelper.createTextMessage(any(PrescriptionUpdateDto.class))).thenReturn(new TextMessageStub());
-        // Call the method to be tested
+        when(messageHelper.createTextMessage(prescriptionUpdateDto)).thenReturn("true");
+
         MessageDto result = prescriptionService.updatePrescription(prescriptionUpdateDto);
-        // Verify the JmsTemplate and MessageHelper were called with correct arguments
-        verify(jmsTemplate).convertAndSend(eq(destinationUpdate), any(Message.class));
-        verify(messageHelper).createTextMessage(eq(prescriptionUpdateDto));
-        // Assert the result
-        assertNotNull(result);
+
         assertEquals("Uspesno poslata poruka za azuriranje uputa.", result.getMessage());
+
+
+        verify(jmsTemplate, times(1)).convertAndSend("dest", "true");
+        verify(messageHelper, times(1)).createTextMessage(eq(prescriptionUpdateDto));
+
     }
 
-    @Test
-    public void testDeletePrescription() {
-        // Prepare test data
-        Long prescriptionId = 1L;
-        // Mock the JmsTemplate and MessageHelper
-        when(jmsTemplate.convertAndSend(eq(destinationDelete), any(Message.class))).thenReturn(null);
-        when(messageHelper.createTextMessage(any(PrescriptionDeleteDto.class))).thenReturn(new TextMessageStub());
-        when(patientRepository.getLbzFromAuthentication()).thenReturn("lbz");
-        // Call the method to be tested
-        MessageDto result = prescriptionService.deletePresscription(prescriptionId);
-        // Verify the JmsTemplate, MessageHelper, and PatientRepository were called with correct arguments
-        verify(jmsTemplate).convertAndSend(eq(destinationDelete), any(Message.class));
-        verify(messageHelper).createTextMessage(eq(new PrescriptionDeleteDto(prescriptionId, "lbz")));
-        verify(patientRepository).getLbzFromAuthentication();
-        // Assert the result
-        assertNotNull(result);
-        assertEquals("Uspesno poslata poruka za brisanje uputa.", result.getMessage());
-    }
 
-    // Helper class for mocking the TextMessage
-    private static class TextMessageStub implements TextMessage {
-        @Override
-        public String getText() throws JMSException {
-            return null;
+
+        @Test
+        public void deletePresscriptionSuccessfulTest() {
+
+            String lbz = "testUser";
+            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(authority);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(lbz, null, authorities);
+            SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            SecurityContextHolder.setContext(securityContext);
+
+            long prescriptionId = 1l;
+            PrescriptionDeleteDto prescriptionDeleteDto = new PrescriptionDeleteDto(prescriptionId, lbz);
+       //     String expectedMessage = messageHelper.createTextMessage(prescriptionDeleteDto);
+
+           when(messageHelper.createTextMessage(prescriptionDeleteDto)).thenReturn("true");
+    //        Mockito.doNothing().when(jmsTemplate).convertAndSend(Mockito.anyString(), Mockito.eq(expectedMessage));
+
+            prescriptionService.setDestinationDeleteLab("dest");
+            MessageDto res = prescriptionService.deletePresscription(prescriptionId);
+
+            // Assert
+            assertEquals("Uspesno poslata poruka za brisanje uputa.", res.getMessage());
+        //    verify(jmsTemplate).convertAndSend(Mockito.anyString(), Mockito.eq("true"));
+
         }
-        // Implement other methods as needed
-    }
+
+
+
+
 
     @Test
-    public void testGetAllDonePrescriptionsForPatient() {
-        // Mocking data
+    public void getAllDonePrescriptionsForPatientTest(){
+
+
+
         String lbp = "123456789";
-        Date dateFrom = new Date();
-        Date dateTo = new Date();
+        Date dateFrom = new Date(2020, 01, 15);
+        Date dateTo = new Date(2023, 01, 15);
         int page = 0;
         int size = 10;
-
         Pageable pageable = PageRequest.of(page, size);
-        Page<Prescription> prescriptionPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
-        when(prescriptionRepository.findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo)).thenReturn(prescriptionPage);
+        Prescription prescription1 = new Prescription();
+        Prescription prescription2 = new Prescription();
+        List<Prescription> prescriptions = Arrays.asList(prescription1, prescription2);
+        when(prescriptionRepository.findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo))
+                .thenReturn(new PageImpl<>(prescriptions));
+        PrescriptionDoneDto prescriptionDoneDto1 = new PrescriptionDoneDto();
+        PrescriptionDoneDto prescriptionDoneDto2 = new PrescriptionDoneDto();
+        List<PrescriptionDoneDto> prescriptionDoneDtos = Arrays.asList(prescriptionDoneDto1, prescriptionDoneDto2);
+        when(prescriptionMapper.toDto(prescription1)).thenReturn(prescriptionDoneDto1);
+        when(prescriptionMapper.toDto(prescription2)).thenReturn(prescriptionDoneDto2);
 
-        // Test
-        Page<PrescriptionDoneDto> result = prescriptionService.getAllDonePrescriptionsForPatient(lbp, dateFrom, dateTo, page, size);
+        // Act
+        Page<PrescriptionDoneDto> result = prescriptionService.getAllDonePrescriptionsForPatient(lbp, (java.sql.Date) dateFrom, dateTo, page, size);
 
-        // Assertions
-        assertNotNull(result);
-        assertEquals(0, result.getTotalElements());
-        assertEquals(page, result.getPageable().getPageNumber());
-        assertEquals(size, result.getPageable().getPageSize());
+        // Assert
+        assertEquals(2, result.getTotalElements());
+        assertEquals(prescriptionDoneDtos, result.getContent());
+        verify(prescriptionRepository).findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo);
+        verify(prescriptionMapper).toDto(prescription1);
+        verify(prescriptionMapper).toDto(prescription2);
     }
 
-    @Test
-    public void testGetPrescription() {
-        // Mocking data
-        Long prescriptionId = 1L;
-        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(token.substring(7));
-        HttpEntity entity = new HttpEntity(null, httpHeaders);
-        ResponseEntity<PrescriptionDoneLabDto> prescriptionResponse = new ResponseEntity<>(new PrescriptionDoneLabDto(), HttpStatus.OK);
-        when(labRestTemplate.exchange(eq("/prescription/"+prescriptionId), eq(HttpMethod.GET), eq(entity), eq(PrescriptionDoneLabDto.class))).thenReturn(prescriptionResponse);
 
-        // Test
-        PrescriptionDoneDto result = prescriptionService.getPrescription(prescriptionId, token);
-
-        // Assertions
-        assertNotNull(result);
-        // Add more assertions based on the expected behavior of the method
-    }
 
     @Test
-    public void testGetPrescription() {
-        // Mocking
-        Long prescriptionId = 1L;
-        String token = "Bearer <token>";
+    public void getPrescriptionTest(){
+
+        Long prescriptionId = 123L;
+        String token = "Bearer abc123";
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token.substring(7));
         HttpEntity entity = new HttpEntity(null, httpHeaders);
         PrescriptionDoneLabDto prescriptionDoneLabDto = new PrescriptionDoneLabDto();
+        prescriptionDoneLabDto.setId(prescriptionId);
+        prescriptionDoneLabDto.setComment("comment");
         ResponseEntity<PrescriptionDoneLabDto> responseEntity = new ResponseEntity<>(prescriptionDoneLabDto, HttpStatus.OK);
-        Mockito.when(labRestTemplate.exchange(Mockito.anyString(), Mockito.eq(HttpMethod.GET), Mockito.eq(entity), Mockito.eq(PrescriptionDoneLabDto.class))).thenReturn(responseEntity);
+        when(labRestTemplate.exchange(eq("/prescription/" + prescriptionId), eq(HttpMethod.GET), eq(entity), eq(PrescriptionDoneLabDto.class)))
+                .thenReturn(responseEntity);
 
-        // Test
+        // Act
         PrescriptionDoneDto result = prescriptionService.getPrescription(prescriptionId, token);
 
-        // Assertions
-        assertNotNull(result);
-        // Add more assertions based on the expected behavior of the method
+        // Assert
+        assertEquals(prescriptionId, result.getId());
+
+        verify(labRestTemplate).exchange(eq("/prescription/" + prescriptionId), eq(HttpMethod.GET), eq(entity), eq(PrescriptionDoneLabDto.class));
+
+
     }
+
+
 
     @Test
-    public void testCreatePrescription() {
-        // Mocking
-        PrescriptionCreateDto prescriptionCreateDto = new PrescriptionCreateDto();
-        Prescription prescription = new Prescription();
-        LabResultDto labResultDto1 = new LabResultDto();
-        LabResultDto labResultDto2 = new LabResultDto();
-        List<LabResultDto> labResultDtoList = Arrays.asList(labResultDto1, labResultDto2);
-        prescriptionCreateDto.setLabResultDtoList(labResultDtoList);
-        LabResults labResults1 = new LabResults();
-        LabResults labResults2 = new LabResults();
-        Mockito.when(prescriptionMapper.toEntity(Mockito.any(PrescriptionCreateDto.class))).thenReturn(prescription);
-        Mockito.when(prescriptionRepository.save(Mockito.any(Prescription.class))).thenReturn(prescription);
-        Mockito.when(prescriptionMapper.getLabResult(Mockito.any(Prescription.class), Mockito.any(LabResultDto.class))).thenReturn(labResults1, labResults2);
+    public void createPrescriptionTest() {
 
-        // Test
+
+        Prescription prescription = new Prescription();
+        PrescriptionCreateDto prescriptionCreateDto = new PrescriptionCreateDto();
+        prescriptionCreateDto.setType("LABORATORIJA");
+
+
+        LabResultDto labResultDto = new LabResultDto();
+        LabResults labResults1 = new LabResults();
+        List<LabResultDto> list = new ArrayList<>();
+        list.add(labResultDto);
+        prescriptionCreateDto.setLabResultDtoList(list);
+
+
+        when(prescriptionMapper.toEntity(prescriptionCreateDto)).thenReturn(prescription);
+        when(prescriptionRepository.save(prescription)).thenReturn(prescription);
+        when(prescriptionMapper.getLabResult(prescription, labResultDto)).thenReturn(labResults1);
+
+
         prescriptionService.createPrescription(prescriptionCreateDto);
 
-        // Assertions
-        Mockito.verify(prescriptionMapper).toEntity(prescriptionCreateDto);
-        Mockito.verify(prescriptionRepository).save(prescription);
-        Mockito.verify(prescriptionMapper, Mockito.times(2)).getLabResult(prescription, labResultDto1); // verify that getLabResult() is called twice for each lab result
-        Mockito.verify(prescriptionMapper, Mockito.times(2)).getLabResult(prescription, labResultDto2);
-        Mockito.verify(labResultsRepository).save(labResults1);
-        Mockito.verify(labResultsRepository).save(labResults2);
-        // Add more assertions based on the expected behavior of the method
+
+
+        verify(prescriptionMapper, times(1)).toEntity(prescriptionCreateDto);
+        verify(prescriptionRepository, times(1)).save(prescription);
+        verify(prescriptionMapper, times(1)).getLabResult(prescription, labResultDto);
+        verify(labResultsRepository, times(1)).save(labResults1);
+
+
+
+
     }
-
-    private String getLbzFromAuthentication(){
-        String lbz = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            lbz = (String) authentication.getPrincipal();
-        }
-        // temp linija, treba malo refaktorisati
-        if(lbz == null) throw new RuntimeException("Something went wrong.");
-        return lbz;
-    }*/
-
 }
