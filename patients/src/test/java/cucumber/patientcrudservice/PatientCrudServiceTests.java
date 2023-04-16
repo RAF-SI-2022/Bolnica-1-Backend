@@ -1,4 +1,4 @@
-package raf.bolnica1.patient.services.cucumber.medicalexaminationservice;
+package cucumber.patientcrudservice;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
@@ -9,7 +9,7 @@ import static io.cucumber.core.options.Constants.GLUE_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features/medicalexaminationservice")
+@SelectClasspathResource("features/patientcrudservice")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "raf.bolnica1.patient.services.cucumber.patientcrudservice")
-public class MedicalExaminationServiceTests {
+public class PatientCrudServiceTests {
 }
