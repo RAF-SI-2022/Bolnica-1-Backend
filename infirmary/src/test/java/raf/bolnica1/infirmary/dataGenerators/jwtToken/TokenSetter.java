@@ -19,6 +19,10 @@ public class TokenSetter {
     private final JwtUtils jwtUtils;
 
 
+    public static TokenSetter getInstance(){
+        return new TokenSetter(JwtUtils.getInstance());
+    }
+
     /// setuje LBZ u security context i returnuje LBZ
     public String setToken(String customToken){
 

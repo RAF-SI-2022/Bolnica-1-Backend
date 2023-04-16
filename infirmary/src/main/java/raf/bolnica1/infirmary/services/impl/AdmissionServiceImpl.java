@@ -46,9 +46,6 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final HospitalizationRepository hospitalizationRepository;
 
 
-    /// SERVICES
-    private final HospitalRoomService hospitalRoomService;
-
 
 
     private void increaseHospitalRoomOccupancy(Long hospitalRoomId) {
@@ -80,11 +77,8 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     @Override
     public ScheduledAppointmentDto createScheduledAppointment(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto) {
-
         ScheduledAppointment scheduledAppointment= scheduledAppointmentMapper.toEntity(scheduledAppointmentCreateDto,prescriptionRepository);
-
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);
-
         return scheduledAppointmentMapper.toDto(scheduledAppointment);
     }
 
@@ -93,37 +87,27 @@ public class AdmissionServiceImpl implements AdmissionService {
         Pageable pageable= PageRequest.of(page,size);
         if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);
         Page<ScheduledAppointment> scheduledAppointments=scheduledAppointmentRepository.findScheduledAppointmentWithFilter(pageable,lbp,departmentId,startDate,endDate,admissionStatus);
-
         return scheduledAppointments.map(scheduledAppointmentMapper::toDto);
     }
 
     @Override
     public ScheduledAppointmentDto getScheduledAppointmentByPrescriptionId(Long prescriptionId) {
-
         ScheduledAppointment scheduledAppointment=scheduledAppointmentRepository.findScheduledAppointmentByPrescriptionId(prescriptionId);
-
         return scheduledAppointmentMapper.toDto(scheduledAppointment);
     }
 
     @Override
     public Page<PrescriptionDto> getPrescriptionsWithFilter(String lbp, Long departmentId, PrescriptionStatus prescriptionStatus,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
-
         Page<Prescription> prescriptions=prescriptionRepository.findPrescriptionWithFilter(pageable,lbp,departmentId,prescriptionStatus);
-
         return prescriptions.map(prescriptionMapper::toDto);
     }
 
     @Override
     public MessageDto setScheduledAppointmentStatus(Long scheduledAppointmentId, AdmissionStatus admissionStatus) {
-
         ScheduledAppointment scheduledAppointment=scheduledAppointmentRepository.findScheduledAppointmentById(scheduledAppointmentId);
-
         scheduledAppointment.setAdmissionStatus(admissionStatus);
-
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);
-
         return new MessageDto("ScheduledAppointment sa ID "+scheduledAppointment.getId()+" promenjen status na "+scheduledAppointment.getAdmissionStatus().name());
-
     }
 }

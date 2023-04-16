@@ -38,8 +38,8 @@ public class HospitalizationGenerator {
 
     public Hospitalization getHospitalization(HospitalRoom hospitalRoom, Prescription prescription){
 
-        if(hospitalRoom==null || prescription==null)
-            throw new RuntimeException();
+        //if(hospitalRoom==null || prescription==null)
+          //  throw new RuntimeException();
 
         Hospitalization ret=new Hospitalization();
 
