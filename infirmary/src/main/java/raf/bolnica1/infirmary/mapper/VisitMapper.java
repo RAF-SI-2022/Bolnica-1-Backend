@@ -1,6 +1,8 @@
 package raf.bolnica1.infirmary.mapper;
 
+import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.Visit;
 import raf.bolnica1.infirmary.dto.visit.VisitCreateDto;
@@ -11,6 +13,7 @@ import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Component
 @AllArgsConstructor
 public class VisitMapper {
@@ -70,5 +73,6 @@ public class VisitMapper {
 
         return entity;
     }
+
 
 }

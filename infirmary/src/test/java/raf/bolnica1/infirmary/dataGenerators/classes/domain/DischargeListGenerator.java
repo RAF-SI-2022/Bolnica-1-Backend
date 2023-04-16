@@ -1,13 +1,16 @@
-package raf.bolnica1.infirmary.dataGenerators.classes.dto.dischargeList;
+package raf.bolnica1.infirmary.dataGenerators.classes.domain;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import raf.bolnica1.infirmary.dataGenerators.classes.dto.dischargeList.DischargeListDtoGenerator;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
+import raf.bolnica1.infirmary.domain.DischargeList;
+import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 
-@AllArgsConstructor
 @Component
-public class DischargeListDtoGenerator {
+@AllArgsConstructor
+public class DischargeListGenerator {
 
     private final RandomString randomString;
     private final RandomNames randomNames;
@@ -20,20 +23,20 @@ public class DischargeListDtoGenerator {
     private final RandomTimestamp randomTimestamp;
 
 
-    public static DischargeListDtoGenerator getInstance(){
-        return new DischargeListDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+    public static DischargeListGenerator getInstance(){
+        return new DischargeListGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
                 RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
                 RandomTime.getInstance(),RandomTimestamp.getInstance());
     }
 
-    public DischargeListDto getDischargeListDto(Long hospitalizationId){
+    public DischargeList getDischargeList(Hospitalization hospitalization){
 
-        DischargeListDto ret=new DischargeListDto();
+        DischargeList ret=new DischargeList();
 
         ret.setCourseOfDisease(randomString.getString(10));
         ret.setTherapy(randomString.getString(10));
         ret.setId(null);
-        ret.setHospitalizationId(hospitalizationId);
+        ret.setHospitalization(hospitalization);
         ret.setSummary(randomString.getString(10));
         ret.setLbzDepartment(randomString.getString(10));
         ret.setAnalysis(randomString.getString(10));

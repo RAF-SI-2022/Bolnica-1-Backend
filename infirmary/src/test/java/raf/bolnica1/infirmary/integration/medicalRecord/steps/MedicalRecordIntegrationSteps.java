@@ -65,6 +65,7 @@ public class MedicalRecordIntegrationSteps extends MedicalRecordIntegrationTestC
 
         try{
             String token= jwtTokenGetter.getDrMedSpec();
+            Thread.sleep(1000);
             medicalRecordDto=medicalRecordService.getMedicalRecordByLbp(lbp, "Bearer " + token);
             patientLbp=lbp;
         }catch (Exception e){
@@ -78,6 +79,7 @@ public class MedicalRecordIntegrationSteps extends MedicalRecordIntegrationTestC
         try{
 
             boolean flag=false;
+            ///System.out.println(medicalRecordDto.getExaminationHistoryDtos().size()+" SIZEEE");
             for(ExaminationHistoryDto examinationHistoryDto: medicalRecordDto.getExaminationHistoryDtos())
                 if(classJsonComparator.compareCommonFields(examinationHistoryDto,examinationHistoryCreateDto))
                     flag=true;

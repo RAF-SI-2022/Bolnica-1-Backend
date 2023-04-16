@@ -17,6 +17,10 @@ public class PatientStateFilterGenerator {
     private RandomDate randomDate;
 
 
+    public static PatientStateFilterGenerator getInstance(){
+        return new PatientStateFilterGenerator(RandomLong.getInstance(),RandomDate.getInstance());
+    }
+
     public PatientStateFilter getRandomFilter(){
         PatientStateFilter patientStateFilter=new PatientStateFilter();
         long maxIds=3;

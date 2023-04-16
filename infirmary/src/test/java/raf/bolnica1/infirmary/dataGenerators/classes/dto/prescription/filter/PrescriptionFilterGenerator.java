@@ -15,6 +15,11 @@ public class PrescriptionFilterGenerator {
     private final RandomLBP randomLBP;
     private final RandomLong randomLong;
 
+
+    public static PrescriptionFilterGenerator getInstance(){
+        return new PrescriptionFilterGenerator(RandomLBP.getInstance(),RandomLong.getInstance());
+    }
+
     public PrescriptionFilter getRandomFilter(){
 
         PrescriptionFilter f=new PrescriptionFilter();

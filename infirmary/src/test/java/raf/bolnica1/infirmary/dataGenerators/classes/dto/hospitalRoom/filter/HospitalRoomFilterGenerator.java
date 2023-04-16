@@ -15,6 +15,11 @@ public class HospitalRoomFilterGenerator {
     @Autowired
     private RandomLong randomLong;
 
+
+    public static HospitalRoomFilterGenerator getInstance(){
+        return new HospitalRoomFilterGenerator(RandomLong.getInstance());
+    }
+
     public HospitalRoomFilter getRandomFilter(){
 
         HospitalRoomFilter filter=new HospitalRoomFilter();

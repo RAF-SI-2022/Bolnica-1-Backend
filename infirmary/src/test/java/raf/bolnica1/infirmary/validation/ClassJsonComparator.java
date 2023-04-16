@@ -19,7 +19,7 @@ public class ClassJsonComparator {
 
 
 
-    private static ClassJsonComparator getInstance(){
+    public static ClassJsonComparator getInstance(){
         return new ClassJsonComparator(new ObjectMapper());
     }
 
@@ -176,7 +176,7 @@ public class ClassJsonComparator {
         return true;
     }
 
-    public <T> boolean compareListCommonFields(List<T> a, List<T> b){
+    public <T,U> boolean compareListCommonFields(List<T> a, List<U> b){
         if(a==null && b==null)return true;
         if(a==null || b==null){
             return false;

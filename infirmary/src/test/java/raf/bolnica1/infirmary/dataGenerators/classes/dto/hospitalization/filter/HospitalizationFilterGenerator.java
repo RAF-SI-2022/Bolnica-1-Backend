@@ -20,6 +20,12 @@ public class HospitalizationFilterGenerator {
     private final RandomLBP randomLBP;
 
 
+    public static HospitalizationFilterGenerator getInstance(){
+        return new HospitalizationFilterGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance(),RandomLBP.getInstance());
+    }
+
     public HospitalizationFilter getRandomFilter(){
         HospitalizationFilter filter=new HospitalizationFilter();
 

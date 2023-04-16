@@ -21,6 +21,10 @@ public class ScheduledAppointmentFilterGenerator {
     private RandomLBP randomLBP;
 
 
+    public static ScheduledAppointmentFilterGenerator getInstance(){
+        return new ScheduledAppointmentFilterGenerator(RandomLong.getInstance(),RandomDate.getInstance(),RandomLBP.getInstance());
+    }
+
     public ScheduledAppointmentFilter getRandomFilter(){
 
         ScheduledAppointmentFilter f=new ScheduledAppointmentFilter();

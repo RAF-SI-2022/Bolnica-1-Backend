@@ -17,6 +17,10 @@ public class VisitFilterGenerator {
     private RandomDate randomDate;
 
 
+    public static VisitFilterGenerator getInstance(){
+        return new VisitFilterGenerator(RandomLong.getInstance(),RandomDate.getInstance());
+    }
+
     public VisitFilter getRandomFilter(){
         VisitFilter visitFilter=new VisitFilter();
         long maxIds=3;
