@@ -26,7 +26,7 @@ public class LaboratoryPrescriptionController {
         return new ResponseEntity<>(prescriptionRecieveService.findPrescriptionsForPatient(lbp, doctorLbz, page, size), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/get_patient/{lbp}")
+    @GetMapping("/get_patient/{lbp}")
     public ResponseEntity<Page<PrescriptionDto>> getPrescriptionsForPatient(@PathVariable("lbp") String lbp,
                                                                                  @RequestParam(defaultValue = "0") Integer page,
                                                                                  @RequestParam(defaultValue = "10") Integer size){

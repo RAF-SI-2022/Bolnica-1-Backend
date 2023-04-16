@@ -11,6 +11,12 @@ public class RandomDouble {
 
     private Random random=new Random();
 
+
+    public static RandomDouble getInstance(){
+        return new RandomDouble();
+    }
+
+
     public Double getDouble(Double max){
         return Math.abs(random.nextDouble())%max;
     }

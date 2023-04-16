@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.infirmary.config.client.RestServiceClientConfig;
 import raf.bolnica1.infirmary.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.infirmary.dto.externalPatientService.PatientDto;
 import raf.bolnica1.infirmary.util.ExtractPageContentFromPageJson;
@@ -31,6 +32,12 @@ public class PatientGetter {
     private ObjectMapper objectMapper;
     @Autowired
     private ExtractPageContentFromPageJson extractPageContentFromPageJson;
+
+
+    public static PatientGetter getInstance(){
+        return new PatientGetter(JwtTokenGetter.getInstance(), RestServiceClientConfig.patientRestTemplate(),
+                new ObjectMapper(),ExtractPageContentFromPageJson.getInstance());
+    }
 
 
     public List<PatientDto> getAllPatients(){

@@ -18,6 +18,13 @@ public class AnamnesisDtoGenerator {
     private final RandomDouble randomDouble;
     private final RandomTime randomTime;
 
+
+    public static AnamnesisDtoGenerator getInstance(){
+        return new AnamnesisDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance());
+    }
+
     public AnamnesisDto getAnamnesisDto(){
 
         AnamnesisDto ret=new AnamnesisDto();

@@ -22,6 +22,12 @@ public class ExaminationHistoryCreateDtoGenerator {
 
 
 
+    public static ExaminationHistoryCreateDtoGenerator getInstance(){
+        return new ExaminationHistoryCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomJMBG.getInstance(),RandomLong.getInstance(),RandomDate.getInstance(),RandomDouble.getInstance(),
+                RandomTime.getInstance(),AnamnesisDtoGenerator.getInstance(),DiagnosisCodeDtoGenerator.getInstance());
+    }
+
     public ExaminationHistoryCreateDto getExaminationHistoryCreateDto(String lbp){
 
         if(lbp==null)

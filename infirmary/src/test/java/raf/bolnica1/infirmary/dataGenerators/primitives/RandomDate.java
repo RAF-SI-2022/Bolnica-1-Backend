@@ -21,6 +21,11 @@ public class RandomDate {
     private int numberOfStamps=20;
     private long millisInDay=24*60*60*1000;
 
+
+    public static RandomDate getInstance(){
+        return new RandomDate();
+    }
+
     public RandomDate(){
 
         list=new ArrayList<>();

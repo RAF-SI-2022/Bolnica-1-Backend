@@ -18,6 +18,11 @@ public class ScheduledAppointmentCreateDtoGenerator {
     private final RandomLBP randomLBP;
 
 
+    public static ScheduledAppointmentCreateDtoGenerator getInstance(){
+        return new ScheduledAppointmentCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomLBP.getInstance());
+    }
+
     public ScheduledAppointmentCreateDto getScheduledAppointmentCreateDto(Long prescriptionId){
 
         ScheduledAppointmentCreateDto ret=new ScheduledAppointmentCreateDto();

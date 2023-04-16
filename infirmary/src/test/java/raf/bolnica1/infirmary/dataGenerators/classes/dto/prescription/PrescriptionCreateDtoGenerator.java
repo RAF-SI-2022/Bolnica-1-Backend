@@ -1,20 +1,18 @@
 package raf.bolnica1.infirmary.dataGenerators.classes.dto.prescription;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionType;
+import raf.bolnica1.infirmary.dto.externalLabService.PrescriptionCreateDto;
 import raf.bolnica1.infirmary.dto.prescription.PrescriptionReceiveDto;
-import raf.bolnica1.infirmary.dto.visit.VisitCreateDto;
 
-import java.sql.Timestamp;
-import java.util.Random;
+import java.util.ArrayList;
 
 @Component
 @AllArgsConstructor
-public class PrescriptionReceiveDtoGenerator {
+public class PrescriptionCreateDtoGenerator {
 
     private final RandomString randomString;
     private final RandomNames randomNames;
@@ -25,15 +23,14 @@ public class PrescriptionReceiveDtoGenerator {
     private final RandomLBP randomLBP;
 
 
-
-    public static PrescriptionReceiveDtoGenerator getInstance(){
-        return new PrescriptionReceiveDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+    public static PrescriptionCreateDtoGenerator getInstance(){
+        return new PrescriptionCreateDtoGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
                 RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomLBP.getInstance());
     }
 
-    public PrescriptionReceiveDto getPrescriptionReceiveDto(){
+    public PrescriptionCreateDto getPrescriptionCreateDto(){
 
-        PrescriptionReceiveDto ret=new PrescriptionReceiveDto();
+        PrescriptionCreateDto ret=new PrescriptionCreateDto();
 
         ret.setType(PrescriptionType.values()[ randomLong.getLong(new Long(PrescriptionType.values().length) ).intValue() ]);
         ret.setDoctorLbz(randomString.getString(10));
@@ -41,9 +38,10 @@ public class PrescriptionReceiveDtoGenerator {
         ret.setDepartmentFromId(randomLong.getLong(10L));
         ret.setLbp(randomLBP.getFromRandom());
         ret.setCreationDateTime(randomTimestamp.getFromRandom());
-        ret.setStatus( PrescriptionStatus.values()[ randomLong.getLong(new Long(PrescriptionStatus.values().length)).intValue() ] );
-        ret.setReferralDiagnosis(randomString.getString(10));
-        ret.setReferralReason(randomString.getString(10));
+        ///ret.setStatus( PrescriptionStatus.values()[ randomLong.getLong(new Long(PrescriptionStatus.values().length)).intValue() ] );
+        ret.setStatus(PrescriptionStatus.NEREALIZOVAN);
+        ret.setComment(randomString.getString(10));
+        ret.setPrescriptionAnalysisDtos(new ArrayList<>());
 
         return ret;
     }

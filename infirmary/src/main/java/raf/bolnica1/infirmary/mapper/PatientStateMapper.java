@@ -19,6 +19,11 @@ public class PatientStateMapper {
     private final AuthenticationUtils authenticationUtils;
 
 
+    public static PatientStateMapper getInstance(){
+        return new PatientStateMapper(AuthenticationUtils.getInstance());
+    }
+
+
     public PatientStateDto toDto(PatientState entity){
         if(entity==null)return null;
 

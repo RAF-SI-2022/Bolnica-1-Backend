@@ -26,6 +26,11 @@ public class RandomLBP {
 
 
 
+    public static RandomLBP getInstance(){
+        return new RandomLBP(PatientGetter.getInstance());
+    }
+
+
     public RandomLBP(PatientGetter patientGetter){
 
         this.patientGetter=patientGetter;

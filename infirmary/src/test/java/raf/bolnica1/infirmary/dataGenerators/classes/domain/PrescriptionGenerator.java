@@ -36,6 +36,11 @@ public class PrescriptionGenerator {
     private final RandomLBP randomLBP;
 
 
+    public static PrescriptionGenerator getInstance(){
+        return new PrescriptionGenerator(RandomString.getInstance(),RandomNames.getInstance(),RandomSurnames.getInstance(),
+                RandomTimestamp.getInstance(),RandomJMBG.getInstance(),RandomLong.getInstance(),RandomLBP.getInstance());
+    }
+
     public Prescription getPrescription(){
 
         Prescription ret=new Prescription();

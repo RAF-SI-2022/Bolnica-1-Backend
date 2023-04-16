@@ -18,6 +18,11 @@ public class ClassJsonComparator {
     private final ObjectMapper objectMapper;
 
 
+
+    private static ClassJsonComparator getInstance(){
+        return new ClassJsonComparator(new ObjectMapper());
+    }
+
     private void convertNestedObjectsToMaps(Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             Object value = entry.getValue();

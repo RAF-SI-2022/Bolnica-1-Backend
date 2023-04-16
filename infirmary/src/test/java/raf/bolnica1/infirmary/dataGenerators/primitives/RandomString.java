@@ -12,6 +12,11 @@ public class RandomString {
 
     private Random random=new Random();
 
+
+    public static RandomString getInstance(){
+        return new RandomString();
+    }
+
     public String getString(int len){
         return UUID.randomUUID().toString().substring(0, len);
     }

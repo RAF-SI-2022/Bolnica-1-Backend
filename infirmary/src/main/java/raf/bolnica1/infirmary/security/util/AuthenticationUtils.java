@@ -9,6 +9,10 @@ import raf.bolnica1.infirmary.exceptions.NotAuthenticatedException;
 @Component
 public class AuthenticationUtils {
 
+    public static AuthenticationUtils getInstance(){
+        return new AuthenticationUtils();
+    }
+
     public String getLbzFromAuthentication() {
         String lbz = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

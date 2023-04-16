@@ -15,6 +15,11 @@ import java.util.List;
 public class HospitalRoomMapper {
 
 
+    public static HospitalRoomMapper getInstance(){
+        return new HospitalRoomMapper();
+    }
+
+
     public HospitalRoomDto toDto(HospitalRoom entity){
         if(entity==null)return null;
 

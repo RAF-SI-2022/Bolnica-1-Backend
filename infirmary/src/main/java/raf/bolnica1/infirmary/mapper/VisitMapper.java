@@ -18,6 +18,11 @@ public class VisitMapper {
     private final AuthenticationUtils authenticationUtils;
 
 
+    public static VisitMapper getInstance(){
+        return new VisitMapper(AuthenticationUtils.getInstance());
+    }
+
+
     public VisitDto toDto(Visit entity){
 
         if(entity==null)return null;
