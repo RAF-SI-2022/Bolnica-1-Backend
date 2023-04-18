@@ -98,6 +98,7 @@ public class PrescriptionMapper {
             prescription.setDoctorLbz(dto.getDoctorLbz());
             prescription.setDepartmentFromId(dto.getDepartmentFromId());
             prescription.setDepartmentToId(dto.getDepartmentToId());
+            ((LabPrescription)prescription).setComment(dto.getComment());
 
             Patient patient=patientRepository.findByLbp(dto.getLbp()).orElse(null);
             if(patient!=null) {

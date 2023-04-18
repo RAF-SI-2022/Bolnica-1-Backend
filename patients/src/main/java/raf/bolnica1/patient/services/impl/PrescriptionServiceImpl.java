@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
+import raf.bolnica1.patient.domain.prescription.LabPrescription;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.create.LabResultDto;
@@ -131,7 +132,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public Page<PrescriptionDoneDto> getAllDonePrescriptionsForPatient(String lbp, Date dateFrom, Date dateTo, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionByPatientAndDate(pageable, lbp, dateFrom, dateTo);
-
         return prescriptions.map(prescriptionMapper::toDto);
     }
 
