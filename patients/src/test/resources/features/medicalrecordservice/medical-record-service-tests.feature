@@ -1,4 +1,4 @@
-Feature: operaciej nad medical records
+Feature: Operacije nad medical records
 
   Scenario: Pretraga svih alergija
     When Kada pronadjemo sve alergije
