@@ -17,6 +17,8 @@ import raf.bolnica1.laboratory.dataGenerators.classes.dto.prescription.Prescript
 import raf.bolnica1.laboratory.dataGenerators.classes.dto.result.ResultUpdateDtoGenerator;
 import raf.bolnica1.laboratory.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreate;
 import raf.bolnica1.laboratory.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreateGenerator;
+import raf.bolnica1.laboratory.dataGenerators.classes.dto.scheduledLabExamination.filter.ScheduledLabExaminationDtoFilter;
+import raf.bolnica1.laboratory.dataGenerators.classes.dto.scheduledLabExamination.filter.ScheduledLabExaminationDtoFilterGenerator;
 import raf.bolnica1.laboratory.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.laboratory.dataGenerators.jwtToken.TokenSetter;
 import raf.bolnica1.laboratory.dataGenerators.primitives.RandomDate;
@@ -26,6 +28,7 @@ import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.integration.labExamination.LabExaminationIntegrationTestConfig;
+import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.*;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
 import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
@@ -44,6 +47,8 @@ import java.util.Optional;
 public class LabExaminationSteps extends LabExaminationIntegrationTestConfig {
 
     /// GENERATORS
+    @Autowired
+    private ScheduledLabExaminationDtoFilterGenerator scheduledLabExaminationDtoFilterGenerator;
     @Autowired
     private RandomLong randomLong;
     @Autowired
@@ -70,6 +75,10 @@ public class LabExaminationSteps extends LabExaminationIntegrationTestConfig {
     private ParameterAnalysisResultRepository parameterAnalysisResultRepository;
     @Autowired
     private ScheduledLabExaminationRepository scheduledLabExaminationRepository;
+
+    /// MAPPERS
+    @Autowired
+    private ScheduledLabExaminationMapper scheduledLabExaminationMapper;
 
     /// SERVICES
     @Autowired
@@ -236,4 +245,51 @@ public class LabExaminationSteps extends LabExaminationIntegrationTestConfig {
             Assertions.fail(e);
         }
     }
+
+
+
+
+    private List<ScheduledLabExaminationDtoFilter> filters;
+    @When("kreiranih {int} filtera za laboratorijski pregled")
+    public void kreiranih_filtera_za_laboratorijski_pregled(Integer filterCount) {
+        try {
+
+            filters=new ArrayList<>();
+            for(int i=0;i<filterCount;i++) {
+                filters.add(scheduledLabExaminationDtoFilterGenerator.getRandomFilter());
+                filters.get(i).setDepartmentId(getDepartmentIdByLbz());
+            }
+
+        }catch (Exception e){
+            Assertions.fail(e);
+        }
+    }
+    @Then("pronalazenje za odredjeni lbp i raspon datuma daje tacne rezultate")
+    public void pronalazenje_za_odredjeni_lbp_i_raspon_datuma_daje_tacne_rezultate() {
+        try {
+
+            List<ScheduledLabExaminationDto>list=scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findAll());
+
+            for(int i=0;i<filters.size();i++){
+                ScheduledLabExaminationDtoFilter f=filters.get(i);
+                List<ScheduledLabExaminationDto>result=f.applyFilterToList(list);
+                List<ScheduledLabExaminationDto> queried=labExaminationsService.listScheduledExaminationsByLbpAndDate(
+                        f.getLbp(),f.getStartDate(),f.getEndDate(),"Bearer "+jwtTokenGetter.getDrMedSpec(),
+                        0,1000000000).getContent();
+
+                List<ScheduledLabExaminationDto>pom1=new ArrayList<>(result);
+                List<ScheduledLabExaminationDto>pom2=new ArrayList<>(queried);
+                pom1.sort(Comparator.comparing(ScheduledLabExaminationDto::getId));
+                pom2.sort(Comparator.comparing(ScheduledLabExaminationDto::getId));
+
+                System.out.println(f);
+                Assertions.assertTrue(classJsonComparator.compareListCommonFields(pom1,pom2));
+
+            }
+
+        }catch (Exception e){
+            Assertions.fail(e);
+        }
+    }
+
 }
