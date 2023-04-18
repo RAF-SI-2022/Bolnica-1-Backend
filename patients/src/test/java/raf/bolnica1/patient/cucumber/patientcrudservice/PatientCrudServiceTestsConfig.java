@@ -1,4 +1,4 @@
-package cucumber.patientcrudservice;
+package raf.bolnica1.patient.cucumber.patientcrudservice;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
