@@ -4,7 +4,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import raf.bolnica1.patient.domain.*;
-import raf.bolnica1.patient.domain.constants.VaccinationType;
+import raf.bolnica1.patient.domain.constants.*;
 import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;
 import raf.bolnica1.patient.dto.create.VaccinationDataDto;
@@ -112,19 +112,95 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
     }
 
 
+    public Patient patientCompate(){
+        Patient patient1 = new Patient();
+        patient1.setJmbg("0101998100001");
+        patient1.setLbp("P0002");
+        patient1.setName("John");
+        patient1.setParentName("Doe");
+        patient1.setSurname("Smith");
+        patient1.setGender(Gender.MUSKO);
+        patient1.setDateOfBirth(Date.valueOf("1998-01-02"));
+        patient1.setBirthPlace("Belgrade");
+        patient1.setPlaceOfLiving("Novi Sad");
+        patient1.setResidenceCountry(CountryCode.SRB);
+        patient1.setCitizenship(CountryCode.SRB);
+        patient1.setPhone("+38111111111");
+        patient1.setEmail("john.smith@example.com");
+        patient1.setGuardianJmbg("0101970100001");
+        patient1.setGuardianNameAndSurname("Jane Doe");
+        SocialData socialData1 = new SocialData();
+        socialData1.setMaritalStatus(MaritalStatus.U_BRAKU);
+        socialData1.setNumOfChildren(0);
+        socialData1.setExpertiseDegree(ExpertiseDegree.VISE);
+        socialData1.setProfession("Software engineer");
+        socialData1.setFamilyStatus(FamilyStatus.OBA_RODITELJA);
+        patient1.setSocialData(socialData1);
 
+        return patient1;
+    }
+
+    public Patient invalidPatientCopare(){
+        Patient patient6 = new Patient();
+        patient6.setJmbg("0607995000001");
+        patient6.setLbp("P0007");
+        patient6.setName("Michael");
+        patient6.setParentName("John");
+        patient6.setSurname("Johnson");
+        patient6.setGender(Gender.MUSKO);
+        patient6.setDateOfBirth(Date.valueOf("1989-5-4"));
+        patient6.setBirthPlace("Toronto");
+        patient6.setPlaceOfLiving("Canada");
+        patient6.setResidenceCountry(CountryCode.CAN);
+        patient6.setCitizenship(CountryCode.CAN);
+        patient6.setPhone("+35498214756");
+        patient6.setEmail("michael.johnson@example.com");
+        patient6.setGuardianJmbg("0485363054001");
+        patient6.setGuardianNameAndSurname("Maria Garcia");
+        SocialData socialData6 = new SocialData();
+        socialData6.setMaritalStatus(MaritalStatus.RAZVEDENI);
+        socialData6.setNumOfChildren(2);
+        socialData6.setExpertiseDegree(ExpertiseDegree.VISE);
+        socialData6.setProfession("Architect");
+        socialData6.setFamilyStatus(FamilyStatus.JEDAN_RODITELJ);
+        patient6.setSocialData(socialData6);
+
+        return patient6;
+    }
+
+    public MedicalRecord medicalRecordCompare(Patient patient){
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setPatient(patient);
+        medicalRecord1.setRegistrationDate(Date.valueOf("2023-03-04"));
+        medicalRecord1.setDeleted(false);
+        GeneralMedicalData generalMedicalData1 = new GeneralMedicalData();
+        generalMedicalData1.setBloodType("A");
+        generalMedicalData1.setRH("+");
+        medicalRecord1.setGeneralMedicalData(generalMedicalData1);
+        return medicalRecord1;
+    }
 
     @When("Kada se doda nova alergija")
     public void kada_se_doda_nova_alergija() {
+
+        Allergy a1 = new Allergy();
+        a1.setName("Mleko");
+
+        Patient patient1 = patientCompate();
+        MedicalRecord medicalRecord1 = medicalRecordCompare(patient1);
+
         try{
             allergy =  allergyRepository.findByName(name);
             assertNotNull(allergy);
+            assertEquals(a1.getName(),allergy.getName());
 
             patient =  patientRepository.findByLbp(lbp);
             assertNotNull(patient.get());
+            assertEquals(patient1.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
             assertNotNull(medicalRecord.get());
+            assertEquals(medicalRecord1.getPatient().getLbp(),medicalRecord.get().getPatient().getLbp());
 
         }catch (Exception e){
             fail(e.getMessage());
@@ -142,12 +218,19 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
 
     @When("Kada se doda nova alergija za pacijenta sa lbp-om koji nema svoj karton odogovor treba da bude da alergija nije uspesno dodata")
     public void kada_se_doda_nova_alergija_za_pacijenta_sa_lbp_om_koji_nema_svoj_karton_odogovor_treba_da_bude_da_alergija_nije_uspesno_dodata() {
+        Allergy a1 = new Allergy();
+        a1.setName("Mleko");
+
+        Patient patient6 = invalidPatientCopare();
+
         try{
             allergy =  allergyRepository.findByName(name);
             assertNotNull(allergy);
+            assertEquals(a1.getName(),allergy.getName());
 
             patient =  patientRepository.findByLbp("P0007");
             assertNotNull(patient.get());
+            assertEquals(patient6.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
         }catch (Exception e){
@@ -169,15 +252,22 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
         vaccinationDto.setVaccinationName("PRIORIX");
         vaccinationDto.setVaccinationDate(Date.valueOf("2022-05-04"));
 
+        Patient patient1 = patientCompate();
+        MedicalRecord medicalRecord1 = medicalRecordCompare(patient1);
+
         try{
             vaccination = vaccinationRepository.findByName(vaccinationDto.getVaccinationName());
             assertNotNull(vaccination);
+            assertEquals(vaccinationDto.getVaccinationName(),vaccination.getName());
 
             patient =  patientRepository.findByLbp(lbp);
             assertNotNull(patient.get());
+            assertEquals(patient1.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
             assertNotNull(medicalRecord.get());
+            assertEquals(medicalRecord1.getPatient().getLbp(),medicalRecord.get().getPatient().getLbp());
+
         }catch (Exception e){
             fail(e.getMessage());
         }
@@ -200,12 +290,15 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
         vaccinationDto.setVaccinationName("PRIORIX");
         vaccinationDto.setVaccinationDate(Date.valueOf("2022-05-04"));
 
+        Patient patient6 = invalidPatientCopare();
         try{
             vaccination = vaccinationRepository.findByName(vaccinationDto.getVaccinationName());
             assertNotNull(vaccination);
+            assertEquals(vaccinationDto.getVaccinationName(),vaccination.getName());
 
             patient =  patientRepository.findByLbp("P0007");
             assertNotNull(patient.get());
+            assertEquals(patient6.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
         }catch (Exception e){
@@ -220,6 +313,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
 
 
 
+
     @When("Kada se doda nova operacija")
     public void kada_se_doda_nova_operacija() {
 
@@ -229,13 +323,16 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
         operationCreateDto.setOperationDate(Date.valueOf("2023-08-12"));
         operationCreateDto.setDescription("Appendectomy");
 
-
+        Patient patient1 = patientCompate();
+        MedicalRecord  medicalRecord1 = medicalRecordCompare(patient1);
         try{
             patient =  patientRepository.findByLbp(lbp);
             assertNotNull(patient.get());
+            assertEquals(patient1.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
             assertNotNull(medicalRecord.get());
+            assertEquals(medicalRecord1.getPatient().getLbp(),medicalRecord.get().getPatient().getLbp());
         }catch (Exception e){
             fail(e.getMessage());
         }
@@ -291,11 +388,11 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
         AllergyDto allergyDto = new AllergyDto();
         allergyDto.setName("Mleko");
         AllergyDto allergyDto2 = new AllergyDto();
-        allergyDto.setName("Orašasti plodovi");
+        allergyDto2.setName("Orašasti plodovi");
         AllergyDto allergyDto3 = new AllergyDto();
-        allergyDto.setName("Pšenica");
+        allergyDto3.setName("Pšenica");
         AllergyDto allergyDto4 = new AllergyDto();
-        allergyDto.setName("Penicilin");
+        allergyDto4.setName("Penicilin");
         allergyDtos.add(allergyDto);
         allergyDtos.add(allergyDto2);
         allergyDtos.add(allergyDto3);
@@ -311,22 +408,39 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
         vaccinationDto1.setManufacturer("GlaxoSmithKline Biologicals S.A.,Belgija");
         vaccinationDtos1.add(vaccinationDto1);
 
+        Patient patient1 = patientCompate();
+        MedicalRecord medicalRecord1 =  medicalRecordCompare(patient1);
+
+        generalMedicalDataCreateDto = new GeneralMedicalDataCreateDto();
+        generalMedicalDataCreateDto.setBloodType("A");
+        generalMedicalDataCreateDto.setRH("+");
+        generalMedicalDataCreateDto.setAllergyDtos(allergyDtos);
+        generalMedicalDataCreateDto.setVaccinationDtos(vaccinationDtos1);
+
         try{
             patient =  patientRepository.findByLbp(lbp);
             assertNotNull(patient.get());
+            assertEquals(patient1.getLbp(),patient.get().getLbp());
 
             medicalRecord = medicalRecordRepository.findByPatient(patient.get());
             assertNotNull(medicalRecord.get());
+            assertEquals(medicalRecord1.getPatient().getLbp(),medicalRecord.get().getPatient().getLbp());
 
-            generalMedicalDataCreateDto = new GeneralMedicalDataCreateDto();
-            generalMedicalDataCreateDto.setBloodType("A");
-            generalMedicalDataCreateDto.setRH("+");
-            generalMedicalDataCreateDto.setAllergyDtos(allergyDtos);
-            generalMedicalDataCreateDto.setVaccinationDtos(vaccinationDtos1);
 
             assertNotNull(vaccinationRepository.findByName(vaccinationDto1.getName()));
 
-            assertNotNull(allergyRepository.findByName(allergyDto.getName()));
+            for (VaccinationDto dto:vaccinationDtos1){
+                assertEquals(dto.getName(),vaccinationRepository.findByName(dto.getName()).getName());
+            }
+
+
+            for (AllergyDto dto:allergyDtos){
+                assertNotNull(allergyRepository.findByName(dto.getName()));
+            }
+
+            for (AllergyDto dto:allergyDtos){
+                assertEquals(dto.getName(),allergyRepository.findByName(dto.getName()).getName());
+            }
 
         }catch (Exception e){
             fail(e.getMessage());
