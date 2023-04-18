@@ -1,6 +1,5 @@
 package raf.bolnica1.infirmary.mapper;
 
-import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
