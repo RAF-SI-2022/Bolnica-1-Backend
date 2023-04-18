@@ -58,12 +58,12 @@ public class PrescriptionController {
 
     @GetMapping("/done_prescriptions/{lbp}")
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
-    public ResponseEntity<Page<PrescriptionDoneDto>> getAllDonePrescriptionsByDatePeriod(@RequestParam Long dateFrom,
-                                                                                         @RequestParam Long dateTo,
+    public ResponseEntity<Page<PrescriptionDoneDto>> getAllDonePrescriptionsByDatePeriod(@RequestParam(required = false) Date dateFrom,
+                                                                                         @RequestParam(required = false) Date dateTo,
                                                                                          @PathVariable String lbp,
                                                                                          @RequestParam(defaultValue = "0") Integer page,
                                                                                          @RequestParam(defaultValue = "10") Integer size){
-        return new ResponseEntity<>(prescriptionService.getAllDonePrescriptionsForPatient(lbp, new Date(dateFrom), new Date(dateTo), page, size), HttpStatus.OK);
+        return new ResponseEntity<>(prescriptionService.getAllDonePrescriptionsForPatient(lbp, dateFrom, dateTo, page, size), HttpStatus.OK);
     }
 
     @GetMapping("/prescription/{id}")
