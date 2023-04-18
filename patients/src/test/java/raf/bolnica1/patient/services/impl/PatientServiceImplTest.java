@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.ScheduleExam;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
@@ -35,8 +37,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PatientServiceImplTest {
@@ -217,5 +218,7 @@ class PatientServiceImplTest {
         Page<ScheduleExamDto> result = patientService.findScheduledExaminationsForMedSister(0, 10);
         assertEquals(scheduleExamDtoList, result.getContent());
     }
+
+
 
 }
