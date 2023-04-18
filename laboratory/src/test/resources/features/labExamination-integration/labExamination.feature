@@ -17,3 +17,7 @@ Feature: Osnovne funkcije sa pregledima u laboratoriji
     When kreiranih 100 laboratorijskih pregleda
     Then pronalazenje daje tacne rezultate
 
+  Scenario: Pronalazenje zakazanih laboratorijskih pregleda za dati lbp i raspon datuma
+    When kreiranih 100 laboratorijskih pregleda
+    When kreiranih 100 filtera za laboratorijski pregled
+    Then pronalazenje za odredjeni lbp i raspon datuma daje tacne rezultate

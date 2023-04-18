@@ -52,7 +52,6 @@ public class LaboratoryExaminationsController {
         return new ResponseEntity<>(labExaminationsService.changeExaminationStatus(id, newStatus), HttpStatus.OK);
     }
 
-    //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
     @GetMapping("/count-scheduled_examinations/by-day")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
     public ResponseEntity<Integer> countScheduledExaminationsByDay(@RequestParam("date") Date date,HttpServletRequest request) {
@@ -65,11 +64,25 @@ public class LaboratoryExaminationsController {
         return new ResponseEntity<>(labExaminationsService.listScheduledExaminationsByDay(date,request.getHeader("Authorization")),HttpStatus.OK);
     }
 
-    //Razmisli o prosledjivanju datuma kao "query" parametar u vidu milisekundi
     @GetMapping("/list-scheduled-examinations")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
     public ResponseEntity<?> listScheduledExaminations(HttpServletRequest request) {
         return new ResponseEntity<>(labExaminationsService.listScheduledExaminations(request.getHeader("Authorization")),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/list-scheduled-examinations/by-lbp-date")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    public ResponseEntity<?> listScheduledExaminationsByLbpAndDate(@RequestParam("lbp")String lbp,
+                                                                    @RequestParam(required = false)Date startDate,
+                                                                    @RequestParam(required = false)Date endDate,
+                                                                    @RequestParam(defaultValue = "0")Integer page,
+                                                                    @RequestParam(defaultValue = "10")Integer size,
+                                                                    HttpServletRequest request) {
+        return new ResponseEntity<>(
+                labExaminationsService.listScheduledExaminationsByLbpAndDate(lbp,startDate,
+                        endDate,request.getHeader("Authorization"),page,size),
+                HttpStatus.OK);
     }
 
 }

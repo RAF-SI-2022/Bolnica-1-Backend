@@ -1,5 +1,6 @@
 package raf.bolnica1.laboratory.services.lab;
 
+import org.springframework.data.domain.Page;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
@@ -17,4 +18,7 @@ public interface LabExaminationsService {
     List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date,String token);
 
     List<ScheduledLabExaminationDto> listScheduledExaminations(String token);
+
+    Page<ScheduledLabExaminationDto> listScheduledExaminationsByLbpAndDate(String lbp, Date startDate, Date endDate, String token,
+                                                                           Integer page,Integer size);
 }

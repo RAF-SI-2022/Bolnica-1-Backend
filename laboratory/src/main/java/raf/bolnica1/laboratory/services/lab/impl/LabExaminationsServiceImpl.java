@@ -2,6 +2,9 @@ package raf.bolnica1.laboratory.services.lab.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -86,4 +89,20 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
 
         return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDepartmentId(departmentId.getBody()));
     }
+
+    @Override
+    public Page<ScheduledLabExaminationDto> listScheduledExaminationsByLbpAndDate(String lbp, Date startDate, Date endDate, String token,Integer page,Integer size){
+        String lbz = authenticationUtils.getLbzFromAuthentication();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setBearerAuth(token.split(" ")[1]);
+        HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
+        ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
+
+        Pageable pageable= PageRequest.of(page,size);
+
+        Page<ScheduledLabExamination> scheduledLabExaminations=scheduledLabExaminationRepository
+                .findScheduledLabExaminationByLbpAndDateAndDepartmentId(pageable,lbp,startDate,endDate, departmentId.getBody());
+        return scheduledLabExaminations.map(scheduledLabExaminationMapper::toDto);
+    }
+
 }
