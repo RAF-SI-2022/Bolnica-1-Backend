@@ -18,6 +18,7 @@ public interface ParameterAnalysisResultRepository extends JpaRepository<Paramet
 
     List<ParameterAnalysisResult> findParameterAnalysisResultsByLabWorkOrderId(Long id);
 
+
     Optional<ParameterAnalysisResult> findByLabWorkOrderIdAndAnalysisParameterId(Long workOrderId, Long analysisParameterId);
 
     @Query("SELECT par FROM ParameterAnalysisResult par WHERE par.labWorkOrder.id=:lid AND par.analysisParameter.id=:aid")

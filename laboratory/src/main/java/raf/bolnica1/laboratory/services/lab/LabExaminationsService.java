@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface LabExaminationsService {
 
-    MessageDto createScheduledExamination(String lbp, Date scheduledDate, String note,String token);
+    ScheduledLabExaminationDto createScheduledExamination(String lbp, Date scheduledDate, String note,String token);
 
-    Object changeExaminationStatus(Long id, ExaminationStatus newStatus);
+    ScheduledLabExaminationDto changeExaminationStatus(Long id, ExaminationStatus newStatus);
 
     List<ScheduledLabExaminationDto> listScheduledExaminationsByDay(Date date,String token);
 

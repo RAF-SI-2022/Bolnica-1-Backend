@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 public class PrescriptionCreateDto {
+
+    private Long pid;
     private PrescriptionType type;
     private String doctorLbz;
     private Long departmentFromId;

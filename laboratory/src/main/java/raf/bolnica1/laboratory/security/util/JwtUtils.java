@@ -26,6 +26,9 @@ public class JwtUtils {
     @Value("${oauth.jwt.secret}")
     private String SECRET_KEY;
 
+    public static JwtUtils getInstance(){
+        return new JwtUtils();
+    }
     public String getUsernameFromToken(String jwtToken) throws CantParseJwtException {
         return getClaimFromToken(jwtToken, Claims::getSubject);
     }

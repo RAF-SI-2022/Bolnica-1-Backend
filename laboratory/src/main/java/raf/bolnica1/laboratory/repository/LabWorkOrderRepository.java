@@ -19,8 +19,9 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
     Optional<LabWorkOrder> findByPrescription(@Param("id") Long id);
 
     @Query("SELECT lw FROM LabWorkOrder lw " +
-            "WHERE (lw.lbp = :lbp) " +
-            "AND (:fromDate IS NULL OR :toDate IS NULL OR lw.creationDateTime BETWEEN :fromDate AND :toDate) " +
+            "WHERE (:lbp IS NULL OR lw.lbp = :lbp) " +
+            "AND (:fromDate IS NULL OR lw.creationDateTime>=:fromDate)" +
+            "AND (:toDate IS NULL OR lw.creationDateTime<:toDate) " +
             "AND (:status IS NULL OR lw.status = :status)")
     Page<LabWorkOrder> findWorkOrdersByLab(
             Pageable pageable,
@@ -30,8 +31,9 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
             @Param("status") OrderStatus status);
 
     @Query("SELECT lw FROM LabWorkOrder lw " +
-            "WHERE (lw.lbp = :lbp) " +
-            "AND (:fromDate IS NULL OR :toDate IS NULL OR lw.creationDateTime BETWEEN :fromDate AND :toDate) " +
+            "WHERE (:lbp IS NULL OR lw.lbp = :lbp) " +
+            "AND (:fromDate IS NULL OR lw.creationDateTime>=:fromDate)" +
+            "AND (:toDate IS NULL OR lw.creationDateTime<:toDate) " +
             "AND (lw.status IS 'U_OBRADI' OR lw.status = 'OBRADJEN')")
     Page<LabWorkOrder> workOrdersHistory(
             Pageable pageable,
