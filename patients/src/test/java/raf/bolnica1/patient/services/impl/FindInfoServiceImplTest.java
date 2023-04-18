@@ -338,25 +338,30 @@ public class FindInfoServiceImplTest {
     }
 
     //Tesovi za findExaminationHistoryByLbpAndDateRangePaged
+
     @Test
-    public void testFindExaminationHistoryByLbpAndDateRangePaged_ValidInput_ReturnsPageWithCorrectNumberOfElements() {
+    void findExaminationHistoryByLbpAndDateRangePaged() {
         String lbp = "123456";
-        Date startDate = Date.valueOf("2023-11-11");
-        Date endDate = Date.valueOf("2023-12-11");
-        int page = 0;
-        int size = 10;
-        when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(new Patient()));
-        when(medicalRecordRepository.findByPatient(any())).thenReturn(Optional.of(new MedicalRecord()));
-        Pageable pageable = PageRequest.of(page, size);
-        List<ExaminationHistory> examinationHistoryList = new ArrayList<>();
-        examinationHistoryList.add(new ExaminationHistory());
-        examinationHistoryList.add(new ExaminationHistory());
-        Page<ExaminationHistory> examinationHistories = new PageImpl<>(examinationHistoryList, pageable, 2);
-        when(examinationHistoryRepository.findExaminationHistoryByMedicalRecordAndDateRange(pageable, any(), eq(startDate), eq(endDate))).thenReturn(examinationHistories);
+        Date startDate = new Date(0L);
+        Date endDate = new Date(100000000000L);
+        Patient patient = createPatietnt();
+        MedicalRecord medicalRecord = createMedicalRecord();
+        ExaminationHistory examinationHistory = createExaminationHistory();
+        ExaminationHistoryDto examinationHistoryDto = createExamHistoryDto();
 
-        Page<ExaminationHistoryDto> result = findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp, startDate, endDate, page, size);
+        when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
+        when(medicalRecordRepository.findByPatient(patient)).thenReturn(Optional.of(medicalRecord));
+        when(examinationHistoryRepository.findExaminationHistoryByMedicalRecordAndDateRange(any(Pageable.class), eq(medicalRecord), eq(startDate), eq(endDate))).thenReturn(new PageImpl<>(Arrays.asList(examinationHistory)));
+        when(examinationHistoryMapper.toDto(examinationHistory)).thenReturn(examinationHistoryDto);
 
-        assertEquals(2, result.getNumberOfElements());
+        Page<ExaminationHistoryDto> result = findInfoService.findExaminationHistoryByLbpAndDateRangePaged(lbp, startDate, endDate, 0, 10);
+
+        assertEquals(1, result.getContent().size());
+        assertEquals(examinationHistoryDto, result.getContent().get(0));
+        verify(patientRepository, times(1)).findByLbp(lbp);
+        verify(medicalRecordRepository, times(1)).findByPatient(patient);
+        verify(examinationHistoryRepository, times(1)).findExaminationHistoryByMedicalRecordAndDateRange(any(Pageable.class), eq(medicalRecord), eq(startDate), eq(endDate));
+        verify(examinationHistoryMapper, times(1)).toDto(examinationHistory);
     }
     @Test
     public void testFindExaminationHistoryByLbpAndDateRangePagedThrows() {
