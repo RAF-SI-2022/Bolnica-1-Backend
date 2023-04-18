@@ -308,8 +308,36 @@ public class TestDataRunner implements CommandLineRunner {
         socialData5.setFamilyStatus(FamilyStatus.JEDAN_RODITELJ);
         patient5.setSocialData(socialData5);
 
-        socialDataRepository.saveAll(Arrays.asList(socialData1, socialData2, socialData3, socialData4, socialData5));
-        patientRepository.saveAll(Arrays.asList(patient1, patient2, patient3, patient4, patient5));
+
+        //DODATO DA BI TEST ZA MEDICALRECORDSERVIS MOGAO DA RADI
+        Patient patient6 = new Patient();
+        patient6.setJmbg("0607995000001");
+        patient6.setLbp("P0007");
+        patient6.setName("Michael");
+        patient6.setParentName("John");
+        patient6.setSurname("Johnson");
+        patient6.setGender(Gender.MUSKO);
+        patient6.setDateOfBirth(Date.valueOf("1989-5-4"));
+        patient6.setBirthPlace("Toronto");
+        patient6.setPlaceOfLiving("Canada");
+        patient6.setResidenceCountry(CountryCode.CAN);
+        patient6.setCitizenship(CountryCode.CAN);
+        patient6.setPhone("+35498214756");
+        patient6.setEmail("michael.johnson@example.com");
+        patient6.setGuardianJmbg("0485363054001");
+        patient6.setGuardianNameAndSurname("Maria Garcia");
+        SocialData socialData6 = new SocialData();
+        socialData6.setMaritalStatus(MaritalStatus.RAZVEDENI);
+        socialData6.setNumOfChildren(2);
+        socialData6.setExpertiseDegree(ExpertiseDegree.VISE);
+        socialData6.setProfession("Architect");
+        socialData6.setFamilyStatus(FamilyStatus.JEDAN_RODITELJ);
+        patient6.setSocialData(socialData6);
+
+
+
+        socialDataRepository.saveAll(Arrays.asList(socialData1, socialData2, socialData3, socialData4, socialData5,socialData6));
+        patientRepository.saveAll(Arrays.asList(patient1, patient2, patient3, patient4, patient5,patient6));
 
         MedicalRecord medicalRecord1 = new MedicalRecord();
         medicalRecord1.setPatient(patient1);
