@@ -1,9 +1,9 @@
-package cucumber.medicalexaminationservice;
+package raf.bolnica1.patient.cucumber.patientservice;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @CucumberContextConfiguration
 @SpringBootTest
-public class MedicalExaminationServiceTestsConfig {
+public class PatientServiceTestsConfig {
 }

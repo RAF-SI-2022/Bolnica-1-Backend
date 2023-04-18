@@ -1,4 +1,4 @@
-package cucumber.patientservice;
+package raf.bolnica1.patient.cucumber.patientservice;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
