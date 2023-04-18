@@ -22,6 +22,7 @@ public class ScheduledLabExaminationMapper {
         dto.setLbp(entity.getLbp());
         dto.setScheduledDate(entity.getScheduledDate());
         dto.setDepartmentId(entity.getDepartmentId());
+        dto.setExaminationStatus(entity.getExaminationStatus());
 
         return dto;
     }

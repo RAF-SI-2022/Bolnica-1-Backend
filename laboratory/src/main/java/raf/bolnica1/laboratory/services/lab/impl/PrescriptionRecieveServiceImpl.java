@@ -1,10 +1,13 @@
 package raf.bolnica1.laboratory.services.lab.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
@@ -67,6 +70,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         if(prescription != null && prescription.getStatus().equals(PrescriptionStatus.NEREALIZOVAN)){
             prescription = prescriptionMapper.toEntityUpdate(dto, prescription);
 
+
             LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
             if(labWorkOrder != null && labWorkOrder.getStatus().equals(OrderStatus.NEOBRADJEN)){
                 parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
@@ -111,7 +115,6 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         for(Prescription prescription : prescriptions){
             prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
         }
-        System.out.println(prescriptionDtos.size());
         int startIndex = page * size;
         int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
 

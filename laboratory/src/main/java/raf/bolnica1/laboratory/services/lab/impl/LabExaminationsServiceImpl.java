@@ -22,38 +22,49 @@ import java.sql.Date;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class LabExaminationsServiceImpl implements LabExaminationsService {
 
     private AuthenticationUtils authenticationUtils;
     private ScheduledLabExaminationMapper scheduledLabExaminationMapper;
     private ScheduledLabExaminationRepository scheduledLabExaminationRepository;
-
     @Qualifier("employeeRestTemplate")
-    private RestTemplate employeeRestTemplate;
+    private final RestTemplate employeeRestTemplate;
+
+    public LabExaminationsServiceImpl(AuthenticationUtils authenticationUtils,
+                                      ScheduledLabExaminationMapper scheduledLabExaminationMapper,
+                                      ScheduledLabExaminationRepository scheduledLabExaminationRepository,
+                                      @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate){
+        this.authenticationUtils=authenticationUtils;
+        this.scheduledLabExaminationMapper=scheduledLabExaminationMapper;
+        this.employeeRestTemplate=employeeRestTemplate;
+        this.scheduledLabExaminationRepository=scheduledLabExaminationRepository;
+    }
+
+
+
 
     @Override
-    public MessageDto createScheduledExamination(String lbp, Date scheduledDate, String note, String token) {
+    public ScheduledLabExaminationDto createScheduledExamination(String lbp, Date scheduledDate, String note, String token) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
         ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationMapper.toEntity(departmentId.getBody(), lbp, scheduledDate, note, lbz);
-        scheduledLabExaminationRepository.save(scheduledLabExamination);
+        scheduledLabExamination=scheduledLabExaminationRepository.save(scheduledLabExamination);
 
-        return new MessageDto(String.format("Uspesno kreiran zakazani laboratorijski pregled za pacijenta %s\n", lbp));
+        return scheduledLabExaminationMapper.toDto(scheduledLabExamination);
     }
 
     @Override
-    public Object changeExaminationStatus(Long id, ExaminationStatus newStatus)
+    public ScheduledLabExaminationDto changeExaminationStatus(Long id, ExaminationStatus newStatus)
     {
         ScheduledLabExamination scheduledLabExamination= scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No examination with id %s", id))
         );
         scheduledLabExamination.setExaminationStatus(newStatus);
-        scheduledLabExaminationRepository.save(scheduledLabExamination);
-        return new MessageDto(String.format("Uspesno promenjen status pregleda") );
+        scheduledLabExamination=scheduledLabExaminationRepository.save(scheduledLabExamination);
+        return scheduledLabExaminationMapper.toDto(scheduledLabExamination);
     }
 
     @Override

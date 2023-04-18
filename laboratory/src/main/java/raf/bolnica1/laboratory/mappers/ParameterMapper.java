@@ -5,11 +5,15 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.laboratory.domain.lab.Parameter;
 import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class ParameterMapper {
 
     public ParameterDto toDto(Parameter entity) {
+        if(entity==null)return null;
         ParameterDto dto = new ParameterDto();
         dto.setId(entity.getId());
         dto.setParameterName(entity.getParameterName());
@@ -20,7 +24,20 @@ public class ParameterMapper {
         return dto;
     }
 
+    public List<ParameterDto> toDto(List<Parameter> entity){
+        if(entity==null)return null;
+
+        List<ParameterDto> dto=new ArrayList<>();
+
+        for(Parameter p:entity)
+            dto.add(toDto(p));
+
+        return dto;
+    }
+
+
     public Parameter toEntity(ParameterDto dto){
+        if(dto==null)return null;
 
         Parameter entity=new Parameter();
 

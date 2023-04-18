@@ -77,24 +77,6 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return new MessageDto("Uspesno izvrseno");
     }
 
-    @Override
-    public LabWorkOrder createWorkOrder(Long prescriptionId) {
-
-        String lbz = authenticationUtils.getLbzFromAuthentication();
-
-        Prescription prescription = prescriptionRepository.findPrescriptionById(prescriptionId);
-
-        LabWorkOrder labWorkOrder = new LabWorkOrder();
-
-        labWorkOrder.setPrescription(prescription);
-        labWorkOrder.setLbp(prescription.getLbp());
-        labWorkOrder.setCreationDateTime(new Timestamp(System.currentTimeMillis()));
-        labWorkOrder.setTechnicianLbz(lbz);
-        labWorkOrder = labWorkOrderRepository.save(labWorkOrder);
-
-
-        return labWorkOrder;
-    }
 
     @Override
     public LabWorkOrderDto updateWorkOrder(Object dto) {
@@ -152,14 +134,17 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return parameterAnalysisResultMapper.toDto(par);
     }
 
+    /// vraca samo obradjene
     public Page<LabWorkOrder> workOrdersHistory(String lbp, Date fromDate, Date toDate, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
+        if(toDate!=null)toDate=new Date(toDate.getTime()+24*60*60*1000);
         return labWorkOrderRepository.workOrdersHistory(pageable, lbp, fromDate, toDate);
     }
 
     @Override
     public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, Date fromDate, Date toDate, OrderStatus status, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
+        if(toDate!=null)toDate=new Date(toDate.getTime()+24*60*60*1000);
         return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, fromDate, toDate, status);
     }
 
