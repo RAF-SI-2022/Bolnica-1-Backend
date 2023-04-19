@@ -229,26 +229,27 @@ class PatientServiceImplTest {
     //Testovi za findScheduledExaminationsForDoctorAll
     @Test
     public void testFindScheduledExaminationsForDoctorAll() {
-        String lbz = "testLbz";
-        Date currentDate = new Date(System.currentTimeMillis());
-        ScheduleExam scheduleExam1 = new ScheduleExam();
-        ScheduleExam scheduleExam2 = new ScheduleExam();
-        List<ScheduleExam> scheduleExams = Arrays.asList(scheduleExam1, scheduleExam2);
-        ScheduleExamDto scheduleExamDto1 = new ScheduleExamDto();
-        ScheduleExamDto scheduleExamDto2 = new ScheduleExamDto();
-        List<ScheduleExamDto> expectedScheduleExamDtoList = Arrays.asList(scheduleExamDto1, scheduleExamDto2);
+        String lbz = "sampleLbz";
+        List<ScheduleExam> scheduleExams = new ArrayList<>();
+        List<ScheduleExamDto> scheduleExamDtoList = new ArrayList<>();
 
-        when(scheduleExamRepository.findFromCurrDateAndDoctor(currentDate, lbz)).thenReturn(scheduleExams);
+        for (int i = 0; i < 3; i++) {
+            ScheduleExam scheduleExam = new ScheduleExam();
+            scheduleExams.add(scheduleExam);
 
-        when(scheduleExamMapper.toDto(scheduleExam1)).thenReturn(scheduleExamDto1);
-        when(scheduleExamMapper.toDto(scheduleExam2)).thenReturn(scheduleExamDto2);
+            ScheduleExamDto scheduleExamDto = new ScheduleExamDto();
+            scheduleExamDtoList.add(scheduleExamDto);
 
-        List<ScheduleExamDto> actualScheduleExamDtoList = patientService.findScheduledExaminationsForDoctorAll(lbz);
+            when(scheduleExamMapper.toDto(scheduleExam)).thenReturn(scheduleExamDto);
+        }
 
-        assertEquals(expectedScheduleExamDtoList, actualScheduleExamDtoList);
-        verify(scheduleExamRepository).findFromCurrDateAndDoctor(currentDate, lbz);
-        verify(scheduleExamMapper).toDto(scheduleExam1);
-        verify(scheduleExamMapper).toDto(scheduleExam2);
+        doReturn(scheduleExams).when(scheduleExamRepository).findFromCurrDateAndDoctor(Mockito.any(Date.class), Mockito.anyString());
+
+        List<ScheduleExamDto> result = patientService.findScheduledExaminationsForDoctorAll(lbz);
+
+        assertEquals(scheduleExamDtoList, result);
+        verify(scheduleExamRepository, times(1)).findFromCurrDateAndDoctor(Mockito.any(Date.class), eq(lbz));
+        verify(scheduleExamMapper, times(3)).toDto(any(ScheduleExam.class));
     }
     //Testovi za updatePatientArrivalStatus
     @Test
