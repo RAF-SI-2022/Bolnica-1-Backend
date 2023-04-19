@@ -19,7 +19,7 @@ Feature: Operacije nad find info service
     When Kada se prosledi lbp preko koga dohvatamo istoriju pregleda
     Then Odgovor treba da sadrzi odgovarajucu istoriju pregleda
 
-  Scenario: Dohvatanje CELOG MedicalRecord po LBP
+  Scenario: Dohvatanje celog MedicalRecord po LBP
     When Kada se prosledi lbp preko koga dohvatamo zdravstveni karton
     Then Odgovor treba da sadrzi odgovarajuci zdravstveni karton
 
