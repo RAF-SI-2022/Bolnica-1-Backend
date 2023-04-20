@@ -38,9 +38,9 @@ Feature: Operacije nad medical records
     Then Ti podaci treba biti sacuvana u bazi
 
 
-#  Scenario: Dodavanje operacije za pacijenta sa lbp-om koji ne postoji u bazi
-#    When Kada se doda nova operacija za pacijenta sa invalid lbp-om, dgovor treba da bude da pacijent ne postoji
-#
+  Scenario: Dodavanje operacije za pacijenta sa lbp-om koji ne postoji u bazi
+    When Kada se doda nova operacija za pacijenta sa invalid lbp-om, dgovor treba da bude da pacijent ne postoji
+
 
   Scenario: Dodavanje vakcine sa lbp-om pacijenta koji nema svoj karton
     When Kada se doda nova vakcina za pacijenta sa lbp-om koji nema svoj karton odogovor treba da bude da vakcina nije uspesno dodata
