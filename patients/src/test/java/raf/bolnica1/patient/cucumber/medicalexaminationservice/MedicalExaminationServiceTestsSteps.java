@@ -63,10 +63,16 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
 
     private DiagnosisCode code;;
 
-    Patient getPatient(){
+    Patient getPatient(String lbp){
 
         List<Patient> patients = patientRepository.findAll();
-        Patient p = patients.get(0);
+        Patient p = new Patient();
+        for (Patient pp: patients){
+            if(pp.getLbp().equals(lbp)){
+                p = pp;
+                break;
+            }
+        }
         return p;
     }
 
@@ -113,7 +119,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
         diagnosisCodeDto.setLatinDescription(code.getLatinDescription());
         diagnosisCodeDto.setDescription(code.getDescription());
 
-        patientSend = getPatient();
+        patientSend = getPatient(lbp);
         medicalRecordSend = getRecord();
 
         List<Anamnesis> anamnesisList = anamnesisRepository.findAll();
@@ -196,7 +202,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
     @When("Kada se prosledi {string} kao lbp napravi se novi medical history")
     public void kada_se_prosledi_kao_lbp_napravi_se_novi_medical_history(String lbp) {
         try{
-            patientSend = getPatient();
+            patientSend = getPatient(lbp);
             medicalRecordSend = getRecord();
 
             List<DiagnosisCode> diagnosisCodes = diagnosisCodeRepository.findAll();

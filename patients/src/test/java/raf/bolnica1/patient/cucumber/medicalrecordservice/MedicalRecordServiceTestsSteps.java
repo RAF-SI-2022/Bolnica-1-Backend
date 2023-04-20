@@ -276,7 +276,6 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
             assertEquals("Neuspesno dodata vakcina.",e.getMessage());
             fail(e.getMessage());
         }
-        
     }
 
 
