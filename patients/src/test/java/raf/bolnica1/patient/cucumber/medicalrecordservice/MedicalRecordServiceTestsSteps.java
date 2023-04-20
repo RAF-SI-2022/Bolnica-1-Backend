@@ -2,6 +2,7 @@ package raf.bolnica1.patient.cucumber.medicalrecordservice;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import raf.bolnica1.patient.domain.*;
 import raf.bolnica1.patient.domain.constants.*;
@@ -11,6 +12,7 @@ import raf.bolnica1.patient.dto.create.VaccinationDataDto;
 import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalRecordService;
+import raf.bolnica1.patient.services.impl.MedicalRecordServiceImpl;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
     @Autowired
     OperationRepository operationRepository;
 
-
+    private Throwable t;
     private List<AllergyDto> allergyes;
     private List<VaccinationDto> vaccinationDtos;
     private List<DiagnosisCodeDto> diagnosisCodes;
@@ -66,6 +68,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
 
     private GeneralMedicalDataCreateDto generalMedicalDataCreateDto;
 
+    //Kada menjamo kog pacijenta tj koji lbp gledamo moramo promeniti i koji medicalRecord dohvatamo i alergiju...
     Patient getPatient(){
 
         List<Patient> patients = patientRepository.findAll();
@@ -275,8 +278,6 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
             fail(e.getMessage());
         }
 
-
-
     }
 
 
@@ -320,37 +321,23 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
 
     }
 
-//    @When("Kada se doda nova operacija za pacijenta sa invalid lbp-om, dgovor treba da bude da pacijent ne postoji")
-//    public void kada_se_doda_nova_operacija_za_pacijenta_sa_invalid_lbp_om_dgovor_treba_da_bude_da_pacijent_ne_postoji() {
-//        operationCreateDto = new OperationCreateDto();
-//        operationCreateDto.setHospitalId(1L);
-//        operationCreateDto.setDepartmentId(1L);
-//        operationCreateDto.setOperationDate(Date.valueOf("2023-08-12"));
-//        operationCreateDto.setDescription("Appendectomy");
-//
-//        patientSend = getInvalidPatient();
-//        medicalRecordSend = getRecord();
-//        //Pogledaj i ovo
-//
-//        try{
-//          //  patientOpt =  patientRepository.findByLbp("1");
-//
-//
-//           //medicalRecordOpt = medicalRecordRepository.findByPatient(patientOpt.get());
-//            //assertNotNull(medicalRecordOpt.get());
-//
-//            OperationDto dto = medicalRecordService.addOperation("1", operationCreateDto);
-//
-//
-//
-//        }catch (Exception e){
-//            assertEquals("Patient with lbp 1 not found.",e.getMessage());
-//            assertThrowsExactly("Patient with lbp 1 not found.",e.getMessage())
-//            fail(e.getMessage());
-//        }
-//
-//
-//    }
+    @When("Kada se doda nova operacija za pacijenta sa invalid lbp-om, dgovor treba da bude da pacijent ne postoji")
+    public void kada_se_doda_nova_operacija_za_pacijenta_sa_invalid_lbp_om_dgovor_treba_da_bude_da_pacijent_ne_postoji() {
+        operationCreateDto = new OperationCreateDto();
+        operationCreateDto.setHospitalId(1L);
+        operationCreateDto.setDepartmentId(1L);
+        operationCreateDto.setOperationDate(Date.valueOf("2023-08-12"));
+        operationCreateDto.setDescription("Appendectomy");
+
+        try{
+            t = assertThrows(RuntimeException.class, () ->medicalRecordService.addOperation("1", operationCreateDto));
+
+        }catch (Exception e){
+            assertEquals("Patient with lbp 1 not found.",t.getMessage());
+            fail(e.getMessage());
+        }
+
+    }
 
 
     @When("Kada se dodaju osnovni zdravstveni podaci")
