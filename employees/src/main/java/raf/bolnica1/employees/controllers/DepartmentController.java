@@ -37,6 +37,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/hospital/{pbb}")
+    @PreAuthorize("hasRole('ROLE_RECEPCIONER')")
     public ResponseEntity<List<DepartmentDto>> getDepartments(@PathVariable String pbb){
         return new ResponseEntity<>(departmentService.getDepartments(pbb), HttpStatus.OK);
     }
@@ -47,6 +48,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/getAllDoctors/{pbo}")
+    @PreAuthorize("hasRole('ROLE_RECEPCIONER')")
     public ResponseEntity<List<DoctorDepartmentDto>> geAllDoctorsByPbo(@PathVariable("pbo") String pbo){
         return new ResponseEntity<>(departmentService.getAllDoctorsByPbo(pbo),HttpStatus.OK);
     }

@@ -362,7 +362,7 @@ public class TestDataRunner implements CommandLineRunner {
         medicalRecord3.setRegistrationDate(Date.valueOf("2023-03-04"));
         medicalRecord3.setDeleted(false);
         GeneralMedicalData generalMedicalData3 = new GeneralMedicalData();
-        generalMedicalData3.setBloodType("O");
+        generalMedicalData3.setBloodType("0");
         generalMedicalData3.setRH("+");
         medicalRecord3.setGeneralMedicalData(generalMedicalData3);
 
