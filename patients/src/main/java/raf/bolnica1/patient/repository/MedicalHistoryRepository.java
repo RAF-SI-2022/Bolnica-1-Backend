@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import raf.bolnica1.patient.domain.DiagnosisCode;
 import raf.bolnica1.patient.domain.MedicalHistory;
 import raf.bolnica1.patient.domain.MedicalRecord;
+import raf.bolnica1.patient.domain.constants.TreatmentResult;
 
 import java.sql.Date;
 import java.util.List;
@@ -41,4 +43,6 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
     Optional<MedicalHistory> findPrev(@Param("diagnosis") String diagnosis,
                                       @Param("record") Long recordId);
 
+
+    MedicalHistory findByStartDateEqualsAndTreatmentResultEqualsAndCurrStateDescEqualsAndDiagnosisCodeEqualsAndConfidentialEquals(Date date, TreatmentResult treatmentResult, String currStateDesc, DiagnosisCode diagnosisCode, boolean confidetial);
 }

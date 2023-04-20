@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import raf.bolnica1.patient.domain.Anamnesis;
+import raf.bolnica1.patient.domain.DiagnosisCode;
 import raf.bolnica1.patient.domain.ExaminationHistory;
 import raf.bolnica1.patient.domain.MedicalRecord;
 
@@ -27,5 +29,15 @@ public interface ExaminationHistoryRepository extends JpaRepository<ExaminationH
                                                                                      @Param("mr") MedicalRecord medicalRecord,
                                                                                      @Param("sdt") Date startDate,
                                                                                      @Param("edt") Date endDate);
+
+
+    @Query("SELECT eh FROM ExaminationHistory eh WHERE eh.examDate=:examDate AND eh.lbz>=:lbz AND eh.confidential<=:confidential AND eh.objectiveFinding<=:objectiveFinding AND eh.advice<=:advice AND eh.therapy<=:therapy")
+    ExaminationHistory findByStartDateAndLbzAndConfidentialAndObjectiveFindingAndAdviceAndTherapy(@Param("examDate") Date examDate,
+                                                                                                   @Param("lbz") String lbz,
+                                                                                                   @Param("confidential") boolean confidential,
+                                                                                                   @Param("objectiveFinding") String objectiveFinding,
+                                                                                                   @Param("advice") String advice,
+                                                                                                   @Param("therapy") String therapy);
+
 
 }
