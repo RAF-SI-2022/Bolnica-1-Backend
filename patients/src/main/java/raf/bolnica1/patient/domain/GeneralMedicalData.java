@@ -14,7 +14,7 @@ public class GeneralMedicalData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Pattern(regexp = "^(A|B|AB|O)$")
+    @Pattern(regexp = "^(A|B|AB|0)$")
     private String bloodType;
     @Pattern(regexp = "[+-]")
     private String rH;
