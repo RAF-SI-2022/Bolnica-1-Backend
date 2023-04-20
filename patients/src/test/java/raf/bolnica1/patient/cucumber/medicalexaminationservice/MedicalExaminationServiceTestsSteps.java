@@ -63,16 +63,12 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
 
     private DiagnosisCode code;;
 
-    Patient getPatient(String lbp){
+
+    //Kada menjamo kog pacijenta tj koji lbp gledamo moramo promeniti i koji medicalRecord dohvatamo i dignose code i anamnezu...
+    Patient getPatient(){
 
         List<Patient> patients = patientRepository.findAll();
-        Patient p = new Patient();
-        for (Patient pp: patients){
-            if(pp.getLbp().equals(lbp)){
-                p = pp;
-                break;
-            }
-        }
+        Patient p = patients.get(0);
         return p;
     }
 
@@ -106,8 +102,8 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
         return medicalHistoryCreateDto;
     }
 
-    @When("Kada se prosledi {string} kao lbp napravi se novi examination history")
-    public void kada_se_prosledi_kao_lbp_napravi_se_novi_examination_history(String lbp){
+    @When("Kada se prosledi odredjeni lbp napravi se novi examination history za tog pacijenta")
+    public void kada_se_prosledi_odredjeni_lbp_napravi_se_novi_examination_history_za_tog_pacijenta() {
 
 
         List<DiagnosisCode> diagnosisCodes = diagnosisCodeRepository.findAll();
@@ -119,7 +115,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
         diagnosisCodeDto.setLatinDescription(code.getLatinDescription());
         diagnosisCodeDto.setDescription(code.getDescription());
 
-        patientSend = getPatient(lbp);
+        patientSend = getPatient();
         medicalRecordSend = getRecord();
 
         List<Anamnesis> anamnesisList = anamnesisRepository.findAll();
@@ -168,7 +164,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
     public void taj_examination_je_sacuvan_u_bazi(){
         try{
 
-           List<Anamnesis> anamnesises = anamnesisRepository.findByMainProblemsEquals(an.getMainProblems());
+            List<Anamnesis> anamnesises = anamnesisRepository.findByMainProblemsEquals(an.getMainProblems());
             assertNotNull(anamnesises);
             assertFalse(anamnesises.isEmpty());
 
@@ -199,10 +195,10 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
 
 
 
-    @When("Kada se prosledi {string} kao lbp napravi se novi medical history")
-    public void kada_se_prosledi_kao_lbp_napravi_se_novi_medical_history(String lbp) {
+    @When("Kada se prosledi odredjeni lbp napravi se novi medical history za tog pacijenta")
+    public void kada_se_prosledi_odredjeni_lbp_napravi_se_novi_medical_history_za_tog_pacijenta() {
         try{
-            patientSend = getPatient(lbp);
+            patientSend = getPatient();
             medicalRecordSend = getRecord();
 
             List<DiagnosisCode> diagnosisCodes = diagnosisCodeRepository.findAll();
@@ -217,7 +213,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
 
             medicalHistoryCreateDto = setMedicalHistoryCreateDto(diagnosisCodeDto);
 
-            patient = patientRepository.findByLbp(lbp);
+            patient = patientRepository.findByLbp(patientSend.getLbp());
             assertNotNull(patient);
             assertEquals(patientSend.getId(),patient.get().getId());
 
@@ -234,7 +230,7 @@ public class MedicalExaminationServiceTestsSteps extends MedicalExaminationServi
             assertEquals(medicalHistoryCreateDto.getDiagnosisCodeDto().getCode(),medicalHistory.get().getDiagnosisCode().getCode());
 
 
-            MedicalHistoryDto medicalHistoryDto = medicalExaminationService.addMedicalHistory(lbp, medicalHistoryCreateDto);
+            MedicalHistoryDto medicalHistoryDto = medicalExaminationService.addMedicalHistory(patient.get().getLbp(), medicalHistoryCreateDto);
             assertNotNull(medicalHistoryDto);
 
         }catch (Exception e){

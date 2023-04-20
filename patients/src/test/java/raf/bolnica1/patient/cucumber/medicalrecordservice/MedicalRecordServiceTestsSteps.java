@@ -68,6 +68,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
 
     private GeneralMedicalDataCreateDto generalMedicalDataCreateDto;
 
+    //Kada menjamo kog pacijenta tj koji lbp gledamo moramo promeniti i koji medicalRecord dohvatamo i alergiju...
     Patient getPatient(){
 
         List<Patient> patients = patientRepository.findAll();
@@ -276,6 +277,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
             assertEquals("Neuspesno dodata vakcina.",e.getMessage());
             fail(e.getMessage());
         }
+
     }
 
 
