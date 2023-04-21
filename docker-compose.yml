@@ -2,15 +2,6 @@ version: '3.9'
 
 services:
 
-  activemq:
-    image: rmohr/activemq::5.15.9
-    container_name: activemq
-    ports:
-      - "61616:61616"
-      - "8161:8161"
-    networks:
-      - my_local_network
-
   patients-db:
     image: oscarfonts/h2
     container_name: patients-db
@@ -22,6 +13,40 @@ services:
     networks:
       - my_local_network
       
+
+  activemq-db:
+    image: rmohr/activemq:5.15.9
+    container_name: activemq-db
+    restart: always
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    volumes:
+      - ./activemq/data:/data
+      - ./activemq/conf:/conf
+      - ./activemq/logs:/logs
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+    networks:
+      - my_local_network
+      
+  activemq:
+    build: 
+      context: ./activemq
+      dockerfile: Dockerfile
+    restart: always
+    container_name: activemq
+    ports:
+      - "8079:8079"
+      - "8078:8078"
+    networks:
+      - my_local_network
+    depends_on:
+      - activemq-db
+
+
+      
   patients-service:
     build: 
      context: ./patients
@@ -31,8 +56,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - ACTIVEMQ_URL=tcp://activemq:61616
-      #- ACTIVEMQ_URL=tcp://localhost:61616
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/patients-service
     networks:
       - my_local_network
@@ -40,6 +64,7 @@ services:
       - patients-db
       - activemq
   
+
 
   employees-db:     
     image: oscarfonts/h2
@@ -50,7 +75,8 @@ services:
     environment:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
     networks:
-      - my_local_network  
+      - my_local_network
+
       
   employees-service:
     build: 
@@ -66,6 +92,7 @@ services:
       - my_local_network
     depends_on:
       - employees-db
+      
       
       
   infirmary-db:
@@ -88,8 +115,7 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - ACTIVEMQ_URL=tcp://activemq:61616
-      #- ACTIVEMQ_URL=tcp://localhost:61616
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/infirmary-service
     networks:
       - my_local_network
@@ -118,8 +144,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - ACTIVEMQ_URL=tcp://activemq:61616
-      #- ACTIVEMQ_URL=tcp://localhost:61616
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
     networks:
       - my_local_network
