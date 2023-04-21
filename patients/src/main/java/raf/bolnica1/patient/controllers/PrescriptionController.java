@@ -63,7 +63,11 @@ public class PrescriptionController {
                                                                                          @PathVariable String lbp,
                                                                                          @RequestParam(defaultValue = "0") Integer page,
                                                                                          @RequestParam(defaultValue = "10") Integer size){
-        return new ResponseEntity<>(prescriptionService.getAllDonePrescriptionsForPatient(lbp, new Date(dateFrom), new Date(dateTo), page, size), HttpStatus.OK);
+        Date startDate=null;
+        if(dateFrom!=null)startDate=new Date(dateFrom);
+        Date endDate=null;
+        if(dateTo!=null)endDate=new Date(dateTo);
+        return new ResponseEntity<>(prescriptionService.getAllDonePrescriptionsForPatient(lbp, startDate, endDate, page, size), HttpStatus.OK);
     }
 
     @GetMapping("/prescription/{id}")
