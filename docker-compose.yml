@@ -2,6 +2,15 @@ version: '3.9'
 
 services:
 
+  activemq:
+    image: rmohr/activemq::5.15.9
+    container_name: activemq
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    networks:
+      - my_local_network
+
   patients-db:
     image: oscarfonts/h2
     container_name: patients-db
@@ -10,16 +19,6 @@ services:
       - ./h2:/opt/h2-data
     environment:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8081
-    networks:
-      - my_local_network
-      
-      
-  activemq:
-    image: rmohr/activemq::5.15.9
-    container_name: activemq
-    ports:
-      - "61616:61616"
-      - "8161:8161"
     networks:
       - my_local_network
       
@@ -42,7 +41,6 @@ services:
       - activemq
   
 
-
   employees-db:     
     image: oscarfonts/h2
     container_name: employees-db
@@ -52,11 +50,7 @@ services:
     environment:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
     networks:
-      - my_local_network
-
-
-  
-      
+      - my_local_network  
       
   employees-service:
     build: 
@@ -72,6 +66,66 @@ services:
       - my_local_network
     depends_on:
       - employees-db
+      
+      
+  infirmary-db:
+    image: oscarfonts/h2
+    container_name: infirmary-db
+    restart: always
+    volumes:
+      - ./h2:/opt/h2-data
+    environment:
+      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8084
+    networks:
+      - my_local_network
+      
+  infirmary-service:
+    build: 
+     context: ./infirmary
+     dockerfile: Dockerfile
+    restart: always
+    container_name: infirmary
+    ports:
+      - "8084:8084"
+    environment:
+      - ACTIVEMQ_URL=tcp://activemq:61616
+      #- ACTIVEMQ_URL=tcp://localhost:61616
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/infirmary-service
+    networks:
+      - my_local_network
+    depends_on:
+      - infirmary-db
+      - activemq
+      
+      
+  laboratory-db:     
+    image: oscarfonts/h2
+    container_name: laboratory-db
+    restart: always
+    volumes:
+      - ./h2:/opt/h2-data
+    environment:
+      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
+    networks:
+      - my_local_network
+      
+  laboratory-service:
+    build: 
+     context: ./laboratory
+     dockerfile: Dockerfile
+    restart: always
+    container_name: laboratory
+    ports:
+      - "8083:8083"
+    environment:
+      - ACTIVEMQ_URL=tcp://activemq:61616
+      #- ACTIVEMQ_URL=tcp://localhost:61616
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
+    networks:
+      - my_local_network
+    depends_on:
+      - laboratory-db
+      - activemq
 
   
 
