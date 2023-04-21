@@ -1,0 +1,11 @@
+[Unit]
+Description=Test project
+
+[Service]
+WorkingDirectory=/home/ubuntu/rest-demo/target/
+ExecStart=/usr/bin/java -jar rest-demo-0.0.1-SNAPSHOT-spring-boot.jar
+User=ubuntu
+Restart=on-failure
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
