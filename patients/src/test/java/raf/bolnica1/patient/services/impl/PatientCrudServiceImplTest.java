@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.parameters.P;
+import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.SocialData;
@@ -17,6 +18,7 @@ import raf.bolnica1.patient.dto.create.PatientUpdateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.mapper.PatientMapper;
+import raf.bolnica1.patient.repository.GeneralMedicalDataRepository;
 import raf.bolnica1.patient.repository.MedicalRecordRepository;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.SocialDataRepository;
@@ -39,6 +41,8 @@ public class PatientCrudServiceImplTest {
     @Mock
     private PatientRepository patientRepository;
     @Mock
+    private GeneralMedicalDataRepository generalMedicalDataRepository;
+    @Mock
     private SocialDataRepository socialDataRepository;
     @Mock
     private MedicalRecordRepository medicalRecordRepository;
@@ -47,6 +51,7 @@ public class PatientCrudServiceImplTest {
 
     @Test
     void testRegisterPatient(){
+
         PatientCreateDto createDto = new PatientCreateDto();
         createDto.setRegisterDate(Date.valueOf("2023-04-03"));
         createDto.setEmail("patient@email.com");
@@ -96,9 +101,13 @@ public class PatientCrudServiceImplTest {
         md.setPatient(patient);
         md.setRegistrationDate(createDto.getRegisterDate());
 
+        GeneralMedicalData generalMedicalData = new GeneralMedicalData();
+        md.setGeneralMedicalData(generalMedicalData);
+
         PatientDto patientDto = createPatientDto();
 
         given(patientRepository.save(patient)).willReturn(patient);
+        given(generalMedicalDataRepository.save(any())).willReturn(generalMedicalData);
         given(medicalRecordRepository.save(any())).willReturn(md);
         given(socialDataRepository.save(sd)).willReturn(sd);
         given(patientMapper.patientDtoToPatientGeneralData(createDto)).willReturn(patient);
