@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import raf.bolnica1.patient.domain.GeneralMedicalData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.SocialData;
@@ -15,6 +16,7 @@ import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.PatientDto;
 import raf.bolnica1.patient.mapper.MedicalRecordMapper;
 import raf.bolnica1.patient.mapper.PatientMapper;
+import raf.bolnica1.patient.repository.GeneralMedicalDataRepository;
 import raf.bolnica1.patient.repository.MedicalRecordRepository;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.SocialDataRepository;
@@ -30,6 +32,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     private PatientRepository patientRepository;
     private SocialDataRepository socialDataRepository;
     private MedicalRecordRepository medicalRecordRepository;
+    private GeneralMedicalDataRepository generalMedicalDataRepository;
 
     @Override
     public PatientDto registerPatient(PatientCreateDto patientCreateDto) {
@@ -42,6 +45,11 @@ public class PatientCrudServiceImpl implements PatientCrudService {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setPatient(patient);
         medicalRecord.setRegistrationDate(patientCreateDto.getRegisterDate());
+
+        GeneralMedicalData generalMedicalData = new GeneralMedicalData();
+        generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
+
+        medicalRecord.setGeneralMedicalData(generalMedicalData);
         medicalRecordRepository.save(medicalRecord);
 
         return patientMapper.patientToPatientDto(patient);

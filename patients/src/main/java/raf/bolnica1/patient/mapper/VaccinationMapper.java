@@ -3,6 +3,7 @@ package raf.bolnica1.patient.mapper;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Vaccination;
+import raf.bolnica1.patient.domain.VaccinationData;
 import raf.bolnica1.patient.dto.general.VaccinationDto;
 
 import java.sql.Date;
@@ -39,6 +40,26 @@ public class VaccinationMapper {
 
         return dto;
 
+    }
+    public List<VaccinationDto> toDtoVaccList(List<VaccinationData> vaccinations){
+        if(vaccinations==null)return null;
+
+        List<VaccinationDto> dto=new ArrayList<>();
+
+        for(VaccinationData vaccination:vaccinations)
+            dto.add(fromDataToDto(vaccination));
+
+        return dto;
+    }
+
+    public VaccinationDto fromDataToDto(VaccinationData vaccinationData){
+        VaccinationDto vaccinationDto = new VaccinationDto();
+        vaccinationDto.setVaccinationDate(vaccinationData.getVaccinationDate());
+        vaccinationDto.setDescription(vaccinationData.getVaccination().getDescription());
+        vaccinationDto.setManufacturer(vaccinationData.getVaccination().getManufacturer());
+        vaccinationDto.setName(vaccinationData.getVaccination().getName());
+        vaccinationDto.setType(vaccinationData.getVaccination().getType());
+        return vaccinationDto;
     }
 
     /*public List<VaccinationDto> toDto(List<Vaccination> vaccinations){

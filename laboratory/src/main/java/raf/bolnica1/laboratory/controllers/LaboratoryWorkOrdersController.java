@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
@@ -25,6 +26,10 @@ public class LaboratoryWorkOrdersController {
         return new ResponseEntity<>(labWorkOrdersService.registerPatient(lbp), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<LabWorkOrderDto> findLabWorkWorder(@PathVariable Long id){
+        return new ResponseEntity<>(labWorkOrdersService.findWorkOrder(id), HttpStatus.OK);
+    }
 
     @GetMapping("/work_orders_history")
     public ResponseEntity<Page<LabWorkOrder>> workOrdersHistory(

@@ -34,4 +34,5 @@ public interface LabWorkOrdersService {
 
     MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus);
 
+    LabWorkOrderDto findWorkOrder(Long id);
 }

@@ -86,7 +86,7 @@ public class MedicalRecordServiceImplTest {
 
         when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
         when(medicalRecordRepository.findByPatient(patient)).thenReturn(Optional.of(medicalRecord));
-        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto)).thenReturn(generalMedicalData);
+        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto, medicalRecord.getGeneralMedicalData())).thenReturn(generalMedicalData);
         when(allergyRepository.findByName("Allergy 1")).thenReturn(new Allergy());
         when(allergyRepository.findByName("Allergy 2")).thenReturn(new Allergy());
         when(vaccinationRepository.findByName("Vaccination 1")).thenReturn(new Vaccination());
@@ -143,7 +143,7 @@ public class MedicalRecordServiceImplTest {
 
         when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
         when(medicalRecordRepository.findByPatient(patient)).thenReturn(Optional.of(medicalRecord));
-        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto)).thenReturn(generalMedicalData);
+        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto, medicalRecord.getGeneralMedicalData())).thenReturn(generalMedicalData);
         when(generalMedicalDataRepository.save(generalMedicalData)).thenReturn(generalMedicalData);
         when(generalMedicalDataMapper.toDto(generalMedicalData)).thenReturn(generalMedicalDataDto);
 
@@ -176,7 +176,7 @@ public class MedicalRecordServiceImplTest {
 
         when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
         when(medicalRecordRepository.findByPatient(patient)).thenReturn(Optional.of(medicalRecord));
-        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto)).thenReturn(generalMedicalData);
+        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto, medicalRecord.getGeneralMedicalData())).thenReturn(generalMedicalData);
         when(generalMedicalDataRepository.save(generalMedicalData)).thenReturn(generalMedicalData);
         when(generalMedicalDataMapper.toDto(generalMedicalData)).thenReturn(generalMedicalDataDto);
 
@@ -217,7 +217,7 @@ public class MedicalRecordServiceImplTest {
 
         when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
         when(medicalRecordRepository.findByPatient(patient)).thenReturn(Optional.of(medicalRecord));
-        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto)).thenReturn(generalMedicalData);
+        when(generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto, medicalRecord.getGeneralMedicalData())).thenReturn(generalMedicalData);
         when(generalMedicalDataRepository.save(generalMedicalData)).thenReturn(generalMedicalData);
         when(generalMedicalDataMapper.toDto(generalMedicalData)).thenReturn(generalMedicalDataDto);
 
