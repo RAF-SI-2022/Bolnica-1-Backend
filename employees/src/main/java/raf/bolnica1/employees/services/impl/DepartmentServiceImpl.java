@@ -11,10 +11,12 @@ import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.Hospital;
 import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
+import raf.bolnica1.employees.dto.department.HospitalDepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
 import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeeNotFoundException;
+import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.HospitalMapper;
 import raf.bolnica1.employees.repository.DepartmentRepository;
 import raf.bolnica1.employees.repository.EmployeeRepository;
@@ -36,6 +38,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final HospitalRepository hospitalRepository;
     private final EmployeesRoleRepository employeesRoleRepository;
     private final HospitalMapper hospitalMapper;
+    private final DepartmentMapper departmentMapper;
 
     @Override
     public Long findDepartmentIdByLbz(String lbz) {
@@ -90,6 +93,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return doctorDtos;
 
+    }
+
+    @Override
+    public Page<DepartmentDto> findHospitalsByDepartmentNameSecond(String name, Integer page, Integer size) {
+        Pageable pageable= PageRequest.of(page,size);
+        Page<Department> departments=departmentRepository.findDepartmentName(pageable,name);
+        return departments.map(departmentMapper::toDto);
     }
 
     @Override

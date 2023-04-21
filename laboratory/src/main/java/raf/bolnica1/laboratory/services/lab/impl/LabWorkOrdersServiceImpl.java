@@ -183,6 +183,12 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
         return new MessageDto("LabWorkOrder with ID "+labWorkOrder.getId()+" changed OrderStatus to "+orderStatus.toString()+". ");
     }
 
+    @Override
+    public LabWorkOrderDto findWorkOrder(Long id) {
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(()->new RuntimeException("Lab work order with id " + id + "not found"));
+        return labWorkOrderMapper.toDto(labWorkOrder);
+    }
+
     /**
     public Date lastSecondOfTheDay(Date date) {
         Calendar calendar = Calendar.getInstance();

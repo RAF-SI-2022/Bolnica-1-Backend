@@ -44,6 +44,9 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        System.out.println("USAO U RUNNER");
+
         Allergy a1 = new Allergy();
         a1.setName("Mleko");
         allergyRepository.save(a1);

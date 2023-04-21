@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface MedicalRecordService {
 
+    MedicalRecordDto findMedicalRecord(String lbp);
+
     GeneralMedicalDataDto addGeneralMedicalData(String lbp, GeneralMedicalDataCreateDto generalMedicalDataCreateDto);
 
     OperationDto addOperation(String lbp, OperationCreateDto operationCreateDto);

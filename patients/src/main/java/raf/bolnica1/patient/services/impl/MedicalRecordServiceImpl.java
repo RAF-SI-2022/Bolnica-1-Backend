@@ -33,6 +33,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private AllergyMapper allergyMapper;
     private VaccinationRepository vaccinationRepository;
+    private MedicalHistoryMapper medicalHistoryMapper;
+    private MedicalRecordMapper medicalRecordMapper;
+    private ExaminationHistoryMapper examinationHistoryMapper;
+    private ExaminationHistoryRepository examinationHistoryRepository;
+    private MedicalHistoryRepository medicalHistoryRepository;
+    private PatientMapper patientMapper;
 
     private VaccinationMapper vaccinationMapper;
 
@@ -40,11 +46,37 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     private OperationRepository operationRepository;
 
     @Override
+    public MedicalRecordDto findMedicalRecord(String lbp) {
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
+
+        return medicalRecordMapper.toDto(medicalRecord, patientMapper.patientToPatientDto(medicalRecord.getPatient()), generalMedicalDataMapper.toDto(medicalRecord.getGeneralMedicalData()), getOperationsForPatient(medicalRecord), getMedicalHistoryForPatient(medicalRecord), getExaminationHistoryForPatient(medicalRecord));
+    }
+    private List<OperationDto> getOperationsForPatient(MedicalRecord medicalRecord){
+        List<Operation> operations = operationRepository.findOperationsByMedicalRecord(medicalRecord);
+
+        return operationMapper.toDto(operations);
+    }
+
+    private List<MedicalHistoryDto> getMedicalHistoryForPatient(MedicalRecord medicalRecord){
+        List<MedicalHistory> medicalHistories = medicalHistoryRepository.findMedicalHistoryByMedicalRecord(medicalRecord);
+
+        return medicalHistoryMapper.toDto(medicalHistories);
+    }
+
+    private List<ExaminationHistoryDto> getExaminationHistoryForPatient(MedicalRecord medicalRecord){
+        List<ExaminationHistory> examinationHistories = examinationHistoryRepository.findExaminationHistoryByMedicalRecord(medicalRecord);
+
+        return examinationHistoryMapper.toDto(examinationHistories);
+    }
+
+    @Override
     public GeneralMedicalDataDto addGeneralMedicalData(String lbp, GeneralMedicalDataCreateDto generalMedicalDataCreateDto) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException());
 
-        GeneralMedicalData generalMedicalData = generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto);
+        GeneralMedicalData generalMedicalData = generalMedicalDataMapper.toEntity(generalMedicalDataCreateDto, medicalRecord.getGeneralMedicalData());
         generalMedicalData = generalMedicalDataRepository.save(generalMedicalData);
 
         if(generalMedicalDataCreateDto.getAllergyDtos() != null) {
@@ -66,7 +98,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             }
         }
 
-        medicalRecord.setGeneralMedicalData(generalMedicalData);
         return generalMedicalDataMapper.toDto(generalMedicalData);
     }
 

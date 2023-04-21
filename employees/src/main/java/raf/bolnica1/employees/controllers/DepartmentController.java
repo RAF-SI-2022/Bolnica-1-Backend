@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
+import raf.bolnica1.employees.dto.department.HospitalDepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.services.DepartmentService;
@@ -59,6 +60,14 @@ public class DepartmentController {
                                                                           @RequestParam(defaultValue = "0") Integer page,
                                                                           @RequestParam(defaultValue = "2") Integer size){
         return new ResponseEntity<>(departmentService.findHospitalsByDepartmentName(name, page, size),HttpStatus.OK);
+    }
+
+    @GetMapping("/getHospitalsByDepartmentNameDep")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA' , 'ROLE_DR_SPEC_POV')")
+    public ResponseEntity<Page<DepartmentDto>> getHospitalsByDepartmentNameSecond(@RequestParam String name,
+                                                                                              @RequestParam(defaultValue = "0") Integer page,
+                                                                                              @RequestParam(defaultValue = "2") Integer size){
+        return new ResponseEntity<>(departmentService.findHospitalsByDepartmentNameSecond(name, page, size),HttpStatus.OK);
     }
 
 }
