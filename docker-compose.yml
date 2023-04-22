@@ -33,7 +33,7 @@ services:
       
   activemq:
     build: 
-      context: ./activemq
+      context: ./activeMQ
       dockerfile: Dockerfile
     restart: always
     container_name: activemq

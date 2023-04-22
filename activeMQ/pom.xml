@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <swagger.version>2.9.2</swagger.version>
+        <start-main>com.raf.restdemo.MessageBroker</start-main>
     </properties>
 
     <dependencies>
@@ -79,6 +80,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${start-main}</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
