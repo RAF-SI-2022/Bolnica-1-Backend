@@ -10,10 +10,18 @@ import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
 import raf.bolnica1.laboratory.domain.lab.*;
+import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.repository.*;
-
 import java.sql.Timestamp;
 import java.util.Arrays;
+
+import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
+import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreate;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreateGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
+import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
 
 @Profile({"default"})
 @Component
@@ -27,11 +35,38 @@ public class TestDataRunner implements CommandLineRunner {
     private final PrescriptionRepository prescriptionRepository;
     private final LabWorkOrderRepository labWorkOrderRepository;
 
+    private final PrescriptionCreateDtoGenerator prescriptionCreateDtoGenerator;
+    private final PrescriptionRecieveService prescriptionRecieveService;
+    private final LabExaminationsService labExaminationsService;
+    private final ScheduledLabExaminationCreateGenerator scheduledLabExaminationCreateGenerator;
+    private final JwtTokenGetter jwtTokenGetter;
+    private final TokenSetter tokenSetter;
+
     private final ParameterAnalysisResultRepository parameterAnalysisResultRepository;
 
     @Override
     public void run(String... args) throws Exception {
         defaultAnalysisParameter();
+        generatedData();
+    }
+
+    private void generatedData(){
+
+        int prescriptionCount=10;
+
+        for(int i=0;i<prescriptionCount;i++){
+            PrescriptionCreateDto p=prescriptionCreateDtoGenerator.getPrescriptionCreateDto(analysisParameterRepository);
+            prescriptionRecieveService.createPrescription(p);
+        }
+
+        int scheduledExaminationCount=10;
+        tokenSetter.setToken(jwtTokenGetter.getDrMedSpec());
+        for(int i=0;i<scheduledExaminationCount;i++){
+            ScheduledLabExaminationCreate s=scheduledLabExaminationCreateGenerator.getScheduledLabExamination();
+            labExaminationsService.createScheduledExamination(s.getLbp(),s.getScheduledDate(),s.getNote(),
+                    "Bearer "+jwtTokenGetter.getDrMedSpec());
+        }
+
     }
 
     private void defaultAnalysisParameter() {
