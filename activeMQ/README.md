@@ -22,6 +22,8 @@ docker pull andreajo/laboratory:1.0
 
 docker pull andreajo/frontend:1.0
 
+docker pull andreajo/activemq:1.0
+
 docker network create my_local_network
 
 --nakon toga treba preko komandne linje doci do lokacije docker-compose fajla koji se nalazi u folderu za projekat
