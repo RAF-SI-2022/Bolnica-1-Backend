@@ -13,12 +13,16 @@ services:
     networks:
       - my_local_network
       
-
-  activemq-db:
-    image: rmohr/activemq:5.15.9
-    container_name: activemq-db
+      
+  activemq:
+    build: 
+      context: ./activeMQ
+      dockerfile: Dockerfile
     restart: always
+    container_name: activemq
     ports:
+      - "8079:8079"
+      - "8078:8078"
       - "61616:61616"
       - "8161:8161"
     volumes:
@@ -30,20 +34,7 @@ services:
       ACTIVEMQ_ADMIN_PASSWORD: admin
     networks:
       - my_local_network
-      
-  activemq:
-    build: 
-      context: ./activeMQ
-      dockerfile: Dockerfile
-    restart: always
-    container_name: activemq
-    ports:
-      - "8079:8079"
-      - "8078:8078"
-    networks:
-      - my_local_network
-    depends_on:
-      - activemq-db
+    
 
 
       
