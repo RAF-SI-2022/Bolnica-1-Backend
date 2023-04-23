@@ -22,7 +22,7 @@ import raf.bolnica1.laboratory.services.lab.AnalysisParameterService;
 import raf.bolnica1.laboratory.services.lab.LabAnalysisService;
 import raf.bolnica1.laboratory.services.lab.ParameterService;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
-import raf.bolnica1.laboratory.validation.ClassJsonComparator;
+import raf.bolnica1.laboratory.integration.validation.ClassJsonComparator;
 
 import java.util.ArrayList;
 import java.util.Comparator;

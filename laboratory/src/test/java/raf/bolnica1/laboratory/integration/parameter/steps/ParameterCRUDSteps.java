@@ -11,7 +11,7 @@ import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 import raf.bolnica1.laboratory.integration.parameter.ParameterIntegrationTestConfig;
 import raf.bolnica1.laboratory.repository.ParameterRepository;
 import raf.bolnica1.laboratory.services.lab.ParameterService;
-import raf.bolnica1.laboratory.validation.ClassJsonComparator;
+import raf.bolnica1.laboratory.integration.validation.ClassJsonComparator;
 
 import java.util.List;
 

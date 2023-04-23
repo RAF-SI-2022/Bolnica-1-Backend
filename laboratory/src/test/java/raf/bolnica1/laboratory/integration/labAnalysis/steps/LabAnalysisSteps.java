@@ -24,7 +24,7 @@ import raf.bolnica1.laboratory.repository.*;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
 import raf.bolnica1.laboratory.services.lab.*;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
-import raf.bolnica1.laboratory.validation.ClassJsonComparator;
+import raf.bolnica1.laboratory.integration.validation.ClassJsonComparator;
 
 import java.util.ArrayList;
 import java.util.Comparator;

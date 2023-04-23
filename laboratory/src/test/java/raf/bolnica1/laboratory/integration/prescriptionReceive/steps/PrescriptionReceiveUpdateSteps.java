@@ -18,7 +18,7 @@ import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
 import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
-import raf.bolnica1.laboratory.validation.ClassJsonComparator;
+import raf.bolnica1.laboratory.integration.validation.ClassJsonComparator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
