@@ -5,7 +5,7 @@ presubmits:
   # PROMENITI PRI KOPIRANJU
   # Name treba da bude u formatu "pull-<tim>-<naziv-servisa>-sonarqube", npr.
   # pull-banka-1-user-service-sonarqube
-  - name: pull-Bolnica-1-patient-sonarqube
+  - name: pull-Bolnica-1-patients-sonarqube
     labels:
       preset-github-ro-token: "true"
       preset-sonar-token: "true"
@@ -28,7 +28,7 @@ presubmits:
               # Pozeljno je da naziv projekta pocinje sa nazivom vaseg tima.
               SONAR_PROJECT_NAME="Bolnica 1 - Pacijent mikroservis"
               # Ovo je naziv foldera gde se nalazi mikroservis.
-              SERVICE_NAME="patient"
+              SERVICE_NAME="patients"
               start-docker.sh
               head_ref=$(curl -L --silent -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/RAF-SI-2022/"$REPO_NAME"/pulls/"$PULL_NUMBER" | jq -r .head.ref)
               export PULL_HEAD_REF="$head_ref"
@@ -66,7 +66,7 @@ postsubmits:
   # PROMENITI PRI KOPIRANJU
   # Name treba da bude u formatu "post-<tim>-<naziv-servisa>-sonarqube", npr.
   # post-banka-1-user-service-sonarqube
-  - name: post-Bolnica-1-Backend-patient-sonarqube
+  - name: post-Bolnica-1-Backend-patients-sonarqube
     labels:
       preset-github-ro-token: "true"
       preset-sonar-token: "true"
@@ -89,7 +89,7 @@ postsubmits:
               # Pozeljno je da naziv projekta pocinje sa nazivom vaseg tima.
               SONAR_PROJECT_NAME="Bolnica 1 - Pacijent mikroservis"
               # Ovo je naziv foldera gde se nalazi mikroservis.
-              SERVICE_NAME="patient"
+              SERVICE_NAME="patients"
               start-docker.sh
               # PROMENITI PRI KOPIRANJU
               # Ovde treba do pokrenete sve mikroservise i dependencies koji vam trebaju
