@@ -15,27 +15,7 @@ import raf.bolnica1.laboratory.services.lab.PrescriptionService;
 public class PrescriptionServiceImpl implements PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
-    private final JmsTemplate jmsTemplate;
 
-    @Override
-    public PrescriptionDto createPrescription(Object dto) {
-        return null;
-    }
-
-    @Override
-    public PrescriptionDto updatePrescription(Object dto) {
-        return null;
-    }
-
-    @Override
-    public Object deletePrescription(Long id) {
-        return null;
-    }
-
-    @Override
-    public PrescriptionDto getPrescription(Long id) {
-        return null;
-    }
 
     @Override
     public void updatePrescriptionStatus(Long id, PrescriptionStatus status) {
