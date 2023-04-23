@@ -73,15 +73,20 @@ public class LaboratoryExaminationsController {
 
     @GetMapping("/list-scheduled-examinations/by-lbp-date")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
-    public ResponseEntity<?> listScheduledExaminationsByLbpAndDate(@RequestParam("lbp")String lbp,
+    public ResponseEntity<?> listScheduledExaminationsByLbpAndDate(@RequestParam(required = false)String lbp,
                                                                     @RequestParam(required = false)Long startDate,
                                                                     @RequestParam(required = false)Long endDate,
                                                                     @RequestParam(defaultValue = "0")Integer page,
                                                                     @RequestParam(defaultValue = "10")Integer size,
                                                                     HttpServletRequest request) {
+        Date sDate=null;
+        if(startDate!=null)sDate=new Date(startDate);
+        Date eDate=null;
+        if(endDate!=null)eDate=new Date(endDate);
+
         return new ResponseEntity<>(
-                labExaminationsService.listScheduledExaminationsByLbpAndDate(lbp,new Date(startDate),
-                        new Date(endDate),request.getHeader("Authorization"),page,size),
+                labExaminationsService.listScheduledExaminationsByLbpAndDate(lbp,sDate,
+                        eDate,request.getHeader("Authorization"),page,size),
                 HttpStatus.OK);
     }
 
