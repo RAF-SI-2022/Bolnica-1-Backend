@@ -27,23 +27,23 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     @Override
     public AnalysisParameterDto createAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
-        AnalysisParameter analysisParameter=analysisParameterMapper.toEntity(analysisParameterDto);
+        AnalysisParameter analysisParameter = analysisParameterMapper.toEntity(analysisParameterDto);
         analysisParameter.setId(null);
 
-        analysisParameter=analysisParameterRepository.save(analysisParameter);
+        analysisParameter = analysisParameterRepository.save(analysisParameter);
 
-        return  analysisParameterMapper.toDto(analysisParameter);
+        return analysisParameterMapper.toDto(analysisParameter);
     }
 
     @Override
     public AnalysisParameterDto updateAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
-        if(analysisParameterRepository.findAnalysisParameterById(analysisParameterDto.getId())==null)
+        if (analysisParameterRepository.findAnalysisParameterById(analysisParameterDto.getId()) == null)
             throw new RuntimeException();
 
-        AnalysisParameter analysisParameter=analysisParameterMapper.toEntity(analysisParameterDto);
+        AnalysisParameter analysisParameter = analysisParameterMapper.toEntity(analysisParameterDto);
 
-        analysisParameter=analysisParameterRepository.save(analysisParameter);
+        analysisParameter = analysisParameterRepository.save(analysisParameter);
 
         return analysisParameterMapper.toDto(analysisParameter);
     }
@@ -51,7 +51,7 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     @Override
     public MessageDto deleteAnalysisParameter(Long id) {
         analysisParameterRepository.deleteById(id);
-        return new MessageDto("AnalysisParameter with ID "+id+" deleted");
+        return new MessageDto("AnalysisParameter with ID " + id + " deleted");
     }
 
     @Override
@@ -60,9 +60,9 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     }
 
     @Override
-    public Page<ParameterDto> getParametersByAnalysisId(Long id,int page,int size) {
-        Pageable pageable= PageRequest.of(page,size);
-        Page<Parameter> parameters=analysisParameterRepository.findParametersByAnalysisId(pageable,id);
+    public Page<ParameterDto> getParametersByAnalysisId(Long id, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Parameter> parameters = analysisParameterRepository.findParametersByAnalysisId(pageable, id);
         return parameters.map(parameterMapper::toDto);
     }
 }
