@@ -41,7 +41,7 @@ presubmits:
               # docker compose up -d mysql-employees
               git branch $PULL_HEAD_REF
               git reset --hard HEAD~1
-              # git checkout $PULL_HEAD_REF
+              git checkout $PULL_HEAD_REF
               cd "$SERVICE_NAME"
               mvn clean verify sonar:sonar -Pcoverage \
                 -Dsonar.host.url=https://sonar.k8s.elab.rs \
