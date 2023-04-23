@@ -38,7 +38,7 @@ presubmits:
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-infirmary
               # docker compose --profile infirmary up -d
-              docker compose up -d mysql-infirmary
+              # docker compose up -d mysql-infirmary
               git branch $PULL_HEAD_REF
               git reset --hard HEAD~1
               git checkout $PULL_HEAD_REF
@@ -90,7 +90,7 @@ postsubmits:
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-infirmary
               # docker compose --profile infirmary up -d
-              docker compose up -d mysql-infirmary
+              # docker compose up -d mysql-infirmary
               cd "$SERVICE_NAME"
 
               ref=$(git rev-parse --abbrev-ref HEAD)

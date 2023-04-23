@@ -36,9 +36,9 @@ presubmits:
               # Ovde treba do pokrenete sve mikroservise i dependencies koji vam trebaju
               # za integracione i end to end testove.
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
-              # docker compose up -d mysql-user
-              # docker compose --profile user-service up -d
-              docker compose up -d mysql-user
+              # docker compose up -d mysql-patients
+              # docker compose --profile patients up -d
+              # docker compose up -d mysql-patients
               git branch $PULL_HEAD_REF
               git reset --hard HEAD~1
               git checkout $PULL_HEAD_REF
@@ -88,9 +88,9 @@ postsubmits:
               # Ovde treba do pokrenete sve mikroservise i dependencies koji vam trebaju
               # za integracione i end to end testove.
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
-              # docker compose up -d mysql-user
-              # docker compose --profile user-service up -d
-              docker compose up -d mysql-user
+              # docker compose up -d mysql-patients
+              # docker compose --profile patients up -d
+              # docker compose up -d mysql-patients
               cd "$SERVICE_NAME"
 
               ref=$(git rev-parse --abbrev-ref HEAD)
