@@ -21,7 +21,7 @@ presubmits:
               set -euo pipefail
               # PROMENITI PRI KOPIRANJU
               # Ovaj parametar dobijate od SonarQube-a prilikom kreiranja projekta.
-              SONAR_PROJECT_KEY="Bolnica 1 - Zaposleni mikroservis"
+              SONAR_PROJECT_KEY="Bolnica-1---Zaposleni-mikroservis"
               # Ovde treba da unesete kako vam se projekat zove.
               # Ovaj naziv ce se prikazati u pregeldu projekata na SonarQube-u.
               # Primer: Banka-1 - korisnicki servis
@@ -82,7 +82,7 @@ postsubmits:
               set -euo pipefail
               # PROMENITI PRI KOPIRANJU
               # Ovaj parametar dobijate od SonarQube-a prilikom kreiranja projekta.
-              SONAR_PROJECT_KEY="Bolnica 1 - Zaposleni mikroservis"
+              SONAR_PROJECT_KEY="Bolnica-1---Zaposleni-mikroservis"
               # Ovde treba da unesete kako vam se projekat zove.
               # Ovaj naziv ce se prikazati u pregeldu projekata na SonarQube-u.
               # Primer: Banka-1 - korisnicki servis
