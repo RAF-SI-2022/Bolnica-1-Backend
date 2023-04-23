@@ -32,6 +32,7 @@ public class ScheduleExamMapper {
     public ScheduleExamDto toDto(ScheduleExam scheduleExam){
         ScheduleExamDto scheduleExamDto = new ScheduleExamDto();
         scheduleExamDto.setId(scheduleExam.getId());
+        scheduleExamDto.setDoctorLbz(scheduleExamDto.getDoctorLbz());
         scheduleExamDto.setLbp(scheduleExam.getPatient().getLbp());
         scheduleExamDto.setPatientArrival(scheduleExam.getArrivalStatus());
         scheduleExamDto.setDateAndTime(scheduleExam.getDateAndTime());

@@ -5,7 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
-import raf.bolnica1.laboratory.dataGenerators.classes.dto.parameter.ParameterDtoGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.parameter.ParameterDtoGenerator;
 import raf.bolnica1.laboratory.domain.lab.Parameter;
 import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 import raf.bolnica1.laboratory.integration.parameter.ParameterIntegrationTestConfig;

@@ -13,16 +13,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import raf.bolnica1.laboratory.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilterGenerator;
-import raf.bolnica1.laboratory.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
-import raf.bolnica1.laboratory.dataGenerators.classes.dto.result.ResultUpdateDtoGenerator;
-import raf.bolnica1.laboratory.dataGenerators.jwtToken.JwtTokenGetter;
-import raf.bolnica1.laboratory.dataGenerators.jwtToken.TokenSetter;
-import raf.bolnica1.laboratory.dataGenerators.primitives.RandomLong;
-import raf.bolnica1.laboratory.dataGenerators.primitives.RandomString;
-import raf.bolnica1.laboratory.dataGenerators.primitives.util.patient.PatientDto;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilterGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.result.ResultUpdateDtoGenerator;
+import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
+import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
+import raf.bolnica1.laboratory.util.dataGenerators.primitives.RandomLong;
+import raf.bolnica1.laboratory.util.dataGenerators.primitives.RandomString;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
-import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
 import raf.bolnica1.laboratory.dto.prescription.*;
@@ -180,6 +178,8 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     @Then("rezultati se nalaze na pacijent servisu")
     public void rezultati_se_nalaze_na_pacijent_servisu() {
         try{
+
+            Thread.sleep(3000);
 
             String token= jwtTokenGetter.getDrMedSpec();
 
