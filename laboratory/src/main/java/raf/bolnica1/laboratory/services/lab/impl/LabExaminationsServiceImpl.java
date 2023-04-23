@@ -36,14 +36,12 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     public LabExaminationsServiceImpl(AuthenticationUtils authenticationUtils,
                                       ScheduledLabExaminationMapper scheduledLabExaminationMapper,
                                       ScheduledLabExaminationRepository scheduledLabExaminationRepository,
-                                      @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate){
-        this.authenticationUtils=authenticationUtils;
-        this.scheduledLabExaminationMapper=scheduledLabExaminationMapper;
-        this.employeeRestTemplate=employeeRestTemplate;
-        this.scheduledLabExaminationRepository=scheduledLabExaminationRepository;
+                                      @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate) {
+        this.authenticationUtils = authenticationUtils;
+        this.scheduledLabExaminationMapper = scheduledLabExaminationMapper;
+        this.employeeRestTemplate = employeeRestTemplate;
+        this.scheduledLabExaminationRepository = scheduledLabExaminationRepository;
     }
-
-
 
 
     @Override
@@ -54,19 +52,18 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
         ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationMapper.toEntity(departmentId.getBody(), lbp, scheduledDate, note, lbz);
-        scheduledLabExamination=scheduledLabExaminationRepository.save(scheduledLabExamination);
+        scheduledLabExamination = scheduledLabExaminationRepository.save(scheduledLabExamination);
 
         return scheduledLabExaminationMapper.toDto(scheduledLabExamination);
     }
 
     @Override
-    public ScheduledLabExaminationDto changeExaminationStatus(Long id, ExaminationStatus newStatus)
-    {
-        ScheduledLabExamination scheduledLabExamination= scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
+    public ScheduledLabExaminationDto changeExaminationStatus(Long id, ExaminationStatus newStatus) {
+        ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No examination with id %s", id))
         );
         scheduledLabExamination.setExaminationStatus(newStatus);
-        scheduledLabExamination=scheduledLabExaminationRepository.save(scheduledLabExamination);
+        scheduledLabExamination = scheduledLabExaminationRepository.save(scheduledLabExamination);
         return scheduledLabExaminationMapper.toDto(scheduledLabExamination);
     }
 
@@ -79,6 +76,7 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
         return scheduledLabExaminationMapper.toDto(scheduledLabExaminationRepository.findScheduledLabExaminationsByDateAndDepartmentId(date, departmentId.getBody()));
     }
+
     @Override
     public List<ScheduledLabExaminationDto> listScheduledExaminations(String token) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
@@ -91,17 +89,17 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
-    public Page<ScheduledLabExaminationDto> listScheduledExaminationsByLbpAndDate(String lbp, Date startDate, Date endDate, String token,Integer page,Integer size){
+    public Page<ScheduledLabExaminationDto> listScheduledExaminationsByLbpAndDate(String lbp, Date startDate, Date endDate, String token, Integer page, Integer size) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token.split(" ")[1]);
         HttpEntity httpEntity = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<Long> departmentId = employeeRestTemplate.exchange("/department/employee/" + lbz, HttpMethod.GET, httpEntity, Long.class);
 
-        Pageable pageable= PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<ScheduledLabExamination> scheduledLabExaminations=scheduledLabExaminationRepository
-                .findScheduledLabExaminationByLbpAndDateAndDepartmentId(pageable,lbp,startDate,endDate, departmentId.getBody());
+        Page<ScheduledLabExamination> scheduledLabExaminations = scheduledLabExaminationRepository
+                .findScheduledLabExaminationByLbpAndDateAndDepartmentId(pageable, lbp, startDate, endDate, departmentId.getBody());
         return scheduledLabExaminations.map(scheduledLabExaminationMapper::toDto);
     }
 

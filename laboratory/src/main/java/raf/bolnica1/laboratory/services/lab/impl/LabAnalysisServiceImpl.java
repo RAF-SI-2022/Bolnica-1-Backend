@@ -21,10 +21,10 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     @Override
     public LabAnalysisDto createLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
-        LabAnalysis labAnalysis=labAnalysisMapper.toEntity(labAnalysisDto);
+        LabAnalysis labAnalysis = labAnalysisMapper.toEntity(labAnalysisDto);
         labAnalysis.setId(null);
 
-        labAnalysis=labAnalysisRepository.save(labAnalysis);
+        labAnalysis = labAnalysisRepository.save(labAnalysis);
 
         return labAnalysisMapper.toDto(labAnalysis);
     }
@@ -33,12 +33,12 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     public LabAnalysisDto updateLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
         /// ako ne postoji sa tim ID onda ne moze ni da update-uje
-        if(labAnalysisRepository.findLabAnalysisById(labAnalysisDto.getId())==null)
+        if (labAnalysisRepository.findLabAnalysisById(labAnalysisDto.getId()) == null)
             throw new RuntimeException();
 
-        LabAnalysis labAnalysis=labAnalysisMapper.toEntity(labAnalysisDto);
+        LabAnalysis labAnalysis = labAnalysisMapper.toEntity(labAnalysisDto);
 
-        labAnalysis=labAnalysisRepository.save(labAnalysis);
+        labAnalysis = labAnalysisRepository.save(labAnalysis);
 
         return labAnalysisMapper.toDto(labAnalysis);
     }
@@ -46,7 +46,7 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     @Override
     public MessageDto deleteLabAnalysis(Long id) {
         labAnalysisRepository.deleteById(id);
-        return new MessageDto("LabAnalysis with ID "+id.toString()+" deleted");
+        return new MessageDto("LabAnalysis with ID " + id.toString() + " deleted");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
 
     @Override
     public List<LabAnalysisDto> getAllLabAnalysis() {
-        List<LabAnalysis> labAnalyses=labAnalysisRepository.findAll();
+        List<LabAnalysis> labAnalyses = labAnalysisRepository.findAll();
         return labAnalysisMapper.toDto(labAnalyses);
     }
 }

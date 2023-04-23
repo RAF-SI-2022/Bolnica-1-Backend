@@ -137,14 +137,14 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     /// vraca samo obradjene
     public Page<LabWorkOrder> workOrdersHistory(String lbp, Date fromDate, Date toDate, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        if(toDate!=null)toDate=new Date(toDate.getTime()+24*60*60*1000);
+        if (toDate != null) toDate = new Date(toDate.getTime() + 24 * 60 * 60 * 1000);
         return labWorkOrderRepository.workOrdersHistory(pageable, lbp, fromDate, toDate);
     }
 
     @Override
     public Page<LabWorkOrder> findWorkOrdersByLab(String lbp, Date fromDate, Date toDate, OrderStatus status, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        if(toDate!=null)toDate=new Date(toDate.getTime()+24*60*60*1000);
+        if (toDate != null) toDate = new Date(toDate.getTime() + 24 * 60 * 60 * 1000);
         return labWorkOrderRepository.findWorkOrdersByLab(pageable, lbp, fromDate, toDate, status);
     }
 
@@ -171,34 +171,32 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
         parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
         labWorkOrderRepository.delete(labWorkOrder);
-           parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
-           labWorkOrderRepository.delete(labWorkOrder);
     }
 
     @Override
-    public MessageDto updateLabWorkOrderStatus(Long id,OrderStatus orderStatus) {
-        LabWorkOrder labWorkOrder=labWorkOrderRepository.findLabWorkOrderById(id);
+    public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);
-        labWorkOrder=labWorkOrderRepository.save(labWorkOrder);
-        return new MessageDto("LabWorkOrder with ID "+labWorkOrder.getId()+" changed OrderStatus to "+orderStatus.toString()+". ");
+        labWorkOrder = labWorkOrderRepository.save(labWorkOrder);
+        return new MessageDto("LabWorkOrder with ID " + labWorkOrder.getId() + " changed OrderStatus to " + orderStatus.toString() + ". ");
     }
 
     @Override
     public LabWorkOrderDto findWorkOrder(Long id) {
-        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(()->new RuntimeException("Lab work order with id " + id + "not found"));
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Lab work order with id " + id + "not found"));
         return labWorkOrderMapper.toDto(labWorkOrder);
     }
 
     /**
-    public Date lastSecondOfTheDay(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
+     public Date lastSecondOfTheDay(Date date) {
+     Calendar calendar = Calendar.getInstance();
+     calendar.setTime(date);
+     calendar.set(Calendar.HOUR_OF_DAY, 23);
+     calendar.set(Calendar.MINUTE, 59);
+     calendar.set(Calendar.SECOND, 59);
+     calendar.set(Calendar.MILLISECOND, 999);
 
-        return calendar.getTime();
-    }
+     return calendar.getTime();
+     }
      */
 }
