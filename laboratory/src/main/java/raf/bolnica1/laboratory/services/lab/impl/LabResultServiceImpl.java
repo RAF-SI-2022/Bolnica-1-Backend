@@ -50,30 +50,30 @@ public class LabResultServiceImpl implements LabResultService {
     @Override
     public MessageDto updateResults(ResultUpdateDto resultUpdateDto) {
 
-        ParameterAnalysisResult parameterAnalysisResult= parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(resultUpdateDto.getLabWorkOrderId(), resultUpdateDto.getAnalysisParameterId());
+        ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(resultUpdateDto.getLabWorkOrderId(), resultUpdateDto.getAnalysisParameterId());
 
-        if(parameterAnalysisResult==null)
+        if (parameterAnalysisResult == null)
             throw new RuntimeException();
 
         parameterAnalysisResult.setResult(resultUpdateDto.getResult());
         parameterAnalysisResult.setDateTime(resultUpdateDto.getDateTime());
         parameterAnalysisResult.setBiochemistLbz(resultUpdateDto.getBiochemistLbz());
 
-        parameterAnalysisResult=parameterAnalysisResultRepository.save(parameterAnalysisResult);
+        parameterAnalysisResult = parameterAnalysisResultRepository.save(parameterAnalysisResult);
 
-        MessageDto statusMessage=new MessageDto("");
-        if(parameterAnalysisResultRepository.countParameterAnalysisResultWithNullResultByLabWorkOrderId(resultUpdateDto.getLabWorkOrderId())==0){
-            statusMessage=labWorkOrdersService.updateLabWorkOrderStatus(resultUpdateDto.getLabWorkOrderId(), OrderStatus.OBRADJEN);
+        MessageDto statusMessage = new MessageDto("");
+        if (parameterAnalysisResultRepository.countParameterAnalysisResultWithNullResultByLabWorkOrderId(resultUpdateDto.getLabWorkOrderId()) == 0) {
+            statusMessage = labWorkOrdersService.updateLabWorkOrderStatus(resultUpdateDto.getLabWorkOrderId(), OrderStatus.OBRADJEN);
 
         }
 
-        return new MessageDto(statusMessage+"Succesfully added result to LabWorkOrder with ID "+parameterAnalysisResult.getLabWorkOrder().getId()+". ");
+        return new MessageDto(statusMessage + "Succesfully added result to LabWorkOrder with ID " + parameterAnalysisResult.getLabWorkOrder().getId() + ". ");
     }
 
     @Override
     public MessageDto commitResults(Long workOrderId) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
-        if(labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)){
+        if (labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)) {
             labWorkOrder.getPrescription().setStatus(PrescriptionStatus.REALIZOVAN);
             PrescriptionCreateDto prescriptionCreateDto = new PrescriptionCreateDto();
             prescriptionCreateDto.setComment(labWorkOrder.getPrescription().getComment());
@@ -85,7 +85,7 @@ public class LabResultServiceImpl implements LabResultService {
             prescriptionCreateDto.setType("LABORATORIJA");
             prescriptionCreateDto.setLabResultDtoList(new ArrayList<>());
             List<ParameterAnalysisResult> parameterAnalysisResultList = parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId());
-            for(ParameterAnalysisResult parameterAnalysisResult : parameterAnalysisResultList){
+            for (ParameterAnalysisResult parameterAnalysisResult : parameterAnalysisResultList) {
                 LabResultDto labResultDto = new LabResultDto();
                 labResultDto.setResult(parameterAnalysisResult.getResult());
                 labResultDto.setAnalysisName(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName());

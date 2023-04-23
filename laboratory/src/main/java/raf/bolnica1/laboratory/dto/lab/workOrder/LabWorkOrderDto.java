@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LabWorkOrderDto {
     private PrescriptionDto prescription;
-    private Long lbp;
+    private String lbp;
     private Timestamp creationDateTime;
     private OrderStatus status;
     private String technicianLbz;
