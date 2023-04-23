@@ -28,7 +28,7 @@ presubmits:
               # Pozeljno je da naziv projekta pocinje sa nazivom vaseg tima.
               SONAR_PROJECT_NAME="Bolnica 1 - Zaposleni mikroservis"
               # Ovo je naziv foldera gde se nalazi mikroservis.
-              SERVICE_NAME="user_service"
+              SERVICE_NAME="employees"
               start-docker.sh
               head_ref=$(curl -L --silent -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/RAF-SI-2022/"$REPO_NAME"/pulls/"$PULL_NUMBER" | jq -r .head.ref)
               export PULL_HEAD_REF="$head_ref"
@@ -39,9 +39,16 @@ presubmits:
               # docker compose up -d mysql-employees
               # docker compose --profile employees up -d
               # docker compose up -d mysql-employees
-              git branch $PULL_HEAD_REF
+
+              branch=$PULL_HEAD_REF
+              curr_branch=$(git rev-parse --abbrev-ref HEAD)
+              if [[ "$branch" == "$curr_branch" ]]; then
+                  branch="$PULL_HEAD_REF"-1
+              fi
+              git branch $branch
               git reset --hard HEAD~1
-              git checkout $PULL_HEAD_REF
+              git checkout $branch
+
               cd "$SERVICE_NAME"
               mvn clean verify sonar:sonar -Pcoverage \
                 -Dsonar.host.url=https://sonar.k8s.elab.rs \
