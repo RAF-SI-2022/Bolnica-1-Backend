@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("departmentRestTemplate")
+    @DependsOn("setEmployeeServiceUrlStatic")
     public static RestTemplate departmentRestTemplate() {
         if(employeeServiceUrlStatic == null)
             employeeServiceUrlStatic = "http://localhost:8080/api";
@@ -30,6 +32,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("loginRestTemplate")
+    @DependsOn("setEmployeeServiceUrlStatic")
     public static RestTemplate loginRestTemplate() {
         if(employeeServiceUrlStatic == null)
             employeeServiceUrlStatic = "http://localhost:8080/api";
@@ -40,6 +43,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("patientRestTemplate")
+    @DependsOn("setPatientsServiceUrl")
     public static RestTemplate patientRestTemplate() {
         if(patientsServiceUrlStatic == null)
             patientsServiceUrlStatic = "http://localhost:8081/api";
@@ -50,6 +54,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("prescriptionRestTemplate")
+    @DependsOn("setPatientsServiceUrl")
     public static RestTemplate prescriptionRestTemplate() {
         if(patientsServiceUrlStatic == null)
             patientsServiceUrlStatic = "http://localhost:8081/api";
@@ -60,6 +65,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("infoRestTemplate")
+    @DependsOn("setPatientsServiceUrl")
     public static RestTemplate infoRestTemplate() {
         if(patientsServiceUrlStatic == null)
             patientsServiceUrlStatic = "http://localhost:8081/api";
@@ -70,6 +76,7 @@ public class RestServiceClientConfig {
 
     @Bean
     @Qualifier("diagnosisCodeRestTemplate")
+    @DependsOn("setPatientsServiceUrl")
     public static RestTemplate diagnosisCodeRestTemplate() {
         if(patientsServiceUrlStatic == null)
             patientsServiceUrlStatic = "http://localhost:8081/api";
@@ -87,12 +94,16 @@ public class RestServiceClientConfig {
     }
 
     @Value("${employee.service.url}")
-    public void setEmployeeServiceUrlStatic(String employeeServiceUrl){
+    @Bean
+    public String setEmployeeServiceUrlStatic(String employeeServiceUrl){
         RestServiceClientConfig.employeeServiceUrlStatic = employeeServiceUrl;
+        return "";
     }
+    @Bean
     @Value("${patients.service.url}")
-    public void setPatientsServiceUrl(String patientsServiceUrl){
+    public String setPatientsServiceUrl(String patientsServiceUrl){
         RestServiceClientConfig.patientsServiceUrlStatic = patientsServiceUrl;
+        return "";
     }
 
 
