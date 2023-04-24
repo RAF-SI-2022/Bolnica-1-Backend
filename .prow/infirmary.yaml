@@ -39,7 +39,11 @@ presubmits:
               # docker compose up -d mysql-infirmary
               # docker compose --profile infirmary up -d
               # docker compose up -d mysql-infirmary
-
+              docker compose --profile employees-service -d
+              docker compose --profile patients-service -d
+              docker compose --profile laboratory-service -d
+              
+              
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
               if [[ "$branch" == "$curr_branch" ]]; then
@@ -98,6 +102,10 @@ postsubmits:
               # docker compose up -d mysql-infirmary
               # docker compose --profile infirmary up -d
               # docker compose up -d mysql-infirmary
+              docker compose --profile employees-service -d
+              docker compose --profile patients-service -d
+              docker compose --profile laboratory-service -d
+              
               cd "$SERVICE_NAME"
 
               ref=$(git rev-parse --abbrev-ref HEAD)

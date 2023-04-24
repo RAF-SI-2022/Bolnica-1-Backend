@@ -38,8 +38,10 @@ presubmits:
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
-              # docker compose up -d mysql-laboratory
-
+#               docker compose up -d mysql-laboratory
+              docker compose --profile employees-service -d
+              docker compose --profile patients-service -d
+              
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
               if [[ "$branch" == "$curr_branch" ]]; then
@@ -98,6 +100,9 @@ postsubmits:
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
               # docker compose up -d mysql-laboratory
+              docker compose --profile employees-service -d
+              docker compose --profile patients-service -d
+              
               cd "$SERVICE_NAME"
 
               ref=$(git rev-parse --abbrev-ref HEAD)
