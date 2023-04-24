@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import raf.bolnica1.employees.dataGenerators.EmployeeGenerator;
 import raf.bolnica1.employees.dataGenerators.HospitalDepartmentGenerator;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomLong;
@@ -12,6 +16,7 @@ import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.Hospital;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
+import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.HospitalMapper;
@@ -167,6 +172,83 @@ public class DepartmentServiceTest {
             }
         }
         Assertions.assertEquals(count, objects.size());
+    }
+
+    @Test
+    public void findHospitalsByDepartmentNameSecond(){
+        hospitalDepartmentGenerator.fill();
+
+        List<Department> departments = hospitalDepartmentGenerator.getDepartments();
+        Page<Department> page = new PageImpl<>(departments);
+
+        Department department = hospitalDepartmentGenerator.getRandomDepartment();
+
+        Pageable pageable = PageRequest.of(0, departments.size());
+
+        given(departmentRepository.findDepartmentName(pageable, department.getName())).willReturn(page);
+
+        Page<DepartmentDto> departmentDtos = departmentService.findHospitalsByDepartmentNameSecond(department.getName(), 0, departments.size());
+
+        int count = 0;
+        for(DepartmentDto departmentDto : departmentDtos.getContent()){
+            for(Department dep : page.getContent()){
+                if(departmentDto.getId().equals(dep.getId())){
+                    Assertions.assertTrue(classJsonComparator.compareCommonFields(dep, departmentDto));
+                    Assertions.assertEquals(dep.getHospital().getShortName(), departmentDto.getHospitalName());
+                    count++;
+                }
+            }
+        }
+        Assertions.assertEquals(count, departments.size());
+    }
+
+    @Test
+    public void listAllHospitals(){
+        hospitalDepartmentGenerator.fill();
+
+        List<Hospital> hospitals = hospitalDepartmentGenerator.getHospitals();
+
+        given(hospitalRepository.findAll()).willReturn(hospitals);
+
+        List<HospitalDto> hospitalDtos = departmentService.listAllHospitals();
+
+        int count = 0;
+        for(HospitalDto hospitalDto : hospitalDtos){
+            for(Hospital hospital : hospitals){
+                if(hospitalDto.getId().equals(hospital.getId())){
+                    Assertions.assertTrue(classJsonComparator.compareCommonFields(hospital, hospitalDto));
+                    count++;
+                }
+            }
+        }
+        Assertions.assertEquals(count, hospitals.size());
+    }
+
+    @Test
+    public void findHospitalsByDepartmentName(){
+        hospitalDepartmentGenerator.fill();
+
+        List<Hospital> hospitals = hospitalDepartmentGenerator.getHospitals();
+        Page<Hospital> page = new PageImpl<>(hospitals);
+
+        Department department = hospitalDepartmentGenerator.getRandomDepartment();
+
+        Pageable pageable = PageRequest.of(0, hospitals.size());
+
+        given(departmentRepository.findHospitalsByDepartmentName(pageable, department.getName())).willReturn(page);
+
+        Page<HospitalDto> hospitalDtos = departmentService.findHospitalsByDepartmentName(department.getName(), 0, hospitals.size());
+
+        int count = 0;
+        for(HospitalDto hospitalDto : hospitalDtos.getContent()){
+            for(Hospital hospital : page.getContent()){
+                if(hospitalDto.getId().equals(hospital.getId())){
+                    Assertions.assertTrue(classJsonComparator.compareCommonFields(hospital, hospitalDto));
+                    count++;
+                }
+            }
+        }
+        Assertions.assertEquals(count, hospitals.size());
     }
 
 }
