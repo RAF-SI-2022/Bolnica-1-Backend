@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import raf.bolnica1.employees.dataGenerators.EmployeeGenerator;
 import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.EmployeeMapper;
@@ -57,9 +58,9 @@ public class EmployeeServiceTest2 {
     @Test
     public void createEmployeeTest(){
 
-        /*Employee employee=employeeGenerator.getRandomEmployee();
+        ///Employee employee=employeeGenerator.getRandomEmployee();
 
-        given()*/
+        ///given()
 
     }
 

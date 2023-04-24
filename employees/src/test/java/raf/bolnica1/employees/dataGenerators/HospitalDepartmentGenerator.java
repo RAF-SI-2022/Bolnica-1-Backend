@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomDate;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomLong;
+import raf.bolnica1.employees.dataGenerators.primitives.RandomNames;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomString;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Hospital;

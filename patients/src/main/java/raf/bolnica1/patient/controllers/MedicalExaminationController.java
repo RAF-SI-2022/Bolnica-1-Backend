@@ -82,7 +82,7 @@ public class MedicalExaminationController {
 
     // Azuriranje statusa pacijenta
     @PutMapping(path = "/patient/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA')")
+    @PreAuthorize("hasAnyRole('ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' , 'ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
     public ResponseEntity<Object> updatePatientArrivalStatus(@PathVariable("id") Long id,@RequestParam("pa") PatientArrival status){
         return new ResponseEntity<>(patientService.updatePatientArrivalStatus(id, status), HttpStatus.OK);
     }
