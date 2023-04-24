@@ -1,11 +1,10 @@
-package raf.bolnica1.employees.dataGenerators;
+package raf.bolnica1.employees.dataGenerators.dto;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomDate;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomLong;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomNames;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomString;
-import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.constants.Profession;
 import raf.bolnica1.employees.domain.constants.Title;
 import raf.bolnica1.employees.dto.employee.EmployeeCreateDto;
@@ -31,12 +30,12 @@ public class EmployeeCreateDtoGenerator {
         this.randomLong = randomLong;
     }
 
-    public void fill(Department department){
+    public void fill(String departmentPbo){
         count = 0;
         employees = new ArrayList<>();
 
         for(int i = 0; i<5; i++){
-            employees.add(generateEmployee(department));
+            employees.add(generateEmployee(departmentPbo));
         }
     }
 

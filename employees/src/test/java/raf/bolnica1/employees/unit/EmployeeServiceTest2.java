@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.serviceTest;
+package raf.bolnica1.employees.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,8 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import raf.bolnica1.employees.dataGenerators.EmployeeGenerator;
-import raf.bolnica1.employees.domain.Employee;
+import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
 import raf.bolnica1.employees.mappers.DepartmentMapper;
 import raf.bolnica1.employees.mappers.EmployeeMapper;
 import raf.bolnica1.employees.repository.DepartmentRepository;
@@ -18,7 +17,6 @@ import raf.bolnica1.employees.security.util.JwtUtils;
 import raf.bolnica1.employees.services.EmployeeService;
 import raf.bolnica1.employees.services.impl.EmployeeServiceImpl;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)

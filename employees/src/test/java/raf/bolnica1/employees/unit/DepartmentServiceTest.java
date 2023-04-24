@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.serviceTest;
+package raf.bolnica1.employees.unit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import raf.bolnica1.employees.dataGenerators.EmployeeGenerator;
-import raf.bolnica1.employees.dataGenerators.HospitalDepartmentGenerator;
+import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
+import raf.bolnica1.employees.dataGenerators.domain.HospitalDepartmentGenerator;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomLong;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
