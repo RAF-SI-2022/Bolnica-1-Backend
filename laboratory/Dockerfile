@@ -1,6 +1,6 @@
 FROM maven:3.9.1 AS build
 
-ARG EMPLOYEE_SERVICE=http://localhost:8080/api
+ARG EMPLOYEE_SERVICE=http://employees-service:8080/api
 ARG PATIENTS_SERVICE=http://localhost:8081/api
 
 COPY src /usr/src/app/src
