@@ -52,6 +52,8 @@ services:
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/patients-service
+      - employee_service_url=http://employees-service:8080/api
+      - laboratory_service_url=http://laboratory-service:8083/api
     networks:
       - my_local_network
     depends_on:
