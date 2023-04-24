@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.validation;
+package raf.bolnica1.laboratory.integration.validation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
