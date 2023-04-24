@@ -27,9 +27,9 @@ public class RestServiceClientConfig {
         RestTemplate restTemplate = new RestTemplate();
         if(employeeServiceUrlStatic == null){
             if(System.getProperty("employee-url") != null)
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")+"/department"));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api"));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/department"));
@@ -42,9 +42,9 @@ public class RestServiceClientConfig {
         RestTemplate restTemplate = new RestTemplate();
         if(employeeServiceUrlStatic == null){
             if(System.getProperty("employee-url") != null)
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")+"/auth/login"));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api"));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/auth/login"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/auth/login"));
