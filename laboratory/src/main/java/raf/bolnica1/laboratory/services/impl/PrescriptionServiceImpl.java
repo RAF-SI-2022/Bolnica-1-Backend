@@ -1,14 +1,12 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.Prescription;
-import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
 import raf.bolnica1.laboratory.exceptions.prescription.PrescriptionNotFoundException;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
-import raf.bolnica1.laboratory.services.lab.PrescriptionService;
+import raf.bolnica1.laboratory.services.PrescriptionService;
 
 @Service
 @AllArgsConstructor

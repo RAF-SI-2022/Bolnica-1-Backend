@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,7 @@ import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.mappers.AnalysisParameterMapper;
 import raf.bolnica1.laboratory.mappers.ParameterMapper;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
-import raf.bolnica1.laboratory.services.lab.AnalysisParameterService;
+import raf.bolnica1.laboratory.services.AnalysisParameterService;
 
 
 @Service

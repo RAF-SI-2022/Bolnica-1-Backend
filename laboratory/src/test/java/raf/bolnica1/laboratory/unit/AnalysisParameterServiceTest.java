@@ -17,7 +17,7 @@ import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.mappers.AnalysisParameterMapper;
 import raf.bolnica1.laboratory.mappers.ParameterMapper;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
-import raf.bolnica1.laboratory.services.lab.impl.AnalysisParameterServiceImpl;
+import raf.bolnica1.laboratory.services.impl.AnalysisParameterServiceImpl;
 
 import java.util.Collections;
 

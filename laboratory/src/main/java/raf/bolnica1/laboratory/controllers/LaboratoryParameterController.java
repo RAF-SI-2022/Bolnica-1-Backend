@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
-import raf.bolnica1.laboratory.services.lab.ParameterService;
+import raf.bolnica1.laboratory.services.ParameterService;
 
 @RestController
 @AllArgsConstructor

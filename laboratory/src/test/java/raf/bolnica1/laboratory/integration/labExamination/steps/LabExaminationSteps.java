@@ -31,10 +31,10 @@ import raf.bolnica1.laboratory.integration.labExamination.LabExaminationIntegrat
 import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.*;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
-import raf.bolnica1.laboratory.services.lab.LabResultService;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.LabExaminationsService;
+import raf.bolnica1.laboratory.services.LabResultService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 

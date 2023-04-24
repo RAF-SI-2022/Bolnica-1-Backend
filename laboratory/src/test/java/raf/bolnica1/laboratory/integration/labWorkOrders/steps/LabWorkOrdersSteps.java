@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilter;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilterGenerator;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
@@ -28,8 +29,8 @@ import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 
 import java.util.*;
@@ -509,6 +510,24 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
         }catch (Exception e){
             Assertions.fail(e);
         }
+    }
+
+    @Then("dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder")
+    public void dobavljanje_lab_work_ordera_po_id_daje_bas_taj_lab_work_order() {
+
+        PrescriptionCreateDto p=prescriptionCreateDtos.get(0);
+        LabWorkOrder lwo=labWorkOrderRepository.findByPrescription(p.getPid()).get();
+
+        LabWorkOrderDto labWorkOrderDto=labWorkOrdersService.findWorkOrder(lwo.getId());
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(labWorkOrderDto.getPrescription(),
+                lwo.getPrescription()));
+
+        labWorkOrderDto.setPrescription(null);
+        lwo.setPrescription(null);
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(lwo,labWorkOrderDto));
+
     }
 
 }

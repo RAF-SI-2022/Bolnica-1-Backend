@@ -29,9 +29,9 @@ import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
-import raf.bolnica1.laboratory.services.lab.LabResultService;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.LabResultService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
 

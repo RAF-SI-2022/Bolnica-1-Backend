@@ -18,6 +18,7 @@ public class LabWorkOrderMapper {
         dto.setStatus(labWorkOrder.getStatus());
         dto.setTechnicianLbz(labWorkOrder.getTechnicianLbz());
         dto.setBiochemistLbz(labWorkOrder.getBiochemistLbz());
+        dto.setLbp(labWorkOrder.getLbp());
         return dto;
     }
 }

@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
@@ -15,8 +15,8 @@ import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
-import raf.bolnica1.laboratory.services.lab.LabResultService;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.LabResultService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
 
 import java.sql.Date;
 import java.util.ArrayList;
