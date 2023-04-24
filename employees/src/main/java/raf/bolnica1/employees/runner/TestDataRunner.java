@@ -180,14 +180,14 @@ public class TestDataRunner implements CommandLineRunner {
 
         createEmployee("E0001", "John", "Doe", "M", RoleShort.ROLE_ADMIN, Title.PROF_DR_MED, Profession.MED_SESTRA, department1);
         createEmployee("E0002", "Jane", "Smith", "Z", RoleShort.ROLE_DR_SPEC_ODELJENJA, Title.DR_MED_SPEC, Profession.SPEC_KARDIOLOG, department1);
-        createEmployee("E0003", "Mike", "Brown", "M", RoleShort.ROLE_DR_SPEC, Title.DR_SCI_ME, Profession.SPEC_NEUROLOG, department2);
-        createEmployee("E0004", "Mary", "Johnson", "Z", RoleShort.ROLE_DR_SPEC_POV, Title.DIPL_FARM, Profession.SPEC_GASTROENTEROLOG, department3);
-        createEmployee("E0005", "James", "Williams", "M", RoleShort.ROLE_MED_SESTRA, Title.MAG_FARM, Profession.SPEC_UROLOG, department4);
-        createEmployee("E0006", "Lisa", "Jones", "Z", RoleShort.ROLE_VISA_MED_SESTRA, Title.MR, Profession.SPEC_ENDOKRINOLOG, department4);
+        createEmployee("E0003", "Mike", "Brown", "M", RoleShort.ROLE_DR_SPEC, Title.DR_SCI_ME, Profession.SPEC_NEUROLOG, department1);
+        createEmployee("E0004", "Mary", "Johnson", "Z", RoleShort.ROLE_DR_SPEC_POV, Title.DIPL_FARM, Profession.SPEC_GASTROENTEROLOG, department1);
+        createEmployee("E0005", "James", "Williams", "M", RoleShort.ROLE_MED_SESTRA, Title.MAG_FARM, Profession.SPEC_UROLOG, department1);
+        createEmployee("E0006", "Lisa", "Jones", "Z", RoleShort.ROLE_VISA_MED_SESTRA, Title.MR, Profession.SPEC_ENDOKRINOLOG, department1);
         createEmployee("E0007", "Nancy", "Miller", "Z", RoleShort.ROLE_VISI_LAB_TEHNICAR, Title.DR_MED_SPEC, Profession.SPEC_BIOHEMICAR, department1);
-        createEmployee("E0008", "Paul", "Davis", "M", RoleShort.ROLE_LAB_TEHNICAR, Title.DIPL_FARM, Profession.SPEC_BIOHEMICAR, department2);
-        createEmployee("E0009", "Linda", "Garcia", "Z", RoleShort.ROLE_MED_BIOHEMICAR, Title.MAG_FARM, Profession.SPEC_BIOHEMICAR, department3);
-        createEmployee("E0010", "Steven", "Taylor", "M", RoleShort.ROLE_SPEC_MED_BIOHEMIJE, Title.MR, Profession.SPEC_BIOHEMICAR, department4);
+        createEmployee("E0008", "Paul", "Davis", "M", RoleShort.ROLE_LAB_TEHNICAR, Title.DIPL_FARM, Profession.SPEC_BIOHEMICAR, department1);
+        createEmployee("E0009", "Linda", "Garcia", "Z", RoleShort.ROLE_MED_BIOHEMICAR, Title.MAG_FARM, Profession.SPEC_BIOHEMICAR, department1);
+        createEmployee("E0010", "Steven", "Taylor", "M", RoleShort.ROLE_SPEC_MED_BIOHEMIJE, Title.MR, Profession.SPEC_BIOHEMICAR, department1);
 
     }
 

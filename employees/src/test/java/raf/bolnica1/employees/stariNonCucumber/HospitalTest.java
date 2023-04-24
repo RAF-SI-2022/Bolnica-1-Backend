@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.domainTest;
+package raf.bolnica1.employees.stariNonCucumber;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
