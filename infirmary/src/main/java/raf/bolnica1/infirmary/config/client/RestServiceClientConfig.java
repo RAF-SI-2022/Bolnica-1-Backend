@@ -28,7 +28,6 @@ public class RestServiceClientConfig {
     @DependsOn("setEmployeeServiceUrlStatic")
     public static RestTemplate loginRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println(employeeServiceUrlStatic+"  AAALLLAAA");
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic + "/auth/login"));
         return restTemplate;
     }
