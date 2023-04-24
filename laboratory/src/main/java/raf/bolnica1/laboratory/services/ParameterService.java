@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.services.lab;
+package raf.bolnica1.laboratory.services;
 
 import raf.bolnica1.laboratory.domain.lab.Parameter;
 import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;

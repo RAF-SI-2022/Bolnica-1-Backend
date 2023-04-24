@@ -15,8 +15,8 @@ import raf.bolnica1.laboratory.repository.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.LabExaminationsService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreate;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreateGenerator;

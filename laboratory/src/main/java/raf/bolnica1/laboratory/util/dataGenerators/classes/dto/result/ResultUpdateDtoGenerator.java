@@ -13,6 +13,10 @@ public class ResultUpdateDtoGenerator {
     private RandomString randomString;
     private RandomTimestamp randomTimestamp;
 
+    public static ResultUpdateDtoGenerator getInstance(){
+        return new ResultUpdateDtoGenerator(RandomString.getInstance(),RandomTimestamp.getInstance());
+    }
+
     public ResultUpdateDto getResultUpdateDto(Long labWorkOrderId,Long analysisParameterId){
 
         ResultUpdateDto ret=new ResultUpdateDto();

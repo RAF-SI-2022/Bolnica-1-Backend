@@ -3,6 +3,7 @@ package raf.bolnica1.laboratory.mappers;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.laboratory.domain.lab.*;
+import raf.bolnica1.laboratory.dto.lab.PatientDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionUpdateDto;
@@ -14,9 +15,6 @@ import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 @AllArgsConstructor
 public class PrescriptionMapper {
 
-    private LabWorkOrderRepository labWorkOrderRepository;
-    private ParameterAnalysisResultRepository parameterAnalysisResultRepository;
-    private AnalysisParameterRepository analysisParameterRepository;
 
     public PrescriptionDto toDto(Prescription entity) {
         PrescriptionDto dto = new PrescriptionDto();
@@ -53,6 +51,15 @@ public class PrescriptionMapper {
         prescription.setCreationDateTime(prescriptionUpdateDto.getCreationDateTime());
 
         return prescription;
+    }
+
+    public PatientDto toPatientDto(Prescription prescription){
+
+        PatientDto ret=new PatientDto();
+        ret.setLbp(prescription.getLbp());
+        ret.setPrescriptionId(prescription.getId());
+
+        return ret;
     }
 
 }

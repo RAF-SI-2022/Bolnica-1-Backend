@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.laboratory.services.*;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilterGenerator;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.labAnalysis.LabAnalysisDtoGenerator;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.prescription.PrescriptionCreateDtoGenerator;
@@ -22,7 +23,6 @@ import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
 import raf.bolnica1.laboratory.integration.labExamination.LabExaminationIntegrationTestConfig;
 import raf.bolnica1.laboratory.repository.*;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.*;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 

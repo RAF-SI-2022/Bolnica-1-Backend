@@ -18,7 +18,7 @@ import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExami
 import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.ScheduledLabExaminationRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.impl.LabExaminationsServiceImpl;
+import raf.bolnica1.laboratory.services.impl.LabExaminationsServiceImpl;
 
 import java.sql.Date;
 import java.util.Arrays;

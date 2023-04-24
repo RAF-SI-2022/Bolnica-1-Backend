@@ -16,6 +16,7 @@ public class ParameterAnalysisResultMapper {
         UpdateParameterAnalysisResultMessageDto dto = new UpdateParameterAnalysisResultMessageDto();
         dto.setResult(entity.getResult());
         dto.setDateTime(entity.getDateTime());
+        dto.setBiochemistLbz(entity.getBiochemistLbz());
         dto.setWorkOrderDto(labWorkOrderMapper.toDto(entity.getLabWorkOrder()));
         dto.setAnalysisParameterDto(analysisParameterMapper.toDto(entity.getAnalysisParameter()));
         return dto;
