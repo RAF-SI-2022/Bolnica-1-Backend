@@ -17,7 +17,14 @@ public class EmployeeServiceClientConfig {
     @Qualifier("employeeRestTemplate")
     public RestTemplate userServiceRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrl));
+        if(employeeServiceUrl == null){
+            if(System.getProperty("employee-url") != null)
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")));
+            else
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8080/api")));
+        }
+        else
+            restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrl));
         return restTemplate;
     }
 
@@ -25,9 +32,20 @@ public class EmployeeServiceClientConfig {
     @Bean
     @Qualifier("employeeWebClient")
     public WebClient employeeWebClient() {
-        return WebClient.builder()
-                .baseUrl(employeeServiceUrl)
-                .build();
+        if(employeeServiceUrl == null){
+            if(System.getProperty("employee-url") != null)
+                return WebClient.builder()
+                        .baseUrl(System.getProperty("employee-url"))
+                        .build();
+            else
+                return WebClient.builder()
+                        .baseUrl(System.getProperty("http://localhost:8080/api"))
+                        .build();
+        }
+        else
+            return WebClient.builder()
+                    .baseUrl(employeeServiceUrl)
+                    .build();
     }
 
 }

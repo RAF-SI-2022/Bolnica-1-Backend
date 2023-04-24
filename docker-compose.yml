@@ -154,6 +154,9 @@ services:
     build: 
      context: ./laboratory
      dockerfile: Dockerfile
+     args:
+       - EMPLOYEE_SERVICE=http://employees-service:8080/api
+       - PATIENTS_SERVICE=http://patients-service:8081/api
     restart: always
     container_name: laboratory
     ports:
