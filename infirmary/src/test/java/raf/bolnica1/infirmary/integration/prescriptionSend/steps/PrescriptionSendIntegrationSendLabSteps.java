@@ -114,6 +114,7 @@ public class PrescriptionSendIntegrationSendLabSteps extends PrescriptionSendInt
             Assertions.assertTrue(flag);
 
         }catch (Exception e){
+            System.out.println("puklo slanje uputa na lab");
             Assertions.fail(e);
         }
     }
