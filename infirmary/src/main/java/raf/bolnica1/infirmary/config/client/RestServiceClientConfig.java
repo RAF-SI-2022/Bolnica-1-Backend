@@ -15,6 +15,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("departmentRestTemplate")
     public static RestTemplate departmentRestTemplate() {
+        if(employeeServiceUrlStatic == null)
+            employeeServiceUrlStatic = "http://localhost:8080/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic + "/department"));
         return restTemplate;
@@ -23,6 +25,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("loginRestTemplate")
     public static RestTemplate loginRestTemplate() {
+        if(employeeServiceUrlStatic == null)
+            employeeServiceUrlStatic = "http://localhost:8080/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic + "/auth/login"));
         return restTemplate;
@@ -31,6 +35,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("patientRestTemplate")
     public static RestTemplate patientRestTemplate() {
+        if(patientsServiceUrlStatic == null)
+            patientsServiceUrlStatic = "http://localhost:8081/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/patient"));
         return restTemplate;
@@ -39,6 +45,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("infoRestTemplate")
     public static RestTemplate infoRestTemplate() {
+        if(patientsServiceUrlStatic == null)
+            patientsServiceUrlStatic = "http://localhost:8081/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/info"));
         return restTemplate;
@@ -47,6 +55,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("diagnosisCodeRestTemplate")
     public static RestTemplate diagnosisCodeRestTemplate() {
+        if(patientsServiceUrlStatic == null)
+            patientsServiceUrlStatic = "http://localhost:8081/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/record/gather_diagnosis"));
         return restTemplate;
@@ -55,6 +65,8 @@ public class RestServiceClientConfig {
     @Bean
     @Qualifier("labPrescriptionRestTemplate")
     public static RestTemplate labPrescriptionRestTemplate() {
+        if(laboratoryServiceUrlStatic == null)
+            laboratoryServiceUrlStatic = "http://localhost:8083/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(laboratoryServiceUrlStatic+"/laboratory/prescription/get_patient"));
         return restTemplate;
