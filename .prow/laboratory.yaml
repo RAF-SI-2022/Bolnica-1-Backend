@@ -38,7 +38,7 @@ presubmits:
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
-#               docker compose up -d mysql-laboratory
+              # docker compose up -d mysql-laboratory
               docker compose --profile employees up -d
               docker compose --profile patients up -d
               
