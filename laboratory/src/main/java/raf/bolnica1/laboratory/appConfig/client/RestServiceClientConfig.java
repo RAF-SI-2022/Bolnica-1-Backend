@@ -29,7 +29,7 @@ public class RestServiceClientConfig {
             if(System.getProperty("employee-url") != null)
                 restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8080/api")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/department"));
@@ -44,7 +44,7 @@ public class RestServiceClientConfig {
             if(System.getProperty("employee-url") != null)
                 restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("employee-url")));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8080/api")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/auth/login"));
@@ -59,7 +59,7 @@ public class RestServiceClientConfig {
             if(System.getProperty("patients-url") != null)
                 restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("patients-url")+"/patient"));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8081/api/patient")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/patient"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/patient"));
@@ -74,7 +74,7 @@ public class RestServiceClientConfig {
             if(System.getProperty("patients-url") != null)
                 restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("patients-url")+"/prescription"));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8081/api/prescription")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/prescription"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/prescription"));
@@ -104,7 +104,7 @@ public class RestServiceClientConfig {
             if(System.getProperty("patients-url") != null)
                 restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("patients-url")+"/record/gather_diagnosis"));
             else
-                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(System.getProperty("http://localhost:8081/api/record/gather_diagnosis")));
+                restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/record/gather_diagnosis"));
         }
         else
             restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/record/gather_diagnosis"));
