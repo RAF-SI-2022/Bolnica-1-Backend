@@ -1,18 +1,28 @@
 package raf.bolnica1.laboratory.appConfig.client;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 @Configuration
 public class RestServiceClientConfig {
+
+    @Value("${employee.service.url}")
+    private String employeeServiceUrl;
+
+    private static String employeeServiceUrlStatic;
+    private static String patientsServiceUrlStatic;
+
     @Bean
     @Qualifier("departmentRestTemplate")
     public static RestTemplate departmentRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/department"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/department"));
         return restTemplate;
     }
 
@@ -20,7 +30,7 @@ public class RestServiceClientConfig {
     @Qualifier("loginRestTemplate")
     public static RestTemplate loginRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8080/api/auth/login"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrlStatic+"/auth/login"));
         return restTemplate;
     }
 
@@ -28,7 +38,7 @@ public class RestServiceClientConfig {
     @Qualifier("patientRestTemplate")
     public static RestTemplate patientRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/patient"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/patient"));
         return restTemplate;
     }
 
@@ -36,7 +46,7 @@ public class RestServiceClientConfig {
     @Qualifier("prescriptionRestTemplate")
     public static RestTemplate prescriptionRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/prescription"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/prescription"));
         return restTemplate;
     }
 
@@ -44,7 +54,7 @@ public class RestServiceClientConfig {
     @Qualifier("infoRestTemplate")
     public static RestTemplate infoRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/info"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/info"));
         return restTemplate;
     }
 
@@ -52,7 +62,7 @@ public class RestServiceClientConfig {
     @Qualifier("diagnosisCodeRestTemplate")
     public static RestTemplate diagnosisCodeRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8081/api/record/gather_diagnosis"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(patientsServiceUrlStatic + "/record/gather_diagnosis"));
         return restTemplate;
     }
 
@@ -63,6 +73,16 @@ public class RestServiceClientConfig {
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8083/api/laboratory/prescription/get_patient"));
         return restTemplate;
     }
+
+    @Value("${employee.service.url}")
+    public void setEmployeeServiceUrlStatic(String employeeServiceUrl){
+        RestServiceClientConfig.employeeServiceUrlStatic = employeeServiceUrl;
+    }
+    @Value("${patients.service.url}")
+    public void setPatientsServiceUrl(String patientsServiceUrl){
+        RestServiceClientConfig.patientsServiceUrlStatic = patientsServiceUrl;
+    }
+
 
 }
 
