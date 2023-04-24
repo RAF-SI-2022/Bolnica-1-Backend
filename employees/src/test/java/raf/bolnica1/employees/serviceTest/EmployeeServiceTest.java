@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
 /*
     @Mock
@@ -58,12 +58,17 @@ public class EmployeeServiceTest {
 
     @BeforeEach
     public void beforeEach() {
+<<<<<<< HEAD
 
     }
 
     public void prepareMessageSource(){
         when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
                 .thenReturn("Unknown message");
+=======
+        ///when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+           ///     .thenReturn("Unknown message");
+>>>>>>> 7482cd5adbdc98af16468070623da7fe8ee05812
     }
 
     // Create employee

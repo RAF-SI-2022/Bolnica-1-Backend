@@ -33,13 +33,12 @@ public class HospitalDepartmentGenerator {
         this.randomDate = randomDate;
         this.randomLong = randomLong;
 
+    }
+
+    public void fill(){
         departments = new ArrayList<>();
         hospitals = new ArrayList<>();
 
-        fill();
-    }
-
-    private void fill(){
         for(int i = 0; i<5; i++){
             hospitals.add(generateHospital());
         }
@@ -51,8 +50,9 @@ public class HospitalDepartmentGenerator {
 
     public Hospital generateHospital(){
         Hospital h = new Hospital();
-        h.setFullName(randomString.getString(10));
-        h.setShortName(randomNames.randomNameHospital());
+        String name = randomNames.randomNameHospital();
+        h.setFullName(name);
+        h.setShortName(name);
         h.setActivity(randomString.getString(10));
         h.setAddress(randomString.getString(20));
         h.setPbb(randomString.getString(5));
