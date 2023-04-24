@@ -26,6 +26,7 @@ public class LaboratoryAnalysisController {
     @PostMapping("/createLabAnalysis")
     @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
     public ResponseEntity<LabAnalysisDto> createLabAnalysis(@RequestBody LabAnalysisDto dto) {
+        System.out.println("Test");
         return new ResponseEntity<>(labAnalysisService.createLabAnalysis(dto), HttpStatus.OK);
     }
 
