@@ -12,6 +12,9 @@ services:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8081
     networks:
       - my_local_network
+    profiles:
+      - patients
+      - all
       
       
   activemq:
@@ -54,6 +57,9 @@ services:
     depends_on:
       - patients-db
       - activemq
+    profiles:
+      - patients
+      - all
   
 
 
@@ -67,6 +73,9 @@ services:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
     networks:
       - my_local_network
+    profiles:
+      - employees
+      - all
 
       
   employees-service:
@@ -83,6 +92,9 @@ services:
       - my_local_network
     depends_on:
       - employees-db
+    profiles:
+      - employees
+      - all
       
       
       
@@ -96,6 +108,9 @@ services:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8084
     networks:
       - my_local_network
+    profiles:
+      - infirmary
+      - all
       
   infirmary-service:
     build: 
@@ -108,11 +123,17 @@ services:
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/infirmary-service
+      - employee_service_url=http://employees-service:8080/api
+      - patients_service_url=http://patients-service:8081/api
+      - laboratory_service_url=http://laboratory-service:8083/api
     networks:
       - my_local_network
     depends_on:
       - infirmary-db
       - activemq
+    profiles:
+      - infirmary
+      - all
       
       
   laboratory-db:     
@@ -125,6 +146,9 @@ services:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
     networks:
       - my_local_network
+    profiles:
+      - laboratory
+      - all
       
   laboratory-service:
     build: 
@@ -137,11 +161,16 @@ services:
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
+      - employee_service_url=http://employees-service:8080/api
+      - patients_service_url=http://patients-service:8081/api
     networks:
       - my_local_network
     depends_on:
       - laboratory-db
       - activemq
+    profiles:
+      - laboratory
+      - all
 
   
 
