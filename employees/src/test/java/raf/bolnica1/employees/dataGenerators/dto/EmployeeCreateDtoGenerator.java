@@ -6,6 +6,7 @@ import raf.bolnica1.employees.dataGenerators.primitives.RandomLong;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomNames;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomString;
 import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.domain.constants.Title;
 import raf.bolnica1.employees.dto.employee.EmployeeCreateDto;
 
@@ -54,6 +55,9 @@ public class EmployeeCreateDtoGenerator {
         employee.setProfession(Profession.SPEC_KARDIOLOG);
         employee.setTitle(Title.DR_MED_SPEC);
         employee.setLbz(randomString.getString(5));
+        List<String>permission=new ArrayList<>();
+        permission.add(RoleShort.values()[randomLong.getLong((long)RoleShort.values().length).intValue()].name());
+        employee.setPermissions(permission);
 
         return employee;
     }

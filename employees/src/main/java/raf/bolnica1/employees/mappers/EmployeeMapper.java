@@ -42,6 +42,7 @@ public class EmployeeMapper {
     }
 
     public EmployeeDto toDto(Employee entity) {
+        if(entity==null)return null;
         EmployeeDto dto = new EmployeeDto();
         dto.setId(entity.getId());
         dto.setLbz(entity.getLbz());
