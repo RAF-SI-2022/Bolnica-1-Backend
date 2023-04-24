@@ -63,3 +63,8 @@ Feature: Osnovne operacije sa LabWorkOrder-ima
     Given napravljen LabWorkOrder za te upute
     When azuriramo status LabWorkOrdera
     Then je on azuriran
+
+  Scenario: Dobavljanje LabWorkOrdera po ID
+    Given napravljeno 1 uputa za lbp "MOJLBP"
+    Given napravljen LabWorkOrder za te upute
+    Then dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder

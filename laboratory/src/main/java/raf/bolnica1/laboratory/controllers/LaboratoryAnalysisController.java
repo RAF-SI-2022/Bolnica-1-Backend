@@ -4,16 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
-import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
-import raf.bolnica1.laboratory.services.lab.LabAnalysisService;
+import raf.bolnica1.laboratory.services.LabAnalysisService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotBlank;
-import java.sql.Date;
 import java.util.List;
 
 @RestController

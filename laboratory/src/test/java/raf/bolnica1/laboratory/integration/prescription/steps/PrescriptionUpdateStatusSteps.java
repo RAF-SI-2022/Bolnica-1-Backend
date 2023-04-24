@@ -11,7 +11,7 @@ import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.Prescription;
 import raf.bolnica1.laboratory.integration.prescription.PrescriptionIntegrationTestConfig;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
-import raf.bolnica1.laboratory.services.lab.PrescriptionService;
+import raf.bolnica1.laboratory.services.PrescriptionService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 
 public class PrescriptionUpdateStatusSteps extends PrescriptionIntegrationTestConfig {

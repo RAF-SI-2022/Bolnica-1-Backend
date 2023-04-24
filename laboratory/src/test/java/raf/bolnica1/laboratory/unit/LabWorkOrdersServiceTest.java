@@ -32,8 +32,8 @@ import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.PrescriptionService;
-import raf.bolnica1.laboratory.services.lab.impl.LabWorkOrdersServiceImpl;
+import raf.bolnica1.laboratory.services.PrescriptionService;
+import raf.bolnica1.laboratory.services.impl.LabWorkOrdersServiceImpl;
 
 import java.sql.Date;
 import java.sql.Timestamp;

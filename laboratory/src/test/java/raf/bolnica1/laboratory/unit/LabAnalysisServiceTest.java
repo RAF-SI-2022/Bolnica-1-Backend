@@ -10,7 +10,7 @@ import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.mappers.LabAnalysisMapper;
 import raf.bolnica1.laboratory.repository.LabAnalysisRepository;
-import raf.bolnica1.laboratory.services.lab.impl.LabAnalysisServiceImpl;
+import raf.bolnica1.laboratory.services.impl.LabAnalysisServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;

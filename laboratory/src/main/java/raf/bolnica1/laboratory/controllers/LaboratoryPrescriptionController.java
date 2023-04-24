@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.dto.lab.PatientDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionDoneDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionDto;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 
 import java.util.ArrayList;
 

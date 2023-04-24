@@ -10,7 +10,7 @@ import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
 
 import java.sql.Date;
 

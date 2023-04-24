@@ -1,15 +1,10 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.lab.AnalysisParameter;
@@ -24,8 +19,8 @@ import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.repository.PrescriptionRepository;
-import raf.bolnica1.laboratory.services.lab.LabWorkOrdersService;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.LabWorkOrdersService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -50,6 +45,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
         prescription = prescriptionRepository.save(prescription);
 
         LabWorkOrder labWorkOrder=labWorkOrdersService.createWorkOrder(prescription);
+
 
         for(PrescriptionAnalysisDto prescriptionAnalysisDto : dto.getPrescriptionAnalysisDtos()){
             Long analysisId=prescriptionAnalysisDto.getAnalysisId();
@@ -110,18 +106,9 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
 
     @Override
     public Page<PrescriptionDto> findPrescriptionsForPatient(String lbp, String doctorLbz, int page, int size) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
-        List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
-        for(Prescription prescription : prescriptions){
-            prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
-        }
-        int startIndex = page * size;
-        int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
-
-        List<PrescriptionDto> sublist = prescriptionDtos.subList(startIndex, endIndex);
-
-        Page<PrescriptionDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), prescriptionDtos.size());
-        return paged;
+        Pageable pageable=PageRequest.of(page,size);
+        Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(pageable,lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
+        return prescriptions.map(prescriptionrecieveMapper::toPrescriptionDto);
     }
 
     @Override
@@ -168,43 +155,22 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
 
     @Override
     public ArrayList<PrescriptionDto> findPrescriptionsForPatientRest(String lbp, String doctorLbz) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
-        List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
-        for(Prescription prescription : prescriptions){
-            prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
-        }
-        return (ArrayList<PrescriptionDto>) prescriptionDtos;
+        Pageable pageable=PageRequest.of(0,1000000000);
+        Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(pageable,lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
+        return new ArrayList<>(prescriptions.map(prescriptionrecieveMapper::toPrescriptionDto).getContent());
     }
 
     @Override
     public Page<PrescriptionDto> findPrescriptionsForPatientNotRealized(String lbp, Integer page, Integer size) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpNotRealized(lbp, PrescriptionStatus.NEREALIZOVAN);
-        List<PrescriptionDto> prescriptionDtos = new ArrayList<>();
-        for(Prescription prescription : prescriptions){
-            prescriptionDtos.add(prescriptionrecieveMapper.toPrescriptionDto(prescription));
-        }
-        int startIndex = page * size;
-        int endIndex = Math.min(startIndex + size, prescriptionDtos.size());
-
-        List<PrescriptionDto> sublist = prescriptionDtos.subList(startIndex, endIndex);
-
-        Page<PrescriptionDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), prescriptionDtos.size());
-        return paged;
+        Pageable pageable=PageRequest.of(page,size);
+        Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpNotRealized(pageable,lbp, PrescriptionStatus.NEREALIZOVAN);
+        return prescriptions.map(prescriptionrecieveMapper::toPrescriptionDto);
     }
 
     @Override
     public Page<PatientDto> findPatients(int page, int size) {
-        List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsNotRealized(PrescriptionStatus.NEREALIZOVAN);
-        List<PatientDto> patientDtos = new ArrayList<>();
-        for(Prescription prescription : prescriptions){
-            patientDtos.add(new PatientDto(prescription.getLbp(), prescription.getId()));
-        }
-        int startIndex = page * size;
-        int endIndex = Math.min(startIndex + size, patientDtos.size());
-
-        List<PatientDto> sublist = patientDtos.subList(startIndex, endIndex);
-
-        Page<PatientDto> paged = new PageImpl<>(sublist, PageRequest.of(page, size), patientDtos.size());
-        return paged;
+        Pageable pageable=PageRequest.of(page,size);
+        Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsNotRealized(pageable,PrescriptionStatus.NEREALIZOVAN);
+        return prescriptions.map(prescriptionMapper::toPatientDto);
     }
 }

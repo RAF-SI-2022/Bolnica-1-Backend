@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.mappers.ParameterMapper;
 import raf.bolnica1.laboratory.repository.ParameterRepository;
-import raf.bolnica1.laboratory.services.lab.ParameterService;
+import raf.bolnica1.laboratory.services.ParameterService;
 
 @Service
 @AllArgsConstructor

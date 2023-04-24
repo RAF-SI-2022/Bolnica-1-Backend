@@ -1,17 +1,13 @@
 package raf.bolnica1.laboratory.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
-import raf.bolnica1.laboratory.dto.employee.EmployeeDto;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
-import raf.bolnica1.laboratory.dto.response.MessageDto;
-import raf.bolnica1.laboratory.services.employee.EmployeeService;
-import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
+import raf.bolnica1.laboratory.services.LabExaminationsService;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,19 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 public class LaboratoryExaminationsController {
 
-    private final EmployeeService employeeService;
-
     private LabExaminationsService labExaminationsService;
 
-    /**
-     * Test za komunikaciju
-     */
-    @GetMapping("/get-employee")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Mono<EmployeeDto> getEmployee(@RequestParam("lbz") String lbz, HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-        return employeeService.getEmployee(lbz, authorizationHeader);
-    }
 
     //////////////////
 

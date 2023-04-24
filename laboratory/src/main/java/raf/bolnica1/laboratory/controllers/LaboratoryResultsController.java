@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
-import raf.bolnica1.laboratory.services.lab.LabResultService;
+import raf.bolnica1.laboratory.services.LabResultService;
 
 @RestController
 @AllArgsConstructor

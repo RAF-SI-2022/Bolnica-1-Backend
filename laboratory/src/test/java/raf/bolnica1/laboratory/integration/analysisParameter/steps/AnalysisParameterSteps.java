@@ -18,9 +18,9 @@ import raf.bolnica1.laboratory.mappers.ParameterMapper;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.repository.ParameterRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.AnalysisParameterService;
-import raf.bolnica1.laboratory.services.lab.LabAnalysisService;
-import raf.bolnica1.laboratory.services.lab.ParameterService;
+import raf.bolnica1.laboratory.services.AnalysisParameterService;
+import raf.bolnica1.laboratory.services.LabAnalysisService;
+import raf.bolnica1.laboratory.services.ParameterService;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 

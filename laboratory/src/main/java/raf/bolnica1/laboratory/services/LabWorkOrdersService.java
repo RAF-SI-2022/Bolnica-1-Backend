@@ -1,4 +1,4 @@
-package raf.bolnica1.laboratory.services.lab;
+package raf.bolnica1.laboratory.services;
 
 
 import org.springframework.data.domain.Page;

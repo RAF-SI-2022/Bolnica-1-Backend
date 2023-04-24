@@ -1,6 +1,5 @@
-package raf.bolnica1.laboratory.services.lab.impl;
+package raf.bolnica1.laboratory.services.impl;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,12 +13,11 @@ import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
 import raf.bolnica1.laboratory.dto.lab.scheduledLabExamination.ScheduledLabExaminationDto;
-import raf.bolnica1.laboratory.dto.response.MessageDto;
 import raf.bolnica1.laboratory.exceptions.workOrder.LabWorkOrderNotFoundException;
 import raf.bolnica1.laboratory.mappers.ScheduledLabExaminationMapper;
 import raf.bolnica1.laboratory.repository.ScheduledLabExaminationRepository;
 import raf.bolnica1.laboratory.security.util.AuthenticationUtils;
-import raf.bolnica1.laboratory.services.lab.LabExaminationsService;
+import raf.bolnica1.laboratory.services.LabExaminationsService;
 
 import java.sql.Date;
 import java.util.List;

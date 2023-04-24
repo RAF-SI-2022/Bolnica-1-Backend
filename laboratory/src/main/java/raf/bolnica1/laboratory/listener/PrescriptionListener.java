@@ -6,7 +6,7 @@ import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionDeleteDto;
 import raf.bolnica1.laboratory.dto.prescription.PrescriptionUpdateDto;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
-import raf.bolnica1.laboratory.services.lab.PrescriptionRecieveService;
+import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
