@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.dataGenerators;
+package raf.bolnica1.employees.dataGenerators.domain;
 
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomDate;

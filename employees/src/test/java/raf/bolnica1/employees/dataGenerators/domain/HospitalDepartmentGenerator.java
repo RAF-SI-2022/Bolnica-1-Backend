@@ -1,4 +1,4 @@
-package raf.bolnica1.employees.dataGenerators;
+package raf.bolnica1.employees.dataGenerators.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
