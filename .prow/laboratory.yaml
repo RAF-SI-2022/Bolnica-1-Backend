@@ -38,9 +38,9 @@ presubmits:
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
-#               docker compose up -d mysql-laboratory
-              docker compose --profile employees-service up -d
-              docker compose --profile patients-service up -d
+              # docker compose up -d mysql-laboratory
+              docker compose --profile employees up -d
+              docker compose --profile patients up -d
               
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)

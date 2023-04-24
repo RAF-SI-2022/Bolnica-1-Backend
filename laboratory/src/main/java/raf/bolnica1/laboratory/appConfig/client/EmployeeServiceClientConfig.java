@@ -16,6 +16,8 @@ public class EmployeeServiceClientConfig {
     @Bean
     @Qualifier("employeeRestTemplate")
     public RestTemplate userServiceRestTemplate() {
+        if(employeeServiceUrl == null)
+            employeeServiceUrl = "http://localhost:8080/api";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(employeeServiceUrl));
         return restTemplate;
@@ -25,6 +27,8 @@ public class EmployeeServiceClientConfig {
     @Bean
     @Qualifier("employeeWebClient")
     public WebClient employeeWebClient() {
+        if(employeeServiceUrl == null)
+            employeeServiceUrl = "http://localhost:8080/api";
         return WebClient.builder()
                 .baseUrl(employeeServiceUrl)
                 .build();

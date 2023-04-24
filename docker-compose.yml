@@ -2,22 +2,42 @@ version: '3.9'
 
 services:
 
-  patients-db:
+  employees-db:     
     image: oscarfonts/h2
-    container_name: patients-db
+    container_name: employees-db
     restart: always
     volumes:
       - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8081
+      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
     networks:
       - my_local_network
     profiles:
-      - patients
+      - employees
       - all
-      
-      
+    
+  employees-service:
+    image: harbor.k8s.elab.rs/bolnica-1/employees:latest
+    build: 
+     context: ./employees
+     dockerfile: Dockerfile
+    restart: always
+    container_name: employees
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/employees-service
+    networks:
+      - my_local_network
+    depends_on:
+      - employees-db
+    profiles:
+      - employees
+      - all
+
+
   activemq:
+    image: harbor.k8s.elab.rs/bolnica-1/activemq:latest
     build: 
       context: ./activeMQ
       dockerfile: Dockerfile
@@ -37,11 +57,25 @@ services:
       ACTIVEMQ_ADMIN_PASSWORD: admin
     networks:
       - my_local_network
-    
 
 
-      
+
+  patients-db:
+    image: oscarfonts/h2
+    container_name: patients-db
+    restart: always
+    volumes:
+      - ./h2:/opt/h2-data
+    environment:
+      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8081
+    networks:
+      - my_local_network
+    profiles:
+      - patients
+      - all
+       
   patients-service:
+    image: harbor.k8s.elab.rs/bolnica-1/patients:latest
     build: 
      context: ./patients
      dockerfile: Dockerfile
@@ -52,6 +86,8 @@ services:
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
       - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/patients-service
+      - employee_service_url=http://employees-service:8080/api
+      - laboratory_service_url=http://laboratory-service:8083/api
     networks:
       - my_local_network
     depends_on:
@@ -60,44 +96,48 @@ services:
     profiles:
       - patients
       - all
-  
-
-
-  employees-db:     
+ 
+      
+      
+  laboratory-db:     
     image: oscarfonts/h2
-    container_name: employees-db
+    container_name: laboratory-db
     restart: always
     volumes:
       - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
+      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
     networks:
       - my_local_network
     profiles:
-      - employees
+      - laboratory
       - all
-
       
-  employees-service:
+  laboratory-service:
+    image: harbor.k8s.elab.rs/bolnica-1/laboratory:latest
     build: 
-     context: ./employees
+     context: ./laboratory
      dockerfile: Dockerfile
     restart: always
-    container_name: employees
+    container_name: laboratory
     ports:
-      - "8080:8080"
+      - "8083:8083"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/employees-service
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
+      - employee_service_url=http://employees-service:8080/api
+      - patients_service_url=http://patients-service:8081/api
     networks:
       - my_local_network
     depends_on:
-      - employees-db
+      - laboratory-db
+      - activemq
     profiles:
-      - employees
+      - laboratory
       - all
-      
-      
-      
+ 
+ 
+  
   infirmary-db:
     image: oscarfonts/h2
     container_name: infirmary-db
@@ -113,6 +153,7 @@ services:
       - all
       
   infirmary-service:
+    image: harbor.k8s.elab.rs/bolnica-1/infirmary:latest 
     build: 
      context: ./infirmary
      dockerfile: Dockerfile
@@ -133,43 +174,6 @@ services:
       - activemq
     profiles:
       - infirmary
-      - all
-      
-      
-  laboratory-db:     
-    image: oscarfonts/h2
-    container_name: laboratory-db
-    restart: always
-    volumes:
-      - ./h2:/opt/h2-data
-    environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
-    networks:
-      - my_local_network
-    profiles:
-      - laboratory
-      - all
-      
-  laboratory-service:
-    build: 
-     context: ./laboratory
-     dockerfile: Dockerfile
-    restart: always
-    container_name: laboratory
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
-      - employee_service_url=http://employees-service:8080/api
-      - patients_service_url=http://patients-service:8081/api
-    networks:
-      - my_local_network
-    depends_on:
-      - laboratory-db
-      - activemq
-    profiles:
-      - laboratory
       - all
 
   
