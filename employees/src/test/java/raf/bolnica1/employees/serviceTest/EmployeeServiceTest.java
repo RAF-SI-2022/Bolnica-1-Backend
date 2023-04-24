@@ -2,8 +2,10 @@ package raf.bolnica1.employees.serviceTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
 
     @Mock
@@ -56,8 +58,8 @@ public class EmployeeServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
-                .thenReturn("Unknown message");
+        ///when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+           ///     .thenReturn("Unknown message");
     }
 
     // Create employee
