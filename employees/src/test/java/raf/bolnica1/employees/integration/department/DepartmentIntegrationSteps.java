@@ -8,6 +8,7 @@ import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
 import raf.bolnica1.employees.dataGenerators.domain.HospitalDepartmentGenerator;
 import raf.bolnica1.employees.domain.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
+import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.repository.*;
 import raf.bolnica1.employees.services.DepartmentService;
@@ -185,7 +186,24 @@ public class DepartmentIntegrationSteps extends DepartmentIntegrationTestConfig{
     }
 
     @Then("vidimo koje zdravstvene ustanove imaju odeljenje sa odredjenim nazivom")
-    public void nesto(){
+    public void nadjiUstanoveZaOdeljenje(){
+        for(Department department : departmentRepository.findAll()){
+            List<HospitalDto> hospitalDtos = departmentService.findHospitalsByDepartmentName(department.getName(), 0, hospitalRepository.findAll().size()).getContent();
+            for(HospitalDto hospitalDto : hospitalDtos){
+                if(department.getHospital().getId().equals(hospitalDto.getId()))
+                    Assertions.assertEquals(hospitalDto.getName(), department.getHospital().getShortName());
+            }
+        }
+    }
 
+    @Then("vidimo koja odeljenja postoje sa odredjenim nazivom")
+    public void nadjiOdeljenja(){
+        for(Department department : departmentRepository.findAll()){
+            List<DepartmentDto> hospitalDtos = departmentService.findHospitalsByDepartmentNameSecond(department.getName(), 0, hospitalRepository.findAll().size()).getContent();
+            for(DepartmentDto departmentDto : hospitalDtos){
+                if(department.getId().equals(departmentDto.getId()))
+                    Assertions.assertTrue(classJsonComparator.compareCommonFields(department, departmentDto));
+            }
+        }
     }
 }
