@@ -80,6 +80,17 @@ public class HospitalDepartmentGenerator {
 
         return d;
     }
+    public Department generateDepartments(Hospital hospital){
+        Department d = new Department();
+        d.setHospital(hospital);
+        d.setName(randomNames.randomNameDep());
+        d.setDeleted(false);
+        d.setPbo(randomString.getString(5));
+        d.setId(countDep);
+        countDep++;
+
+        return d;
+    }
 
     public static HospitalDepartmentGenerator getInstance(){ return new HospitalDepartmentGenerator(RandomNames.getInstance(), RandomString.getInstance(), RandomDate.getInstance(), RandomLong.getInstance()); }
 
