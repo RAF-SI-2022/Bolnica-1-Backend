@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
-import raf.bolnica1.employees.dto.department.HospitalDepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.services.DepartmentService;

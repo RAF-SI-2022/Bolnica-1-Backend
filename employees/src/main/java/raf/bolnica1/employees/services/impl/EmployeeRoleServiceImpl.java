@@ -21,7 +21,6 @@ import java.util.List;
 public class EmployeeRoleServiceImpl implements EmployeeRoleService {
 
     private final EmployeeRepository employeeRepository;
-    private final RoleRepository roleRepository;
     private final EmployeesRoleRepository employeesRoleRepository;
 
     @Override

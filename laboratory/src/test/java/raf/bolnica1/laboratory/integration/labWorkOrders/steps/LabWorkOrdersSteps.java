@@ -140,8 +140,9 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
     @When("napravljen LabWorkOrder za te upute")
     public void napravljen_lab_work_order_za_te_upute() {
         try{
-            for(PrescriptionCreateDto p:prescriptionCreateDtos)
+            for(PrescriptionCreateDto p:prescriptionCreateDtos) {
                 Assertions.assertTrue(labWorkOrderRepository.findByPrescription(p.getPid()).isPresent());
+            }
 
         }catch (Exception e){
             Assertions.fail(e);
@@ -175,10 +176,17 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
 
             List<LabWorkOrder> pom=labWorkOrderRepository.findAll();
 
-            for(LabWorkOrder labWorkOrder:pom)
-                if(labWorkOrder.getPrescription().getLbp().equals(lbp)){
+            for(LabWorkOrder labWorkOrder:pom) {
+                /*System.out.println(objectMapper.writeValueAsString(labWorkOrder)+"  LWO ZAPISAN");
+                if(!labWorkOrder.getPrescription().getId().equals(labWorkOrder.getId()))
+                    System.out.println(objectMapper.writeValueAsString(labWorkOrder)+"  LWO ZAPISAN");
+                Assertions.assertTrue(labWorkOrder.getPrescription().getId().equals(
+                        labWorkOrder.getId()
+                ));*/
+                if (labWorkOrder.getPrescription().getLbp().equals(lbp)) {
                     Assertions.assertTrue(labWorkOrder.getStatus().equals(OrderStatus.U_OBRADI));
                 }
+            }
 
         }catch (Exception e){
             Assertions.fail(e);

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
 import raf.bolnica1.employees.dataGenerators.domain.HospitalDepartmentGenerator;
 import raf.bolnica1.employees.dataGenerators.dto.EmployeeCreateDtoGenerator;
+import raf.bolnica1.employees.dataGenerators.dto.EmployeeUpdateAdminDtoGenerator;
 import raf.bolnica1.employees.dataGenerators.dto.EmployeeUpdateDtoGenerator;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
@@ -49,6 +50,7 @@ public class EmployeeServiceTest2 {
     private HospitalDepartmentGenerator hospitalDepartmentGenerator=HospitalDepartmentGenerator.getInstance();
     private ClassJsonComparator classJsonComparator=ClassJsonComparator.getInstance();
     private EmployeeUpdateDtoGenerator employeeUpdateDtoGenerator=EmployeeUpdateDtoGenerator.getInstance();
+    private EmployeeUpdateAdminDtoGenerator employeeUpdateAdminDtoGenerator=EmployeeUpdateAdminDtoGenerator.getInstance();
 
 
     private PasswordEncoder passwordEncoder;
@@ -359,10 +361,70 @@ public class EmployeeServiceTest2 {
 
         hospitalDepartmentGenerator.fill();
         Department department=hospitalDepartmentGenerator.getRandomDepartment();
+
+        employeeUpdateAdminDtoGenerator.fill(department.getPbo());
+        EmployeeUpdateAdminDto employeeUpdateAdminDto=employeeUpdateAdminDtoGenerator.getRandomEmployee();
+
+        insertRoles(employeeUpdateAdminDto.getPermissions());
+
+        String lbz="mojLbz";
+
+        Employee employee=new Employee();
+        employee.setId(3L);
+        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
+        given(departmentRepository.findByPbo(department.getPbo())).willReturn(Optional.of(department));
+        given(passwordEncoder.encode(any())).willReturn("noviPassword");
+        given(employeeRepository.save(employee)).willReturn(employee);
+
+        EmployeeDto ret=employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto,lbz);
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(ret,employeeUpdateAdminDto));
+
+        ArgumentCaptor<EmployeesRole> employeesRoleArgumentCaptor=ArgumentCaptor.forClass(EmployeesRole.class);
+        verify(employeesRoleRepository).save(employeesRoleArgumentCaptor.capture());
+
+        assertTrue(employeeUpdateAdminDto.getPermissions().size()==employeesRoleArgumentCaptor.getAllValues().size());
+        for(int i=0;i<employeeUpdateAdminDto.getPermissions().size();i++){
+            String pom1=employeeUpdateAdminDto.getPermissions().get(i);
+            RoleShort pom2=employeesRoleArgumentCaptor.getAllValues().get(i).getRole().getRoleShort();
+            System.out.println(pom1+" "+pom2.name()+"  ROLES");
+            assertEquals(pom1, pom2.name());
+        }
+
+    }
+
+    @Test
+    public void findDoctorSpecialistsByDepartmentTest(){
+
+        int employeeCount=5;
+
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+
         employeeGenerator.fill(department);
-        Employee employee = employeeGenerator.getRandomEmployee();
+        List<EmployeesRole>employeesRoles=new ArrayList<>();
+        for(int i=0;i<employeeCount;i++){
+            EmployeesRole pom=new EmployeesRole();
+            pom.setEmployee(employeeGenerator.getRandomEmployee());
+            employeesRoles.add(pom);
+        }
 
+        given(employeeRepository.listDoctorsSpecialistsByDepartment(department.getPbo())).willReturn(Optional.of(employeesRoles));
 
+        List<EmployeeDto>ret=employeeService.findDoctorSpecialistsByDepartment(department.getPbo());
+        List<Employee>ret2=new ArrayList<>();
+        for(EmployeesRole er:employeesRoles) {
+            ret2.add(er.getEmployee());
+        }
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(ret.get(0).getDepartment(),ret2.get(0).getDepartment()));
+        Assertions.assertTrue(ret.size()==ret2.size());
+        for(int i=0;i<ret.size();i++){
+
+            ret.get(i).setDepartment(null);
+            ret2.get(i).setDepartment(null);
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(ret.get(i),ret2.get(i)));
+        }
 
     }
 
