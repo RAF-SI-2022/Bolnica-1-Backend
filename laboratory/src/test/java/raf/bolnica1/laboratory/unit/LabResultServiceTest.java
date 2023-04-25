@@ -22,6 +22,7 @@ import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,8 +73,9 @@ public class LabResultServiceTest {
         lwo.setId(lwoId);
         par.setLabWorkOrder(lwo);
 
-        given(parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(lwoId,apId))
-                .willReturn(par);
+        ///given(parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(lwoId,apId))
+           ///     .willReturn(par);
+        given(parameterAnalysisResultRepository.findById(resultUpdateDto.getAnalysisParameterId())).willReturn(Optional.of(par));
 
         given(parameterAnalysisResultRepository.countParameterAnalysisResultWithNullResultByLabWorkOrderId(resultUpdateDto.getLabWorkOrderId()))
                 .willReturn(1);
