@@ -40,8 +40,8 @@ public class HospitalDepartmentGenerator {
         departments = new ArrayList<>();
         hospitals = new ArrayList<>();
 
-        countHospital = 0;
-        countDep = 0;
+        countHospital = 1;
+        countDep = 1;
 
         for(int i = 0; i<5; i++){
             hospitals.add(generateHospital());

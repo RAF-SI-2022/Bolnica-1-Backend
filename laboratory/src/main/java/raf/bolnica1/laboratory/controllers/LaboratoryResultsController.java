@@ -17,13 +17,13 @@ public class LaboratoryResultsController {
     private final LabResultService labResultService;
 
     @PostMapping("/updateResults")
-    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR')")
+    @PreAuthorize("hasAnyRole('ROLE_LAB_TEHNICAR','ROLE_VISI_LAB_TEHNICAR', 'ROLE_SPEC_MED_BIOHEMIJE')")
     public ResponseEntity<MessageDto> updateResults(@RequestBody ResultUpdateDto resultUpdateDto){
         return new ResponseEntity<>( labResultService.updateResults(resultUpdateDto) , HttpStatus.OK);
     }
 
     @PutMapping("/commitResults")
-    @PreAuthorize("hasAnyRole('ROLE_VISI_LAB_TEHNICAR', 'ROLE_MED_BIOHEMICAR')")
+    @PreAuthorize("hasAnyRole('ROLE_VISI_LAB_TEHNICAR', 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_MED_BIOHEMIJE')")
     public ResponseEntity<MessageDto> commitResults(@RequestParam Long workOrderId){
         return new ResponseEntity<>( labResultService.commitResults(workOrderId) , HttpStatus.OK);
     }
