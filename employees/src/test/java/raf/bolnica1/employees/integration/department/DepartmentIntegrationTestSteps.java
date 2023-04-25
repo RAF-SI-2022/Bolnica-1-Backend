@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DepartmentIntegrationSteps extends DepartmentIntegrationTestConfig{
+public class DepartmentIntegrationTestSteps extends DepartmentIntegrationTestConfig{
 
     @Autowired
     private EmployeeGenerator employeeGenerator;
