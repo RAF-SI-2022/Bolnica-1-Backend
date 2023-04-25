@@ -2,7 +2,6 @@ package raf.bolnica1.employees.services;
 
 import org.springframework.data.domain.Page;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
-import raf.bolnica1.employees.dto.department.HospitalDepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 

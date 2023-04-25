@@ -11,7 +11,6 @@ import raf.bolnica1.employees.domain.Employee;
 import raf.bolnica1.employees.domain.Hospital;
 import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
-import raf.bolnica1.employees.dto.department.HospitalDepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
 import raf.bolnica1.employees.exceptionHandler.exceptions.department.DepartmentNotFoundException;
