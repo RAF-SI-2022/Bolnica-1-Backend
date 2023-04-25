@@ -50,7 +50,8 @@ public class LabResultServiceImpl implements LabResultService {
     @Override
     public MessageDto updateResults(ResultUpdateDto resultUpdateDto) {
 
-        ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(resultUpdateDto.getLabWorkOrderId(), resultUpdateDto.getAnalysisParameterId());
+        ///ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(resultUpdateDto.getLabWorkOrderId(), resultUpdateDto.getAnalysisParameterId());
+        ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findById(resultUpdateDto.getAnalysisParameterId()).orElse(null);
 
         if (parameterAnalysisResult == null)
             throw new RuntimeException();

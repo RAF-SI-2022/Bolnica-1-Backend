@@ -9,7 +9,6 @@ import raf.bolnica1.patient.cucumber.dataGenerators.classes.domain.VaccinationGe
 import raf.bolnica1.patient.cucumber.dataGenerators.classes.dto.medicalRecord.MedicalRecordGenerator;
 import raf.bolnica1.patient.cucumber.dataGenerators.classes.dto.patient.PatientCreateDtoGenerator;
 import raf.bolnica1.patient.cucumber.validation.ClassJsonComparator;
-import raf.bolnica1.patient.domain.AllergyData;
 import raf.bolnica1.patient.domain.MedicalRecord;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;

@@ -73,6 +73,7 @@ public class DepartmentServiceTest {
                     Assertions.assertTrue(classJsonComparator.compareCommonFields(department, departmentDto));
                     Assertions.assertEquals(departmentDto.getHospitalName(), department.getHospital().getShortName());
                     count++;
+                    break;
                 }
             }
         }
@@ -168,10 +169,11 @@ public class DepartmentServiceTest {
                     doctorDepartmentDto.getSurname().equals(object[1]) &&
                     doctorDepartmentDto.getLbz().equals(object[2]) && doctorDepartmentDto.getDepartmentId().equals(object[3])){
                     count++;
+                    break;
                 }
             }
         }
-        Assertions.assertEquals(count, objects.size());
+        Assertions.assertEquals(count, returned.size());
     }
 
     @Test
@@ -196,6 +198,7 @@ public class DepartmentServiceTest {
                     Assertions.assertTrue(classJsonComparator.compareCommonFields(dep, departmentDto));
                     Assertions.assertEquals(dep.getHospital().getShortName(), departmentDto.getHospitalName());
                     count++;
+                    break;
                 }
             }
         }
@@ -218,6 +221,7 @@ public class DepartmentServiceTest {
                 if(hospitalDto.getId().equals(hospital.getId())){
                     Assertions.assertTrue(classJsonComparator.compareCommonFields(hospital, hospitalDto));
                     count++;
+                    break;
                 }
             }
         }
@@ -245,6 +249,7 @@ public class DepartmentServiceTest {
                 if(hospitalDto.getId().equals(hospital.getId())){
                     Assertions.assertTrue(classJsonComparator.compareCommonFields(hospital, hospitalDto));
                     count++;
+                    break;
                 }
             }
         }

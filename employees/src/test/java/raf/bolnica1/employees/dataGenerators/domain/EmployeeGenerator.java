@@ -7,7 +7,9 @@ import raf.bolnica1.employees.dataGenerators.primitives.RandomNames;
 import raf.bolnica1.employees.dataGenerators.primitives.RandomString;
 import raf.bolnica1.employees.domain.Department;
 import raf.bolnica1.employees.domain.Employee;
+import raf.bolnica1.employees.domain.Role;
 import raf.bolnica1.employees.domain.constants.Profession;
+import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.domain.constants.Title;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class EmployeeGenerator {
     }
 
     public void fill(Department department){
-        count = 0;
+        count = 1;
         employees = new ArrayList<>();
 
         for(int i = 0; i<5; i++){
@@ -40,7 +42,16 @@ public class EmployeeGenerator {
         }
     }
 
-    private Employee generateEmployee(Department department) {
+    public void fillNum(Department department, int num){
+        count = 1;
+        employees = new ArrayList<>();
+
+        for(int i = 0; i<num; i++){
+            employees.add(generateEmployee(department));
+        }
+    }
+
+    public Employee generateEmployee(Department department) {
         Employee employee = new Employee();
         employee.setId(count);
         count++;
@@ -60,6 +71,14 @@ public class EmployeeGenerator {
         employee.setLbz(randomString.getString(5));
 
         return employee;
+    }
+
+    public Role generateRole(String name){
+        Role role = new Role();
+        role.setRoleShort(RoleShort.ROLE_DR_SPEC);
+        role.setName(name);
+
+        return role;
     }
 
     public static EmployeeGenerator getInstance(){ return new EmployeeGenerator(RandomString.getInstance(), RandomNames.getInstance(), RandomDate.getInstance(), RandomLong.getInstance());}

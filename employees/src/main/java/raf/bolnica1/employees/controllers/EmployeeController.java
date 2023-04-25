@@ -78,7 +78,7 @@ public class EmployeeController {
     @GetMapping(path = "/list")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<EmployeeDto>> listEmployeesWithFilters(
-            @RequestParam String name,
+            @RequestParam(required = false) String name,
             @RequestParam(required = false) String surname,
             @RequestParam(required = false) String deleted,
             @RequestParam(required = false) String departmentName,

@@ -25,6 +25,6 @@ public interface ScheduleExamRepository extends JpaRepository<ScheduleExam, Long
     Page<ScheduleExam> findScheduleForMedSister(Pageable pageable, @Param("date") Date date, @Param("status") PatientArrival status);
 
     @Query("SELECT se FROM ScheduleExam se WHERE se.doctorLbz = :lbz " +
-            "AND YEAR(:date) = YEAR(dateAndTime) AND MONTH(:date) = MONTH(dateAndTime) and DAY(:date) = DAY(dateAndTime)")
+            "AND :date <= se.dateAndTime")
     List<ScheduleExam> findFromCurrDateAndDoctor(@Param("date") Date date, @Param("lbz") String lbz);
 }
