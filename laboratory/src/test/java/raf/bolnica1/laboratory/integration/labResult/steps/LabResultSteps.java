@@ -109,8 +109,12 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
             List<ParameterAnalysisResult> list=parameterAnalysisResultRepository.findAll();
             ParameterAnalysisResult parId=list.get(0);
 
+            ///ResultUpdateDto resultUpdateDto=resultUpdateDtoGenerator.getResultUpdateDto(parId.getLabWorkOrder().getId(),
+               ///     parId.getAnalysisParameter().getId());
+
+            /// MODIFIKACIJA ZBOG LOSEG TUMACENJA FRONT
             ResultUpdateDto resultUpdateDto=resultUpdateDtoGenerator.getResultUpdateDto(parId.getLabWorkOrder().getId(),
-                    parId.getAnalysisParameter().getId());
+                    parId.getId());
 
             labResultService.updateResults(resultUpdateDto);
 
@@ -153,8 +157,13 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
                     labWorkOrderId=parId.getLabWorkOrder().getId();
                     prescriptionCreateDto.setPid(parId.getLabWorkOrder().getPrescription().getId());
                 }
+                ///ResultUpdateDto resultUpdateDto=resultUpdateDtoGenerator.getResultUpdateDto(parId.getLabWorkOrder().getId(),
+                     ///   parId.getAnalysisParameter().getId());
+
+                /// ZBOG NESPORAZUMA SA FRONTOM MORA OVO
                 ResultUpdateDto resultUpdateDto=resultUpdateDtoGenerator.getResultUpdateDto(parId.getLabWorkOrder().getId(),
-                        parId.getAnalysisParameter().getId());
+                           parId.getId());
+
                 labResultService.updateResults(resultUpdateDto);
             }
 

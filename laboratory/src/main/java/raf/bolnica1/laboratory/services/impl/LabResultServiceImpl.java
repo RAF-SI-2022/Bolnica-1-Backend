@@ -51,6 +51,8 @@ public class LabResultServiceImpl implements LabResultService {
     public MessageDto updateResults(ResultUpdateDto resultUpdateDto) {
 
         ///ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findParameterAnalysisResultByLabWorkOrderIdAndAnalysisParameterId(resultUpdateDto.getLabWorkOrderId(), resultUpdateDto.getAnalysisParameterId());
+
+        /// OVO NIJE U REDU, NA FRONTU JE analysisParameterId zapravo id od parameterAnalysisResult
         ParameterAnalysisResult parameterAnalysisResult = parameterAnalysisResultRepository.findById(resultUpdateDto.getAnalysisParameterId()).orElse(null);
 
         if (parameterAnalysisResult == null)
