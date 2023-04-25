@@ -1,342 +1,214 @@
 package raf.bolnica1.employees.unit;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
+import raf.bolnica1.employees.dataGenerators.domain.HospitalDepartmentGenerator;
+import raf.bolnica1.employees.dataGenerators.dto.EmployeeCreateDtoGenerator;
+import raf.bolnica1.employees.dataGenerators.dto.EmployeeUpdateAdminDtoGenerator;
+import raf.bolnica1.employees.dataGenerators.dto.EmployeeUpdateDtoGenerator;
+import raf.bolnica1.employees.domain.Department;
+import raf.bolnica1.employees.domain.Employee;
+import raf.bolnica1.employees.domain.EmployeesRole;
+import raf.bolnica1.employees.domain.Role;
+import raf.bolnica1.employees.domain.constants.RoleShort;
+import raf.bolnica1.employees.dto.employee.*;
+import raf.bolnica1.employees.exceptionHandler.exceptions.employee.EmployeePasswordException;
+import raf.bolnica1.employees.mappers.DepartmentMapper;
+import raf.bolnica1.employees.mappers.EmployeeMapper;
+import raf.bolnica1.employees.repository.DepartmentRepository;
+import raf.bolnica1.employees.repository.EmployeeRepository;
+import raf.bolnica1.employees.repository.EmployeesRoleRepository;
+import raf.bolnica1.employees.repository.RoleRepository;
+import raf.bolnica1.employees.security.util.JwtUtils;
+import raf.bolnica1.employees.services.EmployeeService;
+import raf.bolnica1.employees.services.impl.EmployeeServiceImpl;
+import raf.bolnica1.employees.validation.ClassJsonComparator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
-/*
-    @Mock
-    private EmployeeRepository employeeRepository;
-    @Mock
-    private RoleRepository roleRepository;
-    @Mock
-    private EmployeesRoleRepository employeesRoleRepository;
-    @Mock
-    private EmployeeMapper employeeMapper;
-    @Mock
-    private DepartmentMapper departmentMapper;
-    @Mock
+
+    private EmployeeGenerator employeeGenerator=EmployeeGenerator.getInstance();
+    private EmployeeCreateDtoGenerator employeeCreateDtoGenerator=EmployeeCreateDtoGenerator.getInstance();
+    private HospitalDepartmentGenerator hospitalDepartmentGenerator=HospitalDepartmentGenerator.getInstance();
+    private ClassJsonComparator classJsonComparator=ClassJsonComparator.getInstance();
+    private EmployeeUpdateDtoGenerator employeeUpdateDtoGenerator=EmployeeUpdateDtoGenerator.getInstance();
+    private EmployeeUpdateAdminDtoGenerator employeeUpdateAdminDtoGenerator=EmployeeUpdateAdminDtoGenerator.getInstance();
+
+
     private PasswordEncoder passwordEncoder;
-    @Mock
+    private EmployeeRepository employeeRepository;
+    private DepartmentRepository departmentRepository;
+    private EmployeeMapper employeeMapper;
+    private DepartmentMapper departmentMapper;
+    private EmployeesRoleRepository employeesRoleRepository;
+    private RoleRepository roleRepository;
     private MessageSource messageSource;
-    @InjectMocks
-    private EmployeeServiceImpl employeeService;
+    private JwtUtils jwtUtils;
+
+    private EmployeeService employeeService;
 
     @BeforeEach
-    public void beforeEach() {
-        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
-                .thenReturn("Unknown message");
+    public void prepare(){
+        departmentMapper=new DepartmentMapper();
+        passwordEncoder=mock(PasswordEncoder.class);
+        employeeRepository=mock(EmployeeRepository.class);
+        departmentRepository=mock(DepartmentRepository.class);
+        employeeMapper=new EmployeeMapper(departmentRepository,departmentMapper);
+        employeesRoleRepository=mock(EmployeesRoleRepository.class);
+        roleRepository=mock(RoleRepository.class);
+        messageSource=mock(MessageSource.class);
+        jwtUtils=mock(JwtUtils.class);
+        employeeService=new EmployeeServiceImpl(passwordEncoder,employeeRepository,employeeMapper,employeesRoleRepository,
+                roleRepository,messageSource,jwtUtils);
     }
 
-    // Create employee
-    @Test
-    void createEmployee_whenEmployeeDoesNotExist_shouldCreateNewEmployee() {
 
-        EmployeeCreateDto employeeCreateDto = EmployeeServiceTest.createEmployeeCreateDto();
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-        DepartmentDto departmentDto = EmployeeServiceTest.createDepartment();
-
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
-        when(employeeMapper.toEntity(any(EmployeeCreateDto.class))).thenReturn(employee);
-        when(passwordEncoder.encode(employeeCreateDto.getEmail().split("@")[0])).thenReturn("encodedPassword");
-        when(employeeRepository.save(employee)).thenReturn(employee);
-
-        Role role = new Role();
-        role.setRoleShort(RoleShort.ROLE_DR_SPEC);
-        when(roleRepository.findByRoleShort(RoleShort.ROLE_DR_SPEC)).thenReturn(Optional.of(role));
-
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
-
-
-        EmployeeDto result = employeeService.createEmployee(employeeCreateDto);
-
-        assertNotNull(result);
-        assertEquals(EMPLOYEE_LBZ, result.getLbz());
-        //assertEquals(result.getPermissions(), employeeCreateDto.getPermissions()); // Da li treba u dto da vratimo i permisije
-        verify(employeesRoleRepository).save(any(EmployeesRole.class));
+    private List<Role> roles;
+    private void insertRoles(List<String> list){
+        roles=new ArrayList<>();
+        int i=0;
+        for(String pom:list) {
+            Role role=new Role();
+            role.setId((long)i);
+            role.setName(pom);
+            role.setRoleShort(RoleShort.valueOf(pom));
+            roles.add(role);
+            given(roleRepository.findByRoleShort(RoleShort.valueOf(pom))).willReturn(Optional.of(role));
+            i++;
+        }
     }
 
     @Test
-    void createEmployee_whenEmployeeAlreadyExists_shouldThrowException() {
+    public void createEmployeeTest(){
 
-        EmployeeCreateDto dto = EmployeeServiceTest.createEmployeeCreateDto();
+        Long employeeId=3L;
 
-        Employee employee = EmployeeServiceTest.createEmployee();
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        given(departmentRepository.findByPbo(department.getPbo())).willReturn(Optional.of(department));
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
+        employeeCreateDtoGenerator.fill(department.getPbo());
+        EmployeeCreateDto employeeCreateDto=employeeCreateDtoGenerator.getRandomEmployee();
 
-        assertThrows(EmployeeAlreadyExistsException.class, () -> employeeService.createEmployee(dto));
+        insertRoles(employeeCreateDto.getPermissions());
+
+        given(employeeRepository.findByLbz(employeeCreateDto.getLbz())).willReturn(Optional.ofNullable(null));
+
+        Employee employee=employeeMapper.toEntity(employeeCreateDto);
+        String mojPassword="mojPassword";
+        given(passwordEncoder.encode(any())).willReturn(mojPassword);
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+        employee.setId(employeeId);
+        given(employeeRepository.save(any())).willReturn(employee);
+
+        EmployeeDto employeeDto=employeeService.createEmployee(employeeCreateDto);
+
+        assertTrue(classJsonComparator.compareCommonFields(employeeDto,employeeCreateDto));
+
+        ArgumentCaptor<EmployeesRole> employeesRoleArgumentCaptor=ArgumentCaptor.forClass(EmployeesRole.class);
+        verify(employeesRoleRepository).save(employeesRoleArgumentCaptor.capture());
+
+        assertTrue(employeeCreateDto.getPermissions().size()==employeesRoleArgumentCaptor.getAllValues().size());
+        for(int i=0;i<employeeCreateDto.getPermissions().size();i++){
+            String pom1=employeeCreateDto.getPermissions().get(i);
+            RoleShort pom2=employeesRoleArgumentCaptor.getAllValues().get(i).getRole().getRoleShort();
+            assertEquals(pom1, pom2.name());
+        }
+
     }
 
-    // Find employeeInfo
-    @Test
-    void findEmployeeInfo_whenEmployeeExists_shouldReturnEmployeeDto() {
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
-
-        EmployeeDto result = employeeService.findEmployeeInfo(EMPLOYEE_LBZ);
-
-        assertNotNull(result);
-        assertEquals(EMPLOYEE_LBZ, result.getLbz());
-    }
 
     @Test
-    void findEmployeeInfo_whenEmployeeDoesNotExist_shouldThrowException() {
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
+    public void findEmployeeInfoTest(){
 
-        assertThrows(EmployeeNotFoundException.class, () -> employeeService.findEmployeeInfo(EMPLOYEE_LBZ));
-    }
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
+        Employee employee=employeeGenerator.getRandomEmployee();
 
-    // Soft delete employee
-    @Test
-    void softDeleteEmployee_whenEmployeeExists_shouldSetDeletedFlagAndReturnMessage() {
+        given(employeeRepository.findByLbz(employee.getLbz())).willReturn(Optional.of(employee));
 
-        Employee employee = EmployeeServiceTest.createEmployee();
+        EmployeeDto ret=employeeService.findEmployeeInfo(employee.getLbz());
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(employeeRepository.save(employee)).thenReturn(employee);
+        assertTrue(classJsonComparator.compareCommonFields(employee.getDepartment(),ret.getDepartment()));
+        employee.setDepartment(null);
+        ret.setDepartment(null);
+        assertTrue(classJsonComparator.compareCommonFields(ret,employee));
 
-        EmployeeMessageDto result = employeeService.softDeleteEmployee(EMPLOYEE_LBZ);
-
-        assertNotNull(result);
-        assertEquals(String.format("Employee with lbz <%s> deleted", EMPLOYEE_LBZ), result.getMessage());
-        assertTrue(employee.isDeleted());
-        verify(employeeRepository).save(employee);
-    }
-
-    @Test
-    void softDeleteEmployee_whenEmployeeDoesNotExist_shouldThrowException() {
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
-
-        assertThrows(EmployeeNotFoundException.class, () -> employeeService.softDeleteEmployee(EMPLOYEE_LBZ));
-    }
-
-    // List with filters
-    @Test
-    void listEmployeesWithFilters_whenDeletedIsNull_shouldReturnPageOfEmployeeDto() {
-        String name = "John";
-        String surname = "Doe";
-        String deleted = null;
-        String departmentName = "Department";
-        String hospitalShortName = "ABC";
-        int page = 0;
-        int size = 2;
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
-
-        Pageable pageable = PageRequest.of(page, size);
-        PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
-
-        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, departmentName, hospitalShortName)).thenReturn(employeePage);
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
-
-        Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
-
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(employeeDto, result.getContent().get(0));
     }
 
     @Test
-    void listEmployeesWithFilters_whenDeletedIsEmptyString_shouldReturnPageOfEmployeeDto() {
-        String name = "John";
-        String surname = "Doe";
-        String deleted = "";
-        String departmentName = "Department";
-        String hospitalShortName = "ABC";
-        int page = 0;
-        int size = 2;
+    public void softDeleteEmployeeTest(){
 
-        Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
+        Employee employee=employeeGenerator.getRandomEmployee();
 
-        Pageable pageable = PageRequest.of(page, size);
-        PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
+        given(employeeRepository.findByLbz(employee.getLbz())).willReturn(Optional.of(employee));
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, departmentName, hospitalShortName)).thenReturn(employeePage);
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
+        employeeService.softDeleteEmployee(employee.getLbz());
 
-        Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
+        ArgumentCaptor<Employee> arg=ArgumentCaptor.forClass(Employee.class);
+        verify(employeeRepository).save(arg.capture());
 
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(employeeDto, result.getContent().get(0));
+        assertTrue(arg.getValue().isDeleted());
+        arg.getValue().setDeleted(false);
+        assertTrue(classJsonComparator.compareCommonFields(arg.getValue(),employee));
+
     }
 
-    @Test
-    void listEmployeesWithFilters_whenDeletedIsTrue_shouldReturnPageOfEmployeeDto() {
-        String name = "John";
-        String surname = "Doe";
-        String deleted = "true";
-        String departmentName = "Department";
-        String hospitalShortName = "ABC";
-        int page = 0;
-        int size = 2;
 
-        Employee employee = EmployeeServiceTest.createEmployee();
 
-        Pageable pageable = PageRequest.of(page, size);
-        PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
+    private Employee replicateEmployee(Employee employee){
+        Employee ret=new Employee();
+        ret.setDeleted(employee.isDeleted());
+        ret.setLbz(employee.getLbz());
+        ret.setEmail(employee.getEmail());
+        ret.setPassword(employee.getPassword());
+        ret.setPhone(employee.getPhone());
+        ret.setId(employee.getId());
+        ret.setAddress(employee.getAddress());
+        ret.setGender(employee.getGender());
+        ret.setName(employee.getName());
+        ret.setProfession(employee.getProfession());
+        ret.setSurname(employee.getSurname());
+        ret.setDepartment(employee.getDepartment());
+        ret.setDateOfBirth(employee.getDateOfBirth());
+        ret.setPlaceOfLiving(employee.getPlaceOfLiving());
+        ret.setTitle(employee.getTitle());
+        ret.setJmbg(employee.getJmbg());
+        ret.setUsername(employee.getUsername());
+        ret.setResetPassword(employee.getResetPassword());
 
-        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, true, departmentName, hospitalShortName)).thenReturn(employeePage);
-        when(employeeMapper.toDto(employee)).thenReturn(new EmployeeDto());
-
-        Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
-
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        verify(employeeRepository).listEmployeesWithFilters(pageable, name, surname, true, departmentName, hospitalShortName);
-        verify(employeeMapper).toDto(employee);
+        return ret;
     }
-
-    @Test
-    void listEmployeesWithFilters_whenDeletedIsFalse_shouldReturnPageOfEmployeeDto() {
-        String name = "John";
-        String surname = "Doe";
-        String deleted = "false";
-        String departmentName = "Department";
-        String hospitalShortName = "ABC";
-        int page = 0;
-        int size = 2;
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
-
-        Pageable pageable = PageRequest.of(page, size);
-        PageImpl<Employee> employeePage = new PageImpl<>(Collections.singletonList(employee), pageable, 1);
-
-        when(employeeRepository.listEmployeesWithFilters(pageable, name, surname, false, departmentName, hospitalShortName)).thenReturn(employeePage);
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
-
-        Page<EmployeeDto> result = employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size);
-
-        assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(employeeDto, result.getContent().get(0));
-    }
-
-    @Test
-    void listEmployeesWithFilters_whenDeletedIsInvalid_shouldThrowException() {
-        String name = "John";
-        String surname = "Doe";
-        String deleted = "invalid";
-        String departmentName = "Department";
-        String hospitalShortName = "ABC";
-        int page = 0;
-        int size = 2;
-
-        assertThrows(RuntimeException.class, () -> employeeService.listEmployeesWithFilters(name, surname, deleted, departmentName, hospitalShortName, page, size));
-    }
-
-    // Edit employee info test
-    @Test
-    void editEmployeeInfo_whenEmployeeExistsAndOldPasswordMatches_shouldReturnEmployeeDto() {
-        String oldPassword = "oldPassword";
-        String newPassword = "newPassword";
-        String phone = "1234567890";
-
-        EmployeeUpdateDto employeeUpdateDto = EmployeeServiceTest.createEmployeeUpdateDto(oldPassword, newPassword, phone);
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setLbz(EMPLOYEE_LBZ);
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(passwordEncoder.matches(oldPassword, employee.getPassword())).thenReturn(true);
-        when(employeeRepository.save(employee)).thenReturn(employee);
-        when(employeeMapper.toDto(employee)).thenReturn(employeeDto);
-
-        EmployeeDto result = employeeService.editEmployeeInfo(employeeUpdateDto, EMPLOYEE_LBZ);
-
-        assertNotNull(result);
-        assertEquals(EMPLOYEE_LBZ, result.getLbz());
-        verify(employeeRepository).save(employee);
-        verify(employeeMapper).toDto(employee);
-    }
-
-    @Test
-    void editEmployeeInfo_whenEmployeeDoesNotExist_shouldThrowException() {
-        String oldPassword = "oldPassword";
-        String newPassword = "newPassword";
-        String phone = "1234567890";
-
-        EmployeeUpdateDto employeeUpdateDto = EmployeeServiceTest.createEmployeeUpdateDto(oldPassword, newPassword, phone);
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
-
-        assertThrows(EmployeeNotFoundException.class, () -> employeeService.editEmployeeInfo(employeeUpdateDto, EMPLOYEE_LBZ));
-    }
-
-    @Test
-    void editEmployeeInfo_whenOldPasswordDoesNotMatch_shouldThrowException() {
-        String oldPassword = "oldPassword";
-        String newPassword = "newPassword";
-        String phone = "1234567890";
-
-        EmployeeUpdateDto employeeUpdateDto = EmployeeServiceTest.createEmployeeUpdateDto(oldPassword, newPassword, phone);
-
-        Employee employee = EmployeeServiceTest.createEmployee();
-        employee.setPassword("differentPassword");
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(passwordEncoder.matches(oldPassword, employee.getPassword())).thenReturn(false);
-
-        assertThrows(EmployeePasswordException.class, () -> employeeService.editEmployeeInfo(employeeUpdateDto, EMPLOYEE_LBZ));
-    }
-
-    // Edit by Admin
-    @Test
-    void editEmployeeInfoByAdmin_whenEmployeeExists_shouldReturnEmployeeDto() {
-        EmployeeUpdateAdminDto employeeUpdateAdminDto = EmployeeServiceTest.createEmployeeUpdateByAdminDto();
-        Employee employee = EmployeeServiceTest.createEmployee();
-        Employee updatedEmployee = EmployeeServiceTest.createEmployee();
-        EmployeeDto employeeDto = EmployeeServiceTest.createEmployeeDto(createDepartment());
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(employeeMapper.toEntity(employeeUpdateAdminDto, employee)).thenReturn(updatedEmployee);
-        when(employeeRepository.save(updatedEmployee)).thenReturn(updatedEmployee);
-        when(employeeMapper.toDto(updatedEmployee)).thenReturn(employeeDto);
-
-        Role role = new Role();
-        role.setRoleShort(RoleShort.ROLE_DR_SPEC);
-        when(roleRepository.findByRoleShort(RoleShort.ROLE_DR_SPEC)).thenReturn(Optional.of(role));
-        when(employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ)).thenReturn(employeeDto);
-        EmployeeDto result = employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ);
-
-        assertNotNull(result);
-        assertEquals(EMPLOYEE_LBZ, result.getLbz());
-        verify(employeeRepository, times(2)).save(updatedEmployee);
-        verify(employeeMapper).toDto(updatedEmployee);
-    }
-
-    @Test
-    void editEmployeeInfoByAdmin_whenEmployeeDoesNotExist_shouldThrowException() {
-
-        EmployeeUpdateAdminDto employeeUpdateAdminDto = EmployeeServiceTest.createEmployeeUpdateByAdminDto();
-
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.empty());
-
-        assertThrows(EmployeeNotFoundException.class, () -> employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto, EMPLOYEE_LBZ));
-    }
-
-    // password reset
     @Test
     public void passwordReset_whenEmployeeExistsAndOldPasswordMatches_shouldReturnEmployeeMessageDto() {
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
         // Arrange
-        Employee employee = EmployeeServiceTest.createEmployee();
+        Employee employee = employeeGenerator.getRandomEmployee();
+        String lbz=employee.getLbz();
         when(passwordEncoder.encode("oldPassword")).thenReturn("encodedPassword");
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedPassword2");
         when(passwordEncoder.matches("oldPassword", "encodedPassword")).thenReturn(true);
@@ -347,222 +219,213 @@ public class EmployeeServiceTest {
         passwordResetDto.setOldPassword("oldPassword");
         passwordResetDto.setNewPassword("newPassword");
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee)).thenReturn(employee);
 
         // Act
-        EmployeeMessageDto actualResult = employeeService.passwordReset(passwordResetDto, EMPLOYEE_LBZ);
+        EmployeeMessageDto actualResult = employeeService.passwordReset(passwordResetDto, lbz);
 
         // Assert
-        verify(employeeRepository).findByLbz(EMPLOYEE_LBZ);
+        verify(employeeRepository).findByLbz(lbz);
         verify(employeeRepository).save(employee);
 
-        String expectedPattern = String.format("http://localhost:8080/api/employee/password-reset/%s/[a-z0-9-]+/", EMPLOYEE_LBZ);
-        assertTrue(actualResult.getMessage().matches(expectedPattern));
         assertTrue(passwordEncoder.matches(passwordResetDto.getNewPassword(), employee.getNewPassword()));
     }
 
     @Test
     public void passwordReset_whenEmployeeExistsAndOldPasswordDoesntMatch_shouldThrowException() {
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
         // Arrange
-        Employee employee = EmployeeServiceTest.createEmployee();
-        when(passwordEncoder.encode("oldPassword")).thenReturn("encodedPassword");
-        when(passwordEncoder.encode("newPassword")).thenReturn("encodedPassword2");
-        when(passwordEncoder.matches("oldPassword", "encodedPassword")).thenReturn(true);
-        when(passwordEncoder.matches("newPassword", "encodedPassword2")).thenReturn(true);
-        employee.setPassword(passwordEncoder.encode("oldPassword"));
+        Employee employee = employeeGenerator.getRandomEmployee();
+        String lbz=employee.getLbz();
+        when(passwordEncoder.matches("oldPasswordNijeIsti","oldPassword")).thenReturn(false);
+        employee.setPassword("oldPassword");
 
         PasswordResetDto passwordResetDto = new PasswordResetDto();
         passwordResetDto.setOldPassword("oldPasswordNijeIsti");
         passwordResetDto.setNewPassword("newPassword");
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(employeeRepository.save(employee)).thenReturn(employee);
+        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
 
-        assertThrows(EmployeePasswordException.class, () -> employeeService.passwordReset(passwordResetDto, EMPLOYEE_LBZ));
+        assertThrows(EmployeePasswordException.class, () -> employeeService.passwordReset(passwordResetDto, lbz));
     }
 
     // password resetToken
     @Test
     public void passwordResetToken_whenEmployeeExistsAndConditionTrue_shouldReturnEmployeeDto() {
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
         String token = "token";
 
-        Employee employee = EmployeeServiceTest.createEmployee();
+        Employee employee = employeeGenerator.getRandomEmployee();
         employee.setResetPassword("razlicitToken");
 
-        Employee updatedEmployee = EmployeeServiceTest.createEmployee();
+        String lbz=employee.getLbz();
+
+        Employee updatedEmployee =  replicateEmployee(employee);
         updatedEmployee.setPassword("newPassword");
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
-        when(employeeRepository.save(employee)).thenReturn(updatedEmployee);
+        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
 
-        assertThrows(EmployeePasswordException.class, () -> employeeService.passwordResetToken(EMPLOYEE_LBZ, token));
+        assertThrows(EmployeePasswordException.class, () -> employeeService.passwordResetToken(lbz, token));
     }
 
     @Test
     public void passwordResetToken_whenEmployeeExistsAndConditionFalse_shouldThrowException() {
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
         String token = "token";
 
-        Employee employee = EmployeeServiceTest.createEmployee();
+        Employee employee = employeeGenerator.getRandomEmployee();
         employee.setResetPassword(token);
 
-        Employee updatedEmployee = EmployeeServiceTest.createEmployee();
+        String lbz=employee.getLbz();
+
+        Employee updatedEmployee = replicateEmployee(employee);
+        assertTrue(classJsonComparator.compareCommonFields(employee,updatedEmployee));
         updatedEmployee.setPassword("newPassword");
 
-        when(employeeRepository.findByLbz(EMPLOYEE_LBZ)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee)).thenReturn(updatedEmployee);
 
-        EmployeeDto result = employeeService.passwordResetToken(EMPLOYEE_LBZ, token);
+        EmployeeDto result = employeeService.passwordResetToken(lbz, token);
 
         verify(employeeRepository).save(employee);
-        assertEquals("NO", updatedEmployee.getResetPassword());
-        assertEquals("NO", updatedEmployee.getNewPassword());
+        assertEquals("NO", employee.getResetPassword());
+        assertEquals("NO", employee.getNewPassword());
         assertEquals("newPassword", updatedEmployee.getPassword());
 
-        verify(employeeMapper).toDto(updatedEmployee);
-
-        EmployeeDto expectedDto = employeeMapper.toDto(employee);
-        assertEquals(expectedDto, result);
     }
 
 
-    // Helpers below
+    @Test
+    public void listEmployeesWithFiltersTest(){
 
-    private static final Long EMPLOYEE_ID = 1L;
-    private static final String EMPLOYEE_LBZ = "12345";
-    private static final String EMPLOYEE_NAME = "John";
-    private static final String EMPLOYEE_SURNAME = "Doe";
-    private static final String EMPLOYEE_DATE_OF_BIRTH = "1990-01-01";
-    private static final String EMPLOYEE_GENDER = "Male";
-    private static final String EMPLOYEE_JMBG = "1234567890123";
-    private static final String EMPLOYEE_ADDRESS = "123 Main St";
-    private static final String EMPLOYEE_PLACE_OF_LIVING = "Anytown";
-    private static final String EMPLOYEE_PHONE = "555-12345";
-    private static final String EMPLOYEE_EMAIL = "johndoe@ibis.rs";
-    private static final String EMPLOYEE_USERNAME = "johndoe";
-    private static final String EMPLOYEE_PASSWORD = "johndoe";
-    private static final Title EMPLOYEE_TITLE = Title.MR;
-    private static final Profession EMPLOYEE_PROFESSION = Profession.MED_SESTRA;
-    private static final List<String> EMPLOYEE_PERMISSIONS;
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+        employeeGenerator.fill(department);
 
-    private static final Department DEPARTMENT;
-    private static final Long DEPARTMENT_ID = 1L;
-    private static final String DEPARTMENT_PBO = "DEPT-2022-001";
-    private static final String DEPARTMENT_NAME = "Department";
+        Employee employee = employeeGenerator.getRandomEmployee();
+        List<Employee> employees=new ArrayList<>();
+        employees.add(employee);
+        Page<Employee> page=new PageImpl<>(employees);
 
-    private static final Hospital HOSPITAL;
-    private static final Long HOSPITAL_ID = 1L;
-    private static final String HOSPITAL_FULLNAME = "Hospital1";
-    private static final String HOSPITAL_SHORTNAME = "H1";
+        given(employeeRepository
+                .listEmployeesWithFilters(any(), eq(employee.getName()), eq(employee.getSurname()),
+                        eq(true), eq(department.getName()), eq(department.getHospital().getShortName()) ))
+                .willReturn(page);
 
-    static {
-        HOSPITAL = new Hospital();
-        HOSPITAL.setId(HOSPITAL_ID);
-        HOSPITAL.setFullName(HOSPITAL_FULLNAME);
-        HOSPITAL.setShortName(HOSPITAL_SHORTNAME);
+        Page<EmployeeDto> ret=employeeService.listEmployeesWithFilters(employee.getName(),employee.getSurname(),"true",
+                department.getName(),department.getHospital().getShortName(),0,2);
 
-        DEPARTMENT = new Department();
-        DEPARTMENT.setId(DEPARTMENT_ID);
-        DEPARTMENT.setPbo(DEPARTMENT_PBO);
-        DEPARTMENT.setName(DEPARTMENT_NAME);
-        DEPARTMENT.setHospital(HOSPITAL);
 
-        EMPLOYEE_PERMISSIONS = new ArrayList<>();
-        EMPLOYEE_PERMISSIONS.add(RoleShort.ROLE_DR_SPEC.name());
+        Assertions.assertTrue(ret.getContent().size()==employees.size());
+        for(int i=0;i<employees.size();i++) {
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(employees.get(i).getDepartment(),
+                    ret.getContent().get(i).getDepartment()));
+            employees.get(i).setDepartment(null);
+            ret.getContent().get(i).setDepartment(null);
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(employees.get(i), ret.getContent().get(i)));
+        }
+
     }
 
-    public static Employee createEmployee() {
-        Employee employee = new Employee();
-        employee.setId(EMPLOYEE_ID);
-        employee.setLbz(EMPLOYEE_LBZ);
-        employee.setName(EMPLOYEE_NAME);
-        employee.setSurname(EMPLOYEE_SURNAME);
-        employee.setDateOfBirth(Date.valueOf(EMPLOYEE_DATE_OF_BIRTH));
-        employee.setGender(EMPLOYEE_GENDER);
-        employee.setJmbg(EMPLOYEE_JMBG);
-        employee.setAddress(EMPLOYEE_ADDRESS);
-        employee.setPlaceOfLiving(EMPLOYEE_PLACE_OF_LIVING);
-        employee.setPhone(EMPLOYEE_PHONE);
-        employee.setEmail(EMPLOYEE_EMAIL);
-        employee.setUsername(EMPLOYEE_USERNAME);
-        employee.setPassword(EMPLOYEE_PASSWORD);
-        employee.setTitle(EMPLOYEE_TITLE);
-        employee.setProfession(EMPLOYEE_PROFESSION);
-        employee.setDepartment(DEPARTMENT);
-        return employee;
+
+    @Test
+    public void editEmployeeInfoTest(){
+
+        employeeUpdateDtoGenerator.fill();
+
+        String lbz="mojLbz";
+
+        EmployeeUpdateDto employeeUpdateDto=employeeUpdateDtoGenerator.getRandomEmployee();
+        Employee employee=new Employee();
+        employee.setPhone("");
+        employee.setPassword(employeeUpdateDto.getOldPassword());
+
+        given(passwordEncoder.matches(employeeUpdateDto.getOldPassword(),employeeUpdateDto.getOldPassword())).willReturn(true);
+        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
+
+        employeeService.editEmployeeInfo(employeeUpdateDto,lbz);
+
+        Assertions.assertTrue(employee.getPhone().equals(employeeUpdateDto.getPhone()));
     }
 
-    public static EmployeeCreateDto createEmployeeCreateDto() {
-        EmployeeCreateDto dto = new EmployeeCreateDto();
-        dto.setLbz(EMPLOYEE_LBZ);
-        dto.setName(EMPLOYEE_NAME);
-        dto.setSurname(EMPLOYEE_SURNAME);
-        dto.setDateOfBirth(Date.valueOf(EMPLOYEE_DATE_OF_BIRTH));
-        dto.setGender(EMPLOYEE_GENDER);
-        dto.setJmbg(EMPLOYEE_JMBG);
-        dto.setAddress(EMPLOYEE_ADDRESS);
-        dto.setPlaceOfLiving(EMPLOYEE_PLACE_OF_LIVING);
-        dto.setPhone(EMPLOYEE_PHONE);
-        dto.setEmail(EMPLOYEE_EMAIL);
-        dto.setTitle(EMPLOYEE_TITLE);
-        dto.setProfession(EMPLOYEE_PROFESSION);
-        dto.setDepartmentPbo(DEPARTMENT.getPbo());
-        dto.setPermissions(EMPLOYEE_PERMISSIONS);
-        return dto;
+
+    @Test
+    public void editEmployeeInfoByAdminTest(){
+
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+
+        employeeUpdateAdminDtoGenerator.fill(department.getPbo());
+        EmployeeUpdateAdminDto employeeUpdateAdminDto=employeeUpdateAdminDtoGenerator.getRandomEmployee();
+
+        insertRoles(employeeUpdateAdminDto.getPermissions());
+
+        String lbz="mojLbz";
+
+        Employee employee=new Employee();
+        employee.setId(3L);
+        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
+        given(departmentRepository.findByPbo(department.getPbo())).willReturn(Optional.of(department));
+        given(passwordEncoder.encode(any())).willReturn("noviPassword");
+        given(employeeRepository.save(employee)).willReturn(employee);
+
+        EmployeeDto ret=employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto,lbz);
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(ret,employeeUpdateAdminDto));
+
+        ArgumentCaptor<EmployeesRole> employeesRoleArgumentCaptor=ArgumentCaptor.forClass(EmployeesRole.class);
+        verify(employeesRoleRepository).save(employeesRoleArgumentCaptor.capture());
+
+        assertTrue(employeeUpdateAdminDto.getPermissions().size()==employeesRoleArgumentCaptor.getAllValues().size());
+        for(int i=0;i<employeeUpdateAdminDto.getPermissions().size();i++){
+            String pom1=employeeUpdateAdminDto.getPermissions().get(i);
+            RoleShort pom2=employeesRoleArgumentCaptor.getAllValues().get(i).getRole().getRoleShort();
+            System.out.println(pom1+" "+pom2.name()+"  ROLES");
+            assertEquals(pom1, pom2.name());
+        }
+
     }
 
-    public static EmployeeDto createEmployeeDto(DepartmentDto departmentDto) {
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(EMPLOYEE_ID);
-        employeeDto.setLbz(EMPLOYEE_LBZ);
-        employeeDto.setName(EMPLOYEE_NAME);
-        employeeDto.setSurname(EMPLOYEE_SURNAME);
-        employeeDto.setDateOfBirth(Date.valueOf(EMPLOYEE_DATE_OF_BIRTH));
-        employeeDto.setGender(EMPLOYEE_GENDER);
-        employeeDto.setJmbg(EMPLOYEE_JMBG);
-        employeeDto.setAddress(EMPLOYEE_ADDRESS);
-        employeeDto.setPlaceOfLiving(EMPLOYEE_PLACE_OF_LIVING);
-        employeeDto.setPhone(EMPLOYEE_PHONE);
-        employeeDto.setEmail(EMPLOYEE_EMAIL);
-        employeeDto.setTitle(EMPLOYEE_TITLE);
-        employeeDto.setProfession(EMPLOYEE_PROFESSION);
-        employeeDto.setDepartment(createDepartment());
-        return employeeDto;
+    @Test
+    public void findDoctorSpecialistsByDepartmentTest(){
+
+        int employeeCount=5;
+
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+
+        employeeGenerator.fill(department);
+        List<EmployeesRole>employeesRoles=new ArrayList<>();
+        for(int i=0;i<employeeCount;i++){
+            EmployeesRole pom=new EmployeesRole();
+            pom.setEmployee(employeeGenerator.getRandomEmployee());
+            employeesRoles.add(pom);
+        }
+
+        given(employeeRepository.listDoctorsSpecialistsByDepartment(department.getPbo())).willReturn(Optional.of(employeesRoles));
+
+        List<EmployeeDto>ret=employeeService.findDoctorSpecialistsByDepartment(department.getPbo());
+        List<Employee>ret2=new ArrayList<>();
+        for(EmployeesRole er:employeesRoles) {
+            ret2.add(er.getEmployee());
+        }
+
+        Assertions.assertTrue(classJsonComparator.compareCommonFields(ret.get(0).getDepartment(),ret2.get(0).getDepartment()));
+        Assertions.assertTrue(ret.size()==ret2.size());
+        for(int i=0;i<ret.size();i++){
+
+            ret.get(i).setDepartment(null);
+            ret2.get(i).setDepartment(null);
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(ret.get(i),ret2.get(i)));
+        }
+
     }
 
-    public static EmployeeUpdateDto createEmployeeUpdateDto(String oldPassword, String newPassword, String phone) {
-        EmployeeUpdateDto employeeUpdateDto = new EmployeeUpdateDto();
-        employeeUpdateDto.setOldPassword(oldPassword);
-        employeeUpdateDto.setNewPassword(newPassword);
-        employeeUpdateDto.setPhone(phone);
-        return employeeUpdateDto;
-    }
-
-    public static EmployeeUpdateAdminDto createEmployeeUpdateByAdminDto() {
-        EmployeeUpdateAdminDto employeeUpdateAdminDto = new EmployeeUpdateAdminDto();
-        employeeUpdateAdminDto.setName(EMPLOYEE_NAME);
-        employeeUpdateAdminDto.setSurname(EMPLOYEE_SURNAME);
-        employeeUpdateAdminDto.setDateOfBirth(Date.valueOf(EMPLOYEE_DATE_OF_BIRTH));
-        employeeUpdateAdminDto.setGender(EMPLOYEE_GENDER);
-        employeeUpdateAdminDto.setJmbg(EMPLOYEE_JMBG);
-        employeeUpdateAdminDto.setAddress(EMPLOYEE_ADDRESS);
-        employeeUpdateAdminDto.setPlaceOfLiving(EMPLOYEE_PLACE_OF_LIVING);
-        employeeUpdateAdminDto.setUsername("test.tafsd_a");
-        employeeUpdateAdminDto.setPhone(EMPLOYEE_PHONE);
-        employeeUpdateAdminDto.setEmail("test._df@gmasd.casom");
-        employeeUpdateAdminDto.setTitle(EMPLOYEE_TITLE);
-        employeeUpdateAdminDto.setProfession(EMPLOYEE_PROFESSION);
-        employeeUpdateAdminDto.setDepartmentPbo(DEPARTMENT.getPbo());
-        employeeUpdateAdminDto.setPermissions(EMPLOYEE_PERMISSIONS);
-        return employeeUpdateAdminDto;
-    }
-
-    public static DepartmentDto createDepartment(){
-        DepartmentDto dto = new DepartmentDto();
-        dto.setPbo(DEPARTMENT_PBO);
-        dto.setHospitalName(HOSPITAL_SHORTNAME);
-        dto.setName(DEPARTMENT_NAME);
-        return dto;
-    }
-*/
 }

@@ -40,7 +40,7 @@ public class EmployeeCreateDtoGenerator {
         }
     }
 
-    private EmployeeCreateDto generateEmployee(String departmentPbo) {
+    public EmployeeCreateDto generateEmployee(String departmentPbo) {
         EmployeeCreateDto employee = new EmployeeCreateDto();
         count++;
         employee.setEmail(randomString.getString(6) + "@ibis.rs");
