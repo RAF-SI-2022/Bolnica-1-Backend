@@ -1,5 +1,6 @@
 package raf.bolnica1.laboratory.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -98,7 +99,9 @@ public class LabResultServiceImpl implements LabResultService {
                 labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
             }
-            System.out.println("STIGO DO SEND: "+destination+" "+prescriptionCreateDto.getLbp());
+
+            ObjectMapper objectMapper=new ObjectMapper();
+            System.out.println("STIGO DO SEND: "+destination+" "+prescriptionCreateDto.getLbp()+" "+objectMapper.writeValueAsString(prescriptionCreateDto));
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
         }
         return null;
