@@ -20,12 +20,7 @@
 		<jacoco.version>0.8.8</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.coverage.exclusions><![CDATA[
-			"raf/bolnica1/employees/appConfig/**",
-			"raf/bolnica1/employees/controllers/**",
-			"raf/bolnica1/employees/runner/**",
-			"raf/bolnica1/employees/security/**"
-		]]></sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/appConfig/**, **/controllers/**, **/runner/**, **/security/**</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 
