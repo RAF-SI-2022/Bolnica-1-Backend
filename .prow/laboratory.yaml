@@ -100,8 +100,8 @@ postsubmits:
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
               # docker compose up -d mysql-laboratory
-              docker compose --profile employees-service up -d
-              docker compose --profile patients-service up -d
+              docker compose --profile employees up -d
+              docker compose --profile patients up -d
               
               cd "$SERVICE_NAME"
 

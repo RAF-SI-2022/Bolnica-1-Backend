@@ -102,9 +102,9 @@ postsubmits:
               # docker compose up -d mysql-infirmary
               # docker compose --profile infirmary up -d
               # docker compose up -d mysql-infirmary
-              docker compose --profile employees-service up -d
-              docker compose --profile patients-service up -d
-              docker compose --profile laboratory-service up -d
+              docker compose --profile employees up -d
+              docker compose --profile patients up -d
+              docker compose --profile laboratory up -d
               
               cd "$SERVICE_NAME"
 
