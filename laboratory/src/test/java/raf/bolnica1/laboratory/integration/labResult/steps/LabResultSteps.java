@@ -201,6 +201,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
                 Assertions.fail("nisu nadjeni uputi");
             }
 
+            System.out.println(prescriptionList.getBody()+" STRINGBODY");
             List<PrescriptionDoneDto>prescriptionDoneDtos=null;
             try {
                 prescriptionDoneDtos=extractPageContentFromPageJson.extractPageContentFromPageJson(
@@ -211,6 +212,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
 
 
             boolean flag=false;
+            System.out.println(prescriptionDoneDtos.size()+" SIZE PRESCRIPTION");
             for(PrescriptionDoneDto p:prescriptionDoneDtos) {
 
                 p.setDate(null);
