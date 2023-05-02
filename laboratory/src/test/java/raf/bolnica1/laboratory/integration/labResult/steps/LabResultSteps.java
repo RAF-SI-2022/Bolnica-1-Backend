@@ -174,6 +174,22 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     @When("posaljemo rezultat u pacijent servis")
     public void posaljemo_rezultat_u_pacijent_servis() {
         try{
+
+            {
+                String token= jwtTokenGetter.getDrMedSpec();
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setBearerAuth(token);
+                HttpEntity httpEntity = new HttpEntity(null, httpHeaders);
+                String uri=new String("/done_prescriptions/"+"P0005"+"?page=0&size=1000000000");
+                ResponseEntity<String> prescriptionList = prescriptionRestTemplate.exchange(uri, HttpMethod.GET, httpEntity,String.class);
+                if(prescriptionList.getBody()==null) {
+                    Assertions.fail("nisu nadjeni uputi");
+                }
+
+                System.out.println(prescriptionList.getBody()+" STRINGBODY COMMIT");
+            }
+
             prescriptionDoneDto=prescriptionRecieveService.findPrescription(prescriptionCreateDto.getPid());
             prescriptionDoneDto.setId(null);
             prescriptionDoneDto.setPrescriptionStatus(PrescriptionStatus.REALIZOVAN);
@@ -188,7 +204,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     public void rezultati_se_nalaze_na_pacijent_servisu() {
         try{
 
-            Thread.sleep(10000);
+            Thread.sleep(3000);
 
             String token= jwtTokenGetter.getDrMedSpec();
 
@@ -201,7 +217,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
                 Assertions.fail("nisu nadjeni uputi");
             }
 
-            System.out.println(prescriptionList.getBody()+" STRINGBODY");
+            System.out.println(prescriptionList.getBody()+" STRINGBODY "+prescriptionCreateDto.getLbp());
             List<PrescriptionDoneDto>prescriptionDoneDtos=null;
             try {
                 prescriptionDoneDtos=extractPageContentFromPageJson.extractPageContentFromPageJson(
