@@ -132,8 +132,8 @@ public class ClassJsonComparator {
         }
 
 
-        System.out.println(mapA);
-        System.out.println(mapB);
+        /*System.out.println(mapA);
+        System.out.println(mapB);*/
 
         return areMapsEqual(mapA,mapB);
     }
