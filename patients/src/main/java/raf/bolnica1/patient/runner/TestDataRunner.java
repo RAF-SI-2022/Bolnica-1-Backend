@@ -62,7 +62,7 @@ public class TestDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        clearAllRepositories();
+        ///clearAllRepositories();
 
         System.out.println("USAO U RUNNER");
 
