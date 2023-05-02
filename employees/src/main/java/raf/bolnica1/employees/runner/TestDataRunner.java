@@ -30,6 +30,7 @@ public class TestDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+       ////clearAllRepositories();
         defaultData();
        /* // hospitals
         Hospital hospital1 = new Hospital();
@@ -142,6 +143,14 @@ public class TestDataRunner implements CommandLineRunner {
         employeesRoleRepository.save(employeesRole1);
         employeesRoleRepository.save(employeesRole2);
         employeesRoleRepository.save(employeesRole3);*/
+    }
+
+    private void clearAllRepositories(){
+        departmentRepository.deleteAll();
+        hospitalRepository.deleteAll();
+        employeeRepository.deleteAll();
+        roleRepository.deleteAll();
+        employeesRoleRepository.deleteAll();
     }
 
     private void defaultData() {

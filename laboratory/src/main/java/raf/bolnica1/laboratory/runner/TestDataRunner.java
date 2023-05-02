@@ -31,9 +31,10 @@ public class TestDataRunner implements CommandLineRunner {
     private final LabAnalysisRepository labAnalysisRepository;
     private final ParameterRepository parameterRepository;
     private final AnalysisParameterRepository analysisParameterRepository;
-
     private final PrescriptionRepository prescriptionRepository;
     private final LabWorkOrderRepository labWorkOrderRepository;
+    private final ParameterAnalysisResultRepository parameterAnalysisResultRepository;
+    private final ScheduledLabExaminationRepository scheduledLabExaminationRepository;
 
     private final PrescriptionCreateDtoGenerator prescriptionCreateDtoGenerator;
     private final PrescriptionRecieveService prescriptionRecieveService;
@@ -42,12 +43,22 @@ public class TestDataRunner implements CommandLineRunner {
     private final JwtTokenGetter jwtTokenGetter;
     private final TokenSetter tokenSetter;
 
-    private final ParameterAnalysisResultRepository parameterAnalysisResultRepository;
 
     @Override
     public void run(String... args) throws Exception {
+        ///clearAllRepositories();
         defaultAnalysisParameter();
         generatedData();
+    }
+
+    private void clearAllRepositories(){
+        labAnalysisRepository.deleteAll();
+        parameterRepository.deleteAll();
+        analysisParameterRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        labWorkOrderRepository.deleteAll();
+        parameterAnalysisResultRepository.deleteAll();
+        scheduledLabExaminationRepository.deleteAll();
     }
 
     private void generatedData(){

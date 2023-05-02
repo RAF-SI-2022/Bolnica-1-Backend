@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import raf.bolnica1.employees.dataGenerators.domain.EmployeeGenerator;
 import raf.bolnica1.employees.dataGenerators.domain.HospitalDepartmentGenerator;
 import raf.bolnica1.employees.domain.*;
+import raf.bolnica1.employees.domain.constants.RoleShort;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 import raf.bolnica1.employees.dto.department.HospitalDto;
 import raf.bolnica1.employees.dto.employee.DoctorDepartmentDto;
@@ -138,8 +139,9 @@ public class DepartmentIntegrationTestSteps extends DepartmentIntegrationTestCon
         for(Department department : hospitalDepartmentGenerator.getDepartments())
             departmentRepository.save(department);
 
-        Role role = employeeGenerator.generateRole("Doktor");
-        role = roleRepository.save(role);
+        ///Role role = employeeGenerator.generateRole("Doktor");
+        ///role = roleRepository.save(role);
+        Role role= roleRepository.findByRoleShort(RoleShort.ROLE_DR_SPEC).get();
 
         for(int i = 0; i<brojDoktora; i++){
             Employee employee = employeeGenerator.generateEmployee(hospitalDepartmentGenerator.getRandomDepartment());

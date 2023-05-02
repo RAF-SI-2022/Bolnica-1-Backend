@@ -137,6 +137,30 @@ public class PatientGetter {
                 return ret;
             }
 
+
+            /*{
+                String token2= jwtTokenGetter.getDrMedSpec();
+                RestTemplate prescriptionRestTemplate=RestServiceClientConfig.prescriptionRestTemplate();
+                httpHeaders = new HttpHeaders();
+                httpHeaders.setBearerAuth(token2);
+                httpEntity = new HttpEntity(null, httpHeaders);
+                uri=new String("/done_prescriptions/"+"P0005"+"?page=0&size=1000000000");
+                ResponseEntity<String> prescriptionList = prescriptionRestTemplate.exchange(uri, HttpMethod.GET, httpEntity,String.class);
+                if(prescriptionList.getBody()==null) {
+                    System.out.println("BODY JE NULL");
+                }
+
+                System.out.println(prescriptionList.getBody()+" STRINGBODY PATIENT GETTER");
+            }
+
+            try {
+                ObjectMapper objectMapper=new ObjectMapper();
+                System.out.println(objectMapper.writeValueAsString(patients));
+                System.out.println(" ISPISAO PATIENTE");
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }*/
+
             return patients;
         }
         else{

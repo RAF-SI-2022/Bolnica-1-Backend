@@ -1,9 +1,11 @@
 package raf.bolnica1.laboratory.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
 
@@ -28,4 +30,8 @@ public interface ParameterAnalysisResultRepository extends JpaRepository<Paramet
     @Query("SELECT count(par) FROM ParameterAnalysisResult par WHERE par.labWorkOrder.id=:id AND par.result IS NULL")
     Integer countParameterAnalysisResultWithNullResultByLabWorkOrderId(@Param("id") Long id);
 
+    @Transactional
+    @Modifying
+    @Query("delete from ParameterAnalysisResult par where par.analysisParameter.id = :analysisParameterId")
+    void deleteByAnalysisParameterId(@Param("analysisParameterId") Long analysisParameterId);
 }

@@ -58,13 +58,17 @@ public class EmployeeRoleTestStep extends EmployeeRoleIntegrationTestConfig {
             mapa.put(employee.getLbz(), new ArrayList<>());
         }
 
-        Role r1 = employeeGenerator.generateRole("Doktor");
+        /*Role r1 = employeeGenerator.generateRole("Doktor");
         Role r2 = employeeGenerator.generateRole("Mediciska sestra");
-        Role r3 = employeeGenerator.generateRole("Nacelnik odeljenja");
+        Role r3 = employeeGenerator.generateRole("Nacelnik odeljenja");*/
 
-        roleRepository.save(r1);
+        Role r1=roleRepository.findAll().get(0);
+        Role r2=roleRepository.findAll().get(1);
+        Role r3=roleRepository.findAll().get(2);
+
+        /*roleRepository.save(r1);
         roleRepository.save(r2);
-        roleRepository.save(r3);
+        roleRepository.save(r3);*/
         List<Role> roles = Arrays.asList(r1, r2, r3);
 
         for(Employee employee : employees){
