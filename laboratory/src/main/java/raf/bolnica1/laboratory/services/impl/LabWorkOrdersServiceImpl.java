@@ -66,7 +66,9 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     public MessageDto registerPatient(String lbp) {
         List<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbp(lbp);
         for (Prescription prescription : prescriptions) {
+            System.out.println("DOSAO DO OVDE");
             LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
+            System.out.println("ZAVRSIO DO OVDE");
             if (labWorkOrder != null) {
                 labWorkOrder.setStatus(OrderStatus.U_OBRADI);
                 labWorkOrder.setTechnicianLbz(authenticationUtils.getLbzFromAuthentication());
