@@ -188,7 +188,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     public void rezultati_se_nalaze_na_pacijent_servisu() {
         try{
 
-            Thread.sleep(3000);
+            Thread.sleep(10000);
 
             String token= jwtTokenGetter.getDrMedSpec();
 
