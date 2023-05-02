@@ -108,6 +108,7 @@ public class LabResultServiceImpl implements LabResultService {
                 throw new RuntimeException(e);
             }
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
+            System.out.println("poslao bez problema");
         }
         return null;
     }

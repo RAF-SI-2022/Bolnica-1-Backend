@@ -37,7 +37,7 @@ presubmits:
               # za integracione i end to end testove.
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-patients
-              # docker compose --profile patients up -d
+              docker compose --profile patients up -d
               # docker compose up -d mysql-patients
 
               branch=$PULL_HEAD_REF
@@ -96,7 +96,7 @@ postsubmits:
               # za integracione i end to end testove.
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-patients
-              # docker compose --profile patients up -d
+              docker compose --profile patients up -d
               # docker compose up -d mysql-patients
               cd "$SERVICE_NAME"
 
