@@ -44,6 +44,7 @@ public class PrescriptionCreateDtoGenerator{
         ret.setStatus(PrescriptionStatus.values()[randomLong.getLong(new Long(PrescriptionStatus.values().length) ).intValue()]);
         ret.setType(PrescriptionType.LABORATORIJA);
         ret.setLbp(randomLBP.getFromRandom());
+        ret.setLbp("P0005");/// TODO
         ret.setCreationDateTime(randomTimestamp.getFromRandom());
         ret.setDepartmentToId(randomLong.getLong(4L));
         ret.setDoctorLbz(randomString.getString(10));

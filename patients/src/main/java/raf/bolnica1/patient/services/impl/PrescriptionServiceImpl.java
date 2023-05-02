@@ -149,10 +149,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     public void createPrescription(PrescriptionCreateDto prescriptionCreateDto) {
         Prescription prescription = prescriptionMapper.toEntity(prescriptionCreateDto);
-
-        /*prescription=new Prescription();
-        prescription.set*/
-
         prescription = prescriptionRepository.save(prescription);
         for(LabResultDto labResultDto : prescriptionCreateDto.getLabResultDtoList()){
             LabResults labResults = prescriptionMapper.getLabResult(prescription, labResultDto);
