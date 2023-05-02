@@ -1,5 +1,6 @@
 package raf.bolnica1.laboratory.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
@@ -101,7 +102,11 @@ public class LabResultServiceImpl implements LabResultService {
             }
 
             ObjectMapper objectMapper=new ObjectMapper();
-            System.out.println("STIGO DO SEND: "+destination+" "+prescriptionCreateDto.getLbp()+" "+objectMapper.writeValueAsString(prescriptionCreateDto));
+            try {
+                System.out.println("STIGO DO SEND: "+destination+" "+prescriptionCreateDto.getLbp()+" "+objectMapper.writeValueAsString(prescriptionCreateDto));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
         }
         return null;
