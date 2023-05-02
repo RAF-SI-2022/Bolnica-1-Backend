@@ -103,6 +103,8 @@ services:
     image: oscarfonts/h2
     container_name: laboratory-db
     restart: always
+    volumes:
+      - ./h2:/opt/h2-data
     environment:
       - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
     networks:

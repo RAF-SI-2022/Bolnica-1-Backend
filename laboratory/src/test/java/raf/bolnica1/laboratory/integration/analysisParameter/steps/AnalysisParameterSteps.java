@@ -92,6 +92,8 @@ public class AnalysisParameterSteps extends AnalysisParameterIntegrationTestConf
                 AnalysisParameterDto pom=new AnalysisParameterDto();
                 pom.setParameter(parameterDtoList.get(i));
                 pom.setLabAnalysis(labAnalysisDto);
+                if(analysisParameterRepository.findAnalysisParameterByAnalysisIdAndParameterId(
+                        pom.getLabAnalysis().getId(),pom.getParameter().getId())!=null)continue;
                 AnalysisParameterDto pom2=analysisParameterService.createAnalysisParameter(pom);
                 pom.setId(pom2.getId());
                 Assertions.assertTrue(classJsonComparator.compareCommonFields(pom2,pom));
