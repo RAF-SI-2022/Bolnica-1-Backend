@@ -21,10 +21,10 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.coverage.exclusions><![CDATA[
-			raf/bolnica1/infirmary/config/**
-			raf/bolnica1/infirmary/controllers/**
-			raf/bolnica1/infirmary/runner/**
-			raf/bolnica1/infirmary/security/**
+			"raf/bolnica1/infirmary/config/**",
+			"raf/bolnica1/infirmary/controllers/**",
+			"raf/bolnica1/infirmary/runner/**",
+			"raf/bolnica1/infirmary/security/**"
 		]]></sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
