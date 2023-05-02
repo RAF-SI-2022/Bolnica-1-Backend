@@ -107,7 +107,9 @@ public class LabResultServiceImpl implements LabResultService {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+            prescriptionCreateDto.setLabResultDtoList(new ArrayList<>());
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
+            System.out.println("poslao bez problema");
         }
         return null;
     }
