@@ -137,6 +137,15 @@ public class PatientGetter {
                 return ret;
             }
 
+
+            try {
+                ObjectMapper objectMapper=new ObjectMapper();
+                System.out.println(objectMapper.writeValueAsString(patients));
+                System.out.println(" ISPISAO PATIENTE");
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
             return patients;
         }
         else{
