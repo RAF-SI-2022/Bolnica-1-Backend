@@ -175,7 +175,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     public void posaljemo_rezultat_u_pacijent_servis() {
         try{
 
-            {
+            /*{
                 String token= jwtTokenGetter.getDrMedSpec();
 
                 HttpHeaders httpHeaders = new HttpHeaders();
@@ -188,7 +188,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
                 }
 
                 System.out.println(prescriptionList.getBody()+" STRINGBODY COMMIT");
-            }
+            }*/
 
             prescriptionDoneDto=prescriptionRecieveService.findPrescription(prescriptionCreateDto.getPid());
             prescriptionDoneDto.setId(null);

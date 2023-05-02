@@ -138,7 +138,7 @@ public class PatientGetter {
             }
 
 
-            {
+            /*{
                 String token2= jwtTokenGetter.getDrMedSpec();
                 RestTemplate prescriptionRestTemplate=RestServiceClientConfig.prescriptionRestTemplate();
                 httpHeaders = new HttpHeaders();
@@ -159,7 +159,7 @@ public class PatientGetter {
                 System.out.println(" ISPISAO PATIENTE");
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
             return patients;
         }

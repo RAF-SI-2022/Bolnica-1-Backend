@@ -98,6 +98,7 @@ public class LabResultServiceImpl implements LabResultService {
                 labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
             }
+            System.out.println("STIGO DO SEND: "+destination+" "+prescriptionCreateDto.getLbp());
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
         }
         return null;
