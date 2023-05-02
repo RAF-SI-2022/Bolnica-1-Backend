@@ -5,6 +5,6 @@ Feature: Upisivanje i slanje rezultata analiza
     Then azuriranje rezultata u za neki LabWorkOrder ce biti izvrseno
 
   Scenario: Slanje rezultata analiza LabWorkOrdera na pacijent servis
-    Given otvoren uput i LabWorkOrder sa upisanim rezultatima
+    Given otvoren uput sa LBP "P0005" i LabWorkOrder sa upisanim rezultatima
     When posaljemo rezultat u pacijent servis
     Then rezultati se nalaze na pacijent servisu

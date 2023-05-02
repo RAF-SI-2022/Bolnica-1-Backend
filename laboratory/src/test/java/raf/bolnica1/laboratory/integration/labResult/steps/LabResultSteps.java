@@ -144,10 +144,11 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
     }
 
     private PrescriptionDoneDto prescriptionDoneDto;
-    @Given("otvoren uput i LabWorkOrder sa upisanim rezultatima")
-    public void otvoren_uput_i_lab_work_order_sa_upisanim_rezultatima() {
+    @Given("otvoren uput sa LBP {string} i LabWorkOrder sa upisanim rezultatima")
+    public void otvoren_uput_i_lab_work_order_sa_upisanim_rezultatima(String lbp) {
         try{
             prescriptionCreateDto=prescriptionCreateDtoGenerator.getPrescriptionCreateDto(analysisParameterRepository);
+            prescriptionCreateDto.setLbp(lbp);
             prescriptionRecieveService.createPrescription(prescriptionCreateDto);
 
             List<ParameterAnalysisResult> list=parameterAnalysisResultRepository.findAll();
