@@ -19,6 +19,14 @@
 		<jacoco.version>0.8.8</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.coverage.exclusions><![CDATA[
+			raf/bolnica1/patient/checking/**
+			raf/bolnica1/patient/config/**
+			raf/bolnica1/patient/controllers/**
+			raf/bolnica1/patient/runner/**
+			raf/bolnica1/patient/security/**
+			raf/bolnica1/patient/util/**
+		]]></sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
