@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.laboratory.domain.lab.AnalysisParameter;
+import raf.bolnica1.laboratory.domain.lab.ParameterAnalysisResult;
+import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
 import raf.bolnica1.laboratory.dto.lab.analysisParameter.AnalysisParameterDto;
@@ -49,6 +52,8 @@ public class AnalysisParameterSteps extends AnalysisParameterIntegrationTestConf
     private ParameterRepository parameterRepository;
     @Autowired
     private AnalysisParameterRepository analysisParameterRepository;
+    @Autowired
+    private ParameterAnalysisResultRepository parameterAnalysisResultRepository;
 
     /// UTILS
     @Autowired
@@ -78,6 +83,16 @@ public class AnalysisParameterSteps extends AnalysisParameterIntegrationTestConf
     @When("kreirano {int} AnalysisParameter")
     public void kreirano_analysis_parameter(Integer apCount) {
         try{
+
+           /* {
+                List<AnalysisParameter> check = analysisParameterRepository.findAll();
+                System.out.println("POCINJE CHECK POCETNI");
+                for (AnalysisParameter ap : check) {
+                    System.out.println(objectMapper.writeValueAsString(ap));
+                }
+                System.out.println("GOTOV CHECK");
+            }*/
+
             labAnalysisDto=labAnalysisService.getLabAnalysis(1L);
             List<ParameterDto>list=parameterMapper.toDto(parameterRepository.findAll());
 
@@ -92,12 +107,25 @@ public class AnalysisParameterSteps extends AnalysisParameterIntegrationTestConf
                 AnalysisParameterDto pom=new AnalysisParameterDto();
                 pom.setParameter(parameterDtoList.get(i));
                 pom.setLabAnalysis(labAnalysisDto);
+                if(analysisParameterRepository.findAnalysisParameterByAnalysisIdAndParameterId(
+                        pom.getLabAnalysis().getId(),pom.getParameter().getId())!=null) {
+
+                    AnalysisParameterDto pom2=analysisParameterMapper.toDto(analysisParameterRepository.findAnalysisParameterByAnalysisIdAndParameterId(
+                            pom.getLabAnalysis().getId(),pom.getParameter().getId()));
+                    analysisParameterDtos.add(pom2);
+                    continue;
+                }
                 AnalysisParameterDto pom2=analysisParameterService.createAnalysisParameter(pom);
                 pom.setId(pom2.getId());
                 Assertions.assertTrue(classJsonComparator.compareCommonFields(pom2,pom));
                 analysisParameterDtos.add(pom2);
             }
 
+            /*List<AnalysisParameter> check=analysisParameterRepository.findAll();
+            System.out.println("POCINJE CHECK");
+            for(AnalysisParameter ap:check){
+                System.out.println(objectMapper.writeValueAsString(ap));
+            }System.out.println("GOTOV CHECK");*/
 
         }catch (Exception e){
             Assertions.fail(e);
@@ -140,6 +168,7 @@ public class AnalysisParameterSteps extends AnalysisParameterIntegrationTestConf
     public void obrisan_taj_analysis_parameter() {
         try{
 
+            parameterAnalysisResultRepository.deleteByAnalysisParameterId(analysisParameterDtos.get(0).getId());
             analysisParameterService.deleteAnalysisParameter(analysisParameterDtos.get(0).getId());
 
         }catch (Exception e){

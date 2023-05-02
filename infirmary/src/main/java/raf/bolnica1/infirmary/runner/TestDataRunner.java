@@ -5,7 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
-import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
+import raf.bolnica1.infirmary.domain.PatientState;
+import raf.bolnica1.infirmary.repository.*;
 
 @Profile({"default"})
 @Component
@@ -13,10 +14,26 @@ import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 public class TestDataRunner implements CommandLineRunner {
 
     private HospitalRoomRepository hospitalRoomRepository;
+    private DischargeListRepository dischargeListRepository;
+    private HospitalizationRepository hospitalizationRepository;
+    private PatientStateRepository patientStateRepository;
+    private PrescriptionRepository prescriptionRepository;
+    private ScheduledAppointmentRepository scheduledAppointmentRepository;
+    private VisitRepository visitRepository;
+
+    private void clearAllRepositories(){
+        hospitalRoomRepository.deleteAll();
+        dischargeListRepository.deleteAll();
+        hospitalizationRepository.deleteAll();
+        patientStateRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        scheduledAppointmentRepository.deleteAll();
+        visitRepository.deleteAll();
+    }
 
     @Override
     public void run(String... args) throws Exception {
-
+        ///clearAllRepositories();
         createHospitalRooms();
     }
 

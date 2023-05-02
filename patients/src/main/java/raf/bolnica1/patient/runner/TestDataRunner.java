@@ -20,20 +20,17 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {
 
+    private PatientMapper patientMapper;
+
     private PatientRepository patientRepository;
     private SocialDataRepository socialDataRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private GeneralMedicalDataRepository generalMedicalDataRepository;
     private AllergyRepository allergyRepository;
     private VaccinationRepository vaccinationRepository;
-
     private DiagnosisCodeRepository diagnosisCodeRepository;
-
-    private PatientMapper patientMapper;
-
     private PrescriptionRepository prescriptionRepository;
     private LabResultsRepository labResultsRepository;
-
     private AllergyDataRepository allergyDataRepository;
     private final VaccinationDataRepository vaccinationDataRepository;
     private final AnamnesisRepository anamnesisRepository;
@@ -42,8 +39,30 @@ public class TestDataRunner implements CommandLineRunner {
     private final ExaminationHistoryRepository examinationHistoryRepository;
     private final MedicalHistoryRepository medicalHistoryRepository;
 
+    private void clearAllRepositories(){
+        patientRepository.deleteAll();
+        socialDataRepository.deleteAll();
+        medicalRecordRepository.deleteAll();
+        generalMedicalDataRepository.deleteAll();
+        allergyRepository.deleteAll();
+        vaccinationRepository.deleteAll();
+        diagnosisCodeRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        labResultsRepository.deleteAll();
+        allergyDataRepository.deleteAll();
+        vaccinationDataRepository.deleteAll();
+        anamnesisRepository.deleteAll();
+        operationRepository.deleteAll();
+        scheduleExamRepository.deleteAll();
+        examinationHistoryRepository.deleteAll();
+        medicalHistoryRepository.deleteAll();
+    }
+
+
     @Override
     public void run(String... args) throws Exception {
+
+        ///clearAllRepositories();
 
         System.out.println("USAO U RUNNER");
 
