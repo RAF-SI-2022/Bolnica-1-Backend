@@ -28,20 +28,10 @@ import java.util.List;
 @AllArgsConstructor
 public class PrescriptionMapper {
 
-    private PrescriptionRepository prescriptionRepository;
     private LabResultsRepository labResultsRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private PatientRepository patientRepository;
 
-    private void setFieldsForPrescriptionSend(PrescriptionSendDto prescriptionSendDto,PrescriptionSendDto prescriptionCreateDto){
-        prescriptionSendDto.setLbp(prescriptionCreateDto.getLbp());
-        prescriptionSendDto.setDepartmentFromId(prescriptionCreateDto.getDepartmentFromId());
-        prescriptionSendDto.setDepartmentToId(prescriptionCreateDto.getDepartmentToId());
-        prescriptionSendDto.setDoctorLbz(prescriptionCreateDto.getDoctorLbz());
-        prescriptionSendDto.setStatus(PrescriptionStatus.NEREALIZOVAN);
-        prescriptionSendDto.setType(prescriptionCreateDto.getType());
-        prescriptionSendDto.setCreationDateTime(prescriptionCreateDto.getCreationDateTime());
-    }
 
     public PrescriptionDoneDto toDto(Prescription prescription){
         PrescriptionDoneDto prescriptionDoneDto = null;

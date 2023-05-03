@@ -16,6 +16,11 @@ public class ClassJsonComparator {
     private final ObjectMapper objectMapper;
 
 
+
+    public static ClassJsonComparator getInstance(){
+        return new ClassJsonComparator(new ObjectMapper());
+    }
+
     private void convertNestedObjectsToMaps(Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             Object value = entry.getValue();
@@ -135,11 +140,7 @@ public class ClassJsonComparator {
 
     public boolean compareCommonFields(Object a,Object b){
 
-        if(a == null && b == null)
-            return true;
-        if(a == null || b == null)
-            return false;
-        
+
         String jsonA;
         String jsonB;
         try {
@@ -173,7 +174,7 @@ public class ClassJsonComparator {
         return true;
     }
 
-    public <T> boolean compareListCommonFields(List<T> a, List<T> b){
+    public <T,U> boolean compareListCommonFields(List<T> a, List<U> b){
         if(a==null && b==null)return true;
         if(a==null || b==null){
             return false;
