@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.dto.create.PatientCreateDto;
 import raf.bolnica1.patient.dto.create.PatientUpdateDto;
 import raf.bolnica1.patient.dto.general.*;
-import raf.bolnica1.patient.dto.prescription.general.PrescriptionDto;
 
 
-import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabSendDto;
-import raf.bolnica1.patient.dto.prescription.lab.PrescriptionLabUpdateDto;
 import raf.bolnica1.patient.services.PatientCrudService;
 import raf.bolnica1.patient.services.PatientService;
 import raf.bolnica1.patient.services.PrescriptionService;
