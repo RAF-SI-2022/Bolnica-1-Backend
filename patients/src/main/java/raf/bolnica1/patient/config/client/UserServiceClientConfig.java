@@ -10,7 +10,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class UserServiceClientConfig {
 
-    @Value("${employees.service.url}")
+    @Value("${employee.service.url}")
     private String employeesServiceUrl;
     @Bean
     @Qualifier("userRestTemplate")
