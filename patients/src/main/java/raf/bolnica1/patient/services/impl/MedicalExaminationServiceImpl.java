@@ -33,7 +33,6 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
     private ExaminationHistoryMapper examinationHistoryMapper;
     private MedicalHistoryMapper medicalHistoryMapper;
 
-    private ScheduleExamRepository scheduleExamRepository;
 
     @Override
     public ExaminationHistoryDto addExamination(String lbp, ExaminationHistoryCreateDto examinationHistoryCreateDto) {

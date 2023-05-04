@@ -20,7 +20,7 @@ public class MedicalHistoryMapper {
     private DiagnosisCodeMapper diagnosisCodeMapper;
     private DiagnosisCodeRepository diagnosisCodeRepository;
 
-    public MedicalHistory toEntity(MedicalHistoryDto medicalHistoryDto){
+    /*public MedicalHistory toEntity(MedicalHistoryDto medicalHistoryDto){
         MedicalHistory medicalHistory = new MedicalHistory();
         medicalHistory.setStartDate(medicalHistoryDto.getStartDate());
         medicalHistory.setEndDate(medicalHistoryDto.getEndDate());
@@ -32,7 +32,7 @@ public class MedicalHistoryMapper {
         DiagnosisCode diagnosisCode = diagnosisCodeRepository.findByCode(medicalHistoryDto.getDiagnosisCodeDto().getCode());
         medicalHistory.setDiagnosisCode(diagnosisCode);
         return medicalHistory;
-    }
+    }*/
 
     public MedicalHistoryDto toDto(MedicalHistory entity){
         if(entity==null)return null;
