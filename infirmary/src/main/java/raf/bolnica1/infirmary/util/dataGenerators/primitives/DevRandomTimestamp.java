@@ -1,32 +1,30 @@
-package raf.bolnica1.infirmary.dataGenerators.primitives;
+package raf.bolnica1.infirmary.util.dataGenerators.primitives;
 
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.TimeZone;
+
 
 @Component
-public class RandomDate {
+public class DevRandomTimestamp {
 
-    private List<Date> list;
+    private List<Timestamp> list;
     /*private Timestamp upperLimit=Timestamp.valueOf("2023-01-01 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");*/
-    private Timestamp upperLimit=Timestamp.valueOf("1990-01-15 00:00:00");
+    private Timestamp upperLimit=Timestamp.valueOf("1990-01-05 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");
     private Random random=new Random();
     private int numberOfStamps=20;
-    private long millisInDay=24*60*60*1000;
 
 
-    public static RandomDate getInstance(){
-        return new RandomDate();
+    public static DevRandomTimestamp getInstance(){
+        return new DevRandomTimestamp();
     }
 
-    public RandomDate(){
+    public DevRandomTimestamp(){
 
         list=new ArrayList<>();
 
@@ -34,11 +32,8 @@ public class RandomDate {
         long minStamp=lowerLimit.getTime();
         long len=maxStamp-minStamp;
         for(int i=0;i<numberOfStamps;i++) {
-            long pom= Math.abs(random.nextLong()) % len;
-            pom/=millisInDay;
-            pom*=millisInDay;
-            pom+=minStamp;
-            list.add(new Date(pom));
+            Timestamp timestamp=new Timestamp(minStamp + Math.abs(random.nextLong()) % len);
+            list.add(timestamp);
         }
 
     }
@@ -47,12 +42,12 @@ public class RandomDate {
         return list.size();
     }
 
-    public Date getFromPos(int pos){
-        return new Date(list.get(pos).getTime());
+    public Timestamp getFromPos(int pos){
+        return new Timestamp(list.get(pos).getTime());
     }
 
-    public Date getFromRandom(){
-        return new Date(list.get(Math.abs(random.nextInt())%getSize()).getTime());
+    public Timestamp getFromRandom(){
+        int pom=random.nextInt();
+        return new Timestamp(list.get(Math.abs(pom)%getSize()).getTime());
     }
-
 }

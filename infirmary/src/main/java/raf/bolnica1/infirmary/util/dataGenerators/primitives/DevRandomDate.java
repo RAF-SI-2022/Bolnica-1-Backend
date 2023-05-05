@@ -1,4 +1,4 @@
-package raf.bolnica1.infirmary.dataGenerators.primitives;
+package raf.bolnica1.infirmary.util.dataGenerators.primitives;
 
 import org.springframework.stereotype.Component;
 
@@ -7,26 +7,25 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.TimeZone;
 
 @Component
-public class RandomDate {
+public class DevRandomDate {
 
     private List<Date> list;
     /*private Timestamp upperLimit=Timestamp.valueOf("2023-01-01 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");*/
-    private Timestamp upperLimit=Timestamp.valueOf("1990-01-15 00:00:00");
+    private Timestamp upperLimit=Timestamp.valueOf("1990-01-05 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");
     private Random random=new Random();
     private int numberOfStamps=20;
     private long millisInDay=24*60*60*1000;
 
 
-    public static RandomDate getInstance(){
-        return new RandomDate();
+    public static DevRandomDate getInstance(){
+        return new DevRandomDate();
     }
 
-    public RandomDate(){
+    public DevRandomDate(){
 
         list=new ArrayList<>();
 
