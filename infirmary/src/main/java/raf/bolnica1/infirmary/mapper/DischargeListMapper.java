@@ -3,6 +3,7 @@ package raf.bolnica1.infirmary.mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.DischargeList;
+import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 
@@ -18,6 +19,26 @@ public class DischargeListMapper {
         return new DischargeListMapper();
     }
 
+
+    public CreateDischargeListDto toDto(DischargeListDto dto){
+
+        if(dto==null)return null;
+
+        CreateDischargeListDto ret=new CreateDischargeListDto();
+
+        ret.setAnalysis(dto.getAnalysis());
+        ret.setAnamnesis(dto.getAnamnesis());
+        ret.setCreation(dto.getCreation());
+        ret.setFollowingDiagnosis(dto.getFollowingDiagnosis());
+        ret.setLbzDepartment(dto.getLbzDepartment());
+        ret.setTherapy(dto.getTherapy());
+        ret.setSummary(dto.getSummary());
+        ret.setLbzPrescribing(dto.getLbzPrescribing());
+        ret.setCourseOfDisease(dto.getCourseOfDisease());
+        ret.setHospitalizationId(dto.getHospitalizationId());
+
+        return ret;
+    }
 
     public DischargeListDto toDto(DischargeList entity){
         if(entity==null)return null;
@@ -53,6 +74,26 @@ public class DischargeListMapper {
 
 
     /// kreiranje
+    public DischargeList toEntity(CreateDischargeListDto dto, HospitalizationRepository hospitalizationRepository){
+
+        if(dto==null)return null;
+
+        DischargeList entity=new DischargeList();
+
+        entity.setAnamnesis(dto.getAnamnesis());
+        entity.setAnalysis(dto.getAnalysis());
+        entity.setCreation(dto.getCreation());
+        entity.setSummary(dto.getSummary());
+        entity.setTherapy(dto.getTherapy());
+        entity.setFollowingDiagnosis(dto.getFollowingDiagnosis());
+        entity.setLbzDepartment(dto.getLbzDepartment());
+        entity.setLbzPrescribing(dto.getLbzPrescribing());
+        entity.setHospitalization(hospitalizationRepository.findHospitalizationById(dto.getHospitalizationId()));
+        entity.setCourseOfDisease(dto.getCourseOfDisease());
+
+        return entity;
+    }
+
     public DischargeList toEntity(DischargeListDto dto, HospitalizationRepository hospitalizationRepository){
 
         if(dto==null)return null;

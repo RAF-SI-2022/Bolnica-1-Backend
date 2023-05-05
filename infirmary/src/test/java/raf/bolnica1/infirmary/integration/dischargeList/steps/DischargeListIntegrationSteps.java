@@ -14,6 +14,7 @@ import raf.bolnica1.infirmary.dataGenerators.classes.dto.hospitalRoom.filter.Hos
 import raf.bolnica1.infirmary.dataGenerators.classes.dto.hospitalization.filter.HospitalizationFilterGenerator;
 import raf.bolnica1.infirmary.dataGenerators.primitives.RandomLong;
 import raf.bolnica1.infirmary.domain.Hospitalization;
+import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 import raf.bolnica1.infirmary.integration.dischargeList.DischargeListIntegrationTestConfig;
 import raf.bolnica1.infirmary.mapper.DischargeListMapper;
@@ -96,7 +97,8 @@ public class DischargeListIntegrationSteps extends DischargeListIntegrationTestC
 
             dischargeListDto=dischargeListDtoGenerator.getDischargeListDto(hospitalization.getId());
 
-            DischargeListDto pom=dischargeListService.createDischargeList(dischargeListDto);
+            CreateDischargeListDto createDischargeListDto=dischargeListMapper.toDto(dischargeListDto);
+            DischargeListDto pom=dischargeListService.createDischargeList(createDischargeListDto);
 
             dischargeListDto.setId(pom.getId());
             Assertions.assertTrue(classJsonComparator.compareCommonFields(pom,dischargeListDto));
@@ -130,7 +132,8 @@ public class DischargeListIntegrationSteps extends DischargeListIntegrationTestC
     public void pretraga_po_njenom_id_hospitalizacije_je_pronalazi() {
 
         try{
-            DischargeListDto dto=dischargeListService.getDischargeListByHospitalizationId(dischargeListDto.getHospitalizationId());
+            DischargeListDto dto=dischargeListService.getDischargeListWithFilter(dischargeListDto.getHospitalizationId(),
+                    null,null,null,0,1000000000).getContent().get(0);
             Assertions.assertTrue(classJsonComparator.compareCommonFields(dischargeListDto,dto));
         }catch (Exception e){
             Assertions.fail(e);

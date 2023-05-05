@@ -5,12 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.DischargeListGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalizationGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.PrescriptionGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.dto.dischargeList.DischargeListDtoGenerator;
 import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.domain.Hospitalization;
+import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 import raf.bolnica1.infirmary.mapper.DischargeListMapper;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
@@ -19,6 +22,10 @@ import raf.bolnica1.infirmary.services.DischargeListService;
 import raf.bolnica1.infirmary.services.impl.DischargeListServiceImpl;
 import raf.bolnica1.infirmary.validation.ClassJsonComparator;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,7 +74,8 @@ public class DischargeListUnitTest {
         given(dischargeListRepository.save(any())).willReturn(dischargeList);
 
 
-        DischargeListDto result=dischargeListService.createDischargeList(dischargeListDto);
+        CreateDischargeListDto createDischargeListDto=dischargeListMapper.toDto(dischargeListDto);
+        DischargeListDto result=dischargeListService.createDischargeList(createDischargeListDto);
 
         dischargeListDto.setId(dischargeListId);
         Assertions.assertTrue(classJsonComparator.compareCommonFields(result,dischargeListDto));
@@ -76,22 +84,31 @@ public class DischargeListUnitTest {
 
     @Test
     public void getDischargeListByHospitalizationIdTest(){
+        try {
+            long hospitalizationId=4;
+            long dischargeListId=2;
 
-        long hospitalizationId=4;
-        long dischargeListId=2;
+            Hospitalization hospitalization=hospitalizationGenerator.getHospitalization(null,
+                    prescriptionGenerator.getPrescription());
+            hospitalization.setId(hospitalizationId);
+            DischargeList dischargeList=dischargeListGenerator.getDischargeList(hospitalization);
+            dischargeList.setId(dischargeListId);
+            List<DischargeList>lista=new ArrayList<>();
+            lista.add(dischargeList);
+            Page<DischargeList> page=new PageImpl<>(lista);
 
-        Hospitalization hospitalization=hospitalizationGenerator.getHospitalization(null,
-                prescriptionGenerator.getPrescription());
-        hospitalization.setId(hospitalizationId);
-        DischargeList dischargeList=dischargeListGenerator.getDischargeList(hospitalization);
-        dischargeList.setId(dischargeListId);
+            given(dischargeListRepository.findDischargeListWithFilter(any(),
+                    eq(hospitalizationId),any(),any(),any()  )).willReturn(page);
 
-        given(dischargeListRepository.findDischargeListByHospitalizationId(hospitalizationId)).willReturn(dischargeList);
+            DischargeListDto result=dischargeListService.getDischargeListWithFilter(hospitalizationId,
+                    null,null,null,0,1000000000).getContent().get(0);
 
-        DischargeListDto result=dischargeListService.getDischargeListByHospitalizationId(hospitalizationId);
-
-        Assertions.assertTrue(classJsonComparator.compareCommonFields(result,dischargeList));
-        Assertions.assertTrue(result.getHospitalizationId().equals(dischargeList.getHospitalization().getId()));
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(result,dischargeList));
+            Assertions.assertTrue(result.getHospitalizationId().equals(dischargeList.getHospitalization().getId()));
+        }
+        catch (Exception e){
+            Assertions.fail(e);
+        }
 
     }
 

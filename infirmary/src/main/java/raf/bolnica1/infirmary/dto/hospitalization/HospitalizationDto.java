@@ -22,5 +22,6 @@ public class HospitalizationDto {
     private String surname;
     private String jmbg;
     private String note;
+    private String lbp;
 
 }

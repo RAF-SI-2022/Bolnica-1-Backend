@@ -17,6 +17,7 @@ public class ScheduledAppointmentDto {
     private AdmissionStatus admissionStatus;
     private String note;
     private String lbzScheduler;
+    private String lbp;
     private Long prescriptionId;
 
 }
