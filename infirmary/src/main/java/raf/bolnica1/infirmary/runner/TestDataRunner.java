@@ -5,13 +5,45 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
-import raf.bolnica1.infirmary.domain.PatientState;
+import raf.bolnica1.infirmary.mapper.DischargeListMapper;
 import raf.bolnica1.infirmary.repository.*;
+import raf.bolnica1.infirmary.services.*;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.dischargeList.DevDischargeListDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.hospitalRoom.DevHospitalRoomCreateDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.hospitalization.DevHospitalizationCreateDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.patientState.DevPatientStateDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.prescription.DevPrescriptionReceiveDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.scheduledAppointment.DevScheduledAppointmentCreateDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.classes.dto.visit.DevVisitCreateDtoGenerator;
+import raf.bolnica1.infirmary.util.dataGenerators.jwtToken.DevJwtTokenGetter;
+import raf.bolnica1.infirmary.util.dataGenerators.jwtToken.DevTokenSetter;
+import raf.bolnica1.infirmary.util.dataGenerators.primitives.DevRandomLong;
 
 @Profile({"default"})
 @Component
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {
+
+    private AdmissionService admissionService;
+    private DischargeListService dischargeListService;
+    private HospitalRoomService hospitalRoomService;
+    private PatientStateService patientStateService;
+    private PrescriptionSendService prescriptionSendService;
+    private VisitService visitService;
+
+
+    private DevPrescriptionReceiveDtoGenerator devPrescriptionReceiveDtoGenerator;
+    private DevVisitCreateDtoGenerator devVisitCreateDtoGenerator;
+    private DevScheduledAppointmentCreateDtoGenerator devScheduledAppointmentCreateDtoGenerator;
+    private DevPatientStateDtoGenerator devPatientStateDtoGenerator;
+    private DevHospitalRoomCreateDtoGenerator devHospitalRoomCreateDtoGenerator;
+    private DevHospitalizationCreateDtoGenerator devHospitalizationCreateDtoGenerator;
+    private DevDischargeListDtoGenerator devDischargeListDtoGenerator;
+    private DevRandomLong devRandomLong;
+    private DevJwtTokenGetter devJwtTokenGetter;
+    private DischargeListMapper dischargeListMapper;
+    private DevTokenSetter devTokenSetter;
+
 
     private HospitalRoomRepository hospitalRoomRepository;
     private DischargeListRepository dischargeListRepository;
@@ -20,6 +52,60 @@ public class TestDataRunner implements CommandLineRunner {
     private PrescriptionRepository prescriptionRepository;
     private ScheduledAppointmentRepository scheduledAppointmentRepository;
     private VisitRepository visitRepository;
+
+    private void createData(){
+
+        int prescriptionCount=100;
+        int scheduledAppointmentCount=25;
+        int hospitalizationCount=50;
+        int dischargeListCount=30;
+        int hospitalRoomCount=30;
+        int patientStateCount=150;
+        int visitCount=150;
+
+        devTokenSetter.setToken(devJwtTokenGetter.getDrMedSpec());
+
+
+        for(int i=0;i<prescriptionCount;i++){
+            prescriptionSendService.receivePrescription(devPrescriptionReceiveDtoGenerator.getPrescriptionReceiveDto());
+        }
+
+        for(int i=0;i<Math.min(scheduledAppointmentCount,prescriptionCount);i++){
+            admissionService.createScheduledAppointment(devScheduledAppointmentCreateDtoGenerator.getScheduledAppointmentCreateDto((long)(i+1) ));
+        }
+
+        for(int i=0;i<hospitalRoomCount;i++){
+            hospitalRoomService.createHospitalRoom(devHospitalRoomCreateDtoGenerator.getHospitalRoomCreateDto());
+        }
+
+        for(int i=scheduledAppointmentCount;i<Math.min(scheduledAppointmentCount+hospitalizationCount,prescriptionCount);i++){
+            admissionService.createHospitalization(devHospitalizationCreateDtoGenerator
+                    .getHospitalizationCreateDto((long)(devRandomLong.getLong(hospitalRoomRepository.count())+1), (long)(i+1)),
+                    "Bearer "+ devJwtTokenGetter.getDrMedSpec());
+        }
+
+        for(int i=0;i<patientStateCount;i++){
+            patientStateService.createPatientState(devPatientStateDtoGenerator.getPatientStateCreateDto(
+                    (long)(i%hospitalizationCount+1)
+            ));
+        }
+
+        for(int i=0;i<visitCount;i++){
+            visitService.createVisit(devVisitCreateDtoGenerator.getVisitCreateDto(
+                    (long)(i%hospitalizationCount+1)
+            ));
+        }
+
+        for(int i=0;i<dischargeListCount;i++){
+            dischargeListService.createDischargeList(
+                    dischargeListMapper.toDto(
+                        devDischargeListDtoGenerator.getDischargeListDto((long)(i%hospitalizationCount+1))
+                    )
+            );
+        }
+
+    }
+
 
     private void clearAllRepositories(){
         hospitalRoomRepository.deleteAll();
@@ -35,6 +121,7 @@ public class TestDataRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         ///clearAllRepositories();
         createHospitalRooms();
+        createData();
     }
 
     private void createHospitalRooms() {
