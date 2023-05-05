@@ -30,6 +30,7 @@ public class ScheduledAppointmentMapper {
         ScheduledAppointmentDto dto=new ScheduledAppointmentDto();
 
         dto.setId(entity.getId());
+        dto.setLbp(entity.getPrescription().getLbp());
         dto.setNote(entity.getNote());
         dto.setLbzScheduler(entity.getLbzScheduler());
         dto.setAdmissionStatus(entity.getAdmissionStatus());

@@ -75,6 +75,7 @@ public class HospitalizationMapper {
         HospitalizationDto dto=new HospitalizationDto();
 
         dto.setId(entity.getId());
+        dto.setLbp(entity.getPrescription().getLbp());
         dto.setNote(entity.getNote());
         dto.setHospitalRoomId(entity.getHospitalRoom().getId());
         dto.setLbzRegister(entity.getLbzRegister());
