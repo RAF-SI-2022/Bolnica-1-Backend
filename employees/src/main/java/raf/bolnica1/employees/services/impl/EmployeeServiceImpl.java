@@ -201,7 +201,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 )
         );
         Employee employeeChanged = employeeMapper.toEntity(dto, employee);
-        employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
+        if(dto.getPassword() != null && !dto.getPassword().equals(""))
+            employeeChanged.setPassword(passwordEncoder.encode(employeeChanged.getPassword()));
         employeeChanged = employeeRepository.save(employeeChanged);
         changePermissions(employeeChanged, dto.getPermissions());
         return employeeMapper.toDto(employeeChanged);
