@@ -373,7 +373,7 @@ public class EmployeeServiceTest {
         employee.setId(3L);
         given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
         given(departmentRepository.findByPbo(department.getPbo())).willReturn(Optional.of(department));
-        given(passwordEncoder.encode(any())).willReturn("noviPassword");
+       /// given(passwordEncoder.encode(any())).willReturn("noviPassword");
         given(employeeRepository.save(employee)).willReturn(employee);
 
         EmployeeDto ret=employeeService.editEmployeeInfoByAdmin(employeeUpdateAdminDto,lbz);
