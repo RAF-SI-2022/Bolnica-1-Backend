@@ -14,7 +14,7 @@ public class SwaggerConfig {
 
     // Ovo treba da se promeni u naziv mikroservisa.
     private final String APP_TITLE = "Employee service";
-    // Ovo treba da se promeni u neki opis mikroservisa.
+    /// Ovo treba da se promeni u neki opis mikroservisa.
     private final String APP_DESCRIPTION = "API za korisnicki servis";
 
     // Ovo ispod ostavite kako jeste.
