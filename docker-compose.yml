@@ -2,14 +2,23 @@ version: '3.9'
 
 services:
 
-  employees-db:     
-    image: oscarfonts/h2
+  employees-db:
+    image: mysql:8.0
     container_name: employees-db
     restart: always
-    volumes:
-      - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8080
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql:/var/lib/employees-db
+    healthcheck:
+      test: curl --fail http://localhost:3306 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     networks:
       - my_local_network
     profiles:
@@ -26,11 +35,20 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/employees-service
+      - spring_profiles_active=dev
+      - spring_database_url=employees-db
+      - spring_database_port=${spring_database_port}
     networks:
       - my_local_network
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     depends_on:
-      - employees-db
+      employees-db:
+        condition: service_healthy
     profiles:
       - employees
       - all
@@ -55,21 +73,36 @@ services:
     environment:
       ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     networks:
       - my_local_network
 
 
 
   patients-db:
-    image: oscarfonts/h2
+    image: mysql:8.0
     container_name: patients-db
     restart: always
-    volumes:
-      - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8081
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db
+    ports:
+      - "33061:3306"
+    volumes:
+      - mysql:/var/lib/patients-db
     networks:
       - my_local_network
+    healthcheck:
+      test: curl --fail http://localhost:3306 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - patients
       - all
@@ -85,30 +118,47 @@ services:
       - "8081:8081"
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/patients-service
       - employee_service_url=http://employees-service:8080/api
       - laboratory_service_url=http://laboratory-service:8083/api
+      - spring_profiles_active=dev
+      - spring_database_url=patients-db
+      - spring_database_port=${spring_database_port}
     networks:
       - my_local_network
     depends_on:
-      - patients-db
-      - activemq
+      patients-db:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - patients
       - all
  
       
       
-  laboratory-db:     
-    image: oscarfonts/h2
+  laboratory-db:
+    image: mysql:8.0
     container_name: laboratory-db
     restart: always
-    volumes:
-      - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8083
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db
+    ports:
+      - "33063:3306"
+    volumes:
+      - mysql:/var/lib/laboratory
     networks:
       - my_local_network
+    healthcheck:
+      test: curl --fail http://localhost:3306 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - laboratory
       - all
@@ -124,30 +174,49 @@ services:
       - "8083:8083"
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/laboratory-service
       - employee_service_url=http://employees-service:8080/api
       - patients_service_url=http://patients-service:8081/api
+      - spring_profiles_active=dev
+      - spring_database_url=laboratory-db
+      - spring_database_port=${spring_database_port}
     networks:
       - my_local_network
     depends_on:
-      - laboratory-db
-      - activemq
+      laboratory-db:
+        condition: service_healthy
+      patients-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - laboratory
       - all
- 
- 
+
+
   
   infirmary-db:
-    image: oscarfonts/h2
+    image: mysql:8.0
     container_name: infirmary-db
     restart: always
-    volumes:
-      - ./h2:/opt/h2-data
     environment:
-      - H2_OPTIONS=-ifNotExists -web -webAllowOthers -webPort 8084
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db
+    ports:
+      - "33064:3306"
+    volumes:
+      - mysql:/var/lib/infirmary
     networks:
       - my_local_network
+    healthcheck:
+      test: curl --fail http://localhost:3306 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - infirmary
       - all
@@ -163,15 +232,25 @@ services:
       - "8084:8084"
     environment:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - SPRING_DATASOURCE_URL=jdbc:h2:file:/opt/h2-data/infirmary-service
       - employee_service_url=http://employees-service:8080/api
       - patients_service_url=http://patients-service:8081/api
       - laboratory_service_url=http://laboratory-service:8083/api
+      - spring_profiles_active=dev
+      - spring_database_url=infirmary-db
+      - spring_database_port=${spring_database_port}
     networks:
       - my_local_network
     depends_on:
-      - infirmary-db
-      - activemq
+      infirmary-db:
+          condition: service_healthy
+      patients-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 10s
     profiles:
       - infirmary
       - all
@@ -181,3 +260,7 @@ services:
 networks:
   my_local_network:
     name : my_local_network
+
+volumes:
+  mysql:
+    driver: local
