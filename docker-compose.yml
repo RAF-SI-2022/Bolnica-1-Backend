@@ -14,7 +14,7 @@ services:
     volumes:
       - mysql:/var/lib/employees-db
     healthcheck:
-      test: curl --fail http://localhost:3306 || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       retries: 10
       start_period: 10s
@@ -74,7 +74,7 @@ services:
       ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin
     healthcheck:
-      test: curl --fail http://localhost || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       retries: 10
       start_period: 10s
@@ -98,7 +98,7 @@ services:
     networks:
       - my_local_network
     healthcheck:
-      test: curl --fail http://localhost:3306 || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       retries: 10
       start_period: 10s
@@ -154,7 +154,7 @@ services:
     networks:
       - my_local_network
     healthcheck:
-      test: curl --fail http://localhost:3306 || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       retries: 10
       start_period: 10s
@@ -212,7 +212,7 @@ services:
     networks:
       - my_local_network
     healthcheck:
-      test: curl --fail http://localhost:3306 || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       retries: 10
       start_period: 10s
