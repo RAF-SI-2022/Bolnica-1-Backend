@@ -73,12 +73,6 @@ services:
     environment:
       ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 5s
-      retries: 10
-      start_period: 10s
-      timeout: 10s
     networks:
       - my_local_network
 
