@@ -120,8 +120,20 @@ public class TestDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         ///clearAllRepositories();
-        createHospitalRooms();
-        createData();
+        boolean addTestData = true;
+        if(hospitalRoomRepository.findAll().size() > 0 ||
+            dischargeListRepository.findAll().size() > 0 ||
+            hospitalizationRepository.findAll().size() > 0 ||
+            patientStateRepository.findAll().size() > 0 ||
+            prescriptionRepository.findAll().size() > 0 ||
+            scheduledAppointmentRepository.findAll().size() > 0 ||
+            visitRepository.findAll().size() > 0)
+            addTestData = false;
+
+        if(addTestData) {
+            createHospitalRooms();
+            createData();
+        }
     }
 
     private void createHospitalRooms() {

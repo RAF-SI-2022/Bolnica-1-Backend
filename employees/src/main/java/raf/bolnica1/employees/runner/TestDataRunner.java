@@ -29,9 +29,17 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        boolean addTestData = true;
        ////clearAllRepositories();
-        defaultData();
+        if(departmentRepository.findAll().size() > 0 ||
+            hospitalRepository.findAll().size() > 0 ||
+            employeeRepository.findAll().size() > 0 ||
+            roleRepository.findAll().size() > 0 ||
+            employeesRoleRepository.findAll().size() > 0)
+            addTestData = false;
+
+        if(addTestData)
+            defaultData();
        /* // hospitals
         Hospital hospital1 = new Hospital();
         hospital1.setShortName("H1");
