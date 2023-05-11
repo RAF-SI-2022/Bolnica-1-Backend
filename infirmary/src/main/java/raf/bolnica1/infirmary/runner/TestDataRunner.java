@@ -19,7 +19,7 @@ import raf.bolnica1.infirmary.util.dataGenerators.jwtToken.DevJwtTokenGetter;
 import raf.bolnica1.infirmary.util.dataGenerators.jwtToken.DevTokenSetter;
 import raf.bolnica1.infirmary.util.dataGenerators.primitives.DevRandomLong;
 
-@Profile({"default"})
+//@Profile({"default"})
 @Component
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {

@@ -23,7 +23,7 @@ import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExami
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
 
-@Profile({"default"})
+//@Profile({"default"})
 @Component
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {

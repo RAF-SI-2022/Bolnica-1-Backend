@@ -15,7 +15,7 @@ import raf.bolnica1.employees.repository.*;
 import java.sql.Date;
 import java.util.Arrays;
 
-@Profile({"default"})
+//@Profile({"default"})
 @Component
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {
