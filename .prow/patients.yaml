@@ -41,7 +41,7 @@ presubmits:
               # docker compose up -d mysql-patients
               docker compose up -d activemq
               docker compose up -d patients-db
-              sleep 30
+              sleep 60
               
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
