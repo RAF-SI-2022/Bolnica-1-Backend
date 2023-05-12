@@ -35,6 +35,7 @@ import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 import raf.bolnica1.laboratory.util.ExtractPageContentFromPageJson;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -149,6 +150,8 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
         try{
             prescriptionCreateDto=prescriptionCreateDtoGenerator.getPrescriptionCreateDto(analysisParameterRepository);
             prescriptionCreateDto.setLbp(lbp);
+            Long tmp = 1000*(prescriptionCreateDto.getCreationDateTime().getTime()/1000);
+            prescriptionCreateDto.setCreationDateTime(new Timestamp(tmp));
             prescriptionRecieveService.createPrescription(prescriptionCreateDto);
 
             List<ParameterAnalysisResult> list=parameterAnalysisResultRepository.findAll();
@@ -190,7 +193,7 @@ public class LabResultSteps extends LabResultIntegrationTestConfig {
 
                 System.out.println(prescriptionList.getBody()+" STRINGBODY COMMIT");
             }*/
-
+            System.out.println("neki obj: " +prescriptionCreateDto.toString());
             prescriptionDoneDto=prescriptionRecieveService.findPrescription(prescriptionCreateDto.getPid());
             prescriptionDoneDto.setId(null);
             prescriptionDoneDto.setPrescriptionStatus(PrescriptionStatus.REALIZOVAN);

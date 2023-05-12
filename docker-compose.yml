@@ -18,7 +18,7 @@ services:
       interval: 5s
       retries: 10
       start_period: 10s
-      timeout: 10s
+      timeout: 60s
     networks:
       - my_local_network
     profiles:

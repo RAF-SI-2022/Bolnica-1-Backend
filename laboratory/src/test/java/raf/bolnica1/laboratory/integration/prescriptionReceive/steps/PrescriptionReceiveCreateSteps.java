@@ -17,6 +17,7 @@ import raf.bolnica1.laboratory.repository.PrescriptionRepository;
 import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -70,6 +71,8 @@ public class PrescriptionReceiveCreateSteps extends PrescriptionReceiveIntegrati
     public void kreiramo_novi_uput() {
         try{
             prescriptionCreateDto=prescriptionCreateDtoGenerator.getPrescriptionCreateDto(analysisParameterRepository);
+            Long tmp = 1000*(prescriptionCreateDto.getCreationDateTime().getTime()/1000);
+            prescriptionCreateDto.setCreationDateTime(new Timestamp(tmp));
             prescriptionRecieveService.createPrescription(prescriptionCreateDto);
         }catch (Exception e){
             Assertions.fail(e);
