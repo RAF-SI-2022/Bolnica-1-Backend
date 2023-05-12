@@ -41,7 +41,8 @@ public class PatientStateDtoGenerator {
         ret.setDateExamState(randomDate.getFromRandom());
         ret.setPulse(randomLong.getLong(100L).intValue());
         ret.setHospitalizationId(hospitalizationId);
-        ret.setTemperature(randomDouble.getDouble(50.0).floatValue());
+        String tmp = String.format("%.5f", randomDouble.getDouble(50.0).floatValue());
+        ret.setTemperature(Float.parseFloat(tmp));
         ret.setTherapy(randomString.getString(20));
         ret.setTimeExamState(randomTime.getTimeFromRandom());
         ret.setSystolicPressure(randomLong.getLong(200L).intValue());

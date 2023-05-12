@@ -23,7 +23,7 @@ import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExami
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
 
-@Profile({"default"})
+//@Profile({"default"})
 @Component
 @AllArgsConstructor
 public class TestDataRunner implements CommandLineRunner {
@@ -47,8 +47,20 @@ public class TestDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         ///clearAllRepositories();
-        defaultAnalysisParameter();
-        generatedData();
+        boolean addTestData = true;
+        if(labAnalysisRepository.findAll().size() > 0 ||
+            parameterRepository.findAll().size() > 0 ||
+            analysisParameterRepository.findAll().size() > 0 ||
+            prescriptionRepository.findAll().size() > 0 ||
+            labWorkOrderRepository.findAll().size() > 0 ||
+            parameterAnalysisResultRepository.findAll().size() > 0 ||
+            scheduledLabExaminationRepository.findAll().size() > 0)
+            addTestData = false;
+
+        if(addTestData) {
+            defaultAnalysisParameter();
+            generatedData();
+        }
     }
 
     private void clearAllRepositories(){

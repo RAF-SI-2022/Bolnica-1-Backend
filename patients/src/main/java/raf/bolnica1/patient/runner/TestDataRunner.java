@@ -64,6 +64,26 @@ public class TestDataRunner implements CommandLineRunner {
 
         ///clearAllRepositories();
 
+        if(patientRepository.findAll().size() > 0 ||
+            socialDataRepository.findAll().size() > 0 ||
+            medicalRecordRepository.findAll().size() > 0 ||
+            generalMedicalDataRepository.findAll().size() > 0 ||
+            allergyRepository.findAll().size() > 0 ||
+            vaccinationRepository.findAll().size() > 0 ||
+            diagnosisCodeRepository.findAll().size() > 0 ||
+            prescriptionRepository.findAll().size() > 0 ||
+            labResultsRepository.findAll().size() > 0 ||
+            allergyDataRepository.findAll().size() > 0 ||
+            vaccinationDataRepository.findAll().size() > 0 ||
+            anamnesisRepository.findAll().size() > 0 ||
+            operationRepository.findAll().size() > 0 ||
+            scheduleExamRepository.findAll().size() > 0 ||
+            examinationHistoryRepository.findAll().size() > 0 ||
+            medicalHistoryRepository.findAll().size() > 0)
+            return;
+
+
+
         System.out.println("USAO U RUNNER");
 
         Allergy a1 = new Allergy();

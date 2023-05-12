@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationCreateDto;
 
+import java.sql.Timestamp;
+
 @Component
 @AllArgsConstructor
 public class HospitalizationCreateDtoGenerator {
@@ -35,8 +37,8 @@ public class HospitalizationCreateDtoGenerator {
         ret.setHospitalRoomId(hospitalRoomId);
         ret.setLbzDoctor(randomString.getString(10));
         ret.setPrescriptionId(prescriptionId);
-        ret.setPatientAdmission(randomTimestamp.getFromRandom());
-        ret.setDischargeDateAndTime(randomTimestamp.getFromRandom());
+        ret.setPatientAdmission(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
+        ret.setDischargeDateAndTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
 
         return ret;
     }

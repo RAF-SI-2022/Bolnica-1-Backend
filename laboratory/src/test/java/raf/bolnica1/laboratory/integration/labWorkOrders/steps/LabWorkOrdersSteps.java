@@ -33,6 +33,7 @@ import raf.bolnica1.laboratory.services.LabWorkOrdersService;
 import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
 import raf.bolnica1.laboratory.validation.ClassJsonComparator;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
@@ -115,9 +116,10 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
                         c=lbp2;
                     }
                 }
-
-                prescriptionCreateDtos.add(prescriptionCreateDtoGenerator.getPrescriptionCreateDtoWithLBP(c,
-                        analysisParameterRepository));
+                PrescriptionCreateDto prescriptionCreateDto = prescriptionCreateDtoGenerator.getPrescriptionCreateDtoWithLBP(c, analysisParameterRepository);
+                Long tmp = 1000*(prescriptionCreateDto.getCreationDateTime().getTime()/1000);
+                prescriptionCreateDto.setCreationDateTime(new Timestamp(tmp));
+                prescriptionCreateDtos.add(prescriptionCreateDto);
                 prescriptionRecieveService.createPrescription(prescriptionCreateDtos.get(i));
             }
 

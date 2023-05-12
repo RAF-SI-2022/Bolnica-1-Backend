@@ -6,6 +6,8 @@ import raf.bolnica1.laboratory.util.dataGenerators.primitives.RandomString;
 import raf.bolnica1.laboratory.util.dataGenerators.primitives.RandomTimestamp;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
 
+import java.sql.Timestamp;
+
 @AllArgsConstructor
 @Component
 public class ResultUpdateDtoGenerator {
@@ -22,7 +24,8 @@ public class ResultUpdateDtoGenerator {
         ResultUpdateDto ret=new ResultUpdateDto();
 
         ret.setResult(randomString.getString(10));
-        ret.setDateTime(randomTimestamp.getFromRandom());
+        Long tmp = 1000*(randomTimestamp.getFromRandom().getTime()/1000);
+        ret.setDateTime(new Timestamp(tmp));
         ret.setBiochemistLbz(randomString.getString(10));
         ret.setLabWorkOrderId(labWorkOrderId);
         ret.setAnalysisParameterId(analysisParameterId);

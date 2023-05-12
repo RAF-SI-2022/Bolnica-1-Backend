@@ -12,5 +12,5 @@ Feature: Upravljanje posetama
 
 
   Scenario: Filtriramo posete
-    Given izabrali smo 10000 filtera 100 poseta zabelezeno
+    Given izabrali smo 100 filtera 100 poseta zabelezeno
     Then  filterisanje po parametrima daje zeljene rezultate

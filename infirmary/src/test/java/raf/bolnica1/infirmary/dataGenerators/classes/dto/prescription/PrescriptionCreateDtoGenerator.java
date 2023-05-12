@@ -8,6 +8,7 @@ import raf.bolnica1.infirmary.domain.constants.PrescriptionType;
 import raf.bolnica1.infirmary.dto.externalLabService.PrescriptionCreateDto;
 import raf.bolnica1.infirmary.dto.prescription.PrescriptionReceiveDto;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Component
@@ -37,7 +38,7 @@ public class PrescriptionCreateDtoGenerator {
         ret.setDepartmentToId(randomLong.getLong(10L));
         ret.setDepartmentFromId(randomLong.getLong(10L));
         ret.setLbp(randomLBP.getFromRandom());
-        ret.setCreationDateTime(randomTimestamp.getFromRandom());
+        ret.setCreationDateTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
         ///ret.setStatus( PrescriptionStatus.values()[ randomLong.getLong(new Long(PrescriptionStatus.values().length)).intValue() ] );
         ret.setStatus(PrescriptionStatus.NEREALIZOVAN);
         ret.setComment(randomString.getString(10));

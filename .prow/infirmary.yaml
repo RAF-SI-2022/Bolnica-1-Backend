@@ -42,7 +42,8 @@ presubmits:
               docker compose --profile employees up -d
               docker compose --profile patients up -d
               docker compose --profile laboratory up -d
-              
+              docker compose up -d infirmary-db
+              sleep 60
               
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)

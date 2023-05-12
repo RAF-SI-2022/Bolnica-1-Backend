@@ -40,7 +40,7 @@ public class PrescriptionReceiveDtoGenerator {
         ret.setDepartmentToId(randomLong.getLong(10L));
         ret.setDepartmentFromId(randomLong.getLong(10L));
         ret.setLbp(randomLBP.getFromRandom());
-        ret.setCreationDateTime(randomTimestamp.getFromRandom());
+        ret.setCreationDateTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
         ret.setStatus( PrescriptionStatus.values()[ randomLong.getLong(new Long(PrescriptionStatus.values().length)).intValue() ] );
         ret.setReferralDiagnosis(randomString.getString(10));
         ret.setReferralReason(randomString.getString(10));
