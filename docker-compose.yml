@@ -15,7 +15,7 @@ services:
       - mysql:/var/lib/employees-db
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 5s
+      interval: 15s
       retries: 10
       start_period: 10s
       timeout: 60s
@@ -93,7 +93,7 @@ services:
       - my_local_network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 5s
+      interval: 15s
       retries: 10
       start_period: 10s
       timeout: 10s
@@ -149,7 +149,7 @@ services:
       - my_local_network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 5s
+      interval: 15s
       retries: 10
       start_period: 10s
       timeout: 60s
@@ -207,7 +207,7 @@ services:
       - my_local_network
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 5s
+      interval: 15s
       retries: 10
       start_period: 10s
       timeout: 60s
