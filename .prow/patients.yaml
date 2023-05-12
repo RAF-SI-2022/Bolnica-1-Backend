@@ -39,6 +39,7 @@ presubmits:
               # docker compose up -d mysql-patients
               # docker compose --profile patients up -d
               # docker compose up -d mysql-patients
+              docker compose up -d activemq
               docker compose up -d patients-db
               sleep 30
               

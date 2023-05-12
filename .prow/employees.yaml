@@ -39,8 +39,8 @@ presubmits:
               # docker compose up -d mysql-employees
               # docker compose --profile employees up -d
               # docker compose up -d mysql-employees
-              
-              docker composer up -d employees-db
+              docker compose up -d activemq
+              docker compose up -d employees-db
               sleep 30
               
               branch=$PULL_HEAD_REF
