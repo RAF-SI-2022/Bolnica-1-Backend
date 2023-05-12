@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.dataGenerators.primitives.*;
 import raf.bolnica1.infirmary.dto.visit.VisitCreateDto;
 
+import java.sql.Timestamp;
+
 @Component
 @AllArgsConstructor
 public class VisitCreateDtoGenerator {
@@ -26,7 +28,7 @@ public class VisitCreateDtoGenerator {
         VisitCreateDto ret=new VisitCreateDto();
 
         ret.setNote(randomString.getString(20));
-        ret.setVisitTime(randomTimestamp.getFromRandom());
+        ret.setVisitTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
         ret.setHospitalizationId(hospitalizationId);
         ret.setVisitorJmbg(randomJMBG.getFromRandom());
         ret.setVisitorName(randomNames.getFromRandom());

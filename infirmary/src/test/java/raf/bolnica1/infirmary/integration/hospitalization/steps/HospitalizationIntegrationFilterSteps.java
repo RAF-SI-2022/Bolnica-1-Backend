@@ -115,8 +115,8 @@ public class HospitalizationIntegrationFilterSteps extends HospitalizationIntegr
                 hospitalRooms.add(hospitalRoomGenerator.getHospitalRoomWithDBSave(hospitalRoomRepository));
 
             for (int i = 0; i < hospitalizationCount; i++) {
-                int prescriptionInd = randomLong.getLong(new Long(prescriptionCount)).intValue();
-                int hospitalRoomInd = randomLong.getLong(new Long(hospitalRoomCount)).intValue();
+                int prescriptionInd = randomLong.getLong(Long.parseLong(String.valueOf(prescriptionCount))).intValue();
+                int hospitalRoomInd = randomLong.getLong(Long.parseLong(String.valueOf(hospitalRoomCount))).intValue();
                 Hospitalization hospitalization = hospitalizationGenerator.getHospitalizationWithDBSave(hospitalizationRepository,
                         hospitalRoomRepository, prescriptionRepository, hospitalRooms.get(hospitalRoomInd),
                         prescriptions.get(prescriptionInd));

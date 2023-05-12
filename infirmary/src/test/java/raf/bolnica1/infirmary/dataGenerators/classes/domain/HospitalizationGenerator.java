@@ -12,6 +12,8 @@ import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 
+import java.sql.Timestamp;
+
 @Component
 @AllArgsConstructor
 public class HospitalizationGenerator {
@@ -51,8 +53,8 @@ public class HospitalizationGenerator {
         ret.setNote(randomString.getString(20));
         ret.setLbzDoctor(randomString.getString(10));
         ret.setLbzRegister(randomString.getString(10));
-        ret.setPatientAdmission(randomTimestamp.getFromRandom());
-        ret.setDischargeDateAndTime(randomTimestamp.getFromRandom());
+        ret.setPatientAdmission(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
+        ret.setDischargeDateAndTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
 
         /// popuni ime i prezime i jmbg
         String lbp= prescription.getLbp();

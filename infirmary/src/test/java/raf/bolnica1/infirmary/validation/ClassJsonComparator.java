@@ -169,8 +169,14 @@ public class ClassJsonComparator {
         for(String key:mapA.keySet()){
             if(!mapB.containsKey(key))continue;
             if(mapB.get(key)==null && mapA.get(key)==null)continue;
-            if(mapB.get(key)==null || mapA.get(key)==null)return false;
-            if(!mapA.get(key).equals(mapB.get(key)))return false;
+            if(mapB.get(key)==null || mapA.get(key)==null){
+                System.out.println("Null vrednosti za kljuc: " + key);
+                return false;
+            }
+            if(!mapA.get(key).equals(mapB.get(key))){
+                System.out.println("Razlicite vrednosti za kljuc: " + key + ", A: " + mapA.get(key) +", B: " + mapB.get(key));
+                return false;
+            }
         }
 
         return true;

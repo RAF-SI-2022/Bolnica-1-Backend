@@ -20,6 +20,7 @@ import raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord.Diagnosis
 import raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord.MedicalRecordDto;
 import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class PrescriptionGenerator {
         ret.setStatus(PrescriptionStatus.values()[randomLong.getLong(new Long(PrescriptionStatus.values().length) ).intValue()]);
         ret.setType(PrescriptionType.values()[randomLong.getLong(new Long(PrescriptionType.values().length) ).intValue()]);
         ret.setLbp(randomLBP.getFromRandom());
-        ret.setCreationDateTime(randomTimestamp.getFromRandom());
+        ret.setCreationDateTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
         ret.setDepartmentToId(randomLong.getLong(4L));
         ret.setReferralDiagnosis(randomString.getString(10));
         ret.setDoctorLbz(randomString.getString(10));
