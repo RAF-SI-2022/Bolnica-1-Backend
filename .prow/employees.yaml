@@ -39,7 +39,10 @@ presubmits:
               # docker compose up -d mysql-employees
               # docker compose --profile employees up -d
               # docker compose up -d mysql-employees
-
+              
+              docker composer up -d employees-db
+              sleep 15
+              
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
               if [[ "$branch" == "$curr_branch" ]]; then
