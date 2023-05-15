@@ -34,10 +34,10 @@ public class HospitalizationFilter {
             Hospitalization hospitalization = hospitalizationRepository.findHospitalizationById(hospitalizationDto.getId());
             if(hospitalRoomId!=null && !hospitalRoomId.equals(hospitalization.getHospitalRoom().getId()))return false;
             if(departmentId!=null && !departmentId.equals(hospitalization.getHospitalRoom().getIdDepartment()))return false;
-            if(name!=null && !name.equals(hospitalizationDto.getName()))return false;
-            if(surname!=null && !surname.equals(hospitalizationDto.getSurname()))return false;
-            if(jmbg!=null && !jmbg.equals(hospitalizationDto.getJmbg()))return false;
-            if(lbp!=null && !lbp.equals(hospitalization.getPrescription().getLbp()))return false;
+            if(name!=null && !hospitalizationDto.getName().contains(name))return false;
+            if(surname!=null && !hospitalizationDto.getSurname().contains(surname))return false;
+            if(jmbg!=null && !hospitalizationDto.getJmbg().contains(jmbg))return false;
+            if(lbp!=null && !hospitalization.getPrescription().getLbp().contains(lbp))return false;
             return true;
         }
         catch (Exception e){

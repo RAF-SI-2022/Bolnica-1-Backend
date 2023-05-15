@@ -32,7 +32,7 @@ public class ScheduledAppointmentFilter {
             if (startDate!=null && scheduledAppointmentDto.getPatientAdmission().getTime()<startDate.getTime()) return false;
             if (endDate!=null && scheduledAppointmentDto.getPatientAdmission().getTime()>=endDate.getTime()+24*60*60*1000)return false;
             Prescription prescription= prescriptionRepository.findPrescriptionById(scheduledAppointmentDto.getPrescriptionId());
-            if(lbp!=null && !prescription.getLbp().equals(lbp))return false;
+            if(lbp!=null && !prescription.getLbp().contains(lbp))return false;
             if(departmentId!=null && !prescription.getDepartmentToId().equals(departmentId))return false;
             if(admissionStatus!=null && !admissionStatus.equals(scheduledAppointmentDto.getAdmissionStatus()))return false;
 
