@@ -26,7 +26,7 @@ public interface ScheduledAppointmentRepository extends JpaRepository<ScheduledA
 
 
     @Query("SELECT sa FROM ScheduledAppointment sa WHERE " +
-            "(:lbp IS NULL OR sa.prescription.lbp=:lbp) AND " +
+            "(:lbp IS NULL OR sa.prescription.lbp LIKE %:lbp%) AND " +
             "(:depId IS NULL OR sa.prescription.departmentToId=:depId) AND " +
             "(:startDate IS NULL OR sa.patientAdmission>=:startDate) AND " +
             "(:endDate IS NULL OR sa.patientAdmission<:endDate) AND " +

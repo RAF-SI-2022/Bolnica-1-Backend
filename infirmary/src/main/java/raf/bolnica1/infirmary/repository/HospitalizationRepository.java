@@ -26,14 +26,13 @@ public interface HospitalizationRepository extends JpaRepository<Hospitalization
     @Query("SELECT h FROM Hospitalization h WHERE h.hospitalRoom.id=:id")
     Page<Hospitalization> findHospitalizationsByHospitalRoomId(Pageable pageable,@Param("id") Long hospitalRoomId);
 
-
     @Query("SELECT h FROM Hospitalization h WHERE " +
-            "(:name IS NULL OR :name=h.name) AND " +
-            "(:surname IS NULL OR :surname=h.surname) AND " +
-            "(:jmbg IS NULL OR :jmbg=h.jmbg) AND " +
+            "(:name IS NULL OR h.name LIKE %:name%) AND " +
+            "(:surname IS NULL OR h.surname LIKE %:surname%) AND " +
+            "(:jmbg IS NULL OR h.jmbg LIKE %:jmbg%) AND " +
             "(:depId IS NULL OR :depId=h.hospitalRoom.idDepartment) AND " +
             "(:hrId IS NULL OR :hrId=h.hospitalRoom.id) AND " +
-            "(:lbp IS NULL OR :lbp=h.prescription.lbp) AND " +
+            "(:lbp IS NULL OR h.prescription.lbp LIKE %:lbp%) AND " +
             "(:startDate IS NULL OR :startDate<=h.patientAdmission ) AND " +
             "(:endDate IS NULL OR :endDate>h.patientAdmission )")
     Page<Hospitalization> findHospitalizationsWithFilter(Pageable pageable,@Param("name") String name,
@@ -44,5 +43,4 @@ public interface HospitalizationRepository extends JpaRepository<Hospitalization
                                                          @Param("lbp") String lbp,
                                                          @Param("startDate") Date startDate,
                                                          @Param("endDate") Date endDate);
-
 }
