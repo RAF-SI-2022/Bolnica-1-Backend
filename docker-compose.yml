@@ -41,11 +41,11 @@ services:
     networks:
       - my_local_network
     healthcheck:
-      test: curl --fail http://localhost || exit 1
+      test: curl --fail http://localhost:8080/api || exit 1
       interval: 5s
       retries: 10
-      start_period: 10s
-      timeout: 10s
+      start_period: 5s
+      timeout: 30s
     depends_on:
       employees-db:
         condition: service_healthy
@@ -122,12 +122,14 @@ services:
     depends_on:
       patients-db:
         condition: service_healthy
+      employees-service: 
+        condition: service_healthy
     healthcheck:
-      test: curl --fail http://localhost || exit 1
+      test: curl --fail http://localhost:8081/api || exit 1
       interval: 5s
       retries: 10
-      start_period: 10s
-      timeout: 60s
+      start_period: 5s
+      timeout: 30s
     profiles:
       - patients
       - all
@@ -178,14 +180,16 @@ services:
     depends_on:
       laboratory-db:
         condition: service_healthy
+      # employees-service:
+        # condition: service_healthy 
       patients-service:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://localhost || exit 1
+      test: curl --fail http://localhost:8083/api/laboratory || exit 1
       interval: 5s
       retries: 10
-      start_period: 10s
-      timeout: 60s
+      start_period: 5s
+      timeout: 30s
     profiles:
       - laboratory
       - all
@@ -237,14 +241,18 @@ services:
     depends_on:
       infirmary-db:
           condition: service_healthy
-      patients-service:
+      # employees-service:
+        # condition: service_healthy
+      # patients-service:
+        # condition: service_healthy
+      laboratory-service:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://localhost || exit 1
+      test: curl --fail http://localhost:8084/api/infirmary || exit 1
       interval: 5s
       retries: 10
       start_period: 10s
-      timeout: 60s
+      timeout: 30s
     profiles:
       - infirmary
       - all
