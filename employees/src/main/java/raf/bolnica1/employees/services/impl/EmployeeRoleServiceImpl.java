@@ -1,6 +1,8 @@
 package raf.bolnica1.employees.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.employees.domain.Employee;
@@ -24,6 +26,7 @@ public class EmployeeRoleServiceImpl implements EmployeeRoleService {
     private final EmployeesRoleRepository employeesRoleRepository;
 
     @Override
+    @Cacheable(value = "emplRoles", key = "#lbz")
     public List<RoleDto> privilegeForEmployee(String lbz) {
         Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz)));
         List<RoleDto> roleDtos = new ArrayList<>();

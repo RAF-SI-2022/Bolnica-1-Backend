@@ -1,6 +1,7 @@
 package raf.bolnica1.employees.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,12 +41,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentMapper departmentMapper;
 
     @Override
+    @Cacheable(value = "depId", key = "#lbz")
     public Long findDepartmentIdByLbz(String lbz) {
         Employee employee=employeeRepository.findByLbz(lbz).orElseThrow(()->new EmployeeNotFoundException(String.format("Employee with lbz %s not found",lbz)));
         return employee.getDepartment().getId();
     }
 
     @Override
+    @Cacheable(value = "allDeps")
     public List<DepartmentDto> listAllDepartments() {
         List<DepartmentDto> departmentDtos = new ArrayList<>();
         for (Department department : departmentRepository.findAll()) {
@@ -55,12 +58,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "dep", key = "#pbo")
     public DepartmentDto getEmployeesDepartment(String pbo) {
         Department department = departmentRepository.findByPbo(pbo).orElseThrow(() -> new DepartmentNotFoundException(String.format("Department with pbo %s not found", pbo)));
         return new DepartmentDto(department.getId(), department.getPbo(), department.getName(), department.getHospital().getShortName());
     }
 
     @Override
+    @Cacheable(value = "deps", key = "#pbb")
     public List<DepartmentDto> getDepartments(String pbb) {
         List<DepartmentDto> departmentDtos = new ArrayList<>();
         List<Department> departments= departmentRepository.findByHostpitalPbb(pbb);
@@ -71,6 +76,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "docDeps", key = "#pbo")
     public List<DoctorDepartmentDto> getAllDoctorsByPbo(String pbo) {
 
         List<RoleShort> roleShortList=new ArrayList<>();
@@ -95,6 +101,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "nameDep", key = "{#name, #page, #size}")
     public Page<DepartmentDto> findHospitalsByDepartmentNameSecond(String name, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Department> departments=departmentRepository.findDepartmentName(pageable,name);
@@ -102,6 +109,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "hosp")
     public List<HospitalDto> listAllHospitals() {
         List<HospitalDto> hospitalDtos = new ArrayList<>();
         for (Hospital hospital : hospitalRepository.findAll()) {
@@ -111,6 +119,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "nameHosp", key = "{#name, #page, #size}")
     public Page<HospitalDto> findHospitalsByDepartmentName(String name, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Hospital> hospitals=departmentRepository.findHospitalsByDepartmentName(pageable,name);
