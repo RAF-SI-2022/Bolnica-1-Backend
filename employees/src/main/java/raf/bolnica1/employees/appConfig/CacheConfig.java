@@ -10,7 +10,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 @EnableCaching
-@PropertySource("application.properties")
 public class CacheConfig {
 
 //    @Value("${spring.redis.host}")

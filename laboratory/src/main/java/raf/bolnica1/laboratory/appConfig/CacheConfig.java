@@ -11,7 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 // funkcionisalo.
 @Configuration
 @EnableCaching
-@PropertySource("application.properties")
 public class CacheConfig {
 
     @Bean
