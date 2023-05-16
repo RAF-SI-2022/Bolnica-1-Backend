@@ -46,7 +46,7 @@ services:
       - spring_profiles_active=dev
       - spring_database_url=employees-db
       - spring_database_port=${spring_database_port}
-      - REDIS_HOST=redis
+      - spring_data_redis_host=redis
     networks:
       - my_local_network
     healthcheck:
@@ -126,7 +126,7 @@ services:
       - spring_profiles_active=dev
       - spring_database_url=patients-db
       - spring_database_port=${spring_database_port}
-      - REDIS_HOST=redis
+      - spring_data_redis_host=redis
     networks:
       - my_local_network
     depends_on:
@@ -185,7 +185,7 @@ services:
       - spring_profiles_active=dev
       - spring_database_url=laboratory-db
       - spring_database_port=${spring_database_port}
-      - REDIS_HOST=redis
+      - spring_data_redis_host=redis
     networks:
       - my_local_network
     depends_on:
@@ -247,7 +247,7 @@ services:
       - spring_profiles_active=dev
       - spring_database_url=infirmary-db
       - spring_database_port=${spring_database_port}
-      - REDIS_HOST=redis
+      - spring_data_redis_host=redis
     networks:
       - my_local_network
     depends_on:
