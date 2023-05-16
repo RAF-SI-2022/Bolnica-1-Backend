@@ -1,6 +1,8 @@
 package raf.bolnica1.patient.domain.constants;
 
-public enum CountryCode {
+import java.io.Serializable;
+
+public enum CountryCode implements Serializable {
 
     AFG, ALA, ALB, DZA, ASM, AND, AGO, AIA, ATA, ATG, ARG, ARM, ABW, AUS, AUT, AZE,
     BHS, BHR, BGD, BRB, BLR, BEL, BLZ, BEN, BMU, BTN, BOL, BES, BIH, BWA, BVT, BRA,

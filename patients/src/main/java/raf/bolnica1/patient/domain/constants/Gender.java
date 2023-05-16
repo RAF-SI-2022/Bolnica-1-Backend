@@ -1,5 +1,7 @@
 package raf.bolnica1.patient.domain.constants;
 
-public enum Gender {
+import java.io.Serializable;
+
+public enum Gender implements Serializable {
     MUSKO, ZENSKO
 }

@@ -1,5 +1,7 @@
 package raf.bolnica1.patient.domain.constants;
 
-public enum ExpertiseDegree {
+import java.io.Serializable;
+
+public enum ExpertiseDegree implements Serializable {
     BEZ_OSNOVNOG, OSNOVNO, SREDNJE, VISE, VISOKO
 }
