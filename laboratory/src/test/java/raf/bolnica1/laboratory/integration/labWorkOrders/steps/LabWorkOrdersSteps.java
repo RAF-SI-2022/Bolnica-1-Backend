@@ -143,10 +143,20 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
     public void napravljen_lab_work_order_za_te_upute() {
         try{
             for(PrescriptionCreateDto p:prescriptionCreateDtos) {
+                System.out.println(p);
+                Optional<LabWorkOrder> lw = labWorkOrderRepository.findByPrescription(p.getPid());
+                if(lw.isPresent())
+                    System.out.println(lw);
+                else {
+                    System.out.println("Nije prisutan za id: " + p.getPid());
+                    for(LabWorkOrder llw: labWorkOrderRepository.findAll())
+                        System.out.println(llw);
+                }
                 Assertions.assertTrue(labWorkOrderRepository.findByPrescription(p.getPid()).isPresent());
             }
 
         }catch (Exception e){
+            e.printStackTrace();
             Assertions.fail(e);
         }
     }

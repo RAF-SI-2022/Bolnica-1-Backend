@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -69,7 +70,15 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
-    @CacheEvict(value = "patient", key = "#lbp")
+    @Caching(evict = {
+            @CacheEvict(value = "patient", key = "#lbp"),
+            @CacheEvict(value = "gmd", key = "#lbp"),
+            @CacheEvict(value = "ops", key = "#lbp"),
+            @CacheEvict(value = "medHistory", key = "#lbp"),
+            @CacheEvict(value = "examHistory", key = "#lbp"),
+            @CacheEvict(value = "medRecord", key = "#lbp")
+    })
+
     public MessageDto deletePatient(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         patient.setDeleted(true);

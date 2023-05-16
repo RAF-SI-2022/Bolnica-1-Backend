@@ -70,7 +70,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "pres", key = "#id"),
+            @CacheEvict(value = "pres", key = "#dto.id"),
             @CacheEvict(value = "presForRest", allEntries = true),
             @CacheEvict(value = "presForNotRealized", allEntries = true),
             @CacheEvict(value = "patPres", allEntries = true)

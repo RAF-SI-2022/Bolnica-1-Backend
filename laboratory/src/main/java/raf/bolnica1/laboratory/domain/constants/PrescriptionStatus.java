@@ -1,6 +1,8 @@
 package raf.bolnica1.laboratory.domain.constants;
 
-public enum PrescriptionStatus {
+import java.io.Serializable;
+
+public enum PrescriptionStatus implements Serializable {
     NEREALIZOVAN,
     REALIZOVAN
 }

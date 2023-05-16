@@ -21,4 +21,20 @@ public class PrescriptionCreateDto {
     private PrescriptionStatus status;
     private String comment;
     private List<PrescriptionAnalysisDto> prescriptionAnalysisDtos;
+
+    @Override
+    public String toString() {
+        return "PrescriptionCreateDto{" +
+                "pid=" + pid +
+                ", type=" + type +
+                ", doctorLbz='" + doctorLbz + '\'' +
+                ", departmentFromId=" + departmentFromId +
+                ", departmentToId=" + departmentToId +
+                ", lbp='" + lbp + '\'' +
+                ", creationDateTime=" + creationDateTime +
+                ", status=" + status +
+                ", comment='" + comment + '\'' +
+                ", prescriptionAnalysisDtos=" + prescriptionAnalysisDtos +
+                '}';
+    }
 }

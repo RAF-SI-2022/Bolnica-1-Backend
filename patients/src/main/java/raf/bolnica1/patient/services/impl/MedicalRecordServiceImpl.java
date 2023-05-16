@@ -76,7 +76,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-//    @Cacheable(value = "gmd", key = "#lbp")
+    @CacheEvict(value = "gmd", key = "#lbp")
     public GeneralMedicalDataDto addGeneralMedicalData(String lbp, GeneralMedicalDataCreateDto generalMedicalDataCreateDto) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException());

@@ -3,6 +3,7 @@ package raf.bolnica1.laboratory.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +77,7 @@ public class LabResultServiceImpl implements LabResultService {
     }
 
     @Override
+//    @CacheEvict(value = "workOrder", key = "#workOrderId")
     public MessageDto commitResults(Long workOrderId) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
         if (labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)) {
