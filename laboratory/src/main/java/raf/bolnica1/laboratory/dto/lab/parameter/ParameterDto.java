@@ -6,11 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParameterDto {
+public class ParameterDto implements Serializable {
 
     private Long id;
     private String parameterName;

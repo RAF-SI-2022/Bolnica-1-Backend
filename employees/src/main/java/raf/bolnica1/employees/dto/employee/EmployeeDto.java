@@ -9,13 +9,14 @@ import raf.bolnica1.employees.domain.constants.Profession;
 import raf.bolnica1.employees.domain.constants.Title;
 import raf.bolnica1.employees.dto.department.DepartmentDto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeDto {
+public class EmployeeDto implements Serializable {
     private Long id;
     private String lbz;
     private String name;
