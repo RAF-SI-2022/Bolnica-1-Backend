@@ -426,17 +426,8 @@ public class TestDataRunner implements CommandLineRunner {
         generalMedicalData5.setRH("-");
         medicalRecord5.setGeneralMedicalData(generalMedicalData5);
 
-        MedicalRecord medicalRecord6 = new MedicalRecord();
-        medicalRecord6.setPatient(patient6);
-        medicalRecord6.setRegistrationDate(Date.valueOf("2020-06-01"));
-        medicalRecord6.setDeleted(false);
-        GeneralMedicalData generalMedicalData6 = new GeneralMedicalData();
-        generalMedicalData6.setBloodType("AB");
-        generalMedicalData6.setRH("-");
-        medicalRecord5.setGeneralMedicalData(generalMedicalData6);
-
-        generalMedicalDataRepository.saveAll(Arrays.asList(generalMedicalData1, generalMedicalData2, generalMedicalData3, generalMedicalData4, generalMedicalData5, generalMedicalData6));
-        medicalRecordRepository.saveAll(Arrays.asList(medicalRecord1, medicalRecord2, medicalRecord3, medicalRecord4, medicalRecord5, medicalRecord6));
+        generalMedicalDataRepository.saveAll(Arrays.asList(generalMedicalData1, generalMedicalData2, generalMedicalData3, generalMedicalData4, generalMedicalData5));
+        medicalRecordRepository.saveAll(Arrays.asList(medicalRecord1, medicalRecord2, medicalRecord3, medicalRecord4, medicalRecord5));
 
         AllergyData allergyData1 = new AllergyData();
         allergyData1.setGeneralMedicalData(generalMedicalData1);

@@ -38,7 +38,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     private GeneralMedicalDataRepository generalMedicalDataRepository;
 
     @Override
-//    @Cacheable(value = "patient", key = "#patientCreateDto.lbp")
+    @CacheEvict(value = "patient", key = "#patientCreateDto.lbp")
     public PatientDto registerPatient(PatientCreateDto patientCreateDto) {
         Patient patient = patientMapper.patientDtoToPatientGeneralData(patientCreateDto);
         SocialData socialData = socialDataRepository.save(patientMapper.patientDtoToPatientSocialData(patientCreateDto));
