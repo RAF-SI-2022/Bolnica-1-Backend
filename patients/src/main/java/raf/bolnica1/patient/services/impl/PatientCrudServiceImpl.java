@@ -56,16 +56,18 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public PatientDto updatePatient(PatientUpdateDto dto) {
-        Patient patient = patientRepository.findByLbp(dto.getLbp()).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", dto.getLbp())));
+        Patient patient = patientRepository.findByLbpLock(dto.getLbp()).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", dto.getLbp())));
         patient.setDeleted(dto.isDeleted());
         patient = patientRepository.save(patientMapper.setPatientGeneralData(dto, patient));
         return patientMapper.patientToPatientDto(patient);
     }
 
     @Override
+    @Transactional(timeout = 20)
     public MessageDto deletePatient(String lbp) {
-        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        Patient patient = patientRepository.findByLbpLock(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         patient.setDeleted(true);
 
         /// delete medical record

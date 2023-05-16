@@ -85,8 +85,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public EmployeeDto findEmployeeInfo(String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )
@@ -96,9 +97,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     public EmployeeMessageDto softDeleteEmployee(String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )
@@ -109,9 +110,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     public EmployeeMessageDto passwordReset(PasswordResetDto passwordResetDto, String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )
@@ -135,9 +136,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     public EmployeeDto passwordResetToken(String lbz, String token) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )
@@ -173,9 +174,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     public EmployeeDto editEmployeeInfo(EmployeeUpdateDto dto, String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )
@@ -193,9 +194,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     public EmployeeDto editEmployeeInfoByAdmin(EmployeeUpdateAdminDto dto, String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() ->
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
                         messageSource.getMessage("employee.already.exists", new Object[]{lbz}, Locale.getDefault())
                 )

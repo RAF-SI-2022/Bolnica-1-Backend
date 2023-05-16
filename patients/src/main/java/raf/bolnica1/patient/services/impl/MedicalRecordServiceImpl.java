@@ -105,7 +105,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     public OperationDto addOperation(String lbp, OperationCreateDto operationCreateDto) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException());
-
         Operation operation = operationMapper.toEntity(operationCreateDto, medicalRecord);
         operation = operationRepository.save(operation);
 

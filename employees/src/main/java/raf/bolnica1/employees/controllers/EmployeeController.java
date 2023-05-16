@@ -64,7 +64,8 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/find/{lbz}")
-    @PreAuthorize("#lbz == authentication.principal")
+    //@PreAuthorize("#lbz == authentication.principal")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<EmployeeDto> findEmployeeInfo(@PathVariable String lbz) {
         return new ResponseEntity<>(employeeService.findEmployeeInfo(lbz), HttpStatus.FOUND);
     }

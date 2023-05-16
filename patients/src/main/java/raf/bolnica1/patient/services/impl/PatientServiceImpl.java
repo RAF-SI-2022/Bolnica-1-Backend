@@ -49,8 +49,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
         ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());
+        Optional<ScheduleExam> scheduleExam1 = scheduleExamRepository.findByDoctorLbzAndDateAndTime(scheduleExam.getDoctorLbz(),scheduleExam.getDateAndTime());
+        if(scheduleExam1.isPresent()) {
+            return new MessageDto("Scheduled exam at this time and with this doctor is already appointed");
+        }
         scheduleExam = scheduleExamRepository.save(scheduleExam);
         return new MessageDto("Uspesno kreiran zakazani pregled.");
     }
@@ -85,8 +90,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
-        Optional<ScheduleExam> exam = scheduleExamRepository.findById(id);
+        Optional<ScheduleExam> exam = scheduleExamRepository.findByIdLock(id);
         if(!exam.isPresent()){
             return new MessageDto("Pregled nije pronadjen.");
         }
@@ -96,22 +102,25 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public Page<ScheduleExamDto> findScheduledExaminationsForDoctor(String lbz, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForDoctor(pageable, lbz, PatientArrival.CEKA);
+        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForDoctorLock(pageable, lbz, PatientArrival.CEKA);
         return scheduleExams.map(scheduleExamMapper::toDto);
     }
 
     @Override
+    @Transactional(timeout = 20)
     public Page<ScheduleExamDto> findScheduledExaminationsForMedSister(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForMedSister(pageable, new Date(System.currentTimeMillis()), PatientArrival.ZAKAZANO);
+        Page<ScheduleExam> scheduleExams = scheduleExamRepository.findScheduleForMedSisterLock(pageable, new Date(System.currentTimeMillis()), PatientArrival.ZAKAZANO);
         return scheduleExams.map(scheduleExamMapper::toDto);
     }
 
     @Override
+    @Transactional(timeout = 20)
     public List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz) {
-        List<ScheduleExam> scheduleExams = scheduleExamRepository.findFromCurrDateAndDoctor(new Date(System.currentTimeMillis()), lbz);
+        List<ScheduleExam> scheduleExams = scheduleExamRepository.findFromCurrDateAndDoctorLock(new Date(System.currentTimeMillis()), lbz);
         List<ScheduleExamDto> scheduleExamDtoList = new ArrayList<>();
         for(ScheduleExam scheduleExam : scheduleExams){
             ScheduleExamDto scheduleExamDto = scheduleExamMapper.toDto(scheduleExam);

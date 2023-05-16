@@ -25,7 +25,7 @@ public class EmployeeRoleServiceImpl implements EmployeeRoleService {
 
     @Override
     public List<RoleDto> privilegeForEmployee(String lbz) {
-        Employee employee = employeeRepository.findByLbz(lbz).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz)));
+        Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz)));
         List<RoleDto> roleDtos = new ArrayList<>();
 
         for (EmployeesRole employeesRole : employeesRoleRepository.findByEmployee(employee)) {
