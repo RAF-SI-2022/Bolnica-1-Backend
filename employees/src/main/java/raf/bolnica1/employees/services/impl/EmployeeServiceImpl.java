@@ -57,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    @CachePut(value = "employee", key="#dto.lbz")
+//    @CachePut(value = "employee", key="#dto.lbz")
     @CacheEvict(value = "employees", allEntries = true)
     public EmployeeDto createEmployee(EmployeeCreateDto dto) {
         Optional<Employee> employee = employeeRepository.findByLbz(dto.getLbz());
