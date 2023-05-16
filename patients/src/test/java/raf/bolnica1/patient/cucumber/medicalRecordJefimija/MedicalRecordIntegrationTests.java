@@ -105,6 +105,7 @@ public class MedicalRecordIntegrationTests extends MedicalRecordIntegrationTestC
         MedicalRecordDto medicalRecordDto = medicalRecordService.findMedicalRecord(lbp);
         assertTrue(medicalRecordDto != null);
         assertTrue(medicalRecordDto.getGeneralMedicalDataDto() != null);
+        System.out.println("record: " + medicalRecordDto.getGeneralMedicalDataDto());
         assertTrue(medicalRecordDto.getGeneralMedicalDataDto().getBloodType() != null);
         assertTrue(medicalRecordDto.getGeneralMedicalDataDto().getRH() != null);
         if(check instanceof GeneralMedicalDataDto){

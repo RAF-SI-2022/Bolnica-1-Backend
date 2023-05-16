@@ -1,6 +1,8 @@
 package raf.bolnica1.patient.domain.constants;
 
-public enum PatientArrival {
+import java.io.Serializable;
+
+public enum PatientArrival implements Serializable {
 
     ZAKAZANO,
     OTKAZANO,
