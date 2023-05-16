@@ -1,6 +1,9 @@
 package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,7 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     private final ParameterMapper parameterMapper;
 
     @Override
+//    @Cacheable(value = "analParam", key = "{#analysisParameterDto.parameter.parameterName, #analysisParameterDto.labAnalysis.analysisName}")
     public AnalysisParameterDto createAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
         AnalysisParameter analysisParameter = analysisParameterMapper.toEntity(analysisParameterDto);
@@ -36,6 +40,7 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     }
 
     @Override
+    @CachePut(value = "analParam", key = "#analysisParameterDto.id")
     public AnalysisParameterDto updateAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
         if (analysisParameterRepository.findAnalysisParameterById(analysisParameterDto.getId()) == null)
@@ -49,12 +54,14 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     }
 
     @Override
+    @CacheEvict(value = "analParam", key = "#id")
     public MessageDto deleteAnalysisParameter(Long id) {
         analysisParameterRepository.deleteById(id);
         return new MessageDto("AnalysisParameter with ID " + id + " deleted");
     }
 
     @Override
+    @Cacheable(value = "analParam", key = "#id")
     public AnalysisParameterDto getAnalysisParameter(Long id) {
         return analysisParameterMapper.toDto(analysisParameterRepository.findAnalysisParameterById(id));
     }
