@@ -1,6 +1,7 @@
 package raf.bolnica1.infirmary.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ public class HospitalizationServiceImpl implements HospitalizationService {
 
 
     @Override
+    @Cacheable(value = "hospDep", key = "{#departmentId, #page, #size}")
     public Page<HospitalizationDto> getHospitalizationsByDepartmentId(Long departmentId, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Hospitalization>hospitalizations=hospitalizationRepository.findHospitalizationsByDepartmentId(pageable,departmentId);
@@ -33,6 +35,7 @@ public class HospitalizationServiceImpl implements HospitalizationService {
     }
 
     @Override
+    @Cacheable(value = "hostRoom", key = "{#hospitalRoomId, #page, #size}")
     public Page<HospitalizationDto> getHospitalizationsByHospitalRoomId(Long hospitalRoomId, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Hospitalization>hospitalizations=hospitalizationRepository.findHospitalizationsByHospitalRoomId(pageable,hospitalRoomId);
