@@ -1,6 +1,9 @@
 package raf.bolnica1.patient.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +38,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     private GeneralMedicalDataRepository generalMedicalDataRepository;
 
     @Override
+    @Cacheable(value = "patient", key = "#patientCreateDto.lbp")
     public PatientDto registerPatient(PatientCreateDto patientCreateDto) {
         Patient patient = patientMapper.patientDtoToPatientGeneralData(patientCreateDto);
         SocialData socialData = socialDataRepository.save(patientMapper.patientDtoToPatientSocialData(patientCreateDto));
@@ -56,6 +60,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
+    @CachePut(value = "patient", key = "#dto.lbp")
     public PatientDto updatePatient(PatientUpdateDto dto) {
         Patient patient = patientRepository.findByLbp(dto.getLbp()).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", dto.getLbp())));
         patient.setDeleted(dto.isDeleted());
@@ -64,6 +69,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
+    @CacheEvict(value = "patient", key = "#lbp")
     public MessageDto deletePatient(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         patient.setDeleted(true);
@@ -84,6 +90,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
+    @Cacheable(value = "patient", key = "#lbp")
     public PatientDto findPatient(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         return patientMapper.patientToPatientDto(patient);
