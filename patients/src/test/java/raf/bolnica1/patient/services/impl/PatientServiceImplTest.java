@@ -124,6 +124,7 @@ class PatientServiceImplTest {
             scheduleExamCreateDto.setLbp("string");
         }
 
+        //Potrebno izmeniti malo
         @Test
         void scheduleSuccessfulTest(){
             ScheduleExam exam = new ScheduleExam();
@@ -184,7 +185,7 @@ class PatientServiceImplTest {
         );
         PageImpl<ScheduleExam> scheduleExamsPage = new PageImpl<>(scheduleExams, pageable, scheduleExams.size());
 
-        when(scheduleExamRepository.findScheduleForDoctor(pageable, lbz, PatientArrival.CEKA))
+        when(scheduleExamRepository.findScheduleForDoctorLock(pageable, lbz, PatientArrival.CEKA))
                 .thenReturn(scheduleExamsPage);
 
         List<ScheduleExamDto> expectedDtos = scheduleExams.stream()
@@ -194,7 +195,7 @@ class PatientServiceImplTest {
         PageImpl<ScheduleExamDto> expectedPage = new PageImpl<>(expectedDtos, pageable, expectedDtos.size());
         Page<ScheduleExamDto> resultPage = patientService.findScheduledExaminationsForDoctor(lbz, page, size);
 
-        verify(scheduleExamRepository).findScheduleForDoctor(pageable, lbz, PatientArrival.CEKA);
+        verify(scheduleExamRepository).findScheduleForDoctorLock(pageable, lbz, PatientArrival.CEKA);
         assertEquals(expectedPage, resultPage);
     }
 
@@ -207,7 +208,7 @@ class PatientServiceImplTest {
         scheduleExamList.add(scheduleExam2);
         Page<ScheduleExam> page = new PageImpl<>(scheduleExamList);
 
-        when(scheduleExamRepository.findScheduleForMedSister(
+        when(scheduleExamRepository.findScheduleForMedSisterLock(
                 any(Pageable.class),
                 any(Date.class),
                 any(PatientArrival.class)))
@@ -243,12 +244,12 @@ class PatientServiceImplTest {
             when(scheduleExamMapper.toDto(scheduleExam)).thenReturn(scheduleExamDto);
         }
 
-        doReturn(scheduleExams).when(scheduleExamRepository).findFromCurrDateAndDoctor(Mockito.any(Date.class), Mockito.anyString());
+        doReturn(scheduleExams).when(scheduleExamRepository).findFromCurrDateAndDoctorLock(Mockito.any(Date.class), Mockito.anyString());
 
         List<ScheduleExamDto> result = patientService.findScheduledExaminationsForDoctorAll(lbz);
 
         assertEquals(scheduleExamDtoList, result);
-        verify(scheduleExamRepository, times(1)).findFromCurrDateAndDoctor(Mockito.any(Date.class), eq(lbz));
+        verify(scheduleExamRepository, times(1)).findFromCurrDateAndDoctorLock(Mockito.any(Date.class), eq(lbz));
         verify(scheduleExamMapper, times(3)).toDto(any(ScheduleExam.class));
     }
     //Testovi za updatePatientArrivalStatus
@@ -257,7 +258,7 @@ class PatientServiceImplTest {
         ScheduleExam exam = new ScheduleExam();
         exam.setArrivalStatus(PatientArrival.ZAKAZANO);
 
-        Mockito.when(scheduleExamRepository.findById(1L)).thenReturn(Optional.of(exam));
+        Mockito.when(scheduleExamRepository.findByIdLock(1L)).thenReturn(Optional.of(exam));
 
         MessageDto message = patientService.updatePatientArrivalStatus(1L, PatientArrival.ZAKAZANO);
 
@@ -266,7 +267,7 @@ class PatientServiceImplTest {
     }
     @Test
     public void testUpdatePatientArrivalStatusNotFound() {
-       when(scheduleExamRepository.findById(1L)).thenReturn(Optional.empty());
+       when(scheduleExamRepository.findByIdLock(1L)).thenReturn(Optional.empty());
 
         MessageDto message = patientService.updatePatientArrivalStatus(1L, PatientArrival.ZAKAZANO);
 

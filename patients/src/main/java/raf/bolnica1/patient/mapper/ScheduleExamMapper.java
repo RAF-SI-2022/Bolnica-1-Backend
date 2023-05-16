@@ -16,7 +16,7 @@ public class ScheduleExamMapper {
     private PatientRepository patientRepository;
 
     public ScheduleExam toEntity(ScheduleExamCreateDto scheduleExamCreateDto, String lbz){
-        Patient patient = patientRepository.findByLbp(scheduleExamCreateDto.getLbp()).orElseThrow(()->new RuntimeException(String.format("Patient with lbp %s not found", scheduleExamCreateDto.getLbp())));
+        Patient patient = patientRepository.findByLbpLock(scheduleExamCreateDto.getLbp()).orElseThrow(()->new RuntimeException(String.format("Patient with lbp %s not found", scheduleExamCreateDto.getLbp())));
 
         ScheduleExam scheduleExam = new ScheduleExam();
         scheduleExam.setArrivalStatus(PatientArrival.ZAKAZANO);
