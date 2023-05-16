@@ -90,6 +90,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @CacheEvict(value = "scheduledExams", allEntries = true)
     public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
         Optional<ScheduleExam> exam = scheduleExamRepository.findById(id);
         if(!exam.isPresent()){
