@@ -157,7 +157,7 @@ public class PatientCrudServiceImplTest {
         md.setRegistrationDate(Date.valueOf("2011-11-11"));
 
 
-        given(patientRepository.findByLbp("4321")).willReturn(Optional.of(patient));
+        given(patientRepository.findByLbpLock("4321")).willReturn(Optional.of(patient));
         given(medicalRecordRepository.findByPatient(patient)).willReturn(Optional.of(md));
 
         try{
@@ -281,7 +281,7 @@ public class PatientCrudServiceImplTest {
         PatientDto patientDto = createPatientDto();
         patientDto.setName("NovoIme");
 
-        given(patientRepository.findByLbp("4321")).willReturn(Optional.of(patient));
+        given(patientRepository.findByLbpLock("4321")).willReturn(Optional.of(patient));
         given(patientRepository.save(patient2)).willReturn(patient2);
         given(patientMapper.setPatientGeneralData(updateDto, patient)).willReturn(patient2);
         given(patientMapper.patientToPatientDto(patient2)).willReturn(patientDto);

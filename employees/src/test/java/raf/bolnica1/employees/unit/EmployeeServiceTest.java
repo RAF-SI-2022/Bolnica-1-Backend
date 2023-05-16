@@ -144,7 +144,7 @@ public class EmployeeServiceTest {
         employeeGenerator.fill(department);
         Employee employee=employeeGenerator.getRandomEmployee();
 
-        given(employeeRepository.findByLbz(employee.getLbz())).willReturn(Optional.of(employee));
+        given(employeeRepository.findByLbzLock(employee.getLbz())).willReturn(Optional.of(employee));
 
         EmployeeDto ret=employeeService.findEmployeeInfo(employee.getLbz());
 
@@ -163,7 +163,7 @@ public class EmployeeServiceTest {
         employeeGenerator.fill(department);
         Employee employee=employeeGenerator.getRandomEmployee();
 
-        given(employeeRepository.findByLbz(employee.getLbz())).willReturn(Optional.of(employee));
+        given(employeeRepository.findByLbzLock(employee.getLbz())).willReturn(Optional.of(employee));
 
         employeeService.softDeleteEmployee(employee.getLbz());
 
@@ -219,14 +219,14 @@ public class EmployeeServiceTest {
         passwordResetDto.setOldPassword("oldPassword");
         passwordResetDto.setNewPassword("newPassword");
 
-        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbzLock(lbz)).thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee)).thenReturn(employee);
 
         // Act
         EmployeeMessageDto actualResult = employeeService.passwordReset(passwordResetDto, lbz);
 
         // Assert
-        verify(employeeRepository).findByLbz(lbz);
+        verify(employeeRepository).findByLbzLock(lbz);
         verify(employeeRepository).save(employee);
 
         assertTrue(passwordEncoder.matches(passwordResetDto.getNewPassword(), employee.getNewPassword()));
@@ -247,7 +247,7 @@ public class EmployeeServiceTest {
         passwordResetDto.setOldPassword("oldPasswordNijeIsti");
         passwordResetDto.setNewPassword("newPassword");
 
-        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbzLock(lbz)).thenReturn(Optional.of(employee));
 
         assertThrows(EmployeePasswordException.class, () -> employeeService.passwordReset(passwordResetDto, lbz));
     }
@@ -268,7 +268,7 @@ public class EmployeeServiceTest {
         Employee updatedEmployee =  replicateEmployee(employee);
         updatedEmployee.setPassword("newPassword");
 
-        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbzLock(lbz)).thenReturn(Optional.of(employee));
 
         assertThrows(EmployeePasswordException.class, () -> employeeService.passwordResetToken(lbz, token));
     }
@@ -289,7 +289,7 @@ public class EmployeeServiceTest {
         assertTrue(classJsonComparator.compareCommonFields(employee,updatedEmployee));
         updatedEmployee.setPassword("newPassword");
 
-        when(employeeRepository.findByLbz(lbz)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByLbzLock(lbz)).thenReturn(Optional.of(employee));
         when(employeeRepository.save(employee)).thenReturn(updatedEmployee);
 
         EmployeeDto result = employeeService.passwordResetToken(lbz, token);
@@ -348,7 +348,7 @@ public class EmployeeServiceTest {
         employee.setPassword(employeeUpdateDto.getOldPassword());
 
         given(passwordEncoder.matches(employeeUpdateDto.getOldPassword(),employeeUpdateDto.getOldPassword())).willReturn(true);
-        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
+        given(employeeRepository.findByLbzLock(lbz)).willReturn(Optional.of(employee));
 
         employeeService.editEmployeeInfo(employeeUpdateDto,lbz);
 
@@ -371,7 +371,7 @@ public class EmployeeServiceTest {
 
         Employee employee=new Employee();
         employee.setId(3L);
-        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.of(employee));
+        given(employeeRepository.findByLbzLock(lbz)).willReturn(Optional.of(employee));
         given(departmentRepository.findByPbo(department.getPbo())).willReturn(Optional.of(department));
        /// given(passwordEncoder.encode(any())).willReturn("noviPassword");
         given(employeeRepository.save(employee)).willReturn(employee);

@@ -62,7 +62,7 @@ public class EmployeeRoleServiceTest {
         Employee employee = employeeGenerator.getRandomEmployee();
         String lbz="mojLbz";
 
-        given(employeeRepository.findByLbz(lbz)).willReturn(Optional.ofNullable(employee));
+        given(employeeRepository.findByLbzLock(lbz)).willReturn(Optional.ofNullable(employee));
 
         int roleCount=5;
         List<EmployeesRole>employeesRoles=new ArrayList<>();
