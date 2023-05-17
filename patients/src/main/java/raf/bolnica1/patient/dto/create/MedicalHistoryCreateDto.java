@@ -5,9 +5,11 @@ import lombok.Setter;
 import raf.bolnica1.patient.domain.constants.TreatmentResult;
 import raf.bolnica1.patient.dto.general.DiagnosisCodeDto;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class MedicalHistoryCreateDto {
+public class MedicalHistoryCreateDto implements Serializable {
     private boolean confidential;
     private TreatmentResult treatmentResult;
     private String currStateDesc;

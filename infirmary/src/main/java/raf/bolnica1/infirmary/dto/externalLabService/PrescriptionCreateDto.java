@@ -5,12 +5,13 @@ import lombok.Setter;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionType;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
-public class PrescriptionCreateDto {
+public class PrescriptionCreateDto implements Serializable {
     private PrescriptionType type;
     private String doctorLbz;
     private Long departmentFromId;

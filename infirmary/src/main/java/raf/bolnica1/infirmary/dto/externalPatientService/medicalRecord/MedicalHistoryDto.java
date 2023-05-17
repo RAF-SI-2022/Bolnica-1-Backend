@@ -3,11 +3,12 @@ package raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Getter
 @Setter
-public class MedicalHistoryDto {
+public class MedicalHistoryDto implements Serializable {
 
     private Date startDate;
     private Date endDate;

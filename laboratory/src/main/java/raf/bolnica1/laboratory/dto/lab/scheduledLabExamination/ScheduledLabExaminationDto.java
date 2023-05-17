@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScheduledLabExaminationDto {
+public class ScheduledLabExaminationDto implements Serializable {
 
     private Long id;
     private Long departmentId;

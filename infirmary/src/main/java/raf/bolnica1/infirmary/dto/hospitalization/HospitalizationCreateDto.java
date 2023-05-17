@@ -8,12 +8,13 @@ import raf.bolnica1.infirmary.domain.Prescription;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class HospitalizationCreateDto {
+public class HospitalizationCreateDto implements Serializable {
 
     private String lbzDoctor;
     private Timestamp patientAdmission;

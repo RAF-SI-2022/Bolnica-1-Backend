@@ -5,11 +5,12 @@ import lombok.Setter;
 import raf.bolnica1.patient.dto.general.AnamnesisDto;
 import raf.bolnica1.patient.dto.general.DiagnosisCodeDto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Getter
 @Setter
-public class ExaminationHistoryCreateDto {
+public class ExaminationHistoryCreateDto implements Serializable {
 
     private Date examDate;
     private String lbz;

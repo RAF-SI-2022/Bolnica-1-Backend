@@ -7,6 +7,7 @@ import lombok.Setter;
 import raf.bolnica1.laboratory.dto.lab.analysisParameter.AnalysisParameterDto;
 import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResultUpdateDto {
+public class ResultUpdateDto implements Serializable {
     private Long labWorkOrderId;
     private Long analysisParameterId;
     private String result;

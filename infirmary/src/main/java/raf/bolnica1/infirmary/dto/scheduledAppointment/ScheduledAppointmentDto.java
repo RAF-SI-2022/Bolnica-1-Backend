@@ -5,12 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.infirmary.domain.constants.AdmissionStatus;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class ScheduledAppointmentDto {
+public class ScheduledAppointmentDto implements Serializable {
 
     private Long id;
     private Timestamp patientAdmission;

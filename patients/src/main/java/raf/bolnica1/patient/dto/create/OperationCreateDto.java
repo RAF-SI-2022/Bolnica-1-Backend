@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import raf.bolnica1.patient.domain.MedicalRecord;
 
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Getter
 @Setter
-public class OperationCreateDto {
+public class OperationCreateDto implements Serializable {
 
     private Date operationDate;
     private Long hospitalId;

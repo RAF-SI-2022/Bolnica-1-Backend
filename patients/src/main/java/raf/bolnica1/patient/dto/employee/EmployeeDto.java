@@ -7,13 +7,14 @@ import lombok.Setter;
 import raf.bolnica1.patient.domain.constants.Profession;
 import raf.bolnica1.patient.domain.constants.Title;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeDto {
+public class EmployeeDto implements Serializable {
     private Long id;
     private String lbz;
     private String name;

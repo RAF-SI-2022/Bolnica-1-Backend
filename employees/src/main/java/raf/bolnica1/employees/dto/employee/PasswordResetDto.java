@@ -7,12 +7,13 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class PasswordResetDto {
+public class PasswordResetDto implements Serializable {
     @NotEmpty(message = "Stara lozinka ne sme biti prazna.")
     private String oldPassword;
     @NotEmpty(message = "Nova lozinka ne sme biti prazna.")

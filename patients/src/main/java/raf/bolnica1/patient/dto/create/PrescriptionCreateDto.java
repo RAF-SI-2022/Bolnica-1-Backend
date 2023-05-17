@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrescriptionCreateDto {
+public class PrescriptionCreateDto implements Serializable {
 
     private String lbp;
     private String doctorLbz;
