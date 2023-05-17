@@ -76,6 +76,7 @@ public class LabResultServiceImpl implements LabResultService {
     }
 
     @Override
+    //    @CacheEvict(value = "workOrder", key = "#workOrderId")
     public MessageDto commitResults(Long workOrderId) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
         if (labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)) {

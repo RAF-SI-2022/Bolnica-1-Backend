@@ -1,6 +1,8 @@
 package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -83,6 +85,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    @CacheEvict(value = "workOrder", key = "#id")
     public LabWorkOrderMessageDto verifyWorkOrder(Long id) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
@@ -108,6 +111,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "workOrder", key = "#workOrderId")
     public UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long analysisParameterId, String result) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
@@ -167,13 +171,18 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    @CacheEvict(value = "workOrder", key = "#labWorkOrder.id")
     public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
         parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
         labWorkOrderRepository.delete(labWorkOrder);
     }
 
     @Override
+<<<<<<< HEAD
     //Konkurentno sa updateAnalysisParameter
+=======
+    @CacheEvict(value = "workOrder", key = "#id")
+>>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);
@@ -182,6 +191,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    @Cacheable(value = "workOrder", key = "#id")
     public LabWorkOrderDto findWorkOrder(Long id) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Lab work order with id " + id + "not found"));
         return labWorkOrderMapper.toDto(labWorkOrder);

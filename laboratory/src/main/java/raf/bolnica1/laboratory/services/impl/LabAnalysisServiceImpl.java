@@ -1,6 +1,10 @@
 package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import raf.bolnica1.laboratory.domain.lab.LabAnalysis;
 import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
@@ -19,6 +23,7 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     private final LabAnalysisMapper labAnalysisMapper;
 
     @Override
+    @CacheEvict(value = "labAnals", allEntries = true)
     public LabAnalysisDto createLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
         LabAnalysis labAnalysis = labAnalysisMapper.toEntity(labAnalysisDto);
@@ -30,6 +35,8 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     }
 
     @Override
+    @CachePut(value = "labAnal", key = "#labAnalysisDto.id")
+    @CacheEvict(value = "labAnals", allEntries = true)
     public LabAnalysisDto updateLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
         /// ako ne postoji sa tim ID onda ne moze ni da update-uje
@@ -44,17 +51,23 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "labAnal", key = "#id"),
+            @CacheEvict(value = "labAnals", allEntries = true)
+    })
     public MessageDto deleteLabAnalysis(Long id) {
         labAnalysisRepository.deleteById(id);
         return new MessageDto("LabAnalysis with ID " + id.toString() + " deleted");
     }
 
     @Override
+    @Cacheable(value = "labAnal", key = "#id")
     public LabAnalysisDto getLabAnalysis(Long id) {
         return labAnalysisMapper.toDto(labAnalysisRepository.findLabAnalysisById(id));
     }
 
     @Override
+    @Cacheable(value = "labAnals")
     public List<LabAnalysisDto> getAllLabAnalysis() {
         List<LabAnalysis> labAnalyses = labAnalysisRepository.findAll();
         return labAnalysisMapper.toDto(labAnalyses);

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LabWorkOrderWithAnalysisDto {
+public class LabWorkOrderWithAnalysisDto implements Serializable {
     private Long id;
     private Long prescriptionId;
     private String lbp;

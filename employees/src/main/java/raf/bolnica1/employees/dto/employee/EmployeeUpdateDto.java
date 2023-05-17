@@ -7,12 +7,13 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeUpdateDto {
+public class EmployeeUpdateDto implements Serializable {
     @NotEmpty
     private String oldPassword;
     @NotEmpty

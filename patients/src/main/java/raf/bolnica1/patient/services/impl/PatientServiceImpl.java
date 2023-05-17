@@ -2,6 +2,8 @@ package raf.bolnica1.patient.services.impl;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +52,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(timeout = 20)
+    @CacheEvict(value = "scheduledExams", allEntries = true)
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
         ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());
         scheduleExam = scheduleExamRepository.save(scheduleExam);
@@ -57,6 +60,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Cacheable(value = "scheduledExams")
     public List<ScheduleExamDto> findScheduledExaminations() {
         List<ScheduleExamDto> exams = scheduleExamRepository.findAll().stream().map(scheduleExamMapper::toDto).collect(Collectors.toList());
         return exams;
@@ -64,6 +68,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
+    @CacheEvict(value = "scheduledExams", allEntries = true)
     public MessageDto deleteScheduledExamination(Long id) {
         scheduleExamRepository.deleteScheduleExamById(id).orElseThrow(() -> new RuntimeException(String.format("Scheduled exam with id %d not found.", id)));
         return new MessageDto(String.format("Scheduled exam with id %d deleted",id));
@@ -88,6 +93,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(timeout = 20)
+    @CacheEvict(value = "scheduledExams", allEntries = true)
     public MessageDto updatePatientArrivalStatus(Long id, PatientArrival status) {
         Optional<ScheduleExam> exam = scheduleExamRepository.findByIdLock(id);
         if(!exam.isPresent()){

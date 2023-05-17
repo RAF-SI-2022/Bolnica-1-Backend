@@ -10,6 +10,7 @@ import raf.bolnica1.employees.domain.constants.Title;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeCreateDto {
+public class EmployeeCreateDto implements Serializable {
     @NotEmpty(message = "LBZ ne sme biti prazan.")
     private String lbz;
     @NotEmpty(message = "Ime ne sme biti prazno.")

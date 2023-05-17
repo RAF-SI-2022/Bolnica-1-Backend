@@ -6,12 +6,13 @@ import lombok.Setter;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionStatus;
 import raf.bolnica1.infirmary.domain.constants.PrescriptionType;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class PrescriptionDto {
+public class PrescriptionDto implements Serializable {
 
     private Long id;
     private String doctorLbz;

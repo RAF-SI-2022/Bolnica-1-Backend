@@ -1,6 +1,9 @@
 package raf.bolnica1.infirmary.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
 
 
     @Override
+    //    @CacheEvict(value = "hostRooms", allEntries = true)
     public HospitalRoomDto createHospitalRoom(HospitalRoomCreateDto hospitalRoomCreateDto) {
         HospitalRoom hospitalRoom=hospitalRoomMapper.toEntity(hospitalRoomCreateDto);
         hospitalRoom=hospitalRoomRepository.save(hospitalRoom);
@@ -34,12 +38,17 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "hospRoom", key = "#hospitalRoomId"),
+            @CacheEvict(value = "hostRooms", allEntries = true)
+    })
     public MessageDto deleteHospitalRoom(Long hospitalRoomId) {
         hospitalRoomRepository.deleteById(hospitalRoomId);
         return new MessageDto("HospitalRoom with ID "+hospitalRoomId+" deleted. ");
     }
 
     @Override
+    @Cacheable(value = "hostRooms", key = "{#departmentId, #page, #size}")
     public Page<HospitalRoomDto> getHospitalRoomsByDepartmentId(Long departmentId, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
 
@@ -49,6 +58,7 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
     }
 
     @Override
+    @Cacheable(value = "hospRoom", key = "#hospitalRoomId")
     public HospitalRoomDto getHospitalRoomById(Long hospitalRoomId) {
         HospitalRoom hospitalRoom= hospitalRoomRepository.findHospitalRoomById(hospitalRoomId);
         return hospitalRoomMapper.toDto(hospitalRoom);

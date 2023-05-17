@@ -6,6 +6,7 @@ import lombok.Setter;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 
@@ -13,7 +14,7 @@ import java.sql.Time;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientStateDto {
+public class PatientStateDto implements Serializable {
 
     private Long id;
     private Date dateExamState;

@@ -3,9 +3,11 @@ package raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class AnamnesisDto {
+public class AnamnesisDto implements Serializable {
 
     private String mainProblems;
     private String currDisease;

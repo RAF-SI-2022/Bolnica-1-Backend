@@ -1,6 +1,9 @@
 package raf.bolnica1.infirmary.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +64,10 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "hospDep", allEntries = true),
+            @CacheEvict(value = "hospRoom", allEntries = true)
+    })
     public HospitalizationDto createHospitalization(HospitalizationCreateDto hospitalizationCreateDto,String authorization) {
 
         Hospitalization hospitalization= hospitalizationMapper.toEntity(hospitalizationCreateDto,hospitalRoomRepository,prescriptionRepository,authorization);
@@ -76,7 +83,11 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+<<<<<<< HEAD
     //Konkurentno zakazivanje (Odraditi)
+=======
+    @CacheEvict(value = "schedApp", allEntries = true)
+>>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public ScheduledAppointmentDto createScheduledAppointment(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto) {
         ScheduledAppointment scheduledAppointment= scheduledAppointmentMapper.toEntity(scheduledAppointmentCreateDto,prescriptionRepository);
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);
@@ -84,6 +95,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+    @Cacheable(value = "schedApp", key = "{#lbp, #departmentId, #startDate, #endDate, #admissionStatus, #page, #size}")
     public Page<ScheduledAppointmentDto> getScheduledAppointmentsWithFilter(String lbp, Long departmentId, Date startDate, Date endDate, AdmissionStatus admissionStatus,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);
@@ -105,6 +117,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+    @CacheEvict(value = "schedApp", allEntries = true)
     public MessageDto setScheduledAppointmentStatus(Long scheduledAppointmentId, AdmissionStatus admissionStatus) {
         ScheduledAppointment scheduledAppointment=scheduledAppointmentRepository.findScheduledAppointmentById(scheduledAppointmentId);
         scheduledAppointment.setAdmissionStatus(admissionStatus);

@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class RoleDto {
+public class RoleDto implements Serializable {
     private Long id;
     private String shortName;
 }

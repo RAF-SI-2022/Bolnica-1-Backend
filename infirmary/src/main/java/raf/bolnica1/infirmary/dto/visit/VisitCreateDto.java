@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class VisitCreateDto {
+public class VisitCreateDto implements Serializable {
 
     private String visitorName;
     private String visitorSurname;
