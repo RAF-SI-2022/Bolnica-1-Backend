@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +38,10 @@ public class AuthController {
     private void authenticate(@NotNull @NotBlank String username, @NotNull @NotBlank String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new DisabledException("Your account has been disabled", e);
         } catch (Exception e) {
-            throw new BadCredentialsException("Wrong username or password.", e);
+            throw new BadCredentialsException("Wrong username or password", e);
         }
     }
 

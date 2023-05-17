@@ -212,6 +212,7 @@ public class TestDataRunner implements CommandLineRunner {
         Employee employee = new Employee();
         employee.setLbz(lbz);
         employee.setName(name);
+        employee.setDeleted(true);
         employee.setSurname(surname);
         employee.setDateOfBirth(Date.valueOf("1992-05-04"));
         employee.setGender(gender);
