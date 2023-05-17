@@ -1,6 +1,8 @@
 package raf.bolnica1.infirmary.dto.externalPatientService.medicalRecord;
 
-public enum VaccinationType {
+import java.io.Serializable;
+
+public enum VaccinationType implements Serializable {
 
     VIRUS,
     BACTERIA

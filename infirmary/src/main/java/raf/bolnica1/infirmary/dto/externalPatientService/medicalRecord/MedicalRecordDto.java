@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.infirmary.dto.externalPatientService.PatientDto;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class MedicalRecordDto {
+public class MedicalRecordDto implements Serializable {
 
     private Long id;
     private Date registrationDate;

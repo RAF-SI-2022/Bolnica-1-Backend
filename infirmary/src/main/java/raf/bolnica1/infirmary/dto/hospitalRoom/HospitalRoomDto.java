@@ -5,10 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class HospitalRoomDto {
+public class HospitalRoomDto implements Serializable {
 
     private Long id;
     private Long idDepartment;

@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateDischargeListDto {
+public class CreateDischargeListDto implements Serializable {
     private String followingDiagnosis;
     private String anamnesis;
     private String analysis;
