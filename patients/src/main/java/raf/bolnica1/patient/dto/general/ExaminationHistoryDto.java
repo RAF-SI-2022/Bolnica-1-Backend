@@ -3,11 +3,12 @@ package raf.bolnica1.patient.dto.general;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Getter
 @Setter
-public class ExaminationHistoryDto {
+public class ExaminationHistoryDto implements Serializable {
 
     private Long id;
     private Date examDate;

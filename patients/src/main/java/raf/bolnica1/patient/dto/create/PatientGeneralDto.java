@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.patient.domain.constants.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class PatientGeneralDto {
+public class PatientGeneralDto implements Serializable {
     private String jmbg;
     private String lbp;
     private String name;
