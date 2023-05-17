@@ -40,6 +40,7 @@ presubmits:
               # docker compose --profile employees up -d
               # docker compose up -d mysql-employees
               docker compose up -d activemq
+              docker compose up -d redis
               docker compose up -d employees-db
               sleep 60
               
