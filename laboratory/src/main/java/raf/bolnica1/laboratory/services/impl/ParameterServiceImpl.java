@@ -1,6 +1,9 @@
 package raf.bolnica1.laboratory.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import raf.bolnica1.laboratory.domain.lab.Parameter;
 import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
@@ -26,6 +29,7 @@ public class ParameterServiceImpl implements ParameterService {
         return parameterMapper.toDto(parameter);
     }
 
+    @CachePut(value = "param", key = "#parameterDto.id")
     public ParameterDto updateParameter(ParameterDto parameterDto){
 
         /// ne moze da update ako se ne nalazi u bazi vec
@@ -40,11 +44,13 @@ public class ParameterServiceImpl implements ParameterService {
 
     }
 
+    @CacheEvict(value = "param", key = "#id")
     public MessageDto deleteParameter(Long id){
         parameterRepository.deleteById(id);
         return new MessageDto("Parameter with ID "+id+" deleted");
     }
 
+    @Cacheable(value = "param", key = "#id")
     public ParameterDto getParameter(Long id){
         return parameterMapper.toDto(parameterRepository.findParameterById(id));
     }
