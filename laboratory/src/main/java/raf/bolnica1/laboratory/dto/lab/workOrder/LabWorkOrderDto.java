@@ -8,6 +8,7 @@ import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ParameterAnalysisResultDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionDto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LabWorkOrderDto {
+public class LabWorkOrderDto implements Serializable {
     private PrescriptionDto prescription;
     private String lbp;
     private Timestamp creationDateTime;

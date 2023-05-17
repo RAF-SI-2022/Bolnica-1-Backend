@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raf.bolnica1.laboratory.dto.lab.analysisParameter.AnalysisParameterDto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParameterAnalysisResultDto {
+public class ParameterAnalysisResultDto implements Serializable {
     private List<AnalysisParameterDto> analysesParameters;
     private String result;
     private Timestamp dateTime;

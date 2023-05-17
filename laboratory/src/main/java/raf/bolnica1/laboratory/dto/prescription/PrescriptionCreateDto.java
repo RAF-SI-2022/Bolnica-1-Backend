@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionType;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
-public class PrescriptionCreateDto {
+public class PrescriptionCreateDto implements Serializable {
 
     private Long pid;
     private PrescriptionType type;

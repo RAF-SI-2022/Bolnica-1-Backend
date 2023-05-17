@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class PrescriptionDoneDto {
+public class PrescriptionDoneDto implements Serializable {
     private Long id;
     private String type;
     private Long departmentFromId;

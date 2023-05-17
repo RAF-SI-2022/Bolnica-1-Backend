@@ -7,13 +7,14 @@ import lombok.Setter;
 import raf.bolnica1.laboratory.dto.lab.labAnalysis.LabAnalysisDto;
 import raf.bolnica1.laboratory.dto.lab.parameter.ParameterDto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParameterAnalysisResultWithDetailsDto {
+public class ParameterAnalysisResultWithDetailsDto implements Serializable {
     private Long id;
     private String result;
     private Timestamp dateTime;
