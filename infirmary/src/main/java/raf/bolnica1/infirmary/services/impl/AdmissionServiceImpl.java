@@ -83,7 +83,11 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+<<<<<<< HEAD
+    //Konkurentno zakazivanje (Odraditi)
+=======
     @CacheEvict(value = "schedApp", allEntries = true)
+>>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public ScheduledAppointmentDto createScheduledAppointment(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto) {
         ScheduledAppointment scheduledAppointment= scheduledAppointmentMapper.toEntity(scheduledAppointmentCreateDto,prescriptionRepository);
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);

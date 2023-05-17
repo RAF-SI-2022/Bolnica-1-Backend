@@ -129,13 +129,13 @@ class PatientServiceImplTest {
         void scheduleSuccessfulTest(){
             ScheduleExam exam = new ScheduleExam();
 
-            when(scheduleExamMapper.toEntity(scheduleExamCreateDto, null)).thenReturn(exam);
+            when(scheduleExamMapper.toEntity(eq(scheduleExamCreateDto), any())).thenReturn(exam);
 
             MessageDto res = patientService.schedule(scheduleExamCreateDto);
 
             assertEquals("Uspesno kreiran zakazani pregled.", res.getMessage());
 
-            verify(scheduleExamMapper).toEntity(scheduleExamCreateDto, null);
+            verify(scheduleExamMapper).toEntity(eq(scheduleExamCreateDto), any());
             verify(scheduleExamRepository).save(exam);
 
         }

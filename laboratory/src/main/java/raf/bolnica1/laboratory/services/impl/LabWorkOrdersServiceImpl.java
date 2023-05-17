@@ -178,7 +178,11 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+<<<<<<< HEAD
+    //Konkurentno sa updateAnalysisParameter
+=======
     @CacheEvict(value = "workOrder", key = "#id")
+>>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);

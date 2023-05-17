@@ -64,7 +64,7 @@ public class SecurityEmployee implements UserDetails, UserDetailsPasswordService
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !employee.isDeleted();
     }
 
     @Override

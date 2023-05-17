@@ -43,6 +43,7 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
 
 
     @Override
+    //konkurentno izvrsavanje (Odraditi)
     public ScheduledLabExaminationDto createScheduledExamination(String lbp, Date scheduledDate, String note, String token) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
         HttpHeaders httpHeaders = new HttpHeaders();
