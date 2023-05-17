@@ -179,7 +179,8 @@ public class LabWorkOrdersServiceTest {
         UpdateParameterAnalysisResultMessageDto expectedDto = new UpdateParameterAnalysisResultMessageDto();
         expectedDto.setResult(result);
 
-        when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.of(labWorkOrder));
+        //when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.of(labWorkOrder));
+        when(labWorkOrderRepository.findLabWorkOrderById(workOrderId)).thenReturn(labWorkOrder);
         when(parameterAnalysisResultRepository.findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameter.getId())).thenReturn(Optional.of(par));
         when(authenticationUtils.getLbzFromAuthentication()).thenReturn("lbz");
         when(parameterAnalysisResultMapper.toDto(par)).thenReturn(expectedDto);
@@ -192,7 +193,7 @@ public class LabWorkOrdersServiceTest {
         assertNotNull(par.getDateTime());
         assertEquals(expectedDto, actualDto);
 
-        verify(labWorkOrderRepository).findById(workOrderId);
+        verify(labWorkOrderRepository).findLabWorkOrderById(workOrderId);
         verify(parameterAnalysisResultRepository).findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameter.getId());
         verify(labWorkOrderRepository).save(labWorkOrder);
         verify(parameterAnalysisResultRepository).save(par);
@@ -205,7 +206,9 @@ public class LabWorkOrdersServiceTest {
         Long analysisParameterId = 2L;
         String result = "result";
 
-        when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.empty());
+        //when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.empty());
+
+        when(labWorkOrderRepository.findLabWorkOrderById(workOrderId)).thenReturn(null);
 
         assertThrows(LabWorkOrderNotFoundException.class, () -> labWorkOrdersService.updateAnalysisParameters(workOrderId, analysisParameterId, result));
         verify(parameterAnalysisResultRepository, never()).findByLabWorkOrderIdAndAnalysisParameterId(anyLong(), anyLong());
@@ -223,13 +226,15 @@ public class LabWorkOrdersServiceTest {
         LabWorkOrder labWorkOrder = createLabWorkOrder();
         labWorkOrder.setStatus(OrderStatus.NEOBRADJEN);
 
-        when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.of(labWorkOrder));
+        //when(labWorkOrderRepository.findById(workOrderId)).thenReturn(Optional.of(labWorkOrder));
+        when(labWorkOrderRepository.findLabWorkOrderById(workOrderId)).thenReturn(labWorkOrder);
         when(parameterAnalysisResultRepository.findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameterId)).thenReturn(Optional.empty());
 
         assertThrows(NoParameterAnalysisResultFound.class, () -> labWorkOrdersService.updateAnalysisParameters(workOrderId, analysisParameterId, result));
         assertEquals(OrderStatus.NEOBRADJEN, labWorkOrder.getStatus());
 
-        verify(labWorkOrderRepository).findById(workOrderId);
+        //verify(labWorkOrderRepository).findById(workOrderId);
+        verify(labWorkOrderRepository).findLabWorkOrderById(workOrderId);
         verify(parameterAnalysisResultRepository).findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameterId);
         verify(labWorkOrderRepository, never()).save(any());
         verify(parameterAnalysisResultRepository, never()).save(any());

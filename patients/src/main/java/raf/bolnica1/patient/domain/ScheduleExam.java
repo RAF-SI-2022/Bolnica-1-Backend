@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "schedule_exam")
+@Table(name = "schedule_exam",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"dateAndTime", "doctorLbz"})})
 @Getter
 @Setter
 public class ScheduleExam {

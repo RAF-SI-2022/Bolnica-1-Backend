@@ -110,14 +110,20 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 20)
     @CacheEvict(value = "workOrder", key = "#workOrderId")
     public UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long analysisParameterId, String result) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
-        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(workOrderId).orElseThrow(() ->
+        /*LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", workOrderId))
-        );
+        );*/
+
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
+
+        if(labWorkOrder == null) {
+            throw new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", workOrderId));
+        }
 
         ParameterAnalysisResult par = parameterAnalysisResultRepository.findByLabWorkOrderIdAndAnalysisParameterId(workOrderId, analysisParameterId).orElseThrow(() ->
                 new NoParameterAnalysisResultFound(String.format("No parameter analysis result found for lab work order id %s and analysis param id %s", workOrderId, analysisParameterId)));
@@ -178,11 +184,8 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
-<<<<<<< HEAD
-    //Konkurentno sa updateAnalysisParameter
-=======
+    @Transactional(timeout = 20)
     @CacheEvict(value = "workOrder", key = "#id")
->>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);

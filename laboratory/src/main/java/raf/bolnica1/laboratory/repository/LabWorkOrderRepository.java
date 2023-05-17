@@ -3,12 +3,14 @@ package raf.bolnica1.laboratory.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.lab.LabWorkOrder;
 
+import javax.persistence.LockModeType;
 import java.util.Optional;
 import java.util.Date;
 
@@ -42,6 +44,7 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
             @Param("toDate") Date toDate);
 
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT lwo FROM LabWorkOrder lwo WHERE lwo.id=:id")
     LabWorkOrder findLabWorkOrderById(@Param("id") Long id);
 
