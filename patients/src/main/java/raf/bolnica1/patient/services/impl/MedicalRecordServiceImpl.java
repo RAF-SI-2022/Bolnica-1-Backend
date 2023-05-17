@@ -1,6 +1,8 @@
 package raf.bolnica1.patient.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
@@ -46,6 +48,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     private OperationRepository operationRepository;
 
     @Override
+    //    @Cacheable(value = "medRecord", key = "#lbp")
     public MedicalRecordDto findMedicalRecord(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
 
@@ -72,6 +75,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @CacheEvict(value = "gmd", key = "#lbp")
     public GeneralMedicalDataDto addGeneralMedicalData(String lbp, GeneralMedicalDataCreateDto generalMedicalDataCreateDto) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException());
@@ -102,6 +106,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @CacheEvict(value = "ops", key = "#lbp")
     public OperationDto addOperation(String lbp, OperationCreateDto operationCreateDto) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException());
@@ -112,6 +117,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Cacheable(value = "allergies")
     public List<AllergyDto> gatherAllergies() {
         List<Allergy> allergies =  allergyRepository.findAll();
         List<AllergyDto> allergyDtos = new ArrayList<>();
@@ -122,6 +128,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Cacheable(value = "vaccines")
     public List<VaccinationDto> gatherVaccines() {
         List<Vaccination> vaccinations =  vaccinationRepository.findAll();
         List<VaccinationDto> vaccinationDtos = new ArrayList<>();
@@ -132,6 +139,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Cacheable(value = "diagnosis")
     public List<DiagnosisCodeDto> gatherDiagnosis() {
         List<DiagnosisCode> diagnosisCodes =  diagnosisCodeRepository.findAll();
         List<DiagnosisCodeDto> diagnosisCodeDtos = new ArrayList<>();
@@ -142,6 +150,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @CacheEvict(value = "vaccines", allEntries = true)
     public MessageDto addVaccine(String lbp, VaccinationDataDto vaccinationDataDto) {
         Vaccination vaccination = vaccinationRepository.findByName(vaccinationDataDto.getVaccinationName());
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
@@ -159,6 +168,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @CacheEvict(value = "allergies", allEntries = true)
     public MessageDto addAllergy(String lbp, String allergyName) {
         Allergy allergy = allergyRepository.findByName(allergyName);
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
