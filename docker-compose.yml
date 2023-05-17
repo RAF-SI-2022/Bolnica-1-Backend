@@ -34,7 +34,7 @@ services:
       - all
     
   employees-service:
-    image: harbor.k8s.elab.rs/bolnica-1/employees:0.0.2
+    image: harbor.k8s.elab.rs/bolnica-1/employees:0.0.3
     build: 
      context: ./employees
      dockerfile: Dockerfile
@@ -111,7 +111,7 @@ services:
       - all
        
   patients-service:
-    image: harbor.k8s.elab.rs/bolnica-1/patients:0.0.2
+    image: harbor.k8s.elab.rs/bolnica-1/patients:0.0.3
     build: 
      context: ./patients
      dockerfile: Dockerfile
@@ -170,7 +170,7 @@ services:
       - all
       
   laboratory-service:
-    image: harbor.k8s.elab.rs/bolnica-1/laboratory:0.0.2
+    image: harbor.k8s.elab.rs/bolnica-1/laboratory:0.0.3
     build: 
      context: ./laboratory
      dockerfile: Dockerfile
@@ -231,7 +231,7 @@ services:
       - all
       
   infirmary-service:
-    image: harbor.k8s.elab.rs/bolnica-1/infirmary:0.0.2
+    image: harbor.k8s.elab.rs/bolnica-1/infirmary:0.0.3
     build: 
      context: ./infirmary
      dockerfile: Dockerfile
