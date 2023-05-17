@@ -52,10 +52,6 @@ public class PatientServiceImpl implements PatientService {
     @Transactional(timeout = 20)
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
         ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());
-        Optional<ScheduleExam> scheduleExam1 = scheduleExamRepository.findByDoctorLbzAndDateAndTime(scheduleExam.getDoctorLbz(),scheduleExam.getDateAndTime());
-        if(scheduleExam1.isPresent()) {
-            return new MessageDto("Scheduled exam at this time and with this doctor is already appointed");
-        }
         scheduleExam = scheduleExamRepository.save(scheduleExam);
         return new MessageDto("Uspesno kreiran zakazani pregled.");
     }

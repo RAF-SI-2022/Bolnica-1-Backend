@@ -76,6 +76,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+    //Konkurentno zakazivanje (Odraditi)
     public ScheduledAppointmentDto createScheduledAppointment(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto) {
         ScheduledAppointment scheduledAppointment= scheduledAppointmentMapper.toEntity(scheduledAppointmentCreateDto,prescriptionRepository);
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);

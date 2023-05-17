@@ -173,6 +173,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    //Konkurentno sa updateAnalysisParameter
     public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);
