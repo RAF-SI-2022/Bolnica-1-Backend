@@ -20,6 +20,7 @@ import raf.bolnica1.infirmary.dto.prescription.PrescriptionDto;
 import raf.bolnica1.infirmary.dto.response.MessageDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentCreateDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentDto;
+import raf.bolnica1.infirmary.exceptions.HospitalRoomFullException;
 import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.mapper.PrescriptionMapper;
 import raf.bolnica1.infirmary.mapper.ScheduledAppointmentMapper;
@@ -71,8 +72,10 @@ public class AdmissionServiceImpl implements AdmissionService {
     public HospitalizationDto createHospitalization(HospitalizationCreateDto hospitalizationCreateDto,String authorization) {
 
         Hospitalization hospitalization= hospitalizationMapper.toEntity(hospitalizationCreateDto,hospitalRoomRepository,prescriptionRepository,authorization);
+        if(hospitalization.getHospitalRoom().getOccupancy() == hospitalization.getHospitalRoom().getCapacity()) {
+            throw new HospitalRoomFullException("This hospital room is full, please try to fill another one");
+        }
         hospitalization=hospitalizationRepository.save(hospitalization);
-
         ScheduledAppointmentDto scheduledAppointmentDto=getScheduledAppointmentByPrescriptionId(hospitalization.getPrescription().getId());
         if(scheduledAppointmentDto!=null)
             setScheduledAppointmentStatus(scheduledAppointmentDto.getId(),AdmissionStatus.REALIZOVAN);
@@ -83,11 +86,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
-<<<<<<< HEAD
-    //Konkurentno zakazivanje (Odraditi)
-=======
     @CacheEvict(value = "schedApp", allEntries = true)
->>>>>>> 7123fd3d1516f2db31a586139f831b7d3a0e0e37
     public ScheduledAppointmentDto createScheduledAppointment(ScheduledAppointmentCreateDto scheduledAppointmentCreateDto) {
         ScheduledAppointment scheduledAppointment= scheduledAppointmentMapper.toEntity(scheduledAppointmentCreateDto,prescriptionRepository);
         scheduledAppointment=scheduledAppointmentRepository.save(scheduledAppointment);
