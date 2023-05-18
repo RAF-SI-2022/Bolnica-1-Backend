@@ -51,7 +51,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    @Transactional(timeout = 20)
     @CacheEvict(value = "scheduledExams", allEntries = true)
     public MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto) {
         ScheduleExam scheduleExam = scheduleExamMapper.toEntity(scheduleExamCreateDto, getLbzFromAuthentication());

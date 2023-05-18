@@ -24,6 +24,7 @@ public class EmployeeRoleServiceImpl implements EmployeeRoleService {
     private final EmployeesRoleRepository employeesRoleRepository;
 
     @Override
+    @Transactional(timeout = 20)
     //    @Cacheable(value = "emplRoles", key = "#lbz")
     public List<RoleDto> privilegeForEmployee(String lbz) {
         Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() -> new EmployeeNotFoundException(String.format("Employee with lbz <%s> not found.", lbz)));
