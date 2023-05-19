@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: patients-service
+  name: patients-service
+  namespace: bolnica-1-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: patients-service
+  template:
+    metadata:
+      labels:
+        app: patients-service
+    spec:
+      containers:
+        - image: harbor.k8s.elab.rs/bolnica-1/patients:0.0.3
+          imagePullPolicy: Always
+          name: patients-service
+          env:
+            - name: spring.activemq.broker.url
+              value: tcp://activemq:61616
+            - name: SPRING_ACTIVEMQ_BROKER_URL
+              value: tcp://activemq:61616
+            - name: employee.service.url
+              value: http://employees-service:8080/api
+            - name: laboratory.service.url
+              value: http://laboratory-service:8083/api
+            - name: spring.profiles.active
+              value: dev
+            - name: spring.datasource.url
+              value: jdbc:mysql://bolnica-1-mysql:3306/patients?createDatabaseIfNotExist=true
+            - name: spring.datasource.username
+              valueFrom:
+                secretKeyRef:
+                  name: bolnica-1-mysql-creds
+                  key: rootUser
+            - name: spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  name: bolnica-1-mysql-creds
+                  key: rootPassword
+            - name: spring.redis.host
+              value: redis
+          ports:
+            - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: 
+    app: patients-service
+  name: patients-service
+  namespace: bolnica-1-dev
+spec:
+  ports: 
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: patients-service
+  type: ClusterIP
