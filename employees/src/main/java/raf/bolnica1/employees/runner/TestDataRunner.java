@@ -193,7 +193,12 @@ public class TestDataRunner implements CommandLineRunner {
         department4.setName("Urology");
         department4.setHospital(hospital);
 
-        departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4));
+        Department department5 = new Department();
+        department5.setPbo("D005");
+        department5.setName("Laboratory");
+        department5.setHospital(hospital);
+
+        departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4, department5));
 
         createEmployee("E0001", "John", "Doe", "M", RoleShort.ROLE_ADMIN, Title.PROF_DR_MED, Profession.MED_SESTRA, department1);
         createEmployee("E0002", "Jane", "Smith", "Z", RoleShort.ROLE_DR_SPEC_ODELJENJA, Title.DR_MED_SPEC, Profession.SPEC_KARDIOLOG, department1);

@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.laboratory.domain.constants.ExaminationStatus;
 import raf.bolnica1.laboratory.domain.lab.ScheduledLabExamination;
@@ -56,10 +57,15 @@ public class LabExaminationsServiceImpl implements LabExaminationsService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     public ScheduledLabExaminationDto changeExaminationStatus(Long id, ExaminationStatus newStatus) {
-        ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
+        /*ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationRepository.findById(id).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No examination with id %s", id))
-        );
+        );*/
+        ScheduledLabExamination scheduledLabExamination = scheduledLabExaminationRepository.findByIdLock(id);
+        if(scheduledLabExamination == null) {
+            throw new LabWorkOrderNotFoundException(String.format("No examination with id %s", id));
+        }
         scheduledLabExamination.setExaminationStatus(newStatus);
         scheduledLabExamination = scheduledLabExaminationRepository.save(scheduledLabExamination);
         return scheduledLabExaminationMapper.toDto(scheduledLabExamination);
