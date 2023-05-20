@@ -85,13 +85,19 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     @CacheEvict(value = "workOrder", key = "#id")
     public LabWorkOrderMessageDto verifyWorkOrder(Long id) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
-        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() ->
+        /*LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() ->
                 new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", id))
-        );
+        );*/
+
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
+        if(labWorkOrder == null) {
+            throw new LabWorkOrderNotFoundException(String.format("No laboratory work order with id %s", id));
+        }
         // check for results of parameter analysis
         ParameterAnalysisResult par = parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(id).stream().filter(result -> result.getResult() == null).findAny().orElse(null);
         if (par != null) {
