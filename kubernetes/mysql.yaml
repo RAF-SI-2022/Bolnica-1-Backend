@@ -1,0 +1,36 @@
+# Secret napravljen sa:
+# kubectl create secret generic user-service-mysql-creds --namespace vezbe --from-literal=rootUser=root --from-literal=rootHost=% --from-literal=rootPassword=raf-si -o yaml --dry-run=client
+# Po potrebi mozete iskoristiti ovu komandu da generisete Secret sa drugacijim passwordom.
+# Username treba da ostane root, a hostname treba da ostane %
+apiVersion: v1
+data:
+  # rootHost: %
+  rootHost: JQ==
+  # rootPassword: admin
+  rootPassword: YWRtaW4=
+  # rootUser: root
+  rootUser: cm9vdA==
+kind: Secret
+metadata:
+  # Naziv Secreta i .spec.secretName polje u InnoDBCluster objektu moraju da se poklapaju
+  name: bolnica-1-mysql-creds
+  namespace: bolnica-1-dev
+---
+# Objekat, tj. resurs, koji definise jedan MySQL klaster koji sadrzi 3 instance
+# (1 primary replika i 2 follower replike) i jedan ruter koji preusmerava saobracaj ka
+# primary ili follower replikama po potrebi.
+# Kao rezultat kreiranja ovog objekta dobicete odgovarajuci StatefulSet, Deployment i Service
+# koji pokrecu i exposuju MySQL.
+# Jedino sto treba da promenite su naziv, namespace, i naziv Secret-a.
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: bolnica-1-mysql
+  namespace: bolnica-1-dev
+spec:
+  # Naziv Secreta i .spec.secretName polje u InnoDBCluster objektu moraju da se poklapaju
+  secretName: bolnica-1-mysql-creds
+  tlsUseSelfSigned: true
+  instances: 3
+  router:
+    instances: 1

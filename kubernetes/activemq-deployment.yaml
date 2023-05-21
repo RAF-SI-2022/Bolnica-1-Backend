@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: activemq
+  name: activemq
+  namespace: bolnica-1-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: activemq
+  template: 
+    metadata:
+      labels:
+        app: activemq
+    spec:
+      containers:
+        - image: harbor.k8s.elab.rs/bolnica-1/activemq:latest
+          imagePullPolicy: Always
+          name: activemq
+          env:
+            - name: ACTIVEMQ_ADMIN_LOGIN
+              value: admin
+            - name: ACTIVEMQ_ADMIN_PASSWORD
+              value: admin
+          ports:
+            - containerPort: 61616
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  labels:
+    app: activemq
+  name: activemq
+  namespace: bolnica-1-dev
+spec:
+  ports:
+    - port: 61616
+      protocol: TCP
+      targetPort: 61616
+  selector:
+    app: activemq
+  type: ClusterIP
