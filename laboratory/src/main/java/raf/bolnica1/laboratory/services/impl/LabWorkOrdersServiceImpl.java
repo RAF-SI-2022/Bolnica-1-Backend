@@ -200,9 +200,13 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     @Cacheable(value = "workOrder", key = "#id")
     public LabWorkOrderDto findWorkOrder(Long id) {
-        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Lab work order with id " + id + "not found"));
+//        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Lab work order with id " + id + "not found"));
+        LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
+        if(labWorkOrder == null)
+            throw new RuntimeException("Lab work order with id " + id + "not found");
         return labWorkOrderMapper.toDto(labWorkOrder);
     }
 

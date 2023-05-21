@@ -84,8 +84,10 @@ public class LabExaminationsServiceTest {
         ScheduledLabExamination updatedEntity = createScheduledLabExamination();
         ScheduledLabExaminationDto expectedDto = createScheduledLabExaminationDto();
 
-        when(scheduledLabExaminationRepository.findById(id)).thenReturn(Optional.of(entity));
+//        when(scheduledLabExaminationRepository.findById(id)).thenReturn(Optional.of(entity));
+        when(scheduledLabExaminationRepository.findByIdLock(id)).thenReturn(entity);
         when(scheduledLabExaminationRepository.save(entity)).thenReturn(updatedEntity);
+
         when(scheduledLabExaminationMapper.toDto(updatedEntity)).thenReturn(expectedDto);
 
         ScheduledLabExaminationDto result = labExaminationsService.changeExaminationStatus(id, newStatus);

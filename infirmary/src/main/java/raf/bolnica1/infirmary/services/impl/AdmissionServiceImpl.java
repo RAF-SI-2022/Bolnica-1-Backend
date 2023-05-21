@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
@@ -65,6 +66,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     @Caching(evict = {
             @CacheEvict(value = "hospDep", allEntries = true),
             @CacheEvict(value = "hospRoom", allEntries = true)
