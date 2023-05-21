@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.laboratory.dto.lab.workOrder.LabWorkOrderDto;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilter;
 import raf.bolnica1.laboratory.util.dataGenerators.classes.domain.labWorkOrder.LabWorkOrderFilterGenerator;
@@ -251,6 +252,7 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
         }
     }
     @Then("LabWorkOrder je obelezen sa obradjen")
+    @Transactional(timeout = 20)
     public void lab_work_order_je_obelezen_sa_obradjen() {
         try{
             Long labWorkOrderId=labWorkOrderRepository.findByPrescription(prescriptionCreateDtos.get(0)
@@ -419,6 +421,7 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
         }
     }
     @When("dobavimo rezultate oni su tacni")
+    @Transactional(timeout = 20)
     public void dobavimo_rezultate_oni_su_tacni() {
         try{
 
@@ -507,6 +510,7 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
         }
     }
     @Then("je on azuriran")
+    @Transactional(timeout = 20)
     public void je_on_azuriran() {
         try{
 
@@ -523,6 +527,7 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
     }
 
     @Then("dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder")
+    @Transactional(timeout = 20)
     public void dobavljanje_lab_work_ordera_po_id_daje_bas_taj_lab_work_order() {
 
         PrescriptionCreateDto p=prescriptionCreateDtos.get(0);

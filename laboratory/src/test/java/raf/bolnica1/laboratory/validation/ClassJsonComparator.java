@@ -168,7 +168,10 @@ public class ClassJsonComparator {
             if(!mapB.containsKey(key))continue;
             if(mapB.get(key)==null && mapA.get(key)==null)continue;
             if(mapB.get(key)==null || mapA.get(key)==null)return false;
-            if(!mapA.get(key).equals(mapB.get(key)))return false;
+            if(!mapA.get(key).equals(mapB.get(key))){
+                System.out.println("Polje: " + key + ", vrednost A: " + mapA.get(key) + ", vrednost B: " + mapB.get(key));
+                return false;
+            }
         }
 
         return true;

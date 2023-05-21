@@ -150,7 +150,8 @@ public class LabWorkOrdersServiceTest {
         parameterAnalysisResult.setLabWorkOrder(labWorkOrder);
 
         when(authenticationUtils.getLbzFromAuthentication()).thenReturn("LBZ001");
-        when(labWorkOrderRepository.findById(id)).thenReturn(Optional.of(labWorkOrder));
+//        when(labWorkOrderRepository.findById(id)).thenReturn(Optional.of(labWorkOrder));
+        when(labWorkOrderRepository.findLabWorkOrderById(id)).thenReturn(labWorkOrder);
         when(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(id)).thenReturn(Collections.singletonList(parameterAnalysisResult));
 
         LabWorkOrderMessageDto result = labWorkOrdersService.verifyWorkOrder(id);
@@ -388,7 +389,8 @@ public class LabWorkOrdersServiceTest {
         parameterAnalysisResultDto.getAnalysesParameters().add(analysisParameterDto);
         labWorkOrderDto.getParameterAnalysisResults().add(parameterAnalysisResultDto);
 
-        when(labWorkOrderRepository.findById(1L)).thenReturn(Optional.of(labWorkOrder));
+//        when(labWorkOrderRepository.findById(1L)).thenReturn(Optional.of(labWorkOrder));
+        when(labWorkOrderRepository.findLabWorkOrderById(1L)).thenReturn(labWorkOrder);
         when(labWorkOrderMapper.toDto(labWorkOrder)).thenReturn(labWorkOrderDto);
 
         LabWorkOrderDto result = labWorkOrdersService.findWorkOrder(1L);

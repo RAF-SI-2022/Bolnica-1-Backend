@@ -11,6 +11,7 @@ import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.repository.AnalysisParameterRepository;
 import raf.bolnica1.laboratory.util.dataGenerators.primitives.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PrescriptionCreateDtoGenerator{
         ret.setStatus(PrescriptionStatus.values()[randomLong.getLong(new Long(PrescriptionStatus.values().length) ).intValue()]);
         ret.setType(PrescriptionType.LABORATORIJA);
         ret.setLbp(randomLBP.getFromRandom());
-        ret.setCreationDateTime(randomTimestamp.getFromRandom());
+        ret.setCreationDateTime(new Timestamp(1000*(randomTimestamp.getFromRandom().getTime()/1000)));
         ret.setDepartmentToId(randomLong.getLong(4L));
         ret.setDoctorLbz(randomString.getString(10));
         ret.setComment(randomString.getString(10));
