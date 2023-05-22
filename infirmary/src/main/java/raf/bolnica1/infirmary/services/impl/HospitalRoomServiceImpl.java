@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.dto.hospitalRoom.HospitalRoomCreateDto;
 import raf.bolnica1.infirmary.dto.hospitalRoom.HospitalRoomDto;
@@ -58,6 +59,7 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
     }
 
     @Override
+    @Transactional(timeout = 20)
     @Cacheable(value = "hospRoom", key = "#hospitalRoomId")
     public HospitalRoomDto getHospitalRoomById(Long hospitalRoomId) {
         HospitalRoom hospitalRoom= hospitalRoomRepository.findHospitalRoomById(hospitalRoomId);
