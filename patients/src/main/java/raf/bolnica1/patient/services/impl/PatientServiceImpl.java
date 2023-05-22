@@ -18,14 +18,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.ScheduleExam;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
+import raf.bolnica1.patient.dto.general.ExamForPatientDto;
+import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.exceptions.jwt.NotAuthenticatedException;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
+import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.ScheduleExamRepository;
 import raf.bolnica1.patient.services.PatientService;
 
@@ -39,12 +43,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
-
+    private PatientRepository patientRepository;
     private ScheduleExamRepository scheduleExamRepository;
     private ScheduleExamMapper scheduleExamMapper;
     private RestTemplate employeeRestTemplate;
 
-    public PatientServiceImpl(ScheduleExamRepository scheduleExamRepository, ScheduleExamMapper scheduleExamMapper, @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate) {
+    public PatientServiceImpl(PatientRepository patientRepository, ScheduleExamRepository scheduleExamRepository, ScheduleExamMapper scheduleExamMapper, @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate) {
+        this.patientRepository = patientRepository;
         this.scheduleExamRepository = scheduleExamRepository;
         this.scheduleExamMapper = scheduleExamMapper;
         this.employeeRestTemplate = employeeRestTemplate;
@@ -129,6 +134,18 @@ public class PatientServiceImpl implements PatientService {
             scheduleExamDtoList.add(scheduleExamDto);
         }
         return scheduleExamDtoList;
+    }
+
+    @Override
+    public ExamsForPatientDto getExamsForPatient(String lbp) {
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(()->new RuntimeException(String.format("Patient with lbp %s not found!", lbp)));
+        List<ScheduleExam> exams = scheduleExamRepository.findFromCurrDateForPatient(new Date(System.currentTimeMillis()), lbp);
+
+        List<ExamForPatientDto> examForPatient = new ArrayList<>();
+        for(ScheduleExam scheduleExam : exams){
+            examForPatient.add(new ExamForPatientDto(lbp, scheduleExam.getDateAndTime(), scheduleExam.getDoctorLbz(), scheduleExam.getNote()));
+        }
+        return new ExamsForPatientDto(examForPatient);
     }
 
     private String getLbzFromAuthentication(){
