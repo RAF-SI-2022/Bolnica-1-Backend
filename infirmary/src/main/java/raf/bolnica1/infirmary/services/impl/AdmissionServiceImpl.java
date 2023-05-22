@@ -51,7 +51,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final HospitalizationRepository hospitalizationRepository;
 
 
-
+@Transactional(timeout = 20)
 
     private void increaseHospitalRoomOccupancy(Long hospitalRoomId) {
         HospitalRoom hospitalRoom= hospitalRoomRepository.findHospitalRoomById(hospitalRoomId);
