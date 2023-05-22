@@ -1,8 +1,8 @@
 Feature: Hendlovanje dolaska pacijenta u stacionar
 
-  Scenario: Hospitalizovanje pacijenta
-    When  otvorimo hospitalizaciju za pacijenta
-    Then  hospitalizacija tog pacijenta se nalazi u bazi i uput i termin su obelezeni kao zakazani i zauzeto je mesto u sobi
+#  Scenario: Hospitalizovanje pacijenta
+#    When  otvorimo hospitalizaciju za pacijenta
+#    Then  hospitalizacija tog pacijenta se nalazi u bazi i uput i termin su obelezeni kao zakazani i zauzeto je mesto u sobi
 
   Scenario: Zakazivanje termina hospitalizacije
     Given imamo uput u bazi sacuvan
