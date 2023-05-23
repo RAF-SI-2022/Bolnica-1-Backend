@@ -31,7 +31,7 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
 
 
     @Override
-    //    @CacheEvict(value = "hostRooms", allEntries = true)
+    @CacheEvict(value = "hostRooms", allEntries = true)
     public HospitalRoomDto createHospitalRoom(HospitalRoomCreateDto hospitalRoomCreateDto) {
         HospitalRoom hospitalRoom=hospitalRoomMapper.toEntity(hospitalRoomCreateDto);
         hospitalRoom=hospitalRoomRepository.save(hospitalRoom);
