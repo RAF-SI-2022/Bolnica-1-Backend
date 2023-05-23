@@ -18,7 +18,7 @@ import java.util.Optional;
 @Repository
 public interface HospitalRoomRepository extends JpaRepository<HospitalRoom, Long> {
 
-//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT hr FROM HospitalRoom hr WHERE hr.id=:id")
     HospitalRoom findHospitalRoomById(@Param("id") Long id);
 
