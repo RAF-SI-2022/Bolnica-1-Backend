@@ -1,8 +1,8 @@
 Feature: Osnovne operacije sa bolnickim sobama
 
-#  Scenario: Dodavanje bolnicke sobe
-#    When bolnicka soba napravljena
-#    Then bolnicka soba se nalazi u bazi bolnickih soba
+  Scenario: Dodavanje bolnicke sobe
+    When bolnicka soba napravljena
+    Then bolnicka soba se nalazi u bazi bolnickih soba
 
 
   Scenario: Brisanje bolnicke sobe

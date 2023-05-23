@@ -59,7 +59,7 @@ public class HospitalRoomServiceImpl implements HospitalRoomService {
     }
 
     @Override
-    @Transactional(timeout = 20)
+//    @Transactional(timeout = 20)
     @Cacheable(value = "hospRoom", key = "#hospitalRoomId")
     public HospitalRoomDto getHospitalRoomById(Long hospitalRoomId) {
         HospitalRoom hospitalRoom= hospitalRoomRepository.findHospitalRoomById(hospitalRoomId);
