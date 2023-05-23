@@ -77,4 +77,10 @@ public class PatientController {
     }
 
 
+    @GetMapping("/examinations/{lbp}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV')")
+    public ResponseEntity<ExamsForPatientDto> patientExams(@PathVariable("lbp") String lbp){
+        return new ResponseEntity<>(patientService.getExamsForPatient(lbp), HttpStatus.OK);
+    }
+
 }

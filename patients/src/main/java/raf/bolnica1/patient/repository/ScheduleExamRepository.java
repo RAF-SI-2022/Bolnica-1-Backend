@@ -53,4 +53,8 @@ public interface ScheduleExamRepository extends JpaRepository<ScheduleExam, Long
     @Query("SELECT se FROM ScheduleExam se WHERE se.doctorLbz = :lbz " +
             "AND :date <= se.dateAndTime")
     List<ScheduleExam> findFromCurrDateAndDoctorLock(@Param("date") Date date, @Param("lbz") String lbz);
+
+    @Query("SELECT se FROM ScheduleExam se WHERE se.patient.lbp = :lbp " +
+            "AND :date <= se.dateAndTime")
+    List<ScheduleExam> findFromCurrDateForPatient(@Param("date") Date date, @Param("lbp") String lbp);
 }

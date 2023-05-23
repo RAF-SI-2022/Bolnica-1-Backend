@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
+import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 
@@ -27,4 +28,6 @@ public interface PatientService {
     Page<ScheduleExamDto> findScheduledExaminationsForMedSister(int page, int size);
 
     List<ScheduleExamDto> findScheduledExaminationsForDoctorAll(String lbz);
+
+    ExamsForPatientDto getExamsForPatient(String lbp);
 }

@@ -31,7 +31,8 @@ public class DevHospitalRoomCreateDtoGenerator {
         ret.setIdDepartment(devRandomLong.getLong(20L));
         ret.setRoomNumber(devRandomLong.getLong(10L).intValue());
         ret.setName(devRandomNames.getFromRandom());
-        ret.setCapacity(devRandomLong.getLong(10L).intValue());
+//        ret.setCapacity(devRandomLong.getLong(10L).intValue());
+        ret.setCapacity(20);
         ret.setDescription(devRandomString.getString(10));
 
         return ret;

@@ -51,7 +51,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final HospitalizationRepository hospitalizationRepository;
 
 
-@Transactional(timeout = 20)
+//@Transactional(timeout = 20)
 
     private void increaseHospitalRoomOccupancy(Long hospitalRoomId) {
         HospitalRoom hospitalRoom= hospitalRoomRepository.findHospitalRoomById(hospitalRoomId);
@@ -75,6 +75,7 @@ public class AdmissionServiceImpl implements AdmissionService {
 
         Hospitalization hospitalization= hospitalizationMapper.toEntity(hospitalizationCreateDto,hospitalRoomRepository,prescriptionRepository,authorization);
         if(hospitalization.getHospitalRoom().getOccupancy() == hospitalization.getHospitalRoom().getCapacity()) {
+            System.err.println("id sobe je: " + hospitalization.getHospitalRoom().getId());
             throw new HospitalRoomFullException("This hospital room is full, please try to fill another one");
         }
         hospitalization=hospitalizationRepository.save(hospitalization);
