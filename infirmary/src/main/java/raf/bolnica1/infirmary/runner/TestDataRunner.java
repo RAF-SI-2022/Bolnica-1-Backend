@@ -78,11 +78,11 @@ public class TestDataRunner implements CommandLineRunner {
             hospitalRoomService.createHospitalRoom(devHospitalRoomCreateDtoGenerator.getHospitalRoomCreateDto());
         }
 
-        for(int i=scheduledAppointmentCount;i<Math.min(scheduledAppointmentCount+hospitalizationCount,prescriptionCount);i++){
-            admissionService.createHospitalization(devHospitalizationCreateDtoGenerator
-                    .getHospitalizationCreateDto((long)(devRandomLong.getLong(hospitalRoomRepository.count())+1), (long)(i+1)),
-                    "Bearer "+ devJwtTokenGetter.getDrMedSpec());
-        }
+//        for(int i=scheduledAppointmentCount;i<Math.min(scheduledAppointmentCount+hospitalizationCount,prescriptionCount);i++){
+//            admissionService.createHospitalization(devHospitalizationCreateDtoGenerator
+//                    .getHospitalizationCreateDto((long)(devRandomLong.getLong(hospitalRoomRepository.count())+1), (long)(i+1)),
+//                    "Bearer "+ devJwtTokenGetter.getDrMedSpec());
+//        }
 
         for(int i=0;i<patientStateCount;i++){
             patientStateService.createPatientState(devPatientStateDtoGenerator.getPatientStateCreateDto(
