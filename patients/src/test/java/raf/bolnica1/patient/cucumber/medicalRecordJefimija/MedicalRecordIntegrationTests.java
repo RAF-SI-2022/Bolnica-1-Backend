@@ -56,8 +56,13 @@ public class MedicalRecordIntegrationTests extends MedicalRecordIntegrationTestC
 
     @When("dodamo novog pacijenta u sistem")
     public void dodaj_pacijenta() {
-        PatientCreateDto patientCreateDto = patientCreateDtoGenerator.generatePatientCreateDto();
-        assertTrue(patientCreateDto != null);
+        PatientCreateDto patientCreateDto = null;
+        while(true) {
+            patientCreateDto = patientCreateDtoGenerator.generatePatientCreateDto();
+            if(!patientCreateDto.getLbp().equals("P0007"))
+                break;
+            assertTrue(patientCreateDto != null);
+        }
         Patient patient = patientRepository.findByLbp(patientCreateDto.getLbp()).orElse(null);
 
         if(patient == null) {
