@@ -41,7 +41,8 @@ presubmits:
               # docker compose up -d mysql-patients
               docker compose up -d activemq
               docker compose up -d redis
-              docker compose up -d patients-db
+              docker compose up -d mysql-db
+              # docker compose up -d patients-db
               sleep 60
               
               branch=$PULL_HEAD_REF
