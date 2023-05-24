@@ -1,71 +1,12 @@
 version: '3.9'
 
 services:
-
-  redis:
-    image: redis:7.0.11-alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - my_local_network
-
-  employees-db:
-    image: mysql:8.0
-    container_name: employees-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33060:3306"
-    volumes:
-      - mysql:/var/lib/employees-db
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
-    networks:
-      - my_local_network
-    profiles:
-      - employees
-      - all
-    
-  employees-service:
-    image: harbor.k8s.elab.rs/bolnica-1/employees:latest
-    build: 
-     context: ./employees
-     dockerfile: Dockerfile
-    restart: always
-    container_name: employees
-    ports:
-      - "8080:8080"
-    environment:
-      - spring_profiles_active=dev
-      - spring_database_url=employees-db
-      - spring_database_port=${spring_database_port}
-      - spring_redis_host=redis
-    networks:
-      - my_local_network
-    healthcheck:
-      test: curl --fail http://localhost:8080/api || exit 1
-      interval: 5s
-      retries: 10
-      start_period: 5s
-      timeout: 30s
-    depends_on:
-      employees-db:
-        condition: service_healthy
-    profiles:
-      - employees
-      - all
-
-
+#-------------------------------------------------
+#-----------------Other services------------------
+#-------------------------------------------------
   activemq:
     image: harbor.k8s.elab.rs/bolnica-1/activemq:latest
-    build: 
+    build:
       context: ./activeMQ
       dockerfile: Dockerfile
     restart: always
@@ -85,36 +26,54 @@ services:
     networks:
       - my_local_network
 
-
-
-  patients-db:
-    image: mysql:8.0
-    container_name: patients-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
+  redis:
+    image: redis:7.0.11-alpine
+    container_name: redis
     ports:
-      - "33061:3306"
-    volumes:
-      - mysql:/var/lib/patients-db
+      - "6379:6379"
+    networks:
+      - my_local_network
+
+#-------------------------------------------
+#------------------Services-----------------
+#-------------------------------------------
+  employees-service:
+    image: harbor.k8s.elab.rs/bolnica-1/employees:latest
+    build:
+      context: ./employees
+      dockerfile: Dockerfile
+    restart: always
+    container_name: employees
+    ports:
+      - "8080:8080"
+    environment:
+      - spring_profiles_active=dev
+      - spring_database_url=mysql-db
+      #      - spring_databse_url=employees-db
+      - spring_database_port=${spring_database_port}
+      - spring_redis_host=redis
     networks:
       - my_local_network
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
+      test: curl --fail http://localhost:8080/api || exit 1
+      interval: 5s
       retries: 10
-      start_period: 10s
-      timeout: 10s
+      start_period: 5s
+      timeout: 30s
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    #      employees-db:
+    #        condition: service_healthy
     profiles:
-      - patients
+      - employees
       - all
-       
+
   patients-service:
     image: harbor.k8s.elab.rs/bolnica-1/patients:latest
-    build: 
-     context: ./patients
-     dockerfile: Dockerfile
+    build:
+      context: ./patients
+      dockerfile: Dockerfile
     restart: always
     container_name: patients
     ports:
@@ -124,15 +83,18 @@ services:
       - employee_service_url=http://employees-service:8080/api
       - laboratory_service_url=http://laboratory-service:8083/api
       - spring_profiles_active=dev
-      - spring_database_url=patients-db
+#      - spring_database_url=patients-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      patients-db:
+      mysql-db:
         condition: service_healthy
-      employees-service: 
+#      patients-db:
+#        condition: service_healthy
+      employees-service:
         condition: service_healthy
     healthcheck:
       test: curl --fail http://localhost:8081/api || exit 1
@@ -143,37 +105,12 @@ services:
     profiles:
       - patients
       - all
- 
-      
-      
-  laboratory-db:
-    image: mysql:8.0
-    container_name: laboratory-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33063:3306"
-    volumes:
-      - mysql:/var/lib/laboratory
-    networks:
-      - my_local_network
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
-    profiles:
-      - laboratory
-      - all
-      
+
   laboratory-service:
     image: harbor.k8s.elab.rs/bolnica-1/laboratory:latest
-    build: 
-     context: ./laboratory
-     dockerfile: Dockerfile
+    build:
+      context: ./laboratory
+      dockerfile: Dockerfile
     restart: always
     container_name: laboratory
     ports:
@@ -183,16 +120,17 @@ services:
       - employee_service_url=http://employees-service:8080/api
       - patients_service_url=http://patients-service:8081/api
       - spring_profiles_active=dev
-      - spring_database_url=laboratory-db
+#      - spring_database_url=laboratory-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      laboratory-db:
+      mysql-db:
         condition: service_healthy
-      # employees-service:
-        # condition: service_healthy 
+#      laboratory-db:
+#        condition: service_healthy
       patients-service:
         condition: service_healthy
     healthcheck:
@@ -205,36 +143,11 @@ services:
       - laboratory
       - all
 
-
-  
-  infirmary-db:
-    image: mysql:8.0
-    container_name: infirmary-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33064:3306"
-    volumes:
-      - mysql:/var/lib/infirmary
-    networks:
-      - my_local_network
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
-    profiles:
-      - infirmary
-      - all
-      
   infirmary-service:
     image: harbor.k8s.elab.rs/bolnica-1/infirmary:latest
-    build: 
-     context: ./infirmary
-     dockerfile: Dockerfile
+    build:
+      context: ./infirmary
+      dockerfile: Dockerfile
     restart: always
     container_name: infirmary
     ports:
@@ -245,18 +158,17 @@ services:
       - patients_service_url=http://patients-service:8081/api
       - laboratory_service_url=http://laboratory-service:8083/api
       - spring_profiles_active=dev
-      - spring_database_url=infirmary-db
+#      - spring_database_url=infirmary-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      infirmary-db:
-          condition: service_healthy
-      # employees-service:
-        # condition: service_healthy
-      # patients-service:
-        # condition: service_healthy
+      mysql-db:
+        condition: service_healthy
+#      infirmary-db:
+#          condition: service_healthy
       laboratory-service:
         condition: service_healthy
     healthcheck:
@@ -269,7 +181,120 @@ services:
       - infirmary
       - all
 
-  
+#--------------------------------------------
+#------------------Databases-----------------
+#--------------------------------------------
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql:/var/lib/db
+    networks:
+      - my_local_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 15s
+      retries: 10
+      start_period: 10s
+      timeout: 60s
+
+#  employees-db:
+#    image: mysql:8.0
+#    container_name: employees-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33060:3306"
+#    volumes:
+#      - mysql:/var/lib/employees-db
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    networks:
+#      - my_local_network
+#    profiles:
+#      - employees
+#      - all
+
+#  patients-db:
+#    image: mysql:8.0
+#    container_name: patients-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33061:3306"
+#    volumes:
+#      - mysql:/var/lib/patients-db
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 10s
+#    profiles:
+#      - patients
+#      - all
+      
+#  laboratory-db:
+#    image: mysql:8.0
+#    container_name: laboratory-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33063:3306"
+#    volumes:
+#      - mysql:/var/lib/laboratory
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    profiles:
+#      - laboratory
+#      - all
+
+#  infirmary-db:
+#    image: mysql:8.0
+#    container_name: infirmary-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33064:3306"
+#    volumes:
+#      - mysql:/var/lib/infirmary
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    profiles:
+#      - infirmary
+#      - all
+      
 
 networks:
   my_local_network:

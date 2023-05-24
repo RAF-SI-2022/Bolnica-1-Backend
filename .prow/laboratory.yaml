@@ -41,7 +41,7 @@ presubmits:
               # docker compose up -d mysql-laboratory
               docker compose --profile employees up -d
               docker compose --profile patients up -d
-              docker compose up -d laboratory-db
+              # docker compose up -d laboratory-db
               sleep 60
               
               branch=$PULL_HEAD_REF

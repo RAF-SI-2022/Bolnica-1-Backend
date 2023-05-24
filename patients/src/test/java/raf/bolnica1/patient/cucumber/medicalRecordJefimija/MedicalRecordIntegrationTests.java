@@ -19,6 +19,7 @@ import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.services.MedicalRecordService;
 import raf.bolnica1.patient.services.PatientCrudService;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MedicalRecordIntegrationTests extends MedicalRecordIntegrationTestConfig {
@@ -56,8 +57,13 @@ public class MedicalRecordIntegrationTests extends MedicalRecordIntegrationTestC
 
     @When("dodamo novog pacijenta u sistem")
     public void dodaj_pacijenta() {
-        PatientCreateDto patientCreateDto = patientCreateDtoGenerator.generatePatientCreateDto();
-        assertTrue(patientCreateDto != null);
+        PatientCreateDto patientCreateDto = null;
+        while(true) {
+            patientCreateDto = patientCreateDtoGenerator.generatePatientCreateDto();
+            assertNotNull(patientCreateDto);
+            if(!patientCreateDto.getLbp().equals("P0007"))
+                break;
+        }
         Patient patient = patientRepository.findByLbp(patientCreateDto.getLbp()).orElse(null);
 
         if(patient == null) {
