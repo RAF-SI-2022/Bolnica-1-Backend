@@ -1,6 +1,30 @@
 version: '3.9'
 
 services:
+#-------------------------------------------------
+#-----------------Other services------------------
+#-------------------------------------------------
+  activemq:
+    image: harbor.k8s.elab.rs/bolnica-1/activemq:latest
+    build:
+      context: ./activeMQ
+      dockerfile: Dockerfile
+    restart: always
+    container_name: activemq
+    ports:
+      - "8079:8079"
+      - "8078:8078"
+      - "61616:61616"
+      - "8161:8161"
+    volumes:
+      - ./activemq/data:/data
+      - ./activemq/conf:/conf
+      - ./activemq/logs:/logs
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+    networks:
+      - my_local_network
 
   redis:
     image: redis:7.0.11-alpine
@@ -9,6 +33,175 @@ services:
       - "6379:6379"
     networks:
       - my_local_network
+
+#-------------------------------------------
+#------------------Services-----------------
+#-------------------------------------------
+  employees-service:
+    image: harbor.k8s.elab.rs/bolnica-1/employees:latest
+    build:
+      context: ./employees
+      dockerfile: Dockerfile
+    restart: always
+    container_name: employees
+    ports:
+      - "8080:8080"
+    environment:
+      - spring_profiles_active=dev
+      - spring_database_url=mysql-db
+      #      - spring_databse_url=employees-db
+      - spring_database_port=${spring_database_port}
+      - spring_redis_host=redis
+    networks:
+      - my_local_network
+    healthcheck:
+      test: curl --fail http://localhost:8080/api || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 5s
+      timeout: 30s
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    #      employees-db:
+    #        condition: service_healthy
+    profiles:
+      - employees
+      - all
+
+  patients-service:
+    image: harbor.k8s.elab.rs/bolnica-1/patients:latest
+    build:
+      context: ./patients
+      dockerfile: Dockerfile
+    restart: always
+    container_name: patients
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
+      - employee_service_url=http://employees-service:8080/api
+      - laboratory_service_url=http://laboratory-service:8083/api
+      - spring_profiles_active=dev
+#      - spring_database_url=patients-db
+      - spring_database_url=mysql-db
+      - spring_database_port=${spring_database_port}
+      - spring_redis_host=redis
+    networks:
+      - my_local_network
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+#      patients-db:
+#        condition: service_healthy
+      employees-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:8081/api || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 5s
+      timeout: 30s
+    profiles:
+      - patients
+      - all
+
+  laboratory-service:
+    image: harbor.k8s.elab.rs/bolnica-1/laboratory:latest
+    build:
+      context: ./laboratory
+      dockerfile: Dockerfile
+    restart: always
+    container_name: laboratory
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
+      - employee_service_url=http://employees-service:8080/api
+      - patients_service_url=http://patients-service:8081/api
+      - spring_profiles_active=dev
+#      - spring_database_url=laboratory-db
+      - spring_database_url=mysql-db
+      - spring_database_port=${spring_database_port}
+      - spring_redis_host=redis
+    networks:
+      - my_local_network
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+#      laboratory-db:
+#        condition: service_healthy
+      patients-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:8083/api/laboratory || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 5s
+      timeout: 30s
+    profiles:
+      - laboratory
+      - all
+
+  infirmary-service:
+    image: harbor.k8s.elab.rs/bolnica-1/infirmary:latest
+    build:
+      context: ./infirmary
+      dockerfile: Dockerfile
+    restart: always
+    container_name: infirmary
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
+      - employee_service_url=http://employees-service:8080/api
+      - patients_service_url=http://patients-service:8081/api
+      - laboratory_service_url=http://laboratory-service:8083/api
+      - spring_profiles_active=dev
+#      - spring_database_url=infirmary-db
+      - spring_database_url=mysql-db
+      - spring_database_port=${spring_database_port}
+      - spring_redis_host=redis
+    networks:
+      - my_local_network
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+#      infirmary-db:
+#          condition: service_healthy
+      laboratory-service:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:8084/api/infirmary || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 10s
+      timeout: 30s
+    profiles:
+      - infirmary
+      - all
+
+#--------------------------------------------
+#------------------Databases-----------------
+#--------------------------------------------
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql:/var/lib/db
+    networks:
+      - my_local_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 15s
+      retries: 10
+      start_period: 10s
+      timeout: 60s
 
 #  employees-db:
 #    image: mysql:8.0
@@ -32,63 +225,6 @@ services:
 #    profiles:
 #      - employees
 #      - all
-    
-  employees-service:
-    image: harbor.k8s.elab.rs/bolnica-1/employees:latest
-    build: 
-     context: ./employees
-     dockerfile: Dockerfile
-    restart: always
-    container_name: employees
-    ports:
-      - "8080:8080"
-    environment:
-      - spring_profiles_active=dev
-      - spring_database_url=mysql-db
-#      - spring_databse_url=employees-db
-      - spring_database_port=${spring_database_port}
-      - spring_redis_host=redis
-    networks:
-      - my_local_network
-    healthcheck:
-      test: curl --fail http://localhost:8080/api || exit 1
-      interval: 5s
-      retries: 10
-      start_period: 5s
-      timeout: 30s
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-#      employees-db:
-#        condition: service_healthy
-    profiles:
-      - employees
-      - all
-
-
-  activemq:
-    image: harbor.k8s.elab.rs/bolnica-1/activemq:latest
-    build: 
-      context: ./activeMQ
-      dockerfile: Dockerfile
-    restart: always
-    container_name: activemq
-    ports:
-      - "8079:8079"
-      - "8078:8078"
-      - "61616:61616"
-      - "8161:8161"
-    volumes:
-      - ./activemq/data:/data
-      - ./activemq/conf:/conf
-      - ./activemq/logs:/logs
-    environment:
-      ACTIVEMQ_ADMIN_LOGIN: admin
-      ACTIVEMQ_ADMIN_PASSWORD: admin
-    networks:
-      - my_local_network
-
-
 
 #  patients-db:
 #    image: mysql:8.0
@@ -112,62 +248,6 @@ services:
 #    profiles:
 #      - patients
 #      - all
-       
-  patients-service:
-    image: harbor.k8s.elab.rs/bolnica-1/patients:latest
-    build: 
-     context: ./patients
-     dockerfile: Dockerfile
-    restart: always
-    container_name: patients
-    ports:
-      - "8081:8081"
-    environment:
-      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - employee_service_url=http://employees-service:8080/api
-      - laboratory_service_url=http://laboratory-service:8083/api
-      - spring_profiles_active=dev
-#      - spring_database_url=patients-db
-      - spring_database_url=mysql-db
-      - spring_database_port=${spring_database_port}
-      - spring_redis_host=redis
-    networks:
-      - my_local_network
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-#      patients-db:
-#        condition: service_healthy
-      employees-service: 
-        condition: service_healthy
-    healthcheck:
-      test: curl --fail http://localhost:8081/api || exit 1
-      interval: 5s
-      retries: 10
-      start_period: 5s
-      timeout: 30s
-    profiles:
-      - patients
-      - all
-
-  mysql-db:
-    image: mysql:8.0
-    container_name: mysql-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-    ports:
-      - "33060:3306"
-    volumes:
-      - mysql:/var/lib/db
-    networks:
-      - my_local_network
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
       
 #  laboratory-db:
 #    image: mysql:8.0
@@ -191,48 +271,7 @@ services:
 #    profiles:
 #      - laboratory
 #      - all
-      
-  laboratory-service:
-    image: harbor.k8s.elab.rs/bolnica-1/laboratory:latest
-    build: 
-     context: ./laboratory
-     dockerfile: Dockerfile
-    restart: always
-    container_name: laboratory
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - employee_service_url=http://employees-service:8080/api
-      - patients_service_url=http://patients-service:8081/api
-      - spring_profiles_active=dev
-#      - spring_database_url=laboratory-db
-      - spring_database_url=mysql-db
-      - spring_database_port=${spring_database_port}
-      - spring_redis_host=redis
-    networks:
-      - my_local_network
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-#      laboratory-db:
-#        condition: service_healthy
-#      employees-service:
-#       condition: service_healthy
-      patients-service:
-        condition: service_healthy
-    healthcheck:
-      test: curl --fail http://localhost:8083/api/laboratory || exit 1
-      interval: 5s
-      retries: 10
-      start_period: 5s
-      timeout: 30s
-    profiles:
-      - laboratory
-      - all
 
-
-  
 #  infirmary-db:
 #    image: mysql:8.0
 #    container_name: infirmary-db
@@ -256,49 +295,6 @@ services:
 #      - infirmary
 #      - all
       
-  infirmary-service:
-    image: harbor.k8s.elab.rs/bolnica-1/infirmary:latest
-    build: 
-     context: ./infirmary
-     dockerfile: Dockerfile
-    restart: always
-    container_name: infirmary
-    ports:
-      - "8084:8084"
-    environment:
-      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
-      - employee_service_url=http://employees-service:8080/api
-      - patients_service_url=http://patients-service:8081/api
-      - laboratory_service_url=http://laboratory-service:8083/api
-      - spring_profiles_active=dev
-#      - spring_database_url=infirmary-db
-      - spring_database_url=mysql-db
-      - spring_database_port=${spring_database_port}
-      - spring_redis_host=redis
-    networks:
-      - my_local_network
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-#      infirmary-db:
-#          condition: service_healthy
-#       employees-service:
-#         condition: service_healthy
-#       patients-service:
-#         condition: service_healthy
-      laboratory-service:
-        condition: service_healthy
-    healthcheck:
-      test: curl --fail http://localhost:8084/api/infirmary || exit 1
-      interval: 5s
-      retries: 10
-      start_period: 10s
-      timeout: 30s
-    profiles:
-      - infirmary
-      - all
-
-  
 
 networks:
   my_local_network:
