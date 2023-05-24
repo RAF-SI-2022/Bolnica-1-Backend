@@ -10,28 +10,28 @@ services:
     networks:
       - my_local_network
 
-  employees-db:
-    image: mysql:8.0
-    container_name: employees-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33060:3306"
-    volumes:
-      - mysql:/var/lib/employees-db
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
-    networks:
-      - my_local_network
-    profiles:
-      - employees
-      - all
+#  employees-db:
+#    image: mysql:8.0
+#    container_name: employees-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33060:3306"
+#    volumes:
+#      - mysql:/var/lib/employees-db
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    networks:
+#      - my_local_network
+#    profiles:
+#      - employees
+#      - all
     
   employees-service:
     image: harbor.k8s.elab.rs/bolnica-1/employees:latest
@@ -44,7 +44,8 @@ services:
       - "8080:8080"
     environment:
       - spring_profiles_active=dev
-      - spring_database_url=employees-db
+      - spring_database_url=mysql-db
+#      - spring_databse_url=employees-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
@@ -56,8 +57,10 @@ services:
       start_period: 5s
       timeout: 30s
     depends_on:
-      employees-db:
+      mysql-db:
         condition: service_healthy
+#      employees-db:
+#        condition: service_healthy
     profiles:
       - employees
       - all
@@ -87,28 +90,28 @@ services:
 
 
 
-  patients-db:
-    image: mysql:8.0
-    container_name: patients-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33061:3306"
-    volumes:
-      - mysql:/var/lib/patients-db
-    networks:
-      - my_local_network
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 10s
-    profiles:
-      - patients
-      - all
+#  patients-db:
+#    image: mysql:8.0
+#    container_name: patients-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33061:3306"
+#    volumes:
+#      - mysql:/var/lib/patients-db
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 10s
+#    profiles:
+#      - patients
+#      - all
        
   patients-service:
     image: harbor.k8s.elab.rs/bolnica-1/patients:latest
@@ -124,14 +127,17 @@ services:
       - employee_service_url=http://employees-service:8080/api
       - laboratory_service_url=http://laboratory-service:8083/api
       - spring_profiles_active=dev
-      - spring_database_url=patients-db
+#      - spring_database_url=patients-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      patients-db:
+      mysql-db:
         condition: service_healthy
+#      patients-db:
+#        condition: service_healthy
       employees-service: 
         condition: service_healthy
     healthcheck:
@@ -143,31 +149,48 @@ services:
     profiles:
       - patients
       - all
- 
-      
-      
-  laboratory-db:
+
+  mysql-db:
     image: mysql:8.0
-    container_name: laboratory-db
+    container_name: mysql-db
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
     ports:
-      - "33063:3306"
+      - "33060:3306"
     volumes:
-      - mysql:/var/lib/laboratory
+      - mysql:/var/lib/db
     networks:
       - my_local_network
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 15s
       retries: 10
       start_period: 10s
       timeout: 60s
-    profiles:
-      - laboratory
-      - all
+      
+#  laboratory-db:
+#    image: mysql:8.0
+#    container_name: laboratory-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33063:3306"
+#    volumes:
+#      - mysql:/var/lib/laboratory
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    profiles:
+#      - laboratory
+#      - all
       
   laboratory-service:
     image: harbor.k8s.elab.rs/bolnica-1/laboratory:latest
@@ -183,16 +206,19 @@ services:
       - employee_service_url=http://employees-service:8080/api
       - patients_service_url=http://patients-service:8081/api
       - spring_profiles_active=dev
-      - spring_database_url=laboratory-db
+#      - spring_database_url=laboratory-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      laboratory-db:
+      mysql-db:
         condition: service_healthy
-      # employees-service:
-        # condition: service_healthy 
+#      laboratory-db:
+#        condition: service_healthy
+#      employees-service:
+#       condition: service_healthy
       patients-service:
         condition: service_healthy
     healthcheck:
@@ -207,28 +233,28 @@ services:
 
 
   
-  infirmary-db:
-    image: mysql:8.0
-    container_name: infirmary-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=db
-    ports:
-      - "33064:3306"
-    volumes:
-      - mysql:/var/lib/infirmary
-    networks:
-      - my_local_network
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      retries: 10
-      start_period: 10s
-      timeout: 60s
-    profiles:
-      - infirmary
-      - all
+#  infirmary-db:
+#    image: mysql:8.0
+#    container_name: infirmary-db
+#    restart: always
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin
+#      - MYSQL_DATABASE=db
+#    ports:
+#      - "33064:3306"
+#    volumes:
+#      - mysql:/var/lib/infirmary
+#    networks:
+#      - my_local_network
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#      interval: 15s
+#      retries: 10
+#      start_period: 10s
+#      timeout: 60s
+#    profiles:
+#      - infirmary
+#      - all
       
   infirmary-service:
     image: harbor.k8s.elab.rs/bolnica-1/infirmary:latest
@@ -245,18 +271,21 @@ services:
       - patients_service_url=http://patients-service:8081/api
       - laboratory_service_url=http://laboratory-service:8083/api
       - spring_profiles_active=dev
-      - spring_database_url=infirmary-db
+#      - spring_database_url=infirmary-db
+      - spring_database_url=mysql-db
       - spring_database_port=${spring_database_port}
       - spring_redis_host=redis
     networks:
       - my_local_network
     depends_on:
-      infirmary-db:
-          condition: service_healthy
-      # employees-service:
-        # condition: service_healthy
-      # patients-service:
-        # condition: service_healthy
+      mysql-db:
+        condition: service_healthy
+#      infirmary-db:
+#          condition: service_healthy
+#       employees-service:
+#         condition: service_healthy
+#       patients-service:
+#         condition: service_healthy
       laboratory-service:
         condition: service_healthy
     healthcheck:
