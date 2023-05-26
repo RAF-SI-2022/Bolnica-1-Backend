@@ -1,0 +1,6 @@
+{
+    "instance-count": 8,
+    "showPackets" : false,
+    "localPort" : 9001,
+    "masterPort" : 9000
+}
