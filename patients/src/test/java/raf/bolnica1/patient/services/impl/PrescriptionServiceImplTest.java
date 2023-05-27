@@ -25,6 +25,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.patient.cucumber.validation.ClassJsonComparator;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
@@ -75,6 +76,8 @@ public class PrescriptionServiceImplTest {
     private PatientRepository patientRepository;
     @Mock
     private LabResultsRepository labResultsRepository;
+
+    private ClassJsonComparator classJsonComparator=ClassJsonComparator.getInstance();
 
 
     @Before
@@ -216,6 +219,7 @@ public class PrescriptionServiceImplTest {
         assertEquals(2, result.getTotalElements());
         assertEquals(0, result.getNumber());
 
+        assertTrue(classJsonComparator.compareListCommonFields(result.getContent(),prescriptionDtos));
 
     }
 
