@@ -28,8 +28,8 @@ public class HospitalRoomGenerator {
 
         HospitalRoom ret=new HospitalRoom();
 
-        ret.setCapacity(randomLong.getLong(new Long(10)).intValue());
-        ret.setOccupancy(randomLong.getLong(new Long(ret.getCapacity()+1) ).intValue());
+        ret.setCapacity(randomLong.getLong(new Long(10)).intValue()+1);
+        ret.setOccupancy(0);
         ret.setRoomNumber(randomLong.getLong(new Long(100) ).intValue() );
         ret.setName(randomNames.getFromRandom());
         ret.setDescription(randomString.getString(10 ));
