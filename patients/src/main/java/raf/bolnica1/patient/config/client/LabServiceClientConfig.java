@@ -17,7 +17,7 @@ public class LabServiceClientConfig {
     @Qualifier("labRestTemplate")
     public RestTemplate labServiceRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(laboratoryServiceUrl+"/laboratory"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(laboratoryServiceUrl));
         return restTemplate;
     }
 }
