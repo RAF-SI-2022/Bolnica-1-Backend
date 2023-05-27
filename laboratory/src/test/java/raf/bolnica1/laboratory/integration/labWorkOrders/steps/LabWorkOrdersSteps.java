@@ -527,13 +527,15 @@ public class LabWorkOrdersSteps extends LabWorkOrdersIntegrationTestConfig {
     }
 
     @Then("dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder")
-    @Transactional(timeout = 20)
+    //@Transactional(timeout = 20)
     public void dobavljanje_lab_work_ordera_po_id_daje_bas_taj_lab_work_order() {
 
         PrescriptionCreateDto p=prescriptionCreateDtos.get(0);
         LabWorkOrder lwo=labWorkOrderRepository.findByPrescription(p.getPid()).get();
 
         LabWorkOrderDto labWorkOrderDto=labWorkOrdersService.findWorkOrder(lwo.getId());
+
+        //System.out.println(lwo.getPrescription()+" "+lwo.getId()+" "+labWorkOrderDto.getPrescription()+" OPALA");
 
         Assertions.assertTrue(classJsonComparator.compareCommonFields(labWorkOrderDto.getPrescription(),
                 lwo.getPrescription()));
