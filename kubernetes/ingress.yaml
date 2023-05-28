@@ -28,7 +28,7 @@ metadata:
   name: bolnica-1-ingress-api
   annotations:
    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /api/$2
 spec:
   ingressClassName: nginx
  # tls:
@@ -47,7 +47,7 @@ spec:
               port:
                 number: 8080
         - pathType: Prefix
-          path: "/api/patient(/|$)(.*)"
+          path: "/api/patients(/|$)(.*)"
           backend:
             service:
               name: patients-service
