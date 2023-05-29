@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: harbor.k8s.elab.rs/bolnica-1/employees
+  pullPolicy: Always
+  tag: "latest"
+
+env:
+  springDatasourceUrl: jdbc:mysql://bolnica-1-mysql2:3306/employees?createDatabaseIfNotExist=true
+
+service:
+  type: ClusterIP
+  name: employees-service
+  port: 8080
+  targetPort: 8080
+
