@@ -9,6 +9,15 @@ function getError(prompt) {
     return errors[prompt]
 }
 
+function validateObject(object, entries){
+    // returns 1 if valid, 0 otherwise
+    for(let entry of entries){
+        if(!object[entry]) return 0;
+    }
+    return 1;
+}
+
 module.exports = {
-    getError
+    getError,
+    validateObject
 }
