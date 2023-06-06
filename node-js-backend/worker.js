@@ -11,13 +11,15 @@ let port = parseInt(config.localPort) + instance;
 console.log(`Scrapper instance : ${instance}`);
 
 const server = http.createServer((req, res) => {
-    const { method, url } = req;
-    let pathOfUrl = ( url ) => {};
+    let { method, url } = req;
     let getHandler = ( method, path) => {
         const fs = require('fs');
         const paths = require('path');
 
-        const filePath = './paths/' + method + url;
+        if(url.endsWith('/')) url = url.substring(0, url.length-1); // make sure that random '/' at the doesn't break pathing
+        const filePath = './paths/' + method + url + ".js";
+
+        console.log(filePath);
 
         if (fs.existsSync(paths.resolve(filePath))) {
             const stats = fs.statSync(paths.resolve(filePath));
@@ -27,12 +29,13 @@ const server = http.createServer((req, res) => {
             } else if (stats.isDirectory()) {
                 // Load a script with input?
             }
-            
+        } else {
             res.statusCode = 404;
             res.setHeader('Content-Type', 'text/plain');
             res.end('404 Not Found!');
-            return res;
         }
+
+        return res;
     }
 
     getHandler(method, url);
