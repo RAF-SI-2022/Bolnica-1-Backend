@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import raf.bolnica1.infirmary.domain.DischargeList;
+import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
 import raf.bolnica1.infirmary.mapper.DischargeListMapper;
@@ -14,6 +15,7 @@ import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.services.DischargeListService;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @AllArgsConstructor
 @Service
@@ -31,6 +33,9 @@ public class DischargeListServiceImpl implements DischargeListService {
     public DischargeListDto createDischargeList(CreateDischargeListDto createDischargeListDto) {
         DischargeList dischargeList= dischargeListMapper.toEntity(createDischargeListDto,hospitalizationRepository);
         dischargeList=dischargeListRepository.save(dischargeList);
+        Hospitalization hospitalization=hospitalizationRepository.findHospitalizationById(createDischargeListDto.getHospitalizationId());
+        hospitalization.setDischargeDateAndTime(new Timestamp(System.currentTimeMillis()));
+        hospitalizationRepository.save(hospitalization);
         return dischargeListMapper.toDto(dischargeList);
     }
 
