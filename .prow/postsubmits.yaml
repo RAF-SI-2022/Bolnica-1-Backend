@@ -1,0 +1,136 @@
+postsubmits:
+  - name: post-bolnica-2-backend-dev-deploy
+    labels:
+      preset-github-ro-token: "true"
+      preset-harbor-robot-push: "true"
+    always_run: true
+    decorate: true
+    branches:
+      - ^main$
+      # Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
+      # - ^v\d+\.\d+\.\d+.*
+    spec:
+      serviceAccountName: prow-admin
+      containers:
+        - image: harbor.k8s.elab.rs/base-images/base:java-19-node-18-docker
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+
+              start-docker.sh
+
+              docker login -u $HARBOR_USERNAME -p $HARBOR_PASSWORD harbor.k8s.elab.rs
+
+              # Trenutni branch i commit hash
+              commit_hash=$(git rev-parse HEAD)
+
+              
+              # build images
+              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:latest ./employees
+              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:latest ./patients
+              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:latest ./laboratory
+              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:latest ./infirmary
+              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:latest ./activemq
+              
+              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash ./employees
+              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash ./patients
+              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash ./laboratory
+              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash ./infirmary
+              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash ./activemq
+
+              
+              # push images
+              docker push harbor.k8s.elab.rs/bolnica-1/employees:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/patients:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/activemq:latest
+
+              docker push harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash
+              
+
+              # sed --in-place "s;__COMMIT_HASH__;$commit_hash;g" kubernetes/
+              # find . -type f -exec sed -i.bak "s;__COMMIT_HASH__;$commit_hash;g" {} \;
+
+              # kubectl apply -f kubernetes/bolnica-1 --set git_version=$commit_hash
+
+              # update dev helm chart
+              helm upgrade bolnica-1-prod ./kubernetes/bolnica-1 --reuse-values --set git_version=$commit_hash -n bolnica-1-dev
+
+          securityContext:
+            privileged: true
+          imagePullPolicy: Always
+
+#  - name: post-bolnica-1-backend-prod-deploy
+#    labels:
+#      preset-github-ro-token: "true"
+#      preset-harbor-robot-push: "true"
+#    always_run: true
+#    decorate: true
+#    branches:
+#      - ^production$
+      # Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
+      # - ^v\d+\.\d+\.\d+.*
+#    spec:
+#      serviceAccountName: prow-admin
+#      containers:
+#        - image: harbor.k8s.elab.rs/base-images/base:java-19-node-18-docker
+#          command:
+#            - /bin/bash
+#            - -c
+#            - |
+#              set -euo pipefail
+
+#              start-docker.sh
+
+#              docker login -u $HARBOR_USERNAME -p $HARBOR_PASSWORD harbor.k8s.elab.rs
+
+              # Trenutni branch i commit hash
+#              commit_hash=$(git rev-parse HEAD)
+
+              
+              # build images
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:latest ./employees
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:latest ./patients
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:latest ./laboratory
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:latest ./infirmary
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:latest ./activemq
+              
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash ./employees
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash ./patients
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash ./laboratory
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash ./infirmary
+#              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash ./activemq
+
+              
+              # push images
+#              docker push harbor.k8s.elab.rs/bolnica-1/employees:latest
+#              docker push harbor.k8s.elab.rs/bolnica-1/patients:latest
+#              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:latest
+#              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:latest
+#              docker push harbor.k8s.elab.rs/bolnica-1/activemq:latest
+
+#              docker push harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash
+#              docker push harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash
+#              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash
+#              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash
+#              docker push harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash
+              
+
+              # sed --in-place "s;__COMMIT_HASH__;$commit_hash;g" kubernetes/
+              # find . -type f -exec sed -i.bak "s;__COMMIT_HASH__;$commit_hash;g" {} \;
+
+              # kubectl apply -f kubernetes/bolnica-1 --set git_version=$commit_hash
+
+              # update dev helm chart
+#              helm upgrade bolnica-1-prod ./kubernetes/bolnica-1 --reuse-values --set git_version=$commit_hash -n bolnica-1-prod
+
+#          securityContext:
+#            privileged: true
+#          imagePullPolicy: Always
