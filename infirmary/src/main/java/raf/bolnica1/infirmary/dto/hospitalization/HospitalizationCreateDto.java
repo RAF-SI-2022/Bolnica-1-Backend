@@ -19,7 +19,6 @@ public class HospitalizationCreateDto implements Serializable {
     private String lbzDoctor;
     private Timestamp patientAdmission;
     private Long hospitalRoomId;
-    private Timestamp dischargeDateAndTime;
     private Long prescriptionId;
     private String note;
 
