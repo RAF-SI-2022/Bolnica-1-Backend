@@ -47,7 +47,6 @@ public class HospitalizationMapper {
         entity.setLbzDoctor(dto.getLbzDoctor());
         entity.setLbzRegister(authenticationUtils.getLbzFromAuthentication());
         entity.setPatientAdmission(dto.getPatientAdmission());
-        entity.setDischargeDateAndTime(dto.getDischargeDateAndTime());
 
         String lbp=entity.getPrescription().getLbp();
         String token = authorization.split(" ")[1];
