@@ -64,7 +64,7 @@ function filterResult(byObject, object, toFilter) {
         for(let key of byObject){
             if(object[key] != item.value[key]) add = false;
         }
-        if(isToday(item.value.dateAndTime)){
+        if(isToday(item.value.dateAndTime) && ["CEKA", "TRENUTNO"].includes(item.value.type)){
             if(add){
                 finalArray.push(item);
             }
