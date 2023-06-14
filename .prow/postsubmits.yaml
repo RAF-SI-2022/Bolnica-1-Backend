@@ -60,10 +60,8 @@ postsubmits:
 
               # kubectl apply -f kubernetes/bolnica-1 --set git_version=$commit_hash
               
-              pwd
-              
               # update dev helm chart
-              helm upgrade bolnica-1-backend b-1-backend-chart --reuse-values --set git_version=$commit_hash -n bolnica-1-dev
+              helm upgrade bolnica-1-backend /kubernetes/b-1-backend-chart --reuse-values -n bolnica-1-dev
 
           securityContext:
             privileged: true

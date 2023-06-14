@@ -4,12 +4,12 @@ metadata:
   labels:
     app: laboratory-service
   name: laboratory-service
-  namespace: bolnica-1-dev
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 8083
       protocol: TCP
-      targetPort: {{ .Values.service.targetPort }}
+      targetPort: 8083
   selector:
     app: laboratory-service
   type: {{ .Values.service.type }}

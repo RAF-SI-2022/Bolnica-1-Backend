@@ -4,12 +4,12 @@ metadata:
   labels:
     app: infirmary-service
   name: infirmary-service
-  namespace: bolnica-1-dev
+  namespace: {{ .Values.namespace  }}
 spec:
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 8084
       protocol: TCP
-      targetPort: {{ .Values.service.targetPort }}
+      targetPort: 8084 
   selector:
     app: infirmary-service
   type: {{ .Values.service.type }}

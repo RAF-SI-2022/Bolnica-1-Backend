@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: infirmary-service
-  name: {{ .Release.Name }}
-  namespace: bolnica-1-dev
+    app: laboratory-service
+  name: laboratory-{{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: infirmary-service
+      app: laboratory-service
   template:
     metadata:
       labels:
-        app: infirmary-service
+        app: laboratory-service
     spec:
       containers:
-        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - image: "{{ .Values.image.repository }}/laboratory:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicly }}
           name: {{ .Chart.Name }}
           env:
             - name: spring.activemq.broker.url
@@ -25,15 +25,13 @@ spec:
             - name: SPRING_ACTIVEMQ_BROKER_URL
               value: {{ .Values.env.activemqUrl }}
             - name: employee.service.url
-              value: {{ .Values.env.employeesServiceUrl}}
+              value: {{ .Values.env.employeesServiceUrl }}
             - name: patients.service.url
               value: {{ .Values.env.patientsServiceUrl }}
-            - name: laboratory.service.url
-              value: {{ .Values.env.laboratoryServiceUrl }}
             - name: spring.profiles.active
               value: dev
             - name: spring.datasource.url
-              value: {{ .Values.env.springDatasourceUrl }}
+              value: {{ .Values.env.laboratoryDBUrl }}
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:
@@ -47,5 +45,5 @@ spec:
             - name: spring.redis.host
               value: redis
           ports:
-            - containerPort: 8084
+            - containerPort: 8083
 

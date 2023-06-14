@@ -4,12 +4,12 @@ metadata:
   labels:
     app: patients-service
   name: patients-service
-  namespace: bolnica-1-dev
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 8081
       protocol: TCP
-      targetPort: {{ .Values.service.targetPort }}
+      targetPort: 8081
   selector:
     app: patients-service
   type: {{ .Values.service.type }}

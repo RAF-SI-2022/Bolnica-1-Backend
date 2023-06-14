@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   labels:
     app: patients-service
-  name: patients-service
-  namespace: bolnica-1-dev
+  name: patients-{{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: patients-service
@@ -16,22 +16,22 @@ spec:
         app: patients-service
     spec:
       containers:
-        - image: harbor.k8s.elab.rs/bolnica-1/patients:0.0.3
-          imagePullPolicy: Always
-          name: patients-service
+        - image: "{{ .Values.image.repository }}/patients:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: {{ .Chart.Name }}
           env:
             - name: spring.activemq.broker.url
-              value: tcp://activemq:61616
+              value: {{ .Values.env.activemqUrl }}
             - name: SPRING_ACTIVEMQ_BROKER_URL
-              value: tcp://activemq:61616
+              value: {{ .Values.env.activemqUrl }}
             - name: employee.service.url
-              value: http://employees-service:8080/api
+              value: {{ .Values.env.employeesServiceUrl }}
             - name: laboratory.service.url
-              value: http://laboratory-service:8083/api
+              value: {{ .Values.env.laboratoryServiceUrl }}
             - name: spring.profiles.active
               value: dev
             - name: spring.datasource.url
-              value: jdbc:mysql://bolnica-1-mysql2:3306/patients?createDatabaseIfNotExist=true
+              value: {{ .Values.env.patientsDBUrl }}
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:
@@ -46,19 +46,4 @@ spec:
               value: redis
           ports:
             - containerPort: 8081
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels: 
-    app: patients-service
-  name: patients-service
-  namespace: bolnica-1-dev
-spec:
-  ports: 
-    - port: 8081
-      protocol: TCP
-      targetPort: 8081
-  selector:
-    app: patients-service
-  type: ClusterIP
+
