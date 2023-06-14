@@ -44,7 +44,7 @@ presubmits:
               # docker compose up -d laboratory-db
 
               docker compose up -d redis mysql-db activemq employees-service patients-service
-              sleep 60
+              sleep 120
               
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -110,6 +110,7 @@ postsubmits:
 
               docker compose up -d redis mysql-db activemq employees-service patients-service
               #docker compose --profile redis mysql-db activemq employees-service patients-service up -d
+              sleep 120
               
               cd "$SERVICE_NAME"
 
