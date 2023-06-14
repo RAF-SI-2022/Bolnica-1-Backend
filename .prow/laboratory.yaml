@@ -39,9 +39,11 @@ presubmits:
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
               # docker compose up -d mysql-laboratory
-              docker compose --profile employees up -d
-              docker compose --profile patients up -d
+              #docker compose --profile employees up -d
+              #docker compose --profile patients up -d
               # docker compose up -d laboratory-db
+
+              docker compose up -d redis mysql-db activemq employees-service patients-service
               sleep 60
               
               branch=$PULL_HEAD_REF
@@ -102,8 +104,12 @@ postsubmits:
               # docker compose up -d mysql-laboratory
               # docker compose --profile laboratory up -d
               # docker compose up -d mysql-laboratory
-              docker compose --profile employees up -d
-              docker compose --profile patients up -d
+
+              #docker compose --profile employees up -d
+              #docker compose --profile patients up -d
+
+              docker compose up -d redis mysql-db activemq employees-service patients-service
+              #docker compose --profile redis mysql-db activemq employees-service patients-service up -d
               
               cd "$SERVICE_NAME"
 
