@@ -4,6 +4,8 @@
 !**/src/test/**/target/
 /activemq
 /activemq-data
+**/node_modules
+**/*.log
 
 ### STS ###
 .apt_generated
@@ -22,3 +24,7 @@
 
 ### VS Code ###
 .vscode/
+
+
+### auth files ###
+**/*.key
