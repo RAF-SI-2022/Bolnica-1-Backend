@@ -25,7 +25,7 @@ metadata:
 apiVersion: mysql.oracle.com/v2
 kind: InnoDBCluster
 metadata:
-  name: bolnica-1-mysql
+  name: bolnica-1-mysql2
   namespace: bolnica-1-dev
 spec:
   # Naziv Secreta i .spec.secretName polje u InnoDBCluster objektu moraju da se poklapaju

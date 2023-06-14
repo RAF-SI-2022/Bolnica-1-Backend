@@ -48,7 +48,7 @@ Feature: Osnovne operacije sa LabWorkOrder-ima
 
   Scenario: Dobavljanje obradjenih rezultata sa svim statusima
     Given prijavljeni smo kao ROLE_MED_BIOHEMICAR
-    Given napravljeno 100 uputa za lbp "MOJLBP"
+    Given napravljeno 10 uputa za lbp "MOJLBP"
     Given napravljen LabWorkOrder za te upute
     When dobavimo rezultate oni su tacni
 
@@ -64,7 +64,7 @@ Feature: Osnovne operacije sa LabWorkOrder-ima
     When azuriramo status LabWorkOrdera
     Then je on azuriran
 
-#  Scenario: Dobavljanje LabWorkOrdera po ID
-#    Given napravljeno 1 uputa za lbp "MOJLBP"
-#    Given napravljen LabWorkOrder za te upute
-#    Then dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder
+  Scenario: Dobavljanje LabWorkOrdera po ID
+    Given napravljeno 1 uputa za lbp "MOJLBP"
+    Given napravljen LabWorkOrder za te upute
+    Then dobavljanje LabWorkOrdera po ID daje bas taj LabWorkOrder

@@ -37,7 +37,6 @@ public class DevHospitalizationCreateDtoGenerator {
         ret.setLbzDoctor(devRandomString.getString(10));
         ret.setPrescriptionId(prescriptionId);
         ret.setPatientAdmission(devRandomTimestamp.getFromRandom());
-        ret.setDischargeDateAndTime(devRandomTimestamp.getFromRandom());
 
         return ret;
     }

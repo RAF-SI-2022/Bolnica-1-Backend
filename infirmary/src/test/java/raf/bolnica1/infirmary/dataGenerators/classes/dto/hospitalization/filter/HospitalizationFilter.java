@@ -29,6 +29,7 @@ public class HospitalizationFilter {
     public boolean applyFilter(HospitalizationDto hospitalizationDto,HospitalizationRepository hospitalizationRepository){
 
         try {
+            if(hospitalizationDto.getDischargeDateAndTime()!=null)return false;
             if (startDate!=null && hospitalizationDto.getPatientAdmission().getTime()<startDate.getTime()) return false;
             if (endDate!=null && hospitalizationDto.getPatientAdmission().getTime()>=(endDate.getTime()+24*60*60*1000) ) return false;
             Hospitalization hospitalization = hospitalizationRepository.findHospitalizationById(hospitalizationDto.getId());

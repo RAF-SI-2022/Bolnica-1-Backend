@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.services.impl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,12 @@ import raf.bolnica1.patient.domain.constants.Gender;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
+import raf.bolnica1.patient.dto.general.ExamForPatientDto;
+import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
+import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.ScheduleExamRepository;
 
 import java.sql.Date;
@@ -53,6 +57,8 @@ class PatientServiceImplTest {
     private ScheduleExamRepository scheduleExamRepository;
     @Mock
     private ScheduleExamMapper scheduleExamMapper;
+    @Mock
+    private PatientRepository patientRepository;
     @InjectMocks
     private PatientServiceImpl patientService;
 
@@ -329,6 +335,48 @@ class PatientServiceImplTest {
             assertTrue(result.isEmpty());
         }
 
+    }
+
+    @Test
+    public void testGetExamsForPatient() {
+        String lbp = "123456789"; // Replace with the desired lbp value
+
+        // Create a sample patient
+        Patient patient = new Patient();
+        patient.setLbp(lbp);
+
+        // Create a list of sample exams
+        List<ScheduleExam> exams = new ArrayList<>();
+        ScheduleExam exam1 = new ScheduleExam();
+        exam1.setDateAndTime(new Timestamp(System.currentTimeMillis()));
+        exam1.setDoctorLbz("Doctor1");
+        exam1.setNote("Note1");
+        exams.add(exam1);
+        ScheduleExam exam2 = new ScheduleExam();
+        exam2.setDateAndTime(new Timestamp(System.currentTimeMillis()));
+        exam2.setDoctorLbz("Doctor2");
+        exam2.setNote("Note2");
+        exams.add(exam2);
+
+        // Mock the patient repository to return the sample patient
+        Mockito.when(patientRepository.findByLbp(lbp)).thenReturn(Optional.of(patient));
+
+        // Mock the schedule exam repository to return the sample exams
+        Mockito.when(scheduleExamRepository.findFromCurrDateForPatient(Mockito.any(Date.class), Mockito.eq(lbp))).thenReturn(exams);
+
+        // Call the method under test
+        ExamsForPatientDto result = patientService.getExamsForPatient(lbp);
+
+        // Assert the result
+        Assertions.assertEquals(exams.size(), result.getExams().size());
+        for (int i = 0; i < exams.size(); i++) {
+            ScheduleExam exam = exams.get(i);
+            ExamForPatientDto examDto = result.getExams().get(i);
+            Assertions.assertEquals(lbp, examDto.getLbp());
+            Assertions.assertEquals(exam.getDateAndTime(), examDto.getExamDate());
+            Assertions.assertEquals(exam.getDoctorLbz(), examDto.getDoctorLbz());
+            Assertions.assertEquals(exam.getNote(), examDto.getNote());
+        }
     }
 
     //Pomocne klase

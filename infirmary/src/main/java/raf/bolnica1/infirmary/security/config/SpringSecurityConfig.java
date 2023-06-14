@@ -17,6 +17,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import raf.bolnica1.infirmary.security.config.filter.SecurityFilter;
 import raf.bolnica1.infirmary.security.config.handler.CustomAuthenticationEntryPoint;
 
+import java.util.Arrays;
+
 @Configuration
 @AllArgsConstructor
 @EnableMethodSecurity
@@ -56,7 +58,7 @@ public class SpringSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://bolnica-1.k8s.elab.rs"));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
