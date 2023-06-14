@@ -110,6 +110,7 @@ postsubmits:
 
               docker compose up -d redis mysql-db activemq employees-service patients-service
               #docker compose --profile redis mysql-db activemq employees-service patients-service up -d
+              sleep 60
               
               cd "$SERVICE_NAME"
 

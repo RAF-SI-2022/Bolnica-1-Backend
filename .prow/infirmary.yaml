@@ -43,8 +43,15 @@ presubmits:
               #docker compose --profile patients up -d
               #docker compose --profile laboratory up -d
               # docker compose up -d infirmary-db
-
-              docker compose up -d redis mysql-db activemq employees-service patients-service laboratory-service
+              
+              docker compose up -d activemq
+              docker compose up -d redis
+              docker compose up -d mysql
+              docker compose up -d employees-service
+              docker compose up -d patients-service
+              docker compose up -d laboratory-service
+              
+              #docker compose up -d redis mysql-db activemq employees-service patients-service laboratory-service
               sleep 60
               
               branch=$PULL_HEAD_REF
@@ -106,12 +113,16 @@ postsubmits:
               # docker compose --profile infirmary up -d
               # docker compose up -d mysql-infirmary
 
-              #docker compose --profile employees up -d
-              #docker compose --profile patients up -d
-              #docker compose --profile laboratory up -d
+              docker compose up -d activemq
+              docker compose up -d redis
+              docker compose up -d mysql
+              docker compose up -d employees-service
+              docker compose up -d patients-service
+              docker compose up -d laboratory-service
 
-              docker compose up -d redis mysql-db activemq employees-service patients-service laboratory-service
+              #docker compose up -d redis mysql-db activemq employees-service patients-service laboratory-service
               #docker compose --profile redis mysql-db activemq employees-service patients-service laboratory-service up -d
+              sleep 60
               
               cd "$SERVICE_NAME"
 
