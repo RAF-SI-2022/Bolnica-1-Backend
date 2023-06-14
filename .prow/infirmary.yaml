@@ -46,7 +46,7 @@ presubmits:
               
               docker compose up -d activemq
               docker compose up -d redis
-              docker compose up -d mysql
+              docker compose up -d mysql-db
               docker compose up -d employees-service
               docker compose up -d patients-service
               docker compose up -d laboratory-service
@@ -115,7 +115,7 @@ postsubmits:
 
               docker compose up -d activemq
               docker compose up -d redis
-              docker compose up -d mysql
+              docker compose up -d mysql-db
               docker compose up -d employees-service
               docker compose up -d patients-service
               docker compose up -d laboratory-service
