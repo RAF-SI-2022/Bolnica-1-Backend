@@ -1,40 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bolnica-1-ingress-frontend
-  #annotations:
-   # cert-manager.io/cluster-issuer: "letsencrypt-prod"
-spec:
-  ingressClassName: nginx
- # tls:
-  #  - hosts:
-   #     - banka.xmudrii.com
-    #  secretName: prod-xmudrii-com-certs
-  rules:
-  - host: "bolnica-1.k8s.elab.rs"
-    http:
-      paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: frontend
-              port:
-                number: 4200
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
   name: bolnica-1-ingress-api
   annotations:
-   # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /api/$2
 spec:
   ingressClassName: nginx
- # tls:
-  #  - hosts:
-   #     - banka.xmudrii.com
-    #  secretName: prod-xmudrii-com-certs
+  tls:
+    - hosts:
+        - bolnica-1.elab.rs
+      secretName: dev-bolnica-1-certs
   rules:
   - host: "bolnica-1.k8s.elab.rs"
     http:
