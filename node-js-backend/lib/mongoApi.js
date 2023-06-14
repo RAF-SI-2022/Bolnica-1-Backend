@@ -28,6 +28,13 @@ async function read(key, collection) {
   return result.value;
 }
 
+async function readAll(collection) {
+  const result = await db.collection(collection).find({});
+  return result.toArray().then( items =>{
+    return items;
+  })
+}
+
 function hoursToMiliseconds(hours) {
   return minutesToMiliseconds(hours * 60)
 }
@@ -44,5 +51,6 @@ function secondsToMiliseconds(seconds) {
 
 module.exports = {
   write,
-  read
+  read,
+  readAll
 }

@@ -20,11 +20,17 @@ let util = {
 
 const server = http.createServer( async (req, res) => {
     let { method, url } = req;
-    let body;
-    try{
-        body = JSON.parse(await getBody(req));
-    }catch(_){
-        body = {};
+    let body = {};
+
+    if(req.method == "POST"){
+      try{
+          body = JSON.parse(await getBody(req));
+      }catch(_){
+          body = {};
+      }
+    }else if(req.method == "GET"){
+      body = getParams(url);
+      url = url.split("?")[0];
     }
 
     let getHandler = async ( method, path) => {
@@ -73,4 +79,19 @@ function getBody(request) {
       resolve(body)
     });
   });
+}
+
+function getParams(path) {
+  let params = {}
+  const qString = path.split('?')[1];
+
+  if (qString) {
+    const pairs = qString.split('&');
+    for (let pair of pairs) {
+      const [key, value] = pair.split('=');
+      params[key] = value;
+    }
+  }
+
+  return params;
 }

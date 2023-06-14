@@ -4,12 +4,17 @@ const config = require('./config.json');
 
 const handleRequest = async (req, res) => {
 
+    console.log("hi1");
+
     let proxyTo = getAvailableLoad();
-    let body;
-    try{
-        body = JSON.parse(await getBody(req));
-    }catch(_){
-        body = {};
+    let body = {};
+
+    if(req.method == "POST"){
+      try{
+          body = JSON.parse(await getBody(req));
+      }catch(_){
+          body = {};
+      }
     }
     const options = {
       hostname: proxyTo.split(":")[0],
@@ -18,14 +23,17 @@ const handleRequest = async (req, res) => {
       method: req.method,
       headers: req.headers
     };
+    console.log("hi2");
 
     const proxyReq = http.request(options, proxyRes => {
         res.writeHead(proxyRes.statusCode, proxyRes.headers);
         proxyRes.pipe(res);
     });
     
+    console.log("hi3");
     proxyReq.write( JSON.stringify(body) );
 
+    console.log(body);
     req.pipe(proxyReq);
 };
 
