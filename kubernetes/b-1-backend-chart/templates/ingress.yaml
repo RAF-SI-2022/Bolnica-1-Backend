@@ -44,3 +44,10 @@ spec:
               name: infirmary-service
               port:
                 number: 8084
+        - pathType: Prefix
+          path: "/api/covid(/|$)(.*)"
+          backend:
+            service:
+              name: covid-service
+              port:
+                number: 9000

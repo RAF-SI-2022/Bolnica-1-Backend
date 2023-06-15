@@ -10,6 +10,8 @@ env:
   patientsDBUrl: jdbc:mysql://bolnica-1-mysql:3306/patietns?createDatabaseIfNotExist=true
   laboratoryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/laboratory?createDatabaseIfNotExist=true
   infirmaryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/infirmary?createDatabaseIfNotExist=true
+  #covidDBUrl: mongodb://raf:raf-si@raf-mongodb-sharded:27017/?retryWrites=true&w=majority
+  covidDBUrl: mongodb+srv://akrstic919rn:aleksandar123@si-mongodb.t3gvnuz.mongodb.net/?retryWrites=true&w=majority
   
   employeesServiceUrl: http://employees-service:8080/api
   patientsServiceUrl: http://patients-service:8081/api
