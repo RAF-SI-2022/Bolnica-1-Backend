@@ -66,8 +66,8 @@ postsubmits:
               
               # update dev helm chart
               #helm upgrade bolnica-1-backend ./kubernetes/b-1-backend-chart --reuse-values -n bolnica-1-dev
-              helm uninstall bolnica-1-backend
-              helm install bolnica-1-backend ./kubernetes/bolnica-1-backend -n bolnica-1-dev
+              helm uninstall bolnica-1-backend -n bolnica-1-dev
+              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart -n bolnica-1-dev
 
           securityContext:
             privileged: true
