@@ -49,7 +49,7 @@ const server = http.createServer( async (req, res) => {
         const paths = require('path');
 
         if(url.endsWith('/')) url = url.substring(0, url.length-1); // make sure that random '/' at the doesn't break pathing
-        url = url.substring(4, url.length-1); // removes /api
+        url = url.substring(4, url.length); // removes /api
         
         console.log('url: ' + url);
         const filePath = './paths/' + method + url + ".js";
