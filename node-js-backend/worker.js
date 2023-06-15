@@ -8,7 +8,7 @@ const validator = require('./lib/validator');
 const errorHandler = require('./lib/errorHandler');
 
 let instance = parseInt(process.argv[2])
-let port = parseInt(config.localPort) + instance;
+let port = 9000;
 
 console.log(`Scrapper instance : ${instance}`);
 
@@ -21,6 +21,17 @@ let util = {
 const server = http.createServer( async (req, res) => {
     let { method, url } = req;
     let body = {};
+    
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Replace * with your desired origin or specify multiple origins
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        // Respond to preflight request
+        res.writeHead(200);
+        res.end();
+        return;
+    }
 
     if(req.method == "POST"){
       try{
@@ -38,6 +49,9 @@ const server = http.createServer( async (req, res) => {
         const paths = require('path');
 
         if(url.endsWith('/')) url = url.substring(0, url.length-1); // make sure that random '/' at the doesn't break pathing
+        url = url.substring(4, url.length-1); // removes /api
+        
+        console.log('url: ' + url);
         const filePath = './paths/' + method + url + ".js";
 
         if (fs.existsSync(paths.resolve(filePath))) {
