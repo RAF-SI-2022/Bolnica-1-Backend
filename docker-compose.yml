@@ -38,13 +38,13 @@ services:
 #------------------Services-----------------
 #-------------------------------------------
 
-  stats-service:
-    #image: harbor.k8s.elab.rs/bolnica-1/stats-service:latest
+  covid-service:
+    image: harbor.k8s.elab.rs/bolnica-1/covid-service:latest
     build:
       context: ./node-js-backend
       dockerfile: Dockerfile
     restart: always
-    container_name: stats-service
+    container_name: covid-service
     environment:
       - MONGO_URI=mongodb://root:admin@mongo:27017/covid?retryWrites=true&w=majority
     ports:
@@ -53,7 +53,7 @@ services:
       - my_local_network
     profiles:
       - all
-      - stats
+      - covid
 
   employees-service:
     image: harbor.k8s.elab.rs/bolnica-1/employees:latest
