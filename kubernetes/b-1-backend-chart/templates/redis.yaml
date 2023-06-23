@@ -25,7 +25,7 @@ metadata:
   labels:
     app: redis
   name: redis
-  namespace: bolnica-1-dev
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
     - port: 6379
