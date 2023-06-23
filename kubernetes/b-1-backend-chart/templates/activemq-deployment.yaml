@@ -4,7 +4,7 @@ metadata:
   labels:
     app: activemq
   name: activemq
-  namespace: bolnica-1-dev
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 1
   selector:

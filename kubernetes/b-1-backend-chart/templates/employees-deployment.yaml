@@ -25,15 +25,12 @@ spec:
             - name: spring.datasource.url
               value: {{ .Values.env.employeesDBUrl }}
             - name: spring.datasource.username
-              valueFrom:
-                secretKeyRef:
-                  name: bolnica-1-mysql-creds
-                  key: rootUser
+              value: root
             - name: spring.datasource.password
               valueFrom:
                 secretKeyRef:
-                  name: bolnica-1-mysql-creds
-                  key: rootPassword
+                  name: mariadb-bolnica-1-creds
+                  key: password
             - name: spring.redis.host
               value: redis
           ports:

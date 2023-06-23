@@ -6,13 +6,17 @@ image:
   tag: "latest"
   
 env:
-  employeesDBUrl: jdbc:mysql://bolnica-1-mysql:3306/employees?createDatabaseIfNotExist=true
-  patientsDBUrl: jdbc:mysql://bolnica-1-mysql:3306/patietns?createDatabaseIfNotExist=true
-  laboratoryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/laboratory?createDatabaseIfNotExist=true
-  infirmaryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/infirmary?createDatabaseIfNotExist=true
-  #covidDBUrl: mongodb://raf:raf-si@raf-mongodb-sharded:27017/?retryWrites=true&w=majority
-  covidDBUrl: mongodb+srv://akrstic919rn:aleksandar123@si-mongodb.t3gvnuz.mongodb.net/?retryWrites=true&w=majority
-  
+ #employeesDBUrl: jdbc:mysql://bolnica-1-mysql:3306/employees?createDatabaseIfNotExist=true
+ #patientsDBUrl: jdbc:mysql://bolnica-1-mysql:3306/patietns?createDatabaseIfNotExist=true
+ #laboratoryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/laboratory?createDatabaseIfNotExist=true
+ #infirmaryDBUrl: jdbc:mysql://bolnica-1-mysql:3306/infirmary?createDatabaseIfNotExist=true
+
+  employeesDBUrl: jdbc:mysql://primary-mariadb-bolnica-1:3306/employees
+  patientsDBUrl: jdbc:mysql://primary-mariadb-bolnica-1:3306/patients
+  laboratoryDBUrl: jdbc:mysql://primary-mariadb-bolnica-1:3306/laboratory
+  infirmaryDBUrl: jdbc:mysql://primary-mariadb-bolnica-1:3306/infirmary
+  covidDBUrl: mongodb://username:password@covid-mongodb-sharded:27017
+
   employeesServiceUrl: http://employees-service:8080/api
   patientsServiceUrl: http://patients-service:8081/api
   laboratoryServiceUrl: http://laboratory-service:8083/api
