@@ -6,7 +6,7 @@ postsubmits:
     always_run: true
     decorate: true
     branches:
-      - ^main$
+      - ^dev$
       # Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
       # - ^v\d+\.\d+\.\d+.*
     spec:
@@ -79,7 +79,7 @@ postsubmits:
     always_run: true
     decorate: true
     branches:
-      - ^production$
+      - ^main$
        #Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
        #- ^v\d+\.\d+\.\d+.*
     spec:
