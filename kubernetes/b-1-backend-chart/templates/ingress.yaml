@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: bolnica-1-ingress-api
+  namespace: {{ .Values.namespace }}
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -10,10 +11,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - bolnica-1.elab.rs
+        - {{ .Values.domain }}
       secretName: dev-bolnica-1-certs
   rules:
-  - host: "bolnica-1.k8s.elab.rs"
+  - host: {{ .Values.domain }}
     http:
       paths:
         - pathType: Prefix
