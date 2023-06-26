@@ -21,7 +21,7 @@ public interface LabWorkOrderRepository extends JpaRepository<LabWorkOrder, Long
     Optional<LabWorkOrder> findByPrescription(@Param("id") Long id);
 
     @Query("SELECT lw FROM LabWorkOrder lw " +
-            "WHERE (:lbp IS NULL OR lw.lbp = :lbp) " +
+            "WHERE (:lbp IS NULL OR lw.lbp LIKE %:lbp%)  " +
             "AND (:fromDate IS NULL OR lw.creationDateTime>=:fromDate)" +
             "AND (:toDate IS NULL OR lw.creationDateTime<:toDate) " +
             "AND (:status IS NULL OR lw.status = :status)")
