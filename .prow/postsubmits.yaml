@@ -28,12 +28,12 @@ postsubmits:
 
               
               # build images
-              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:latest ./employees
-              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:latest ./patients
-              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:latest ./laboratory
-              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:latest ./infirmary
-              #docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:latest ./activeMQ
-              docker build -t harbor.k8s.elab.rs/bolnica-1/covid-service:latest ./node-js-backend
+              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:dev ./employees
+              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:dev ./patients
+              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:dev ./laboratory
+              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:dev ./infirmary
+              #docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:dev ./activeMQ
+              docker build -t harbor.k8s.elab.rs/bolnica-1/covid-service:dev ./node-js-backend
               
               docker build -t harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash ./employees
               docker build -t harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash ./patients
@@ -44,12 +44,12 @@ postsubmits:
 
               
               # push images
-              docker push harbor.k8s.elab.rs/bolnica-1/employees:latest
-              docker push harbor.k8s.elab.rs/bolnica-1/patients:latest
-              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:latest
-              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:latest
-              #docker push harbor.k8s.elab.rs/bolnica-1/activemq:latest
-              docker push harbor.k8s.elab.rs/bolnica-1/covid-service:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/employees:dev
+              docker push harbor.k8s.elab.rs/bolnica-1/patients:dev
+              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:dev
+              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:dev
+              #docker push harbor.k8s.elab.rs/bolnica-1/activemq:dev
+              docker push harbor.k8s.elab.rs/bolnica-1/covid-service:dev
 
               docker push harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash
               docker push harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash
@@ -65,78 +65,82 @@ postsubmits:
               # kubectl apply -f kubernetes/bolnica-1 --set git_version=$commit_hash
               
               # update dev helm chart
-              #helm upgrade bolnica-1-backend ./kubernetes/b-1-backend-chart --reuse-values -n bolnica-1-dev
               helm uninstall bolnica-1-backend -n bolnica-1-dev
-              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart -n bolnica-1-dev
+              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart --set namespace=bolnica-1-dev --set image.tag=dev -n bolnica-1-dev
 
           securityContext:
             privileged: true
           imagePullPolicy: Always
 
-#  - name: post-bolnica-1-backend-prod-deploy
-#    labels:
-#      preset-github-ro-token: "true"
-#      preset-harbor-robot-push: "true"
-#    always_run: true
-#    decorate: true
-#    branches:
-#      - ^production$
-      # Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
-      # - ^v\d+\.\d+\.\d+.*
-#    spec:
-#      serviceAccountName: prow-admin
-#      containers:
-#        - image: harbor.k8s.elab.rs/base-images/base:java-19-node-18-docker
-#          command:
-#            - /bin/bash
-#            - -c
-#            - |
-#              set -euo pipefail
+  - name: post-bolnica-1-backend-prod-deploy
+    labels:
+      preset-github-ro-token: "true"
+      preset-harbor-robot-push: "true"
+    always_run: true
+    decorate: true
+    branches:
+      - ^production$
+       #Matchuje grane i tagove (release-ove) koji su tipa v0.0.0
+       #- ^v\d+\.\d+\.\d+.*
+    spec:
+      serviceAccountName: prow-admin
+      containers:
+        - image: harbor.k8s.elab.rs/base-images/base:java-19-node-18-docker
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
 
-#              start-docker.sh
+              start-docker.sh
 
-#              docker login -u $HARBOR_USERNAME -p $HARBOR_PASSWORD harbor.k8s.elab.rs
+              docker login -u $HARBOR_USERNAME -p $HARBOR_PASSWORD harbor.k8s.elab.rs
 
               # Trenutni branch i commit hash
-#              commit_hash=$(git rev-parse HEAD)
-
+              commit_hash=$(git rev-parse HEAD)
+              
               
               # build images
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:latest ./employees
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:latest ./patients
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:latest ./laboratory
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:latest ./infirmary
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:latest ./activemq
+              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:prod ./employees
+              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:prod ./patients
+              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:prod ./laboratory
+              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:prod ./infirmary
+              #docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:prod ./activeMQ
+              docker build -t harbor.k8s.elab.rs/bolnica-1/covid-service:prod ./node-js-backend
               
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash ./employees
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash ./patients
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash ./laboratory
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash ./infirmary
-#              docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash ./activemq
-
+              docker build -t harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash ./employees
+              docker build -t harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash ./patients
+              docker build -t harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash ./laboratory
+              docker build -t harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash ./infirmary
+              #docker build -t harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash ./activeMQ
+              docker build -t harbor.k8s.elab.rs/bolnica-1/covid-service:$commit_hash ./node-js-backend
+              
               
               # push images
-#              docker push harbor.k8s.elab.rs/bolnica-1/employees:latest
-#              docker push harbor.k8s.elab.rs/bolnica-1/patients:latest
-#              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:latest
-#              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:latest
-#              docker push harbor.k8s.elab.rs/bolnica-1/activemq:latest
+              docker push harbor.k8s.elab.rs/bolnica-1/employees:prod
+              docker push harbor.k8s.elab.rs/bolnica-1/patients:prod
+              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:prod
+              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:prod
+              #docker push harbor.k8s.elab.rs/bolnica-1/activemq:prod
+              docker push harbor.k8s.elab.rs/bolnica-1/covid-service:prod
 
-#              docker push harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash
-#              docker push harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash
-#              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash
-#              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash
-#              docker push harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/employees:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/patients:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/laboratory:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/infirmary:$commit_hash
+              #docker push harbor.k8s.elab.rs/bolnica-1/activemq:$commit_hash
+              docker push harbor.k8s.elab.rs/bolnica-1/covid-service:$commit_hash
               
-
+              
               # sed --in-place "s;__COMMIT_HASH__;$commit_hash;g" kubernetes/
               # find . -type f -exec sed -i.bak "s;__COMMIT_HASH__;$commit_hash;g" {} \;
 
               # kubectl apply -f kubernetes/bolnica-1 --set git_version=$commit_hash
+              
+              # update prod helm chart
+              helm uninstall bolnica-1-backend -n bolnica-1-prod 
+              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart --set namespace=bolnica-1-prod --set image.tag=prod -n bolnica-1-prod
 
-              # update dev helm chart
-#              helm upgrade bolnica-1-prod ./kubernetes/bolnica-1 --reuse-values --set git_version=$commit_hash -n bolnica-1-prod
-
-#          securityContext:
-#            privileged: true
-#          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          imagePullPolicy: Always
