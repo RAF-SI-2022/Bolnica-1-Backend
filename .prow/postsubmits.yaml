@@ -66,7 +66,7 @@ postsubmits:
               
               # update dev helm chart
               helm uninstall bolnica-1-backend -n bolnica-1-dev
-              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart --set namespace=bolnica-1-dev --set image.tag=dev -n bolnica-1-dev
+              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart -n bolnica-1-dev
 
           securityContext:
             privileged: true
@@ -139,7 +139,7 @@ postsubmits:
               
               # update prod helm chart
               helm uninstall bolnica-1-backend -n bolnica-1-prod 
-              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart --set namespace=bolnica-1-prod --set image.tag=prod -n bolnica-1-prod
+              helm install bolnica-1-backend ./kubernetes/b-1-backend-chart --set namespace=bolnica-1-prod --set image.tag=prod --set domain=bolnica-1.k8s.elab.rs -n bolnica-1-prod
 
           securityContext:
             privileged: true
