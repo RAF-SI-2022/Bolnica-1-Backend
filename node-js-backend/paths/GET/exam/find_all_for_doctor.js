@@ -2,7 +2,6 @@ module.exports = async function createExam(res, body, util){
     /*
         lbz: string
     */
-    
         let objectType = [
             "lbz"
         ]
@@ -14,8 +13,8 @@ module.exports = async function createExam(res, body, util){
             return res;
         }
 
-        let result = await util.dbApi.readAll("exams");
-
+        let result = await util.dbApi.readExamsByLbz(body.lbz);
+        console.log('result: ' + result)
 
         if(result.length > 0){
             res.statusCode = 200;
