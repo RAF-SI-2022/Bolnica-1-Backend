@@ -105,7 +105,7 @@ public class LabResultServiceImpl implements LabResultService {
                 labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
 
-                if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName().contains("covid")){
+                if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName().contains("SARS CoV-2")){
                     if(parameterAnalysisResult.getResult().equals("POZ")) {
                         Stats stats = new Stats("POZ");
                         jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
