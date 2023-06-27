@@ -43,6 +43,7 @@ public class LabResultServiceTest {
     private LabWorkOrdersService labWorkOrdersService;
     private JmsTemplate jmsTemplate;
     private String destination;
+    private String destinationStats;
     private MessageHelper messageHelper;
     private LabResultServiceImpl labResultService;
 
@@ -54,9 +55,10 @@ public class LabResultServiceTest {
         labWorkOrdersService=mock(LabWorkOrdersService.class);
         jmsTemplate=mock(JmsTemplate.class);
         destination="mojaDestinacija";
+        destinationStats = "mojaDestinacijaStats";
         messageHelper=mock(MessageHelper.class);
         labResultService=new LabResultServiceImpl(parameterAnalysisResultRepository,labWorkOrderRepository,labWorkOrdersService,
-                jmsTemplate,destination,messageHelper);
+                jmsTemplate,destination, destinationStats, messageHelper);
     }
 
 

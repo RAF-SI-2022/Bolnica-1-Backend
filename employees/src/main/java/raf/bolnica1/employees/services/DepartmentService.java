@@ -26,4 +26,6 @@ public interface DepartmentService {
      List<DoctorDepartmentDto> getAllDoctorsByPbo(String pbo);
 
      Page<DepartmentDto> findHospitalsByDepartmentNameSecond(String name, Integer page, Integer size);
+
+    DepartmentDto getEmployeesDepartmentById(Long id);
 }

@@ -24,4 +24,5 @@ public class DischargeList {
     private Timestamp creation;
     @OneToOne
     private Hospitalization hospitalization;
+    private boolean died;
 }

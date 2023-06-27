@@ -36,6 +36,7 @@ public class DischargeListMapper {
         ret.setLbzPrescribing(dto.getLbzPrescribing());
         ret.setCourseOfDisease(dto.getCourseOfDisease());
         ret.setHospitalizationId(dto.getHospitalizationId());
+        ret.setDied(dto.isDied());
 
         return ret;
     }
@@ -56,6 +57,7 @@ public class DischargeListMapper {
         dto.setLbzPrescribing(entity.getLbzPrescribing());
         dto.setHospitalizationId(entity.getHospitalization().getId());
         dto.setCourseOfDisease(entity.getCourseOfDisease());
+        dto.setDied(entity.isDied());
 
         return dto;
     }
@@ -90,6 +92,7 @@ public class DischargeListMapper {
         entity.setLbzPrescribing(dto.getLbzPrescribing());
         entity.setHospitalization(hospitalizationRepository.findHospitalizationById(dto.getHospitalizationId()));
         entity.setCourseOfDisease(dto.getCourseOfDisease());
+        entity.setDied(dto.isDied());
 
         return entity;
     }
@@ -110,6 +113,7 @@ public class DischargeListMapper {
         entity.setLbzPrescribing(dto.getLbzPrescribing());
         entity.setHospitalization(hospitalizationRepository.findHospitalizationById(dto.getHospitalizationId()));
         entity.setCourseOfDisease(dto.getCourseOfDisease());
+        entity.setDied(dto.isDied());
 
         return entity;
     }

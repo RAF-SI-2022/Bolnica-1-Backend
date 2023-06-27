@@ -78,6 +78,10 @@ public class AdmissionServiceImpl implements AdmissionService {
             System.err.println("id sobe je: " + hospitalization.getHospitalRoom().getId());
             throw new HospitalRoomFullException("This hospital room is full, please try to fill another one");
         }
+
+        if(hospitalization.getPrescription().getReferralReason().equals("Covid"))
+            hospitalization.setCovid(true);
+
         hospitalization=hospitalizationRepository.save(hospitalization);
         ScheduledAppointmentDto scheduledAppointmentDto=getScheduledAppointmentByPrescriptionId(hospitalization.getPrescription().getId());
         if(scheduledAppointmentDto!=null)

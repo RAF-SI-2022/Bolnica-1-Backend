@@ -14,6 +14,7 @@ import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.LabResultDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
+import raf.bolnica1.laboratory.dto.response.covid.Stats;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
@@ -33,6 +34,7 @@ public class LabResultServiceImpl implements LabResultService {
     private final LabWorkOrdersService labWorkOrdersService;
     private JmsTemplate jmsTemplate;
     private String destination;
+    private String destinationStats;
     private MessageHelper messageHelper;
 
     public LabResultServiceImpl(ParameterAnalysisResultRepository parameterAnalysisResultRepository,
@@ -40,12 +42,14 @@ public class LabResultServiceImpl implements LabResultService {
                                 LabWorkOrdersService labWorkOrdersService,
                                 JmsTemplate jmsTemplate,
                                 @Value("${destination.send.completed}") String destination,
+                                @Value("${destination.send.stats}") String destinationStats,
                                 MessageHelper messageHelper) {
         this.parameterAnalysisResultRepository = parameterAnalysisResultRepository;
         this.labWorkOrderRepository = labWorkOrderRepository;
         this.labWorkOrdersService = labWorkOrdersService;
         this.jmsTemplate = jmsTemplate;
         this.destination = destination;
+        this.destinationStats = destinationStats;
         this.messageHelper = messageHelper;
     }
 
@@ -100,6 +104,17 @@ public class LabResultServiceImpl implements LabResultService {
                 labResultDto.setUpperLimit(parameterAnalysisResult.getAnalysisParameter().getParameter().getUpperLimit());
                 labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
+
+                if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName().contains("covid")){
+                    if(parameterAnalysisResult.getResult().equals("POZ")) {
+                        Stats stats = new Stats("POZ");
+                        jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
+                    }
+                    else if(parameterAnalysisResult.getResult().equals("NEG")){
+                        Stats stats = new Stats("NEG");
+                        jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
+                    }
+                }
             }
 
             ObjectMapper objectMapper=new ObjectMapper();

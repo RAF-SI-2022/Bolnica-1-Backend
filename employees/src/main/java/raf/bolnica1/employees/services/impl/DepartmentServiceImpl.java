@@ -109,6 +109,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public DepartmentDto getEmployeesDepartmentById(Long id) {
+        Department department = departmentRepository.findById(id).orElse(null);
+        if(department != null){
+            return departmentMapper.toDto(department);
+        }
+        else
+            throw new RuntimeException();
+    }
+
+    @Override
     @Cacheable(value = "hosp")
     public List<HospitalDto> listAllHospitals() {
         List<HospitalDto> hospitalDtos = new ArrayList<>();
