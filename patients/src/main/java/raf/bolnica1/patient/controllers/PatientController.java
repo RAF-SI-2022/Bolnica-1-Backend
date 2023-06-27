@@ -58,7 +58,7 @@ public class PatientController {
     }
 
     @GetMapping("/find_patient/{lbp}")
-    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' , 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_MED_BIOHEMIJE')")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' , 'ROLE_MED_BIOHEMICAR', 'ROLE_SPEC_MED_BIOHEMIJE', 'ROLE_VISI_LAB_TEHNICAR', 'ROLE_LAB_TEHNICAR')")
     public ResponseEntity<PatientDto> findPatientByLbp(@PathVariable("lbp")String lbp){
         return new ResponseEntity<>(patientCrudService.findPatient(lbp),HttpStatus.OK);
     }
