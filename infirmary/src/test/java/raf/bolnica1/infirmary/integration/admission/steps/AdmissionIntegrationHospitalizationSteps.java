@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalRoomGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalizationGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.PrescriptionGenerator;
@@ -124,6 +125,8 @@ public class AdmissionIntegrationHospitalizationSteps extends AdmissionIntegrati
         }
 
     }
+
+    @Transactional
     @Then("hospitalizacija tog pacijenta se nalazi u bazi i uput i termin su obelezeni kao zakazani i zauzeto je mesto u sobi")
     public void hospitalizacija_tog_pacijenta_se_nalazi_u_bazi_i_uput_i_termin_su_obelezeni_kao_zakazani_i_zauzeto_je_mesto_u_sobi() {
         try{

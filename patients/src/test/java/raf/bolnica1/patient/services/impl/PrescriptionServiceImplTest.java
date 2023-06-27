@@ -25,6 +25,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
+import raf.bolnica1.patient.cucumber.validation.ClassJsonComparator;
 import raf.bolnica1.patient.domain.constants.PrescriptionType;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
@@ -32,6 +33,7 @@ import raf.bolnica1.patient.dto.create.LabResultDto;
 import raf.bolnica1.patient.dto.create.PrescriptionCreateDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.prescription.general.*;
+import raf.bolnica1.patient.dto.prescription.lab.PrescriptionAnalysisDataDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionDoneLabDto;
 import raf.bolnica1.patient.dto.prescription.lab.PrescriptionNewDto;
 import raf.bolnica1.patient.mapper.PrescriptionMapper;
@@ -39,6 +41,7 @@ import raf.bolnica1.patient.messaging.helper.MessageHelper;
 import raf.bolnica1.patient.repository.LabResultsRepository;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.PrescriptionRepository;
+import raf.bolnica1.patient.domain.constants.PrescriptionStatus;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -73,6 +76,8 @@ public class PrescriptionServiceImplTest {
     private PatientRepository patientRepository;
     @Mock
     private LabResultsRepository labResultsRepository;
+
+    private ClassJsonComparator classJsonComparator=ClassJsonComparator.getInstance();
 
 
     @Before
@@ -170,8 +175,38 @@ public class PrescriptionServiceImplTest {
         int page = 0;
         int size = 10;
         List<PrescriptionNewDto> prescriptionDtos = new ArrayList<>();
-        prescriptionDtos.add(new PrescriptionNewDto());
-        prescriptionDtos.add(new PrescriptionNewDto());
+
+
+        PrescriptionNewDto prescription1 = new PrescriptionNewDto();
+        prescription1.setId(1L);
+        prescription1.setType("Type 1");
+        prescription1.setDepartmentFromId(100L);
+        prescription1.setDepartmentToId(200L);
+        prescription1.setLbp("LBP 1");
+        prescription1.setDoctorLbz("Doctor LBZ 1");
+        prescription1.setComment("Comment 1");
+        prescription1.setCreationDate(new Date(System.currentTimeMillis()));
+        prescription1.setStatus(PrescriptionStatus.REALIZOVAN);
+        prescription1.setPrescriptionAnalysisDataDtoList(
+                null
+        );
+
+        PrescriptionNewDto prescription2 = new PrescriptionNewDto();
+        prescription2.setId(2L);
+        prescription2.setType("Type 2");
+        prescription2.setDepartmentFromId(300L);
+        prescription2.setDepartmentToId(400L);
+        prescription2.setLbp("LBP 2");
+        prescription2.setDoctorLbz("Doctor LBZ 2");
+        prescription2.setComment("Comment 2");
+        prescription2.setCreationDate(new Date(System.currentTimeMillis()));
+        prescription2.setStatus(PrescriptionStatus.NEREALIZOVAN);
+        prescription2.setPrescriptionAnalysisDataDtoList(
+                null
+        );
+
+        prescriptionDtos.add(prescription1);
+        prescriptionDtos.add(prescription2);
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth("some_token");
         when(labRestTemplate.exchange(eq("/prescription/" + lbz + "/get_rest/" + lbp), eq(HttpMethod.GET), eq(new HttpEntity<>(null, headers)), any(ParameterizedTypeReference.class)))
@@ -184,6 +219,7 @@ public class PrescriptionServiceImplTest {
         assertEquals(2, result.getTotalElements());
         assertEquals(0, result.getNumber());
 
+        assertTrue(classJsonComparator.compareListCommonFields(result.getContent(),prescriptionDtos));
 
     }
 

@@ -64,7 +64,7 @@ public class RestServiceClientConfig {
     @DependsOn("setLaboratoryServiceUrl")
     public static RestTemplate labPrescriptionRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(laboratoryServiceUrlStatic+"/laboratory/prescription/get_patient"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(laboratoryServiceUrlStatic+"/prescription/get_patient"));
         return restTemplate;
     }
 

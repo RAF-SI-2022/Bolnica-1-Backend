@@ -33,7 +33,7 @@ spec:
             - name: spring.profiles.active
               value: dev
             - name: spring.datasource.url
-              value: jdbc:mysql://bolnica-1-mysql:3306/infirmary?createDatabaseIfNotExist=true
+              value: jdbc:mysql://bolnica-1-mysql2:3306/infirmary?createDatabaseIfNotExist=true
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:

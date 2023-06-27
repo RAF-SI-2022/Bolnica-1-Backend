@@ -19,6 +19,14 @@ spec:
         - image: harbor.k8s.elab.rs/bolnica-1/frontend-angular:latest
           imagePullPolicy: Always
           name: frontend
+          command:
+            - ng
+            - serve
+            - 0.0.0.0
+            - --public-host
+            - "bolnica-1.k8s.elab.rs"
+            - --port
+            - "4200"
           ports:
             - containerPort: 4200
 ---
