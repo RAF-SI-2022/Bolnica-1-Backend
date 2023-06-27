@@ -3,15 +3,21 @@ package raf.bolnica1.patient.services.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
+import raf.bolnica1.patient.dto.create.CovidExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
+import raf.bolnica1.patient.dto.general.CovidExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.mapper.AnamnesisMapper;
+import raf.bolnica1.patient.mapper.CovidExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
 import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
 import raf.bolnica1.patient.repository.*;
@@ -34,6 +40,8 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
     private DiagnosisCodeRepository diagnosisCodeRepository;
     private ExaminationHistoryMapper examinationHistoryMapper;
     private MedicalHistoryMapper medicalHistoryMapper;
+    private CovidExaminationHistoryMapper covidExaminationHistoryMapper;
+    private CovidExaminationHistoryRepository covidExaminationHistoryRepository;
 
 
     @Override
@@ -58,6 +66,35 @@ public class MedicalExaminationServiceImpl implements MedicalExaminationService 
 
         return examinationHistoryMapper.toDto(examinationHistoryRepository.save(examinationHistory));
     }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "medRecord", key = "#lbp")
+    })
+    public CovidExaminationHistoryDto addCovidExamination(String lbp, CovidExaminationHistoryCreateDto covidExaminationHistoryCreateDto) {
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+
+        CovidExaminationHistory covidExaminationHistory = covidExaminationHistoryMapper.toEntity(covidExaminationHistoryCreateDto,medicalRecordRepository);
+        covidExaminationHistory.setMedicalRecord(medicalRecord);
+
+        return covidExaminationHistoryMapper.toDto(covidExaminationHistoryRepository.save(covidExaminationHistory));
+    }
+
+    @Override
+    public Page<CovidExaminationHistoryDto> getCovidExaminationByLbp(String lbp,int page,int size){
+
+        Pageable pageable= PageRequest.of(page,size);
+
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord=medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
+
+        Page<CovidExaminationHistory> covidExaminationHistories=covidExaminationHistoryRepository
+                .findCovidExaminationHHistoryByMedicalRecordPaged(pageable,medicalRecord);
+
+        return covidExaminationHistories.map(covidExaminationHistoryMapper::toDto);
+    }
+
 
     @Override
     @Caching(evict = {

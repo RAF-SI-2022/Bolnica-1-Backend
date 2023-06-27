@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
+import raf.bolnica1.patient.dto.create.CovidExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.ExaminationHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
+import raf.bolnica1.patient.dto.general.CovidExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.ExaminationHistoryDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
@@ -31,6 +33,20 @@ public class MedicalExaminationController {
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<ExaminationHistoryDto> createExaminationHistory(@PathVariable String lbp, @RequestBody ExaminationHistoryCreateDto examinationHistoryCreateDto){
         return new ResponseEntity<>(medicalExaminationService.addExamination(lbp, examinationHistoryCreateDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/covid/{lbp}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    public ResponseEntity<CovidExaminationHistoryDto> createCovidExaminationHistory(@PathVariable String lbp, @RequestBody CovidExaminationHistoryCreateDto covidExaminationHistoryCreateDto){
+        return new ResponseEntity<>(medicalExaminationService.addCovidExamination(lbp, covidExaminationHistoryCreateDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/covid/{lbp}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
+    public ResponseEntity<Page<CovidExaminationHistoryDto>> getCovidExaminationHistoryByLbp(@PathVariable String lbp,
+                                                                                      @RequestParam(defaultValue = "0") Integer page,
+                                                                                      @RequestParam(defaultValue = "2") Integer size){
+        return new ResponseEntity<>(medicalExaminationService.getCovidExaminationByLbp(lbp,page,size), HttpStatus.OK);
     }
 
     @PostMapping("/diagnosis_history/{lbp}")
