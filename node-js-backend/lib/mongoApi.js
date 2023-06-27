@@ -4,10 +4,12 @@ require('dotenv').config();
 console.log('mongo uri: ' + process.env.MONGO_URI);
 const client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 let db;
+let exams;
 
 client.connect().then(_ =>{
   console.log("Connected to the database!");
-  db = client.db("covid")
+  db = client.db("covid");
+  exams = db.collection('exams');
 }).catch(_=>{
   console.log("Error connecting to the database :");
   console.log(_);
@@ -28,6 +30,13 @@ async function read(key, collection) {
     { key } // find key
   );
   return result.value;
+}
+
+async function readExamsByLbz(lbz){
+  const result = await exams.find(
+    { "value.lbz": {$in:[lbz]}}
+  );
+  return result.toArray();
 }
 
 async function readAll(collection) {
@@ -54,5 +63,6 @@ function secondsToMiliseconds(seconds) {
 module.exports = {
   write,
   read,
-  readAll
+  readAll,
+  readExamsByLbz
 }

@@ -52,6 +52,8 @@ const server = http.createServer( async (req, res) => {
         url = url.substring(4, url.length); // removes /api
         
         console.log('url: ' + url);
+        console.log('method: ')
+        console.log('body: ' + body.lbz)
         const filePath = './paths/' + method + url + ".js";
 
         if (fs.existsSync(paths.resolve(filePath))) {
@@ -59,7 +61,7 @@ const server = http.createServer( async (req, res) => {
             if (stats.isFile()) {
                 await loadScriptWithoutCache(filePath)(res, body, util);
             } else if (stats.isDirectory()) {
-                // Load a script with input?
+                console.log('nista od skripte!')
             }
         } else {
             res.statusCode = 422;
