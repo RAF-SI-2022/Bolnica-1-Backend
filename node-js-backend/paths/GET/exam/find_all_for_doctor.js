@@ -25,6 +25,7 @@ module.exports = async function createExam(res, body, util){
                 body,
                 result
             );
+            console.log(ResponseObject);
             res.end(JSON.stringify(ResponseObject));
             return res;
         }else{
