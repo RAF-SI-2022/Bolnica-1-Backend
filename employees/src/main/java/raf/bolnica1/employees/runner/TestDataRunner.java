@@ -198,13 +198,18 @@ public class TestDataRunner implements CommandLineRunner {
         department5.setName("Laboratory");
         department5.setHospital(hospital);
 
-        departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4, department5));
+        Department department6 = new Department();
+        department6.setPbo("D006");
+        department6.setName("Covid");
+        department6.setHospital(hospital);
+
+        departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4, department5, department6));
 
         createEmployee("E0001", "John", "Doe", "M", RoleShort.ROLE_ADMIN, Title.PROF_DR_MED, Profession.MED_SESTRA, department1);
         createEmployee("E0002", "Jane", "Smith", "Z", RoleShort.ROLE_DR_SPEC_ODELJENJA, Title.DR_MED_SPEC, Profession.SPEC_KARDIOLOG, department1);
-        createEmployee("E0003", "Mike", "Brown", "M", RoleShort.ROLE_DR_SPEC, Title.DR_SCI_ME, Profession.SPEC_NEUROLOG, department1);
+        createEmployee("E0003", "Mike", "Brown", "M", RoleShort.ROLE_DR_SPEC, Title.DR_SCI_ME, Profession.SPEC_NEUROLOG, department6);
         createEmployee("E0004", "Mary", "Johnson", "Z", RoleShort.ROLE_DR_SPEC_POV, Title.DIPL_FARM, Profession.SPEC_GASTROENTEROLOG, department1);
-        createEmployee("E0005", "James", "Williams", "M", RoleShort.ROLE_MED_SESTRA, Title.MAG_FARM, Profession.SPEC_UROLOG, department1);
+        createEmployee("E0005", "James", "Williams", "M", RoleShort.ROLE_MED_SESTRA, Title.MAG_FARM, Profession.SPEC_UROLOG, department6);
         createEmployee("E0006", "Lisa", "Jones", "Z", RoleShort.ROLE_VISA_MED_SESTRA, Title.MR, Profession.SPEC_ENDOKRINOLOG, department1);
         createEmployee("E0007", "Nancy", "Miller", "Z", RoleShort.ROLE_VISI_LAB_TEHNICAR, Title.DR_MED_SPEC, Profession.SPEC_BIOHEMICAR, department1);
         createEmployee("E0008", "Paul", "Davis", "M", RoleShort.ROLE_LAB_TEHNICAR, Title.DIPL_FARM, Profession.SPEC_BIOHEMICAR, department1);

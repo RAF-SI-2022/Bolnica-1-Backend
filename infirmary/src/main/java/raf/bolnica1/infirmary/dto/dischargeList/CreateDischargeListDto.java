@@ -21,4 +21,5 @@ public class CreateDischargeListDto implements Serializable {
     private String lbzDepartment;
     private Timestamp creation;
     private Long hospitalizationId;
+    private boolean died;
 }

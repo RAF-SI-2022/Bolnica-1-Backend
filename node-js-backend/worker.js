@@ -6,6 +6,7 @@ const mongoApi = require('./lib/mongoApi');
 const covidApi = require('./lib/covid');
 const validator = require('./lib/validator');
 const errorHandler = require('./lib/errorHandler');
+const stompit = require('stompit');
 
 let instance = parseInt(process.argv[2])
 let port = 9000;

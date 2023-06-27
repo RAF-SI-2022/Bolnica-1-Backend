@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.jms.core.JmsTemplate;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.DischargeListGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalizationGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.PrescriptionGenerator;
@@ -15,6 +16,7 @@ import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
+import raf.bolnica1.infirmary.listener.helper.MessageHelper;
 import raf.bolnica1.infirmary.mapper.DischargeListMapper;
 import raf.bolnica1.infirmary.repository.DischargeListRepository;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
@@ -46,6 +48,8 @@ public class DischargeListUnitTest {
     private DischargeListRepository dischargeListRepository;
     private HospitalizationRepository hospitalizationRepository;
     private DischargeListService dischargeListService;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
 
 
     @BeforeEach
@@ -53,7 +57,9 @@ public class DischargeListUnitTest {
         dischargeListMapper=new DischargeListMapper();
         dischargeListRepository=mock(DischargeListRepository.class);
         hospitalizationRepository=mock(HospitalizationRepository.class);
-        dischargeListService=new DischargeListServiceImpl(dischargeListMapper,dischargeListRepository,hospitalizationRepository);
+        jmsTemplate=mock(JmsTemplate.class);
+        messageHelper=mock(MessageHelper.class);
+        dischargeListService=new DischargeListServiceImpl(dischargeListMapper,dischargeListRepository,hospitalizationRepository, jmsTemplate, messageHelper, "destination");
     }
 
 
