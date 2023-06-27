@@ -14,10 +14,7 @@ import raf.bolnica1.patient.domain.prescription.Prescription;
 import raf.bolnica1.patient.dto.create.MedicalHistoryCreateDto;
 import raf.bolnica1.patient.dto.general.DiagnosisCodeDto;
 import raf.bolnica1.patient.dto.general.MedicalHistoryDto;
-import raf.bolnica1.patient.mapper.AnamnesisMapper;
-import raf.bolnica1.patient.mapper.DiagnosisCodeMapper;
-import raf.bolnica1.patient.mapper.ExaminationHistoryMapper;
-import raf.bolnica1.patient.mapper.MedicalHistoryMapper;
+import raf.bolnica1.patient.mapper.*;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalExaminationService;
 import raf.bolnica1.patient.services.impl.MedicalExaminationServiceImpl;
@@ -45,6 +42,8 @@ public class MedicalExaminationServiceUnitTest {
     private MedicalHistoryMapper medicalHistoryMapper;
 
     private MedicalExaminationService medicalExaminationService;
+    private CovidExaminationHistoryMapper covidExaminationHistoryMapper;
+    private CovidExaminationHistoryRepository covidExaminationHistoryRepository;
 
 
     private ClassJsonComparator classJsonComparator=new ClassJsonComparator(new ObjectMapper());
@@ -66,9 +65,12 @@ public class MedicalExaminationServiceUnitTest {
         diagnosisCodeRepository=mock(DiagnosisCodeRepository.class);
         examinationHistoryMapper=new ExaminationHistoryMapper(new DiagnosisCodeMapper(),anamnesisMapper);
         medicalHistoryMapper=new MedicalHistoryMapper(new DiagnosisCodeMapper(),diagnosisCodeRepository);
+        covidExaminationHistoryMapper=mock(CovidExaminationHistoryMapper.class);
+        covidExaminationHistoryRepository=mock(CovidExaminationHistoryRepository.class);
         medicalExaminationService=new MedicalExaminationServiceImpl(patientRepository,medicalRecordRepository,
                 examinationHistoryRepository,medicalHistoryRepository,anamnesisRepository,anamnesisMapper,
-                diagnosisCodeRepository,examinationHistoryMapper,medicalHistoryMapper);
+                diagnosisCodeRepository,examinationHistoryMapper,medicalHistoryMapper,
+                covidExaminationHistoryMapper,covidExaminationHistoryRepository);
     }
 
 
