@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: covid-service
+  name: covid-{{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount  }}
+  selector:
+    matchLabels:
+      app: covid-service
+  template:
+    metadata:
+      labels:
+        app: covid-service
+    spec:
+      containers:
+        - image: "{{ .Values.image.repository }}/covid-service:{{ .Values.image.tag  }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: {{ .Chart.Name  }}
+          env:
+            - name: MONGO_URI
+              value: {{ .Values.env.covidDBUrl }}
+          ports:
+            - containerPort: 9000

@@ -1,6 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = require('fs').readFileSync(require('path').resolve("./mongo.key"), 'utf-8');
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+// const uri = require('fs').readFileSync(require('path').resolve("./mongo.key"), 'utf-8');
+require('dotenv').config();
+const client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const allowedCacheHold = minutesToMiliseconds(5);
 let collection;
 

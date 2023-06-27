@@ -42,8 +42,11 @@ presubmits:
               docker compose up -d activemq
               docker compose up -d redis
               docker compose up -d mysql-db
+              docker compose up -d employees-service
               # docker compose up -d patients-db
-              sleep 60
+
+              #docker compose up -d redis mysql-db activemq employees-service laboratory-service 
+              sleep 120
               
               branch=$PULL_HEAD_REF
               curr_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -101,8 +104,18 @@ postsubmits:
               # za integracione i end to end testove.
               # Primeri komandi (odkomentirasti neku komandu ili dodati neku svoju):
               # docker compose up -d mysql-patients
-              docker compose --profile patients up -d
               # docker compose up -d mysql-patients
+
+              #docker compose --profile patients up -d
+              docker compose up -d activemq
+              docker compose up -d redis
+              docker compose up -d mysql-db
+              docker compose up -d employees-service
+              
+              # docker compose up -d redis mysql-db activemq employees-service laboratory-service 
+              # docker compose --profile redis mysql-db activemq employees-service laboratory-service up -d 
+              sleep 120
+              
               cd "$SERVICE_NAME"
 
               ref=$(git rev-parse --abbrev-ref HEAD)

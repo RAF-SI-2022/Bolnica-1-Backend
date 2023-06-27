@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mariadb-bolnica-1-creds
+  namespace: $NAMESPACE
+data:
+  # Password je "raf-si".
+  password: cmFmLXNp
+---
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb-bolnica-1
+  namespace: $NAMESPACE
+spec:
+  # Ukoliko vam trebaju DODATNE baze podataka pored ove default,
+  # napraviti bazu podataka koristeci Database resurs, npr:
+  # https://github.com/mariadb-operator/mariadb-operator/blob/main/examples/manifests/mariadb_v1alpha1_database.yaml
+  database: employees
+  username: admin
+  
+  passwordSecretKeyRef:
+    name: mariadb-bolnica-1-creds
+    key: password
+  rootPasswordSecretKeyRef:
+    name: mariadb-bolnica-1-creds
+    key: password
+
+  # Promeniti storageClassName ukoliko deployujete bazu
+  # na cloud hosted Kubernetes. Dostupne StorageClass-ove mozete videti sa:
+  # "kubectl get storageclass".
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 2Gi
+    storageClassName: nfs-client
+    accessModes:
+      - ReadWriteOnce
+
+  ###############################
+  # NE MENJATI PARAMETRE ISPOD! #
+  ###############################
+  connection:
+    secretName: mariadb-conn
+    secretTemplate:
+      key: dsn
+
+  image:
+    repository: mariadb
+    tag: "10.11.3"
+    pullPolicy: IfNotPresent
+
+  port: 3306
+
+  replicas: 3
+
+  replication:
+    primary:
+      podIndex: 0
+      automaticFailover: true
+      service:
+        type: ClusterIP
+      connection:
+        secretName: primary-mariadb-conn
+        secretTemplate:
+          key: dsn
+    replica:
+      waitPoint: AfterCommit
+      gtid: CurrentPos
+      connectionTimeout: 10s
+      connectionRetries: 10
+      syncTimeout: 10s
+    syncBinlog: true
+
+  myCnf: |
+    [mysqld]
+    bind-address=0.0.0.0
+    default_storage_engine=InnoDB
+    binlog_format=row
+    innodb_autoinc_lock_mode=2
+    max_allowed_packet=256M
+
+  service:
+    type: ClusterIP

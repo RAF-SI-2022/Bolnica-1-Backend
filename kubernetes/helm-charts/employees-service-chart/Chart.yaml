@@ -1,9 +1,0 @@
-apiVersion: v2
-name: employees-service-chart
-description: Employee managment service chart
-type: application
-version: 0.1.0
-appVersion: "1.0.0"
-maintainers:
- - email: bolnica1.dev@gmail.com
-   name: devteam

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: patients-service
+  name: patients-{{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: patients-service
+  template:
+    metadata:
+      labels:
+        app: patients-service
+    spec:
+      containers:
+        - image: "{{ .Values.image.repository }}/patients:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: {{ .Chart.Name }}
+          env:
+            - name: spring.activemq.broker.url
+              value: {{ .Values.env.activemqUrl }}
+            - name: SPRING_ACTIVEMQ_BROKER_URL
+              value: {{ .Values.env.activemqUrl }}
+            - name: employee.service.url
+              value: {{ .Values.env.employeesServiceUrl }}
+            - name: laboratory.service.url
+              value: {{ .Values.env.laboratoryServiceUrl }}
+            - name: spring.profiles.active
+              value: dev
+            - name: spring.datasource.url
+              value: {{ .Values.env.patientsDBUrl }}
+            - name: spring.datasource.username
+              value: root
+            - name: spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-bolnica-1-creds
+                  key: password
+            - name: spring.redis.host
+              value: redis
+          ports:
+            - containerPort: 8081
+

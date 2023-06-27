@@ -1,0 +1,9 @@
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: Database
+metadata:
+  name: infirmary
+spec:
+  mariaDbRef:
+    name: mariadb-bolnica-1
+  characterSet: utf8
+  collate: utf8_general_ci
