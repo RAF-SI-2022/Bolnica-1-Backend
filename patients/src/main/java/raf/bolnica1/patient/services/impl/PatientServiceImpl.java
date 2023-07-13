@@ -20,17 +20,19 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.ScheduleExam;
+import raf.bolnica1.patient.domain.ScheduledVaccination;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduledVaccinationCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
-import raf.bolnica1.patient.dto.general.ExamForPatientDto;
-import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
-import raf.bolnica1.patient.dto.general.MessageDto;
-import raf.bolnica1.patient.dto.general.ScheduleExamDto;
+import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.exceptions.jwt.NotAuthenticatedException;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
+import raf.bolnica1.patient.mapper.ScheduledVaccinationMapper;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.ScheduleExamRepository;
+import raf.bolnica1.patient.repository.ScheduledVaccinationRepository;
+import raf.bolnica1.patient.repository.VaccinationRepository;
 import raf.bolnica1.patient.services.PatientService;
 
 import java.net.URI;
@@ -47,12 +49,50 @@ public class PatientServiceImpl implements PatientService {
     private ScheduleExamRepository scheduleExamRepository;
     private ScheduleExamMapper scheduleExamMapper;
     private RestTemplate employeeRestTemplate;
+    private ScheduledVaccinationMapper scheduledVaccinationMapper;
+    private VaccinationRepository vaccinationRepository;
+    private ScheduledVaccinationRepository scheduledVaccinationRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository, ScheduleExamRepository scheduleExamRepository, ScheduleExamMapper scheduleExamMapper, @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate) {
+
+    public PatientServiceImpl(PatientRepository patientRepository, ScheduleExamRepository scheduleExamRepository, ScheduleExamMapper scheduleExamMapper, @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate,
+                              ScheduledVaccinationMapper scheduledVaccinationMapper,
+                              VaccinationRepository vaccinationRepository,
+                              ScheduledVaccinationRepository scheduledVaccinationRepository) {
         this.patientRepository = patientRepository;
         this.scheduleExamRepository = scheduleExamRepository;
         this.scheduleExamMapper = scheduleExamMapper;
         this.employeeRestTemplate = employeeRestTemplate;
+        this.scheduledVaccinationMapper=scheduledVaccinationMapper;
+        this.vaccinationRepository=vaccinationRepository;
+        this.scheduledVaccinationRepository=scheduledVaccinationRepository;
+    }
+
+    @Override
+    public ScheduledVaccinationDto scheduleVaccination(ScheduledVaccinationCreateDto scheduledVaccinationCreateDto) {
+        ScheduledVaccination scheduledVaccination= scheduledVaccinationMapper.toEntity(scheduledVaccinationCreateDto,
+                vaccinationRepository,patientRepository);
+        scheduledVaccination=scheduledVaccinationRepository.save(scheduledVaccination);
+        return scheduledVaccinationMapper.toDto(scheduledVaccination);
+    }
+
+    @Override
+    public ScheduledVaccinationDto updateScheduledVaccination(Long scheduledVaccinationId,
+                                                              PatientArrival arrivalStatus) {
+        ScheduledVaccination scheduledVaccination= scheduledVaccinationRepository.getById(scheduledVaccinationId);
+        scheduledVaccination.setArrivalStatus(arrivalStatus);
+        scheduledVaccination=scheduledVaccinationRepository.save(scheduledVaccination);
+        return scheduledVaccinationMapper.toDto(scheduledVaccination);
+    }
+
+    @Override
+    public Page<ScheduledVaccinationDto> getScheduledVaccinationsWithFilter(int page, int size,Date startDate,
+                                                                            Date endDate,String lbp,String lbz,
+                                                                            Boolean covid,PatientArrival arrivalStatus) {
+        Pageable pageable=PageRequest.of(page,size);
+        if(endDate!=null)endDate=new Date(endDate.getTime()+1000*60*60*24);
+        Page<ScheduledVaccination> scheduledVaccinations=scheduledVaccinationRepository.getScheduledVaccinationsWithFilter(
+                pageable,startDate,endDate,lbp,lbz,covid,arrivalStatus);
+        return scheduledVaccinations.map(scheduledVaccinationMapper::toDto);
     }
 
     @Override

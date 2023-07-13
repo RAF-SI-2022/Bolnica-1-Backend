@@ -18,4 +18,6 @@ public class LabAnalysis {
     private String analysisName;
     @NotBlank
     private String abbreviation;
+
+    private boolean covid=false;
 }

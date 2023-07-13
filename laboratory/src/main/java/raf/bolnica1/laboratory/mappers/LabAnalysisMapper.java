@@ -17,6 +17,7 @@ public class LabAnalysisMapper {
         dto.setId(entity.getId());
         dto.setAnalysisName(entity.getAnalysisName());
         dto.setAbbreviation(entity.getAbbreviation());
+        dto.setCovid(entity.isCovid());
         return dto;
     }
 
@@ -36,6 +37,7 @@ public class LabAnalysisMapper {
 
         entity.setAnalysisName(dto.getAnalysisName());
         entity.setAbbreviation(dto.getAbbreviation());
+        entity.setCovid(dto.isCovid());
         entity.setId(dto.getId());
 
         return entity;

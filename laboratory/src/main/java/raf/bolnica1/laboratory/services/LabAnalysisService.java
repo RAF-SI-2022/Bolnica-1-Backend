@@ -15,6 +15,6 @@ public interface LabAnalysisService {
 
     LabAnalysisDto getLabAnalysis(Long id);
 
-    List<LabAnalysisDto> getAllLabAnalysis();
+    List<LabAnalysisDto> getAllLabAnalysis(boolean covid);
 
 }

@@ -22,6 +22,7 @@ public class VaccinationMapper {
         dto.setType(vaccination.getType());
         dto.setDescription(vaccination.getDescription());
         dto.setManufacturer(vaccination.getManufacturer());
+        dto.setCovid(vaccination.isCovid());
 
         return dto;
 
@@ -36,6 +37,7 @@ public class VaccinationMapper {
         dto.setType(((Vaccination)vaccination[0]).getType());
         dto.setDescription(((Vaccination)vaccination[0]).getDescription());
         dto.setManufacturer(((Vaccination)vaccination[0]).getManufacturer());
+        dto.setCovid(((Vaccination)vaccination[0]).isCovid());
         dto.setVaccinationDate((Date)vaccination[1]);
 
         return dto;
@@ -59,6 +61,7 @@ public class VaccinationMapper {
         vaccinationDto.setManufacturer(vaccinationData.getVaccination().getManufacturer());
         vaccinationDto.setName(vaccinationData.getVaccination().getName());
         vaccinationDto.setType(vaccinationData.getVaccination().getType());
+        vaccinationDto.setCovid(vaccinationData.getVaccination().isCovid());
         return vaccinationDto;
     }
 
@@ -93,6 +96,7 @@ public class VaccinationMapper {
         entity.setType(vaccinationDto.getType());
         entity.setDescription(vaccinationDto.getDescription());
         entity.setManufacturer(vaccinationDto.getManufacturer());
+        entity.setCovid(vaccinationDto.isCovid());
 
         return entity;
 

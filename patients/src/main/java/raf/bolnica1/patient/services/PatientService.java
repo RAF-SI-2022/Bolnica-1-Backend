@@ -1,16 +1,28 @@
 package raf.bolnica1.patient.services;
 
 import org.springframework.data.domain.Page;
+import raf.bolnica1.patient.domain.ScheduledVaccination;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
+import raf.bolnica1.patient.dto.create.ScheduledVaccinationCreateDto;
 import raf.bolnica1.patient.dto.employee.EmployeeDto;
 import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
+import raf.bolnica1.patient.dto.general.ScheduledVaccinationDto;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface PatientService {
+
+    ScheduledVaccinationDto scheduleVaccination(ScheduledVaccinationCreateDto scheduledVaccinationCreateDto);
+    ScheduledVaccinationDto updateScheduledVaccination(Long scheduledVaccinationId,
+                                                       PatientArrival arrivalStatus);
+    Page<ScheduledVaccinationDto> getScheduledVaccinationsWithFilter(int page, int size, Date startDate,
+                                                                     Date endDate, String lbp, String lbz,
+                                                                     Boolean covid, PatientArrival arrivalStatus);
+
 
     MessageDto schedule(ScheduleExamCreateDto scheduleExamCreateDto);
 

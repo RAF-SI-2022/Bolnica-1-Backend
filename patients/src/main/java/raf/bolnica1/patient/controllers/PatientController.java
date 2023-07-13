@@ -8,8 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
+import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.PatientCreateDto;
 import raf.bolnica1.patient.dto.create.PatientUpdateDto;
+import raf.bolnica1.patient.dto.create.ScheduledVaccinationCreateDto;
 import raf.bolnica1.patient.dto.general.*;
 
 
@@ -28,6 +30,34 @@ public class PatientController {
     private PatientService patientService;
     private PatientCrudService patientCrudService;
     private PrescriptionService prescriptionService;
+
+    @PostMapping("/scheduleVaccination")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
+    public ResponseEntity<ScheduledVaccinationDto> scheduleVaccination(@RequestBody ScheduledVaccinationCreateDto scheduledVaccinationCreateDto){
+        return new ResponseEntity<>(this.patientService.scheduleVaccination(scheduledVaccinationCreateDto),HttpStatus.OK);
+    }
+
+    @PostMapping("/updateScheduledVaccination")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
+    public ResponseEntity<ScheduledVaccinationDto> updateScheduledVaccination(@RequestParam Long scheduledVaccinationId,
+                                                                              @RequestParam PatientArrival arrivalStatus){
+        return new ResponseEntity<>(this.patientService.updateScheduledVaccination(scheduledVaccinationId,arrivalStatus),HttpStatus.OK);
+    }
+
+    @GetMapping("/findScheduledVaccinationsWithFilter")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
+    public ResponseEntity<Page<ScheduledVaccinationDto>> findScheduledVaccinationsWithFilter(@RequestParam(defaultValue = "0") Integer page,
+                                                                                             @RequestParam(defaultValue = "2") Integer size,
+                                                                                             @RequestParam(required = false) Date startDate,
+                                                                                             @RequestParam(required = false) Date endDate,
+                                                                                             @RequestParam(required = false) String lbp,
+                                                                                             @RequestParam(required = false) String lbz,
+                                                                                             @RequestParam(required = false) Boolean covid,
+                                                                                             @RequestParam(required = false) PatientArrival arrivalStatus){
+        return new ResponseEntity<>(this.patientService.getScheduledVaccinationsWithFilter(page,size,
+                startDate,endDate,lbp,lbz,covid,arrivalStatus),HttpStatus.OK);
+    }
+
 
     //Registracija pacijenta
     //priv: visa med sesta, med sestra

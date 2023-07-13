@@ -18,4 +18,5 @@ public class LabAnalysisDto implements Serializable {
     private Long id;
     private String analysisName;
     private String abbreviation;
+    private boolean covid;
 }

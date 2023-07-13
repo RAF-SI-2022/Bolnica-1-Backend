@@ -185,7 +185,10 @@ public class LabAnalysisSteps extends LabExaminationIntegrationTestConfig {
     public void dobavljanje_svih_laboratorijskih_analiza_daje_tu_analizu_i_ostale_vec_postojece_analize() {
         try {
             List<LabAnalysis> pom=labAnalysisRepository.findAll();
-            List<LabAnalysisDto> pom2=labAnalysisService.getAllLabAnalysis();
+            List<LabAnalysisDto> pom2=labAnalysisService.getAllLabAnalysis(false);
+            List<LabAnalysisDto> pom3=labAnalysisService.getAllLabAnalysis(true);
+            for(LabAnalysisDto la:pom3)
+                pom2.add(la);
 
             List<LabAnalysis>q1=new ArrayList<>(pom);
             List<LabAnalysisDto>q2=new ArrayList<>(pom2);
