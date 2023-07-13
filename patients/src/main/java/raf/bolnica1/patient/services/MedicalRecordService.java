@@ -17,7 +17,7 @@ public interface MedicalRecordService {
 
     List<AllergyDto> gatherAllergies();
 
-    List<VaccinationDto> gatherVaccines();
+    List<VaccinationDto> gatherVaccines(boolean covid);
 
     List<DiagnosisCodeDto> gatherDiagnosis();
 

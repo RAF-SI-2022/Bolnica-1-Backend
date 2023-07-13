@@ -39,11 +39,12 @@ presubmits:
               # docker compose up -d mysql-patients
               # docker compose --profile patients up -d
               # docker compose up -d mysql-patients
-              docker compose up -d activemq
-              docker compose up -d redis
-              docker compose up -d mysql-db
-              docker compose up -d employees-service
+              #docker compose up -d activemq
+              #docker compose up -d redis
+              #docker compose up -d mysql-db
+              #docker compose up -d employees-service
               # docker compose up -d patients-db
+              docker compose --profile employees up -d
 
               #docker compose up -d redis mysql-db activemq employees-service laboratory-service 
               sleep 120

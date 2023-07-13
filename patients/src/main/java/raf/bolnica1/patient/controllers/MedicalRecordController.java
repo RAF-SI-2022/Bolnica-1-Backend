@@ -53,8 +53,8 @@ public class MedicalRecordController {
 
     @GetMapping("/gather_vaccines")
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
-    public ResponseEntity<List<VaccinationDto>> gatherVaccines(){
-        return new ResponseEntity<>(medicalRecordService.gatherVaccines(), HttpStatus.OK);
+    public ResponseEntity<List<VaccinationDto>> gatherVaccines(@RequestParam Boolean covid){
+        return new ResponseEntity<>(medicalRecordService.gatherVaccines(covid), HttpStatus.OK);
     }
 
     @GetMapping("/gather_diagnosis")

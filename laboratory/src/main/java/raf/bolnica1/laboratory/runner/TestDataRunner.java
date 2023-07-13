@@ -193,15 +193,23 @@ public class TestDataRunner implements CommandLineRunner {
         la20.setId(20L);
         la20.setAnalysisName("SARS CoV-2 antigen");
         la20.setAbbreviation("SARS CoV-2 antigen");
+        la20.setCovid(true);
 
         LabAnalysis la21 = new LabAnalysis();
         la21.setId(21L);
         la21.setAnalysisName("Urin");
         la21.setAbbreviation("URIN");
 
+        LabAnalysis la22 = new LabAnalysis();
+        la22.setId(22L);
+        la22.setAnalysisName("PCR Covid");
+        la22.setAbbreviation("PCR Covid");
+        la22.setCovid(true);
+
+
         labAnalysisRepository.saveAll(Arrays.asList(
                 la1, la2, la3, la4, la5, la6, la7, la8, la9, la10, la11,
-                la12, la13, la14, la15, la16, la17, la18, la19, la20, la21)
+                la12, la13, la14, la15, la16, la17, la18, la19, la20, la21,la22)
         );
 
 
@@ -459,7 +467,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         Parameter p33 = new Parameter();
         p33.setId(33L);
-        p33.setParameterName("SARS CoV-2 antigen");
+        p33.setParameterName("Test");
         p33.setType(ParameterValueType.TEKSTUALNI);
 
         Parameter p34 = new Parameter();
@@ -567,6 +575,7 @@ public class TestDataRunner implements CommandLineRunner {
         p52.setParameterName("Bakterije");
         p52.setType(ParameterValueType.TEKSTUALNI);
 
+
         parameterRepository.saveAll(Arrays.asList(
                 p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12,
                 p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25,
@@ -660,10 +669,15 @@ public class TestDataRunner implements CommandLineRunner {
             makeThemRelatable(la21, i);
         }
 
+
+        AnalysisParameter ap21 = new AnalysisParameter();
+        ap21.setLabAnalysis(la22);
+        ap21.setParameter(p33);
+
         // 18 i 21 su setovani u makeThemRelatable()
         analysisParameterRepository.saveAll(Arrays.asList(
                 ap1, ap2, ap3, ap4, ap5, ap6, ap7, ap8, ap9, ap10, ap11, ap12,
-                ap13, ap14, ap15, ap16, ap17, ap19, ap20)
+                ap13, ap14, ap15, ap16, ap17, ap19, ap20,ap21)
         );
 
         // prescriptions

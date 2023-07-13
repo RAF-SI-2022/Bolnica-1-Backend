@@ -169,6 +169,47 @@ public class TestDataRunner implements CommandLineRunner {
         v5.setManufacturer("Institut za virusologiju, vakcine i serume \"Torlak\", Republika Srbija");
         vaccinationRepository.save(v5);
 
+        Vaccination v6 = new Vaccination();
+        v6.setName("Covid Pfizer");
+        v6.setType(VaccinationType.VIRUS);
+        v6.setDescription("Vakcine protiv covida");
+        v6.setManufacturer("BioNTech");
+        v6.setCovid(true);
+        vaccinationRepository.save(v6);
+
+        Vaccination v7 = new Vaccination();
+        v7.setName("Covid AstraZeneca");
+        v7.setType(VaccinationType.VIRUS);
+        v7.setDescription("Vakcine protiv covida");
+        v7.setManufacturer("Oxford");
+        v7.setCovid(true);
+        vaccinationRepository.save(v7);
+
+        Vaccination v8 = new Vaccination();
+        v8.setName("Covid Janssen");
+        v8.setType(VaccinationType.VIRUS);
+        v8.setDescription("Vakcine protiv covida");
+        v8.setManufacturer("Janssen");
+        v8.setCovid(true);
+        vaccinationRepository.save(v8);
+
+        Vaccination v9 = new Vaccination();
+        v9.setName("Covid Moderna");
+        v9.setType(VaccinationType.VIRUS);
+        v9.setDescription("Vakcine protiv covida");
+        v9.setManufacturer("Moderna");
+        v9.setCovid(true);
+        vaccinationRepository.save(v9);
+
+        Vaccination v10 = new Vaccination();
+        v10.setName("Covid Sputnik");
+        v10.setType(VaccinationType.VIRUS);
+        v10.setDescription("Vakcine protiv covida");
+        v10.setManufacturer("Sputnik");
+        v10.setCovid(true);
+        vaccinationRepository.save(v10);
+
+
         DiagnosisCode d1 = new DiagnosisCode();
         d1.setCode("A15.3");
         d1.setDescription("Tuberkuloza pluća, potvrđena neoznačenim metodama");

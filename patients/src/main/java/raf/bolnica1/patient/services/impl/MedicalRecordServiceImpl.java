@@ -129,11 +129,12 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     @Override
     @Cacheable(value = "vaccines")
-    public List<VaccinationDto> gatherVaccines() {
+    public List<VaccinationDto> gatherVaccines(boolean covid) {
         List<Vaccination> vaccinations =  vaccinationRepository.findAll();
         List<VaccinationDto> vaccinationDtos = new ArrayList<>();
         for(Vaccination a: vaccinations) {
-            vaccinationDtos.add(vaccinationMapper.toDto(a));
+            if(a.isCovid()==covid)
+                vaccinationDtos.add(vaccinationMapper.toDto(a));
         }
         return vaccinationDtos;
     }

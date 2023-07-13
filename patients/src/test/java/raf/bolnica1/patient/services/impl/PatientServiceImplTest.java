@@ -33,8 +33,11 @@ import raf.bolnica1.patient.dto.general.ExamsForPatientDto;
 import raf.bolnica1.patient.dto.general.MessageDto;
 import raf.bolnica1.patient.dto.general.ScheduleExamDto;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
+import raf.bolnica1.patient.mapper.ScheduledVaccinationMapper;
 import raf.bolnica1.patient.repository.PatientRepository;
 import raf.bolnica1.patient.repository.ScheduleExamRepository;
+import raf.bolnica1.patient.repository.ScheduledVaccinationRepository;
+import raf.bolnica1.patient.repository.VaccinationRepository;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -59,6 +62,12 @@ class PatientServiceImplTest {
     private ScheduleExamMapper scheduleExamMapper;
     @Mock
     private PatientRepository patientRepository;
+    @Mock
+    private ScheduledVaccinationMapper scheduledVaccinationMapper;
+    @Mock
+    private VaccinationRepository vaccinationRepository;
+    @Mock
+    private ScheduledVaccinationRepository scheduledVaccinationRepository;
     @InjectMocks
     private PatientServiceImpl patientService;
 

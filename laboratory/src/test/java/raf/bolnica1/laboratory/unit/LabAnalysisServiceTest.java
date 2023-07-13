@@ -105,7 +105,7 @@ public class LabAnalysisServiceTest {
         when(labAnalysisRepository.findAll()).thenReturn(entities);
         when(labAnalysisMapper.toDto(entities)).thenReturn(expectedDtos);
 
-        List<LabAnalysisDto> result = labAnalysisService.getAllLabAnalysis();
+        List<LabAnalysisDto> result = labAnalysisService.getAllLabAnalysis(false);
 
         assertEquals(expectedDtos, result);
         verify(labAnalysisRepository, times(1)).findAll();

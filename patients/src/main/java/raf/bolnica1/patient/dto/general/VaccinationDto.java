@@ -17,5 +17,5 @@ public class VaccinationDto implements Serializable {
     private String description;
     private String manufacturer;
     private Date vaccinationDate;
-
+    private boolean covid;
 }

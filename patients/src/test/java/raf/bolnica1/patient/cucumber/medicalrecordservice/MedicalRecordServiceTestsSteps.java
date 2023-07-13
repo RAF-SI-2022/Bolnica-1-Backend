@@ -121,7 +121,7 @@ public class MedicalRecordServiceTestsSteps extends MedicalRecordServiceTestsCon
     @When("Kada pronadjemo sve vakcine")
     public void kada_pronadjemo_sve_vakcine() {
         try{
-            vaccinationDtos = medicalRecordService.gatherVaccines();
+            vaccinationDtos = medicalRecordService.gatherVaccines(false);
         }catch (Exception e){
             fail(e.getMessage());
         }

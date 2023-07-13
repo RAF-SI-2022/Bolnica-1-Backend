@@ -327,7 +327,7 @@ public class MedicalRecordServiceImplTest {
         when(vaccinationMapper.toDto(vaccination1)).thenReturn(vaccinationDto1);
         when(vaccinationMapper.toDto(vaccination2)).thenReturn(vaccinationDto2);
 
-        List<VaccinationDto> result = medicalRecordService.gatherVaccines();
+        List<VaccinationDto> result = medicalRecordService.gatherVaccines(false);
 
         assertNotNull(result);
         assertEquals(2, result.size());

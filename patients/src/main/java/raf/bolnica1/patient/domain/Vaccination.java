@@ -18,4 +18,5 @@ public class Vaccination {
     private VaccinationType type;
     private String description;
     private String manufacturer;
+    private boolean covid=false;
 }

@@ -44,12 +44,16 @@ presubmits:
               #docker compose --profile laboratory up -d
               # docker compose up -d infirmary-db
               
-              docker compose up -d activemq
-              docker compose up -d redis
-              docker compose up -d mysql-db
-              docker compose up -d employees-service
-              docker compose up -d patients-service
-              docker compose up -d laboratory-service
+              #docker compose up -d activemq
+              #docker compose up -d redis
+              #docker compose up -d mysql-db
+              #docker compose up -d employees-service
+              #docker compose up -d patients-service
+              #docker compose up -d laboratory-service
+
+              docker compose --profile employees up -d
+              docker compose --profile patients up -d
+              docker compose --profile laboratory up -d
               
               #docker compose up -d redis mysql-db activemq employees-service patients-service laboratory-service
               sleep 120

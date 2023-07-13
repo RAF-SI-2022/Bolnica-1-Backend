@@ -13,6 +13,7 @@ import raf.bolnica1.laboratory.mappers.LabAnalysisMapper;
 import raf.bolnica1.laboratory.repository.LabAnalysisRepository;
 import raf.bolnica1.laboratory.services.LabAnalysisService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,8 +69,12 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
 
     @Override
     @Cacheable(value = "labAnals")
-    public List<LabAnalysisDto> getAllLabAnalysis() {
+    public List<LabAnalysisDto> getAllLabAnalysis(boolean covid) {
         List<LabAnalysis> labAnalyses = labAnalysisRepository.findAll();
-        return labAnalysisMapper.toDto(labAnalyses);
+        List<LabAnalysis>ret=new ArrayList<>();
+        for(LabAnalysis la:labAnalyses)
+            if(covid==la.isCovid())
+                ret.add(la);
+        return labAnalysisMapper.toDto(ret);
     }
 }
