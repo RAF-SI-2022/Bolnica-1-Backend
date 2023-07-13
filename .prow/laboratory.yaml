@@ -43,7 +43,9 @@ presubmits:
               #docker compose --profile patients up -d
               # docker compose up -d laboratory-db
 
-              docker compose up -d redis mysql-db activemq employees-service patients-service
+              #docker compose up -d redis mysql-db activemq employees-service patients-service
+              docker compose --profile employees up -d
+              docker compose --profile patients up -d
               sleep 120
               
               branch=$PULL_HEAD_REF
