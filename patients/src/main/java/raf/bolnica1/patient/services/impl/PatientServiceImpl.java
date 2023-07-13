@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import raf.bolnica1.patient.domain.Patient;
-import raf.bolnica1.patient.domain.ScheduleExam;
-import raf.bolnica1.patient.domain.ScheduledVaccination;
+import raf.bolnica1.patient.domain.*;
 import raf.bolnica1.patient.domain.constants.PatientArrival;
 import raf.bolnica1.patient.dto.create.ScheduleExamCreateDto;
 import raf.bolnica1.patient.dto.create.ScheduledVaccinationCreateDto;
@@ -29,11 +27,9 @@ import raf.bolnica1.patient.dto.general.*;
 import raf.bolnica1.patient.exceptions.jwt.NotAuthenticatedException;
 import raf.bolnica1.patient.mapper.ScheduleExamMapper;
 import raf.bolnica1.patient.mapper.ScheduledVaccinationMapper;
-import raf.bolnica1.patient.repository.PatientRepository;
-import raf.bolnica1.patient.repository.ScheduleExamRepository;
-import raf.bolnica1.patient.repository.ScheduledVaccinationRepository;
-import raf.bolnica1.patient.repository.VaccinationRepository;
+import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.PatientService;
+import raf.bolnica1.patient.util.PDFUtils;
 
 import java.net.URI;
 import java.sql.Date;
@@ -52,12 +48,16 @@ public class PatientServiceImpl implements PatientService {
     private ScheduledVaccinationMapper scheduledVaccinationMapper;
     private VaccinationRepository vaccinationRepository;
     private ScheduledVaccinationRepository scheduledVaccinationRepository;
+    private MedicalRecordRepository medicalRecordRepository;
+    private VaccinationDataRepository vaccinationDataRepository;
 
 
     public PatientServiceImpl(PatientRepository patientRepository, ScheduleExamRepository scheduleExamRepository, ScheduleExamMapper scheduleExamMapper, @Qualifier("employeeRestTemplate") RestTemplate employeeRestTemplate,
                               ScheduledVaccinationMapper scheduledVaccinationMapper,
                               VaccinationRepository vaccinationRepository,
-                              ScheduledVaccinationRepository scheduledVaccinationRepository) {
+                              ScheduledVaccinationRepository scheduledVaccinationRepository,
+                              MedicalRecordRepository medicalRecordRepository,
+                              VaccinationDataRepository vaccinationDataRepository) {
         this.patientRepository = patientRepository;
         this.scheduleExamRepository = scheduleExamRepository;
         this.scheduleExamMapper = scheduleExamMapper;
@@ -65,6 +65,33 @@ public class PatientServiceImpl implements PatientService {
         this.scheduledVaccinationMapper=scheduledVaccinationMapper;
         this.vaccinationRepository=vaccinationRepository;
         this.scheduledVaccinationRepository=scheduledVaccinationRepository;
+        this.medicalRecordRepository=medicalRecordRepository;
+        this.vaccinationDataRepository=vaccinationDataRepository;
+    }
+
+    @Override
+    public MessageDto sendVaccinationCertificateToMail(String lbp) {
+        Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
+        MedicalRecord medicalRecord=medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
+
+        GeneralMedicalData generalMedicalData=medicalRecord.getGeneralMedicalData();
+        if(generalMedicalData == null)
+            return new MessageDto("No general medical data");
+        List<Object[]> vaccinationsAndDates=vaccinationDataRepository.findVaccinationsByGeneralMedicalData(generalMedicalData);
+
+        for(int i=0;i<vaccinationsAndDates.size();i++){
+            Vaccination v=((Vaccination)vaccinationsAndDates.get(i)[0]);
+            if(v.isCovid()){
+                VaccinationData vd=new VaccinationData();
+                vd.setVaccination(v);
+                vd.setVaccinationDate(((Date)vaccinationsAndDates.get(i)[1]));
+                String pdf= PDFUtils.makeVaccinationCertificate(patient,vd);
+                PDFUtils.sendToMail(pdf,patient.getEmail());
+                PDFUtils.removePDF(pdf);
+                return new MessageDto("Mail successfully sent");
+            }
+        }
+        return new MessageDto("No covid vaccination found");
     }
 
     @Override

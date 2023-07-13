@@ -16,6 +16,8 @@ import java.util.List;
 
 public interface PatientService {
 
+    MessageDto sendVaccinationCertificateToMail(String lbp);
+
     ScheduledVaccinationDto scheduleVaccination(ScheduledVaccinationCreateDto scheduledVaccinationCreateDto);
     ScheduledVaccinationDto updateScheduledVaccination(Long scheduledVaccinationId,
                                                        PatientArrival arrivalStatus);

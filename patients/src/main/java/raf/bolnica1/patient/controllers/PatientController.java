@@ -31,6 +31,12 @@ public class PatientController {
     private PatientCrudService patientCrudService;
     private PrescriptionService prescriptionService;
 
+    @PostMapping("/sendVaccinationCertificateToMail")
+    @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
+    public ResponseEntity<MessageDto> sendVaccinationCertificateToMail(@RequestParam String lbp){
+        return new ResponseEntity<>(this.patientService.sendVaccinationCertificateToMail(lbp),HttpStatus.OK);
+    }
+
     @PostMapping("/scheduleVaccination")
     @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
     public ResponseEntity<ScheduledVaccinationDto> scheduleVaccination(@RequestBody ScheduledVaccinationCreateDto scheduledVaccinationCreateDto){
