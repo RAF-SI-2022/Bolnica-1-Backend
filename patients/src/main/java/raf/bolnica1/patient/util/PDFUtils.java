@@ -174,8 +174,8 @@ public class PDFUtils {
         String subject = "Kovid Sertifikat";
 
         System.out.println(email);
-        //Email to = new Email(email);
-        Email to = new Email("stefanbalaz2@gmail.com");
+        Email to = new Email(email);
+        //Email to = new Email("stefanbalaz2@gmail.com");
 
         Content content = new Content("text/plain", "Sertifikat");
         Mail mail = new Mail(from, subject, to, content);
