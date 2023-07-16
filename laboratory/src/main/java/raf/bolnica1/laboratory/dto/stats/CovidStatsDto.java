@@ -1,4 +1,4 @@
-package raf.bolnica1.infirmary.dto.response.covid;
+package raf.bolnica1.laboratory.dto.stats;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Stats {
+public class CovidStatsDto {
 
-    private String type;
-
+    private CovidStat covidStat;
+    private String lbp;
 }
