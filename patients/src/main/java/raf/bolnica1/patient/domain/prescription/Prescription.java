@@ -29,6 +29,8 @@ public class Prescription {
     private Date date;
     @ManyToOne
     private MedicalRecord medicalRecord;
+    private boolean covid;
+    private boolean done = false;
 
     @Transient
     public String getDecriminatorValue() {

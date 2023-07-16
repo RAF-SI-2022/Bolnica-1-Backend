@@ -21,4 +21,5 @@ public class LabResults {
     private String analysisName;
     @ManyToOne
     private LabPrescription labPrescription;
+
 }

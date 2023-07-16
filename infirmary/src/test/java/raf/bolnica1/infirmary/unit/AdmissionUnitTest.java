@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalRoomGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.PrescriptionGenerator;
@@ -32,6 +33,7 @@ import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
 import raf.bolnica1.infirmary.dto.prescription.PrescriptionDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentCreateDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentDto;
+import raf.bolnica1.infirmary.listener.helper.MessageHelper;
 import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.mapper.PrescriptionMapper;
 import raf.bolnica1.infirmary.mapper.ScheduledAppointmentMapper;
@@ -41,7 +43,6 @@ import raf.bolnica1.infirmary.repository.PrescriptionRepository;
 import raf.bolnica1.infirmary.repository.ScheduledAppointmentRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
 import raf.bolnica1.infirmary.services.AdmissionService;
-import raf.bolnica1.infirmary.services.HospitalRoomService;
 import raf.bolnica1.infirmary.services.impl.AdmissionServiceImpl;
 import raf.bolnica1.infirmary.validation.ClassJsonComparator;
 
@@ -76,6 +77,9 @@ public class AdmissionUnitTest {
     private HospitalizationMapper hospitalizationMapper;
     private AuthenticationUtils authenticationUtils;
     private RestTemplate patientRestTemplate;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+
 
 
     private PrescriptionRepository prescriptionRepository;
@@ -99,8 +103,8 @@ public class AdmissionUnitTest {
         scheduledAppointmentRepository=mock(ScheduledAppointmentRepository.class);
         hospitalRoomRepository=mock(HospitalRoomRepository.class);
         hospitalizationRepository=mock(HospitalizationRepository.class);
-        admissionService=new AdmissionServiceImpl(prescriptionMapper,scheduledAppointmentMapper,hospitalizationMapper,
-                prescriptionRepository,scheduledAppointmentRepository,hospitalRoomRepository,hospitalizationRepository);
+        admissionService=new AdmissionServiceImpl(prescriptionMapper,scheduledAppointmentMapper,hospitalizationMapper, hospitalizationRepository,
+                prescriptionRepository,scheduledAppointmentRepository,hospitalRoomRepository, jmsTemplate, messageHelper, "destination", "destination2");
     }
 
 

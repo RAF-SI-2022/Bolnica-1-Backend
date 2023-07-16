@@ -24,5 +24,6 @@ public class PrescriptionCreateDto implements Serializable {
     private String comment;
     private List<LabResultDto> labResultDtoList;
     private String type;
+    private boolean covid = false;
 
 }

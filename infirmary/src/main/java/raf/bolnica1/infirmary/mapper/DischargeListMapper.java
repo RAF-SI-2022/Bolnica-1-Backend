@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.DischargeList;
 import raf.bolnica1.infirmary.dto.dischargeList.CreateDischargeListDto;
 import raf.bolnica1.infirmary.dto.dischargeList.DischargeListDto;
+import raf.bolnica1.infirmary.dto.externalPatientService.DischargeListCreateDto;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 
 import java.util.ArrayList;
@@ -116,6 +117,22 @@ public class DischargeListMapper {
         entity.setDied(dto.isDied());
 
         return entity;
+    }
+
+    public DischargeListCreateDto forPatientToDto(DischargeList dischargeList){
+        DischargeListCreateDto dischargeListCreateDto = new DischargeListCreateDto();
+        dischargeListCreateDto.setCreation(dischargeList.getCreation());
+        dischargeListCreateDto.setDied(dischargeList.isDied());
+        dischargeListCreateDto.setSummary(dischargeList.getSummary());
+        dischargeListCreateDto.setCourseOfDisease(dischargeList.getCourseOfDisease());
+        dischargeListCreateDto.setHospitalization(dischargeList.getHospitalization().getPatientAdmission());
+        dischargeListCreateDto.setAnalysis(dischargeList.getAnalysis());
+        dischargeListCreateDto.setAnamnesis(dischargeList.getAnamnesis());
+        dischargeListCreateDto.setLbp(dischargeList.getHospitalization().getPrescription().getLbp());
+        dischargeListCreateDto.setTherapy(dischargeList.getTherapy());
+        dischargeListCreateDto.setFollowingDiagnosis(dischargeList.getFollowingDiagnosis());
+
+        return dischargeListCreateDto;
     }
 
 }

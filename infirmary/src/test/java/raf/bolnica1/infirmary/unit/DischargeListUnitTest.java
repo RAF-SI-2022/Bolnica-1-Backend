@@ -59,7 +59,7 @@ public class DischargeListUnitTest {
         hospitalizationRepository=mock(HospitalizationRepository.class);
         jmsTemplate=mock(JmsTemplate.class);
         messageHelper=mock(MessageHelper.class);
-        dischargeListService=new DischargeListServiceImpl(dischargeListMapper,dischargeListRepository,hospitalizationRepository, jmsTemplate, messageHelper, "destination");
+        dischargeListService=new DischargeListServiceImpl(dischargeListMapper,dischargeListRepository,hospitalizationRepository, jmsTemplate, messageHelper, "destination", "destination2");
     }
 
 

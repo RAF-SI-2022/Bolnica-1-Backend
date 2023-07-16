@@ -1,12 +1,14 @@
 package raf.bolnica1.infirmary.services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
@@ -21,21 +23,21 @@ import raf.bolnica1.infirmary.dto.prescription.PrescriptionDto;
 import raf.bolnica1.infirmary.dto.response.MessageDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentCreateDto;
 import raf.bolnica1.infirmary.dto.scheduledAppointment.ScheduledAppointmentDto;
+import raf.bolnica1.infirmary.dto.stats.CovidStat;
+import raf.bolnica1.infirmary.dto.stats.CovidStatsDto;
 import raf.bolnica1.infirmary.exceptions.HospitalRoomFullException;
+import raf.bolnica1.infirmary.listener.helper.MessageHelper;
+import raf.bolnica1.infirmary.mapper.DischargeListMapper;
 import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.mapper.PrescriptionMapper;
 import raf.bolnica1.infirmary.mapper.ScheduledAppointmentMapper;
-import raf.bolnica1.infirmary.repository.HospitalRoomRepository;
-import raf.bolnica1.infirmary.repository.HospitalizationRepository;
-import raf.bolnica1.infirmary.repository.PrescriptionRepository;
-import raf.bolnica1.infirmary.repository.ScheduledAppointmentRepository;
+import raf.bolnica1.infirmary.repository.*;
 import raf.bolnica1.infirmary.services.AdmissionService;
 import raf.bolnica1.infirmary.services.HospitalRoomService;
 
 import java.sql.Date;
 
 @Service
-@AllArgsConstructor
 public class AdmissionServiceImpl implements AdmissionService {
 
     /// MAPPERS
@@ -50,6 +52,33 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final HospitalRoomRepository hospitalRoomRepository;
     private final HospitalizationRepository hospitalizationRepository;
 
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String destination;
+    private String destination2;
+
+    public AdmissionServiceImpl(PrescriptionMapper prescriptionMapper, ScheduledAppointmentMapper scheduledAppointmentMapper,
+                                    HospitalizationMapper hospitalizationMapper,
+                                    HospitalizationRepository hospitalizationRepository,
+                                    PrescriptionRepository prescriptionRepository,
+                                    ScheduledAppointmentRepository scheduledAppointmentRepository,
+                                    HospitalRoomRepository hospitalRoomRepository,
+                                    JmsTemplate jmsTemplate,
+                                    MessageHelper messageHelper,
+                                    @Value("${destination.send.stats}") String destination,
+                                    @Value("${destination.send.hospitalization}") String destination2){
+        this.prescriptionMapper = prescriptionMapper;
+        this.scheduledAppointmentMapper = scheduledAppointmentMapper;
+        this.hospitalizationMapper = hospitalizationMapper;
+        this.prescriptionRepository = prescriptionRepository;
+        this.scheduledAppointmentRepository = scheduledAppointmentRepository;
+        this.hospitalRoomRepository = hospitalRoomRepository;
+        this.hospitalizationRepository = hospitalizationRepository;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
+        this.destination = destination;
+        this.destination2 = destination2;
+    }
 
 //@Transactional(timeout = 20)
 
@@ -79,8 +108,13 @@ public class AdmissionServiceImpl implements AdmissionService {
             throw new HospitalRoomFullException("This hospital room is full, please try to fill another one");
         }
 
-        if(hospitalization.getPrescription().getReferralReason().equals("Covid"))
+        if(hospitalization.getPrescription().getReferralReason().equals("Covid")) {
             hospitalization.setCovid(true);
+            jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(new CovidStatsDto(CovidStat.HOSPITALIZED, hospitalization.getPrescription().getLbp())));
+            jmsTemplate.convertAndSend(destination2, messageHelper.createTextMessage(new raf.bolnica1.infirmary.dto.externalPatientService.HospitalizationCreateDto(hospitalization.getPatientAdmission(), hospitalization.getPrescription().getLbp(), hospitalization.getNote(), true)));
+        }
+        else
+            jmsTemplate.convertAndSend(destination2, messageHelper.createTextMessage(new raf.bolnica1.infirmary.dto.externalPatientService.HospitalizationCreateDto(hospitalization.getPatientAdmission(), hospitalization.getPrescription().getLbp(), hospitalization.getNote(), false)));
 
         hospitalization=hospitalizationRepository.save(hospitalization);
         ScheduledAppointmentDto scheduledAppointmentDto=getScheduledAppointmentByPrescriptionId(hospitalization.getPrescription().getId());

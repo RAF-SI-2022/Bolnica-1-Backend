@@ -14,7 +14,8 @@ import raf.bolnica1.laboratory.dto.lab.parameterAnalysisResult.ResultUpdateDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.LabResultDto;
 import raf.bolnica1.laboratory.dto.lab.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.dto.response.MessageDto;
-import raf.bolnica1.laboratory.dto.response.covid.Stats;
+import raf.bolnica1.laboratory.dto.stats.CovidStat;
+import raf.bolnica1.laboratory.dto.stats.CovidStatsDto;
 import raf.bolnica1.laboratory.listener.helper.MessageHelper;
 import raf.bolnica1.laboratory.repository.LabWorkOrderRepository;
 import raf.bolnica1.laboratory.repository.ParameterAnalysisResultRepository;
@@ -105,13 +106,14 @@ public class LabResultServiceImpl implements LabResultService {
                 labResultDto.setUnitOfMeasure(parameterAnalysisResult.getAnalysisParameter().getParameter().getUnitOfMeasure());
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
 
-                if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().getAnalysisName().contains("SARS CoV-2")){
-                    if(parameterAnalysisResult.getResult().equals("POZ")) {
-                        Stats stats = new Stats("POZ");
+                if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().isCovid()){
+                    prescriptionCreateDto.setCovid(true);
+                    if(parameterAnalysisResult.getResult().equals("POZITIVAN")) {
+                        CovidStatsDto stats = new CovidStatsDto(CovidStat.POSITIVE, labWorkOrder.getPrescription().getLbp());
                         jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
                     }
-                    else if(parameterAnalysisResult.getResult().equals("NEG")){
-                        Stats stats = new Stats("NEG");
+                    else if(parameterAnalysisResult.getResult().equals("NEGATIVAN")){
+                        CovidStatsDto stats = new CovidStatsDto(CovidStat.NEGATIVE, labWorkOrder.getPrescription().getLbp());
                         jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
                     }
                 }
@@ -124,8 +126,7 @@ public class LabResultServiceImpl implements LabResultService {
                 throw new RuntimeException(e);
             }
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(prescriptionCreateDto));
-            System.out.println("poslao bez problema");
         }
-        return null;
+        return new MessageDto("Upisano");
     }
 }
