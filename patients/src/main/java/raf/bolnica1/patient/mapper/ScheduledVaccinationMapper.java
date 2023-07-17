@@ -22,7 +22,7 @@ public class ScheduledVaccinationMapper {
 
         ScheduledVaccination entity=new ScheduledVaccination();
 
-        entity.setVaccination(vaccinationRepository.getById(dto.getVaccinationId()));
+        entity.setVaccination(vaccinationRepository.findByName(dto.getVaccineName()));
         entity.setNote(dto.getNote());
         entity.setLbz(dto.getLbz());
         entity.setPatient(patientRepository.findByLbp(dto.getLbp()).get());
