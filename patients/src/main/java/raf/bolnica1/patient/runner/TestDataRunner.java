@@ -49,10 +49,10 @@ public class TestDataRunner implements CommandLineRunner {
         scheduledVaccinationRepository.deleteAll();
         vaccinationRepository.deleteAll();
         scheduleExamRepository.deleteAll();
-        prescriptionRepository.deleteAll();
         operationRepository.deleteAll();
         medicalHistoryRepository.deleteAll();
         labResultsRepository.deleteAll();
+        prescriptionRepository.deleteAll();
         hospitalizationRepository.deleteAll();
         examinationHistoryRepository.deleteAll();
         dischargeListRepository.deleteAll();
