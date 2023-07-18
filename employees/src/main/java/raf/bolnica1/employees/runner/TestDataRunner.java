@@ -28,7 +28,6 @@ public class TestDataRunner implements CommandLineRunner {
     private EmployeesRoleRepository employeesRoleRepository;
     private ShiftRepository shiftRepository;
     private PasswordEncoder passwordEncoder;
-    private ShiftRepository shiftRepository;
     private ShiftScheduleRepository shiftScheduleRepository;
 
 
