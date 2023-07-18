@@ -14,6 +14,7 @@ import raf.bolnica1.employees.repository.ShiftScheduleRepository;
 import raf.bolnica1.employees.services.ShiftService;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,23 +95,36 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public Page<ShiftScheduleDto> scheduleEmployee(Long id, Date startDate, Date endDate, int page, int size) {
+    public Page<ShiftScheduleDto> scheduleEmployee(String lbz, Date startDate, Date endDate, int page, int size) {
 
         Page<ShiftSchedule> shiftSchedules;
         Pageable sortedByDate = PageRequest.of(page, size, Sort.by("date"));
 
         if(startDate != null && endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqualAndDateLessThanEqual(id, startDate, endDate, sortedByDate);
+            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqualAndDateLessThanEqual(lbz, startDate, endDate, sortedByDate);
         }
         else if(startDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqual(id, startDate, sortedByDate);
+            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqual(lbz, startDate, sortedByDate);
         }
         else if(endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateLessThanEqual(id, endDate, sortedByDate);
+            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateLessThanEqual(lbz, endDate, sortedByDate);
         }
         else
-            shiftSchedules = shiftScheduleRepository.findByEmployee(id, sortedByDate);
+            shiftSchedules = shiftScheduleRepository.findByEmployee(lbz, sortedByDate);
 
         return shiftSchedules.map(ShiftMapper::entityToDtoSchedule);
+    }
+
+    @Override
+    public Boolean isDoctorWorking(String lbz, String time, Date date) {
+        Time time1 = Time.valueOf(time);
+        Shift shift = shiftRepository.findByTime(time1);
+        ShiftSchedule shiftSchedule = shiftScheduleRepository.findForEmployee(lbz, date).orElse(null);
+
+        System.out.println(shiftSchedule.getShift().getShiftNum());
+        if(shiftSchedule == null)
+            return shift.getShiftNum() == 0;
+
+        return shiftSchedule.getShift().getShiftNum() == shift.getShiftNum();
     }
 }
