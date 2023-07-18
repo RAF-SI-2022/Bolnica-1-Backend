@@ -62,13 +62,13 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     }
 
     @Override
-    @Cacheable(value = "labAnal", key = "#id")
+    ///@Cacheable(value = "labAnal", key = "#id")
     public LabAnalysisDto getLabAnalysis(Long id) {
         return labAnalysisMapper.toDto(labAnalysisRepository.findLabAnalysisById(id));
     }
 
     @Override
-    @Cacheable(value = "labAnals")
+    //@Cacheable(value = "labAnals")
     public List<LabAnalysisDto> getAllLabAnalysis(boolean covid) {
         List<LabAnalysis> labAnalyses = labAnalysisRepository.findAll();
         List<LabAnalysis>ret=new ArrayList<>();
