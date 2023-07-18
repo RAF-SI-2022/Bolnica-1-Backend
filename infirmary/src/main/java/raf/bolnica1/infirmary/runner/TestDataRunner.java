@@ -108,13 +108,20 @@ public class TestDataRunner implements CommandLineRunner {
 
 
     private void clearAllRepositories(){
+        visitRepository.deleteAll();
+        scheduledAppointmentRepository.deleteAll();
+        patientStateRepository.deleteAll();
         dischargeListRepository.deleteAll();
+        hospitalizationRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        hospitalRoomRepository.deleteAll();
+        /*dischargeListRepository.deleteAll();
         hospitalizationRepository.deleteAll();
         hospitalRoomRepository.deleteAll();
         patientStateRepository.deleteAll();
         prescriptionRepository.deleteAll();
         scheduledAppointmentRepository.deleteAll();
-        visitRepository.deleteAll();
+        visitRepository.deleteAll();*/
     }
 
     @Override
