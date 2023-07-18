@@ -43,7 +43,7 @@ public class PatientController {
         return new ResponseEntity<>(this.patientService.scheduleVaccination(scheduledVaccinationCreateDto),HttpStatus.OK);
     }
 
-    @PostMapping("/updateScheduledVaccination")
+    @PutMapping("/updateScheduledVaccination")
     @PreAuthorize("hasAnyRole( 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA', 'ROLE_RECEPCIONER' )")
     public ResponseEntity<ScheduledVaccinationDto> updateScheduledVaccination(@RequestParam Long scheduledVaccinationId,
                                                                               @RequestParam PatientArrival arrivalStatus){

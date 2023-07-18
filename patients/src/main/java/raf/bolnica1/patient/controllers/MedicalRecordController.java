@@ -34,7 +34,7 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/vaccine/{lbp}")
-    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV' )")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA', 'ROLE_DR_SPEC' , 'ROLE_DR_SPEC_POV', 'ROLE_MED_SESTRA', 'ROLE_VISA_MED_SESTRA' )")
     public ResponseEntity<MessageDto> addVaccine(@RequestParam String lbp, @RequestBody VaccinationDataDto vaccinationDataDto){
         return new ResponseEntity<>(medicalRecordService.addVaccine(lbp, vaccinationDataDto), HttpStatus.OK);
     }
