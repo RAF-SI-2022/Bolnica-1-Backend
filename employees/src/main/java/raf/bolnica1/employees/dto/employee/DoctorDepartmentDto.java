@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//opa
 public class DoctorDepartmentDto implements Serializable {
 
     private String name;
