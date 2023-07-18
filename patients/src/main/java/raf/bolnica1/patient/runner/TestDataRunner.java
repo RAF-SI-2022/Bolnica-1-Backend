@@ -38,31 +38,41 @@ public class TestDataRunner implements CommandLineRunner {
     private final ScheduleExamRepository scheduleExamRepository;
     private final ExaminationHistoryRepository examinationHistoryRepository;
     private final MedicalHistoryRepository medicalHistoryRepository;
+    private final CovidExaminationHistoryRepository covidExaminationHistoryRepository;
+    private final CovidStatsRepository covidStatsRepository;
+    private final DischargeListRepository dischargeListRepository;
+    private final HospitalizationRepository hospitalizationRepository;
+    private final ScheduledVaccinationRepository scheduledVaccinationRepository;
 
     private void clearAllRepositories(){
-        patientRepository.deleteAll();
-        socialDataRepository.deleteAll();
-        medicalRecordRepository.deleteAll();
-        generalMedicalDataRepository.deleteAll();
-        allergyRepository.deleteAll();
-        vaccinationRepository.deleteAll();
-        diagnosisCodeRepository.deleteAll();
-        prescriptionRepository.deleteAll();
-        labResultsRepository.deleteAll();
         allergyDataRepository.deleteAll();
-        vaccinationDataRepository.deleteAll();
+        allergyRepository.deleteAll();
         anamnesisRepository.deleteAll();
-        operationRepository.deleteAll();
-        scheduleExamRepository.deleteAll();
+        covidExaminationHistoryRepository.deleteAll();
+        covidStatsRepository.deleteAll();
+        diagnosisCodeRepository.deleteAll();
+        dischargeListRepository.deleteAll();
         examinationHistoryRepository.deleteAll();
+        generalMedicalDataRepository.deleteAll();
+        hospitalizationRepository.deleteAll();
+        labResultsRepository.deleteAll();
         medicalHistoryRepository.deleteAll();
+        medicalRecordRepository.deleteAll();
+        operationRepository.deleteAll();
+        patientRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        scheduledVaccinationRepository.deleteAll();
+        scheduleExamRepository.deleteAll();
+        socialDataRepository.deleteAll();
+        vaccinationDataRepository.deleteAll();
+        vaccinationRepository.deleteAll();
     }
 
 
     @Override
     public void run(String... args) throws Exception {
 
-        ///clearAllRepositories();
+        clearAllRepositories();
 
         if(patientRepository.findAll().size() > 0 ||
             socialDataRepository.findAll().size() > 0 ||
