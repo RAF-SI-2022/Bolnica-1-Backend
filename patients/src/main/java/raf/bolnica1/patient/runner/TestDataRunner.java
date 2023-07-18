@@ -45,7 +45,29 @@ public class TestDataRunner implements CommandLineRunner {
     private final ScheduledVaccinationRepository scheduledVaccinationRepository;
 
     private void clearAllRepositories(){
+        vaccinationDataRepository.deleteAll();
+        scheduledVaccinationRepository.deleteAll();
+        vaccinationRepository.deleteAll();
+        scheduleExamRepository.deleteAll();
+        operationRepository.deleteAll();
+        medicalHistoryRepository.deleteAll();
+        labResultsRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        hospitalizationRepository.deleteAll();
+        examinationHistoryRepository.deleteAll();
+        dischargeListRepository.deleteAll();
+        diagnosisCodeRepository.deleteAll();
+        covidStatsRepository.deleteAll();
+        covidExaminationHistoryRepository.deleteAll();
+        medicalRecordRepository.deleteAll();
+        patientRepository.deleteAll();
+        socialDataRepository.deleteAll();
+        anamnesisRepository.deleteAll();
         allergyDataRepository.deleteAll();
+        generalMedicalDataRepository.deleteAll();
+        allergyRepository.deleteAll();
+
+       /* allergyDataRepository.deleteAll();
         allergyRepository.deleteAll();
         anamnesisRepository.deleteAll();
         covidExaminationHistoryRepository.deleteAll();
@@ -65,7 +87,7 @@ public class TestDataRunner implements CommandLineRunner {
         scheduleExamRepository.deleteAll();
         socialDataRepository.deleteAll();
         vaccinationDataRepository.deleteAll();
-        vaccinationRepository.deleteAll();
+        vaccinationRepository.deleteAll();*/
     }
 
 

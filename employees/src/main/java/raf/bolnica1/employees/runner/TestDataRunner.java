@@ -31,13 +31,13 @@ public class TestDataRunner implements CommandLineRunner {
 
 
     private void clearAllRepositories(){
-        departmentRepository.deleteAll();
-        employeeRepository.deleteAll();
-        employeesRoleRepository.deleteAll();
-        hospitalRepository.deleteAll();
-        roleRepository.deleteAll();
-        shiftRepository.deleteAll();
         shiftScheduleRepository.deleteAll();
+        shiftRepository.deleteAll();
+        employeesRoleRepository.deleteAll();
+        roleRepository.deleteAll();
+        employeeRepository.deleteAll();
+        departmentRepository.deleteAll();
+        hospitalRepository.deleteAll();
     }
 
     @Override
