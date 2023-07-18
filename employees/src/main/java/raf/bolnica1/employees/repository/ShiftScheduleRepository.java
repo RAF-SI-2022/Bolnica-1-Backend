@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import raf.bolnica1.employees.domain.ShiftSchedule;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Repository
 public interface ShiftScheduleRepository extends JpaRepository<ShiftSchedule, Long> {
@@ -18,15 +19,18 @@ public interface ShiftScheduleRepository extends JpaRepository<ShiftSchedule, Lo
 
     Page<ShiftSchedule> findByDateGreaterThanEqualAndDateLessThanEqual(Date startDate, Date endDate, Pageable pageable);
 
-    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.id = :id")
-    Page<ShiftSchedule> findByEmployee(@Param("id") Long id, Pageable pageable);
+    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.lbz = :lbz")
+    Page<ShiftSchedule> findByEmployee(@Param("lbz") String lbz, Pageable pageable);
 
-    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.id = :id AND ss.date >= :start")
-    Page<ShiftSchedule> findByEmployeeAndDateGreaterThanEqual(@Param("id") Long id, @Param("start") Date startDate, Pageable pageable);
+    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.lbz = :lbz AND ss.date >= :start")
+    Page<ShiftSchedule> findByEmployeeAndDateGreaterThanEqual(@Param("lbz") String lbz, @Param("start") Date startDate, Pageable pageable);
 
-    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.id = :id AND ss.date <= :end")
-    Page<ShiftSchedule> findByEmployeeAndDateLessThanEqual(@Param("id") Long id, @Param("end") Date endDate, Pageable pageable);
+    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.lbz = :lbz AND ss.date <= :end")
+    Page<ShiftSchedule> findByEmployeeAndDateLessThanEqual(@Param("lbz") String lbz, @Param("end") Date endDate, Pageable pageable);
 
-    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.id = :id AND ss.date >= :start AND ss.date <= :end")
-    Page<ShiftSchedule> findByEmployeeAndDateGreaterThanEqualAndDateLessThanEqual(@Param("id") Long id, @Param("start") Date startDate, @Param("end") Date endDate, Pageable pageable);
+    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.lbz = :lbz AND ss.date >= :start AND ss.date <= :end")
+    Page<ShiftSchedule> findByEmployeeAndDateGreaterThanEqualAndDateLessThanEqual(@Param("lbz") String lbz, @Param("start") Date startDate, @Param("end") Date endDate, Pageable pageable);
+
+    @Query("SELECT ss FROM ShiftSchedule ss WHERE ss.employee.lbz=:lbz AND ss.date=:curr")
+    Optional<ShiftSchedule> findForEmployee(@Param("lbz") String lbz, @Param("curr") Date date);
 }

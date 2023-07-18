@@ -13,6 +13,7 @@ import raf.bolnica1.employees.domain.constants.Title;
 import raf.bolnica1.employees.repository.*;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.Arrays;
 
 //@Profile({"default"})
@@ -25,6 +26,7 @@ public class TestDataRunner implements CommandLineRunner {
     private EmployeeRepository employeeRepository;
     private RoleRepository roleRepository;
     private EmployeesRoleRepository employeesRoleRepository;
+    private ShiftRepository shiftRepository;
     private PasswordEncoder passwordEncoder;
     private ShiftRepository shiftRepository;
     private ShiftScheduleRepository shiftScheduleRepository;
@@ -211,6 +213,29 @@ public class TestDataRunner implements CommandLineRunner {
         department6.setHospital(hospital);
 
         departmentRepository.saveAll(Arrays.asList(department1, department2, department3, department4, department5, department6));
+
+        Shift shift1 = new Shift();
+        shift1.setShiftNum(1);
+        shift1.setId(1L);
+        shift1.setActive(true);
+        shift1.setStartTime(Time.valueOf("08:00:01"));
+        shift1.setEndTime(Time.valueOf("16:00:00"));
+
+        Shift shift2 = new Shift();
+        shift2.setShiftNum(2);
+        shift1.setId(2L);
+        shift2.setActive(true);
+        shift2.setStartTime(Time.valueOf("16:00:01"));
+        shift2.setEndTime(Time.valueOf("00:00:00"));
+
+        Shift shift3 = new Shift();
+        shift3.setShiftNum(3);
+        shift1.setId(3L);
+        shift3.setActive(true);
+        shift3.setStartTime(Time.valueOf("00:00:01"));
+        shift3.setEndTime(Time.valueOf("08:00:00"));
+
+        shiftRepository.saveAll(Arrays.asList(shift1, shift2, shift3));
 
         createEmployee("E0001", "John", "Doe", "M", RoleShort.ROLE_ADMIN, Title.PROF_DR_MED, Profession.MED_SESTRA, department1);
         createEmployee("E0002", "Jane", "Smith", "Z", RoleShort.ROLE_DR_SPEC_ODELJENJA, Title.DR_MED_SPEC, Profession.SPEC_KARDIOLOG, department1);
