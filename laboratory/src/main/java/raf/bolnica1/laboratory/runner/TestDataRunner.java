@@ -44,9 +44,19 @@ public class TestDataRunner implements CommandLineRunner {
     private final TokenSetter tokenSetter;
 
 
+    private void clearAllRepositories(){
+        analysisParameterRepository.deleteAll();
+        labAnalysisRepository.deleteAll();
+        labWorkOrderRepository.deleteAll();
+        parameterAnalysisResultRepository.deleteAll();
+        parameterRepository.deleteAll();
+        prescriptionRepository.deleteAll();
+        scheduledLabExaminationRepository.deleteAll();
+    }
+
     @Override
     public void run(String... args) throws Exception {
-        ///clearAllRepositories();
+        clearAllRepositories();
         boolean addTestData = true;
         if(labAnalysisRepository.findAll().size() > 0 ||
             parameterRepository.findAll().size() > 0 ||
@@ -61,16 +71,6 @@ public class TestDataRunner implements CommandLineRunner {
             defaultAnalysisParameter();
             generatedData();
         }
-    }
-
-    private void clearAllRepositories(){
-        labAnalysisRepository.deleteAll();
-        parameterRepository.deleteAll();
-        analysisParameterRepository.deleteAll();
-        prescriptionRepository.deleteAll();
-        labWorkOrderRepository.deleteAll();
-        parameterAnalysisResultRepository.deleteAll();
-        scheduledLabExaminationRepository.deleteAll();
     }
 
     private void generatedData(){

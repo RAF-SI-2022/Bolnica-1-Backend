@@ -26,11 +26,26 @@ public class TestDataRunner implements CommandLineRunner {
     private RoleRepository roleRepository;
     private EmployeesRoleRepository employeesRoleRepository;
     private PasswordEncoder passwordEncoder;
+    private ShiftRepository shiftRepository;
+    private ShiftScheduleRepository shiftScheduleRepository;
+
+
+    private void clearAllRepositories(){
+        departmentRepository.deleteAll();
+        employeeRepository.deleteAll();
+        employeesRoleRepository.deleteAll();
+        hospitalRepository.deleteAll();
+        roleRepository.deleteAll();
+        shiftRepository.deleteAll();
+        shiftScheduleRepository.deleteAll();
+    }
 
     @Override
     public void run(String... args) throws Exception {
         boolean addTestData = true;
-       ////clearAllRepositories();
+
+       clearAllRepositories();
+
         if(departmentRepository.findAll().size() > 0 ||
             hospitalRepository.findAll().size() > 0 ||
             employeeRepository.findAll().size() > 0 ||
@@ -151,14 +166,6 @@ public class TestDataRunner implements CommandLineRunner {
         employeesRoleRepository.save(employeesRole1);
         employeesRoleRepository.save(employeesRole2);
         employeesRoleRepository.save(employeesRole3);*/
-    }
-
-    private void clearAllRepositories(){
-        departmentRepository.deleteAll();
-        hospitalRepository.deleteAll();
-        employeeRepository.deleteAll();
-        roleRepository.deleteAll();
-        employeesRoleRepository.deleteAll();
     }
 
     private void defaultData() {

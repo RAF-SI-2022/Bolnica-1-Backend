@@ -108,9 +108,9 @@ public class TestDataRunner implements CommandLineRunner {
 
 
     private void clearAllRepositories(){
-        hospitalRoomRepository.deleteAll();
         dischargeListRepository.deleteAll();
         hospitalizationRepository.deleteAll();
+        hospitalRoomRepository.deleteAll();
         patientStateRepository.deleteAll();
         prescriptionRepository.deleteAll();
         scheduledAppointmentRepository.deleteAll();
@@ -119,7 +119,7 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ///clearAllRepositories();
+        clearAllRepositories();
         boolean addTestData = true;
         if(hospitalRoomRepository.findAll().size() > 0 ||
             dischargeListRepository.findAll().size() > 0 ||
