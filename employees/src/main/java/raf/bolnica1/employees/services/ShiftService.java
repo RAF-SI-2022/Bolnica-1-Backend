@@ -20,5 +20,7 @@ public interface ShiftService {
 
     Page<ShiftScheduleDto> scheduleAll(Date startDate, Date endDate, int page, int size);
 
-    Page<ShiftScheduleDto> scheduleEmployee(Long id, Date startDate, Date endDate, int page, int size);
+    Page<ShiftScheduleDto> scheduleEmployee(String lbz, Date startDate, Date endDate, int page, int size);
+
+    Boolean isDoctorWorking(String lbz, String time, Date date);
 }

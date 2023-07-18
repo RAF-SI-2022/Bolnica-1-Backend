@@ -52,14 +52,19 @@ public class ShiftController {
         return new ResponseEntity<>(shiftService.scheduleAll(startDate, endDate, page, size), HttpStatus.OK);
     }
 
-    @GetMapping("/schedule/{id}")
+    @GetMapping("/schedule/{lbz}")
     public ResponseEntity<Page<ShiftScheduleDto>> getShiftSchedule(
-            @PathVariable("id") Long id,
+            @PathVariable("lbz") String lbz,
             @RequestParam(required = false) Date startDate,
             @RequestParam(required = false) Date endDate,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
-        return new ResponseEntity<>(shiftService.scheduleEmployee(id, startDate, endDate, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(shiftService.scheduleEmployee(lbz, startDate, endDate, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/working/{lbz}")
+    public ResponseEntity<Boolean> isWorking(@PathVariable("lbz") String lbz, @RequestParam Date date,  @RequestParam String time){
+        return new ResponseEntity<>(shiftService.isDoctorWorking(lbz, time, date), HttpStatus.OK);
     }
 }
