@@ -56,7 +56,7 @@ services:
       - covid
 
   employees-service:
-    image: harbor.k8s.elab.rs/bolnica-1/employees:dev
+    image: harbor.k8s.elab.rs/bolnica-1/employees:prod
     build:
       context: ./employees
       dockerfile: Dockerfile
@@ -85,7 +85,7 @@ services:
       - all
 
   patients-service:
-    image: harbor.k8s.elab.rs/bolnica-1/patients:dev
+    image: harbor.k8s.elab.rs/bolnica-1/patients:prod
     build:
       context: ./patients
       dockerfile: Dockerfile
@@ -119,7 +119,7 @@ services:
       - all
 
   laboratory-service:
-    image: harbor.k8s.elab.rs/bolnica-1/laboratory:dev
+    image: harbor.k8s.elab.rs/bolnica-1/laboratory:prod
     build:
       context: ./laboratory
       dockerfile: Dockerfile
@@ -153,7 +153,7 @@ services:
       - all
 
   infirmary-service:
-    image: harbor.k8s.elab.rs/bolnica-1/infirmary:dev
+    image: harbor.k8s.elab.rs/bolnica-1/infirmary:prod
     build:
       context: ./infirmary
       dockerfile: Dockerfile
