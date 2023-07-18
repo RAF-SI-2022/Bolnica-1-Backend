@@ -35,7 +35,7 @@ public class FindInfoServiceImpl implements FindInfoService {
     private ExaminationHistoryMapper examinationHistoryMapper;
 
     //Dohvatanje GeneralMedicalData po LBP(GMD,vaccines,allergies)
-    @Cacheable(value = "gmd", key = "#lbp")
+    //@Cacheable(value = "gmd", key = "#lbp")
     public GeneralMedicalDataDto findGeneralMedicalDataByLbp(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord=medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
@@ -53,7 +53,7 @@ public class FindInfoServiceImpl implements FindInfoService {
     }
 
     ///Dohvatanje liste operacije koje odgovaraju LBP
-    @Cacheable(value = "ops", key = "#lbp")
+    //@Cacheable(value = "ops", key = "#lbp")
     public List<OperationDto> findOperationsByLbp(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         MedicalRecord medicalRecord=medicalRecordRepository.findByPatient(patient).orElseThrow(() -> new RuntimeException(String.format("Medical record for patient with lbp %s not found.", lbp)));
@@ -64,7 +64,7 @@ public class FindInfoServiceImpl implements FindInfoService {
     }
 
     ///Dohvatanje liste MedicalHistory po LBP
-    @Cacheable(value = "medHistory", key = "#lbp")
+    //@Cacheable(value = "medHistory", key = "#lbp")
     public List<MedicalHistoryDto> findMedicalHistoryByLbp(String lbp) {
 
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
@@ -118,7 +118,7 @@ public class FindInfoServiceImpl implements FindInfoService {
     }
 
     ///Dohvatanje liste ExaminationHistory po LBP
-    @Cacheable(value = "examHistory", key = "#lbp")
+    //@Cacheable(value = "examHistory", key = "#lbp")
     public List<ExaminationHistoryDto> findExaminationHistoryByLbp(String lbp){
 
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
@@ -137,7 +137,7 @@ public class FindInfoServiceImpl implements FindInfoService {
     }
 
     ///Dohvatanje CELOG MedicalRecord po LBP
-    @Cacheable(value = "medRecord", key = "#lbp")
+    //@Cacheable(value = "medRecord", key = "#lbp")
     public MedicalRecordDto findMedicalRecordByLbp(String lbp){
 
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() ->  new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
