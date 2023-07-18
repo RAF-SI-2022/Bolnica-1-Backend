@@ -474,7 +474,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         Parameter p33 = new Parameter();
         p33.setId(33L);
-        p33.setParameterName("Test");
+        p33.setParameterName("Test Covid");
         p33.setType(ParameterValueType.TEKSTUALNI);
 
         Parameter p34 = new Parameter();
