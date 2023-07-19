@@ -3,6 +3,7 @@ package raf.bolnica1.infirmary.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
+import raf.bolnica1.infirmary.dto.response.MessageDto;
 
 import java.sql.Date;
 
@@ -16,4 +17,7 @@ public interface HospitalizationService {
                                                            Long departmentId, Long hospitalRoomId, String lbp,
                                                            Date startDate, Date endDate, Integer page, Integer size);
 
+    MessageDto addOnVentilator(Long id);
+
+    MessageDto removeFromVentilator(Long id);
 }

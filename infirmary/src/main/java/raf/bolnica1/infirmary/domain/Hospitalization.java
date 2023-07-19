@@ -26,5 +26,6 @@ public class Hospitalization {
     private String jmbg;
     private String note;
     private boolean covid;
+    private boolean ventiltor;
 
 }

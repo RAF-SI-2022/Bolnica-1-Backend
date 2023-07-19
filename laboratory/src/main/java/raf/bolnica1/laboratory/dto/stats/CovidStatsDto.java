@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,4 +15,5 @@ public class CovidStatsDto {
 
     private CovidStat covidStat;
     private String lbp;
+    private Date date;
 }

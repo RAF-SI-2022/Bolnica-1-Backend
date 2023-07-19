@@ -18,6 +18,7 @@ import raf.bolnica1.patient.repository.LabResultsRepository;
 import raf.bolnica1.patient.repository.PatientRepository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -67,11 +68,19 @@ public class StatsScheduler {
     }
 
     private void createRow(Gender gender){
+        Date currentDate = new Date(System.currentTimeMillis());
+        LocalDate localDate = currentDate.toLocalDate();
+        LocalDate newDate = localDate.minusDays(1);
+        Date newSqlDate = Date.valueOf(newDate);
+
         for(int i = 1; i<=3; i++) {
             CovidStats covidStats = new CovidStats();
             covidStats.setGender(gender);
             covidStats.setAgeCategory(i);
-            covidStats.setDate(new Date(System.currentTimeMillis()));
+            covidStats.setDate(currentDate);
+            CovidStats covidStats1 = covidStatsRepository.findByDateAndGenderAndAgeCategory(newSqlDate, gender, i).orElse(null);
+            if(covidStats1!=null)
+                covidStats.setVentilator(covidStats1.getVentilator());
             covidStatsRepository.save(covidStats);
         }
     }
