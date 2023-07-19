@@ -1,5 +1,6 @@
 package raf.bolnica1.patient.messaging.helper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Patient;
@@ -16,27 +17,21 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Component
+@AllArgsConstructor
 public class StatsListener {
 
     private CovidStatsRepository covidStatsRepository;
     private PatientRepository patientRepository;
     private MessageHelper messageHelper;
 
-    public StatsListener(CovidStatsRepository covidStatsRepository,
-                         PatientRepository patientRepository,
-                         MessageHelper messageHelper) {
-
-        this.covidStatsRepository = covidStatsRepository;
-        this.patientRepository = patientRepository;
-        this. messageHelper = messageHelper;
-    }
-
     @JmsListener(destination = "${destination.send.stats}", concurrency = "5-10")
     public void getStats(Message message) throws JMSException {
+        System.out.println("DOSOOOOO");
         CovidStatsDto covidStatsDto = messageHelper.getMessage(message, CovidStatsDto.class);
         Date date = covidStatsDto.getDate();
         CovidStats covidStats = null;
         Patient patient = patientRepository.findByLbp(covidStatsDto.getLbp()).orElse(null);
+
         if(patient != null) {
             int ageCategory = calculateYearsPassed(patient.getDateOfBirth(), date);
             System.out.println(patient.getLbp() + " " + ageCategory);
@@ -45,19 +40,21 @@ public class StatsListener {
                 if (covidStats != null) break;
             }
             System.out.println(covidStats.getDate());
-
+            System.out.println(covidStatsDto.getCovidStat());
             if (covidStatsDto.getCovidStat().equals(CovidStat.POSITIVE))
                 covidStats.setPositive(covidStats.getPositive() + 1);
             else if (covidStatsDto.getCovidStat().equals(CovidStat.NEGATIVE))
-                covidStats.setPositive(covidStats.getNegative() + 1);
+                covidStats.setNegative(covidStats.getNegative() + 1);
             else if (covidStatsDto.getCovidStat().equals(CovidStat.HEALED))
                 covidStats.setHealed(covidStats.getHealed() + 1);
             else if (covidStatsDto.getCovidStat().equals(CovidStat.DEAD))
                 covidStats.setDead(covidStats.getDead() + 1);
             else if (covidStatsDto.getCovidStat().equals(CovidStat.HOSPITALIZED))
                 covidStats.setHospitalized(covidStats.getHospitalized() + 1);
-            else if (covidStatsDto.getCovidStat().equals(CovidStat.VENTILATOR))
+            else if (covidStatsDto.getCovidStat().equals(CovidStat.VENTILATOR_ADD))
                 covidStats.setVentilator(covidStats.getVentilator() + 1);
+            else if (covidStatsDto.getCovidStat().equals(CovidStat.VENTILATOR_REMOVE))
+                covidStats.setVentilator(covidStats.getVentilator() - 1);
             else if (covidStatsDto.getCovidStat().equals(CovidStat.VACCINATED))
                 covidStats.setVaccinated(covidStats.getVaccinated() + 1);
 

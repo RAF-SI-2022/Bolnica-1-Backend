@@ -47,11 +47,42 @@ public class CovidStatsController {
 
     @PostMapping("/add")
     public ResponseEntity<String> tryItAdd() {
-        CovidStats covidStats = new CovidStats();
-        covidStats.setAgeCategory(2);
-        covidStats.setDate(Date.valueOf("2023-08-02"));
-        covidStats.setGender(Gender.ZENSKO);
-        covidStatsRepository.save(covidStats);
+        CovidStats covidStats2 = new CovidStats();
+        covidStats2.setAgeCategory(2);
+        covidStats2.setDate(new Date(System.currentTimeMillis()));
+        covidStats2.setGender(Gender.ZENSKO);
+        covidStatsRepository.save(covidStats2);
+
+        CovidStats covidStats1 = new CovidStats();
+        covidStats1.setAgeCategory(1);
+        covidStats1.setDate(new Date(System.currentTimeMillis()));
+        covidStats1.setGender(Gender.ZENSKO);
+        covidStatsRepository.save(covidStats1);
+
+        CovidStats covidStats3 = new CovidStats();
+        covidStats3.setAgeCategory(3);
+        covidStats3.setDate(new Date(System.currentTimeMillis()));
+        covidStats3.setGender(Gender.ZENSKO);
+        covidStatsRepository.save(covidStats3);
+
+        CovidStats covidStats22 = new CovidStats();
+        covidStats22.setAgeCategory(2);
+        covidStats22.setDate(new Date(System.currentTimeMillis()));
+        covidStats22.setGender(Gender.MUSKO);
+        covidStatsRepository.save(covidStats22);
+
+        CovidStats covidStats11 = new CovidStats();
+        covidStats11.setAgeCategory(1);
+        covidStats11.setDate(new Date(System.currentTimeMillis()));
+        covidStats11.setGender(Gender.MUSKO);
+        covidStatsRepository.save(covidStats11);
+
+        CovidStats covidStats33 = new CovidStats();
+        covidStats33.setAgeCategory(3);
+        covidStats33.setDate(new Date(System.currentTimeMillis()));
+        covidStats33.setGender(Gender.MUSKO);
+        covidStatsRepository.save(covidStats33);
+
         return new ResponseEntity<>("To je to 2", HttpStatus.OK);
     }
 

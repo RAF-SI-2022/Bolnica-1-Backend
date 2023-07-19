@@ -5,11 +5,9 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
+import raf.bolnica1.infirmary.dto.response.MessageDto;
 import raf.bolnica1.infirmary.services.HospitalizationService;
 
 import java.sql.Date;
@@ -49,6 +47,15 @@ public class HospitalizationController {
         return new ResponseEntity<>(hospitalizationService.getHospitalizationsWithFilter(name, surname, jmbg, departmentId, hospitalRoomId, lbp, startDate, endDate, page, size),HttpStatus.OK);
     }
 
+    @PutMapping("/add_ventilator/{id}")
+    public ResponseEntity<MessageDto> addOnVentilator(@PathVariable("id") Long id){
+        return new ResponseEntity<>(hospitalizationService.addOnVentilator(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/remove_ventilator/{id}")
+    public ResponseEntity<MessageDto> removeFromVentilator(@PathVariable("id") Long id){
+        return new ResponseEntity<>(hospitalizationService.removeFromVentilator(id), HttpStatus.OK);
+    }
 
 
 }

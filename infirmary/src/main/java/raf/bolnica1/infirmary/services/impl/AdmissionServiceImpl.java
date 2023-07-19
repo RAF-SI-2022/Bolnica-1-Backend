@@ -110,7 +110,7 @@ public class AdmissionServiceImpl implements AdmissionService {
 
         if(hospitalization.getPrescription().getReferralReason().equals("Covid")) {
             hospitalization.setCovid(true);
-            jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(new CovidStatsDto(CovidStat.HOSPITALIZED, hospitalization.getPrescription().getLbp())));
+            jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(new CovidStatsDto(CovidStat.HOSPITALIZED, hospitalization.getPrescription().getLbp(), new Date(System.currentTimeMillis()))));
             jmsTemplate.convertAndSend(destination2, messageHelper.createTextMessage(new raf.bolnica1.infirmary.dto.externalPatientService.HospitalizationCreateDto(hospitalization.getPatientAdmission(), hospitalization.getPrescription().getLbp(), hospitalization.getNote(), true)));
         }
         else
