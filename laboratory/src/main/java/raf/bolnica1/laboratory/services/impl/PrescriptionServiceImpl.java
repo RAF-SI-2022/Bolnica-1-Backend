@@ -18,12 +18,12 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 
     @Override
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "pres", key = "#id"),
             @CacheEvict(value = "presForRest", allEntries = true),
             @CacheEvict(value = "presForNotRealized", allEntries = true),
             @CacheEvict(value = "patPres", allEntries = true)
-    })
+    })*/
     public void updatePrescriptionStatus(Long id, PrescriptionStatus status) {
         Prescription p = prescriptionRepository.findById(id).orElseThrow(() ->
                 new PrescriptionNotFoundException("Could not find prescription with id %s")

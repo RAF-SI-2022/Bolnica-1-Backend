@@ -40,7 +40,7 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     }
 
     @Override
-    @CachePut(value = "analParam", key = "#analysisParameterDto.id")
+    //@CachePut(value = "analParam", key = "#analysisParameterDto.id")
     public AnalysisParameterDto updateAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
         if (analysisParameterRepository.findAnalysisParameterById(analysisParameterDto.getId()) == null)
@@ -54,14 +54,14 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
     }
 
     @Override
-    @CacheEvict(value = "analParam", key = "#id")
+    //@CacheEvict(value = "analParam", key = "#id")
     public MessageDto deleteAnalysisParameter(Long id) {
         analysisParameterRepository.deleteById(id);
         return new MessageDto("AnalysisParameter with ID " + id + " deleted");
     }
 
     @Override
-    @Cacheable(value = "analParam", key = "#id")
+    //@Cacheable(value = "analParam", key = "#id")
     public AnalysisParameterDto getAnalysisParameter(Long id) {
         return analysisParameterMapper.toDto(analysisParameterRepository.findAnalysisParameterById(id));
     }

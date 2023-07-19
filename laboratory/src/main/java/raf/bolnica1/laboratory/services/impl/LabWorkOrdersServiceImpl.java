@@ -86,7 +86,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     @Transactional(timeout = 20)
-    @CacheEvict(value = "workOrder", key = "#id")
+    ///@CacheEvict(value = "workOrder", key = "#id")
     public LabWorkOrderMessageDto verifyWorkOrder(Long id) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
@@ -117,7 +117,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     @Transactional(timeout = 20)
-    @CacheEvict(value = "workOrder", key = "#workOrderId")
+    //@CacheEvict(value = "workOrder", key = "#workOrderId")
     public UpdateParameterAnalysisResultMessageDto updateAnalysisParameters(Long workOrderId, Long analysisParameterId, String result) {
         String lbz = authenticationUtils.getLbzFromAuthentication();
 
@@ -183,7 +183,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
     }
 
     @Override
-    @CacheEvict(value = "workOrder", key = "#labWorkOrder.id")
+    ///@CacheEvict(value = "workOrder", key = "#labWorkOrder.id")
     public void deleteWorkOrder(LabWorkOrder labWorkOrder) {
         parameterAnalysisResultRepository.deleteAll(parameterAnalysisResultRepository.findParameterAnalysisResultsByLabWorkOrderId(labWorkOrder.getId()));
         labWorkOrderRepository.delete(labWorkOrder);
@@ -191,7 +191,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     @Transactional(timeout = 20)
-    @CacheEvict(value = "workOrder", key = "#id")
+    ///@CacheEvict(value = "workOrder", key = "#id")
     public MessageDto updateLabWorkOrderStatus(Long id, OrderStatus orderStatus) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);
         labWorkOrder.setStatus(orderStatus);
@@ -201,7 +201,7 @@ public class LabWorkOrdersServiceImpl implements LabWorkOrdersService {
 
     @Override
     @Transactional(timeout = 20)
-    @Cacheable(value = "workOrder", key = "#id")
+    ///@Cacheable(value = "workOrder", key = "#id")
     public LabWorkOrderDto findWorkOrder(Long id) {
 //        LabWorkOrder labWorkOrder = labWorkOrderRepository.findById(id).orElseThrow(() -> new RuntimeException("Lab work order with id " + id + "not found"));
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(id);

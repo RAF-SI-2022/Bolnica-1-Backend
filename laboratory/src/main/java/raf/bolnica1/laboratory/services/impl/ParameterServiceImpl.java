@@ -29,7 +29,7 @@ public class ParameterServiceImpl implements ParameterService {
         return parameterMapper.toDto(parameter);
     }
 
-    @CachePut(value = "param", key = "#parameterDto.id")
+    ///@CachePut(value = "param", key = "#parameterDto.id")
     public ParameterDto updateParameter(ParameterDto parameterDto){
 
         /// ne moze da update ako se ne nalazi u bazi vec
@@ -44,13 +44,13 @@ public class ParameterServiceImpl implements ParameterService {
 
     }
 
-    @CacheEvict(value = "param", key = "#id")
+    ////@CacheEvict(value = "param", key = "#id")
     public MessageDto deleteParameter(Long id){
         parameterRepository.deleteById(id);
         return new MessageDto("Parameter with ID "+id+" deleted");
     }
 
-    @Cacheable(value = "param", key = "#id")
+    //@Cacheable(value = "param", key = "#id")
     public ParameterDto getParameter(Long id){
         return parameterMapper.toDto(parameterRepository.findParameterById(id));
     }

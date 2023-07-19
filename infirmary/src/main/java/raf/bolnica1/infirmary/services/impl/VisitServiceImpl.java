@@ -29,7 +29,7 @@ public class VisitServiceImpl implements VisitService {
     private final HospitalizationRepository hospitalizationRepository;
 
     @Override
-    @CacheEvict(value = "visits", allEntries = true)
+    //@CacheEvict(value = "visits", allEntries = true)
     public VisitDto createVisit(VisitCreateDto visitCreateDto) {
         Visit visit=visitMapper.toEntity(visitCreateDto,hospitalizationRepository);
         visit=visitRepository.save(visit);
@@ -37,7 +37,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    @Cacheable(value = "visits", key = "{#departmentId, #hospitalRoomId, #hospitalizationId, #startDate, #endDate, #page, #size}")
+    //@Cacheable(value = "visits", key = "{#departmentId, #hospitalRoomId, #hospitalizationId, #startDate, #endDate, #page, #size}")
     public Page<VisitDto> getVisitsWithFilter(Long departmentId, Long hospitalRoomId, Long hospitalizationId, Date startDate, Date endDate,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         if(endDate!=null)endDate=new Date(endDate.getTime()+24*60*60*1000);

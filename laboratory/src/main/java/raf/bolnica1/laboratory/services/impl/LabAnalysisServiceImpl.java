@@ -24,7 +24,7 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     private final LabAnalysisMapper labAnalysisMapper;
 
     @Override
-    @CacheEvict(value = "labAnals", allEntries = true)
+    //@CacheEvict(value = "labAnals", allEntries = true)
     public LabAnalysisDto createLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
         LabAnalysis labAnalysis = labAnalysisMapper.toEntity(labAnalysisDto);
@@ -36,8 +36,8 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     }
 
     @Override
-    @CachePut(value = "labAnal", key = "#labAnalysisDto.id")
-    @CacheEvict(value = "labAnals", allEntries = true)
+    //@CachePut(value = "labAnal", key = "#labAnalysisDto.id")
+    //@CacheEvict(value = "labAnals", allEntries = true)
     public LabAnalysisDto updateLabAnalysis(LabAnalysisDto labAnalysisDto) {
 
         /// ako ne postoji sa tim ID onda ne moze ni da update-uje
@@ -52,10 +52,10 @@ public class LabAnalysisServiceImpl implements LabAnalysisService {
     }
 
     @Override
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "labAnal", key = "#id"),
             @CacheEvict(value = "labAnals", allEntries = true)
-    })
+    })*/
     public MessageDto deleteLabAnalysis(Long id) {
         labAnalysisRepository.deleteById(id);
         return new MessageDto("LabAnalysis with ID " + id.toString() + " deleted");

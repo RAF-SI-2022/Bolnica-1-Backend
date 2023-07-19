@@ -43,11 +43,11 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     private final LabWorkOrderRepository labWorkOrderRepository;
 
     @Override
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "presForRest", allEntries = true),
             @CacheEvict(value = "presForNotRealized", allEntries = true),
             @CacheEvict(value = "patPres", allEntries = true)
-    })
+    })*/
     public void createPrescription(PrescriptionCreateDto dto) {
         Prescription prescription = prescriptionMapper.toEntity(dto);
         prescription = prescriptionRepository.save(prescription);
@@ -69,12 +69,12 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "pres", key = "#dto.id"),
             @CacheEvict(value = "presForRest", allEntries = true),
             @CacheEvict(value = "presForNotRealized", allEntries = true),
             @CacheEvict(value = "patPres", allEntries = true)
-    })
+    })*/
     public void updatePrescription(PrescriptionUpdateDto dto) {
         Prescription prescription = prescriptionRepository.findById(dto.getId()).orElse(null);
         if(prescription != null && prescription.getStatus().equals(PrescriptionStatus.NEREALIZOVAN)){
@@ -102,12 +102,12 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "pres", key = "#id"),
             @CacheEvict(value = "presForRest", allEntries = true),
             @CacheEvict(value = "presForNotRealized", allEntries = true),
             @CacheEvict(value = "patPres", allEntries = true)
-    })
+    })*/
     public void deletePrescription(Long id, String lbz) {
         Prescription prescription = prescriptionRepository.findById(id).orElse(null);
         if(prescription == null)
@@ -132,7 +132,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Cacheable(value = "pres", key = "#id")
+    //@Cacheable(value = "pres", key = "#id")
     public PrescriptionDoneDto findPrescription(Long id) {
         Prescription prescription = prescriptionRepository.findPrescriptionById(id);
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findByPrescription(prescription.getId()).orElse(null);
@@ -175,7 +175,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Cacheable(value = "presForRest", key = "{#lbp, #doctorLbz}")
+    //@Cacheable(value = "presForRest", key = "{#lbp, #doctorLbz}")
     public ArrayList<PrescriptionDto> findPrescriptionsForPatientRest(String lbp, String doctorLbz) {
         Pageable pageable=PageRequest.of(0,1000000000);
         Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpAndDoctorLbz(pageable,lbp, doctorLbz, PrescriptionStatus.NEREALIZOVAN);
@@ -183,7 +183,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Cacheable(value = "presForNotRealized", key = "{#lbp, #page, #size}")
+    //@Cacheable(value = "presForNotRealized", key = "{#lbp, #page, #size}")
     public Page<PrescriptionDto> findPrescriptionsForPatientNotRealized(String lbp, Integer page, Integer size) {
         Pageable pageable=PageRequest.of(page,size);
         Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsByLbpNotRealized(pageable,lbp, PrescriptionStatus.NEREALIZOVAN);
@@ -191,7 +191,7 @@ public class PrescriptionRecieveServiceImpl implements PrescriptionRecieveServic
     }
 
     @Override
-    @Cacheable(value = "patPres", key = "{#page, #size}")
+    ///@Cacheable(value = "patPres", key = "{#page, #size}")
     public Page<PatientDto> findPatients(int page, int size) {
         Pageable pageable=PageRequest.of(page,size);
         Page<Prescription> prescriptions = prescriptionRepository.findPrescriptionsNotRealized(pageable,PrescriptionStatus.NEREALIZOVAN);

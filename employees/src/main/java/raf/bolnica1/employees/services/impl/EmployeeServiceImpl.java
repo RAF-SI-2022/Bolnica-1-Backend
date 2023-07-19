@@ -57,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     //    @CachePut(value = "employee", key="#dto.lbz")
-    @CacheEvict(value = "employees", allEntries = true)
+    //@CacheEvict(value = "employees", allEntries = true)
     public EmployeeDto createEmployee(EmployeeCreateDto dto) {
         Optional<Employee> employee = employeeRepository.findByLbz(dto.getLbz());
 
@@ -91,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(timeout = 20)
-    @Cacheable(value = "employee", key = "#lbz")
+    //@Cacheable(value = "employee", key = "#lbz")
     public EmployeeDto findEmployeeInfo(String lbz) {
         Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
@@ -104,12 +104,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(timeout = 20)
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "employee", key = "#lbz"),
             @CacheEvict(value = "employees"),
             @CacheEvict(value = "emplByDep"),
             @CacheEvict(value = "emplRoles", key = "#lbz")
-    })
+    })*/
     public EmployeeMessageDto softDeleteEmployee(String lbz) {
         Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
@@ -187,8 +187,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(timeout = 20)
-    @CachePut(value = "employee", key = "#lbz")
-    @CacheEvict(value = "employees", allEntries = true)
+    //@CachePut(value = "employee", key = "#lbz")
+    //@CacheEvict(value = "employees", allEntries = true)
     public EmployeeDto editEmployeeInfo(EmployeeUpdateDto dto, String lbz) {
         Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
@@ -209,11 +209,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(timeout = 20)
-    @CachePut(value = "employee", key = "#lbz")
-    @Caching(evict = {
+    //@CachePut(value = "employee", key = "#lbz")
+    /*@Caching(evict = {
             @CacheEvict("employees"),
             @CacheEvict(value = "emplRoles", key = "#lbz")
-    })
+    })*/
     public EmployeeDto editEmployeeInfoByAdmin(EmployeeUpdateAdminDto dto, String lbz) {
         Employee employee = employeeRepository.findByLbzLock(lbz).orElseThrow(() ->
                 new EmployeeNotFoundException(
@@ -229,7 +229,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Cacheable(value = "emplByDep", key = "#pbo")
+    //@Cacheable(value = "emplByDep", key = "#pbo")
     public List<EmployeeDto> findDoctorSpecialistsByDepartment(String pbo) {
         List<EmployeesRole> employeesRolesList = employeeRepository.listDoctorsSpecialistsByDepartment(pbo)
                 .orElseThrow(() -> new RuntimeException(String.format("Doctor specialists for department with pbo %s not found.", pbo)));
