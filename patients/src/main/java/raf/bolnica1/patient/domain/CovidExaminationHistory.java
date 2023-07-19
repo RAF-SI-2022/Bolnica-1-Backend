@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "examination_history")
+@Table(name = "covid_examination_history")
 @Getter
 @Setter
 public class CovidExaminationHistory {

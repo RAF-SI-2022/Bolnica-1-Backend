@@ -4,6 +4,7 @@ package raf.bolnica1.employees.runner;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.employees.domain.*;
@@ -31,6 +32,11 @@ public class TestDataRunner implements CommandLineRunner {
     private ShiftScheduleRepository shiftScheduleRepository;
 
 
+    private final JdbcTemplate jdbcTemplate;
+    public void resetAutoIncrementCounter(String name) {
+        String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
+        jdbcTemplate.execute(sql);
+    }
     private void clearAllRepositories(){
         shiftScheduleRepository.deleteAll();
         shiftRepository.deleteAll();
@@ -39,6 +45,13 @@ public class TestDataRunner implements CommandLineRunner {
         employeeRepository.deleteAll();
         departmentRepository.deleteAll();
         hospitalRepository.deleteAll();
+        resetAutoIncrementCounter("department");
+        resetAutoIncrementCounter("employee");
+        resetAutoIncrementCounter("employees_role");
+        resetAutoIncrementCounter("hospital");
+        resetAutoIncrementCounter("role");
+        resetAutoIncrementCounter("shift");
+        resetAutoIncrementCounter("shift_schedule");
     }
 
     @Override

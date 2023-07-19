@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
+@Table(name = "scheduled_vaccination")
 public class ScheduledVaccination {
 
     @Id

@@ -4,7 +4,10 @@ package raf.bolnica1.laboratory.runner;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.laboratory.domain.constants.OrderStatus;
 import raf.bolnica1.laboratory.domain.constants.ParameterValueType;
 import raf.bolnica1.laboratory.domain.constants.PrescriptionStatus;
@@ -14,6 +17,7 @@ import raf.bolnica1.laboratory.dto.prescription.PrescriptionCreateDto;
 import raf.bolnica1.laboratory.repository.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 
 import raf.bolnica1.laboratory.services.LabExaminationsService;
 import raf.bolnica1.laboratory.services.PrescriptionRecieveService;
@@ -22,6 +26,9 @@ import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExami
 import raf.bolnica1.laboratory.util.dataGenerators.classes.dto.scheduledLabExamination.ScheduledLabExaminationCreateGenerator;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.JwtTokenGetter;
 import raf.bolnica1.laboratory.util.dataGenerators.jwtToken.TokenSetter;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 //@Profile({"default"})
 @Component
@@ -44,6 +51,12 @@ public class TestDataRunner implements CommandLineRunner {
     private final TokenSetter tokenSetter;
 
 
+    private final JdbcTemplate jdbcTemplate;
+    public void resetAutoIncrementCounter(String name) {
+        String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
+        jdbcTemplate.execute(sql);
+    }
+
     private void clearAllRepositories(){
         scheduledLabExaminationRepository.deleteAll();
         parameterAnalysisResultRepository.deleteAll();
@@ -52,13 +65,13 @@ public class TestDataRunner implements CommandLineRunner {
         analysisParameterRepository.deleteAll();
         parameterRepository.deleteAll();
         labAnalysisRepository.deleteAll();
-        /*analysisParameterRepository.deleteAll();
-        labAnalysisRepository.deleteAll();
-        labWorkOrderRepository.deleteAll();
-        parameterAnalysisResultRepository.deleteAll();
-        parameterRepository.deleteAll();
-        prescriptionRepository.deleteAll();
-        scheduledLabExaminationRepository.deleteAll();*/
+        resetAutoIncrementCounter("analysis_parameter");
+        resetAutoIncrementCounter("lab_analysis");
+        resetAutoIncrementCounter("lab_work_order");
+        resetAutoIncrementCounter("parameter");
+        resetAutoIncrementCounter("parameter_analysis_result");
+        resetAutoIncrementCounter("prescription");
+        resetAutoIncrementCounter("scheduled_lab_examination");
     }
 
     @Override
@@ -767,8 +780,25 @@ public class TestDataRunner implements CommandLineRunner {
         AnalysisParameter ap = new AnalysisParameter();
         ap.setLabAnalysis(la);
         Parameter p = parameterRepository.findById((long) i).isPresent() ? parameterRepository.findById((long) i).get() : null;
+
+        /*List<Parameter> pom=parameterRepository.findAll();
+        for(Parameter pp:pom)
+            System.out.println(pp.getId()+" "+pp.getParameterName());
+        pom.get(0).setParameterName("opala "+pom.get(0).getParameterName());
+        Parameter par=pom.get(0);
+        parameterRepository.save(par);
+
+        Parameter blabla=new Parameter();
+        blabla.setParameterName("blabla");
+        blabla.setType(ParameterValueType.NUMERICKI);
+        blabla.setId(1L);
+        parameterRepository.save(blabla);*/
+
         if (p == null) {
-            throw new RuntimeException("Parameter p" + i + "=null");
+            /*List<Parameter> pom=parameterRepository.findAll();
+            for(Parameter pp:pom)
+                System.out.println(pp.getId()+" "+pp.getParameterName());*/
+            throw new RuntimeException("Parameter p" + i + "=null ");
         }
         ap.setParameter(p);
         analysisParameterRepository.save(ap);
