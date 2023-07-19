@@ -2,6 +2,7 @@ package raf.bolnica1.patient.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.*;
 import raf.bolnica1.patient.domain.constants.*;
@@ -44,6 +45,11 @@ public class TestDataRunner implements CommandLineRunner {
     private final HospitalizationRepository hospitalizationRepository;
     private final ScheduledVaccinationRepository scheduledVaccinationRepository;
 
+    private final JdbcTemplate jdbcTemplate;
+    public void resetAutoIncrementCounter(String name) {
+        String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
+        jdbcTemplate.execute(sql);
+    }
     private void clearAllRepositories(){
         vaccinationDataRepository.deleteAll();
         scheduledVaccinationRepository.deleteAll();
@@ -67,27 +73,27 @@ public class TestDataRunner implements CommandLineRunner {
         generalMedicalDataRepository.deleteAll();
         allergyRepository.deleteAll();
 
-       /* allergyDataRepository.deleteAll();
-        allergyRepository.deleteAll();
-        anamnesisRepository.deleteAll();
-        covidExaminationHistoryRepository.deleteAll();
-        covidStatsRepository.deleteAll();
-        diagnosisCodeRepository.deleteAll();
-        dischargeListRepository.deleteAll();
-        examinationHistoryRepository.deleteAll();
-        generalMedicalDataRepository.deleteAll();
-        hospitalizationRepository.deleteAll();
-        labResultsRepository.deleteAll();
-        medicalHistoryRepository.deleteAll();
-        medicalRecordRepository.deleteAll();
-        operationRepository.deleteAll();
-        patientRepository.deleteAll();
-        prescriptionRepository.deleteAll();
-        scheduledVaccinationRepository.deleteAll();
-        scheduleExamRepository.deleteAll();
-        socialDataRepository.deleteAll();
-        vaccinationDataRepository.deleteAll();
-        vaccinationRepository.deleteAll();*/
+        resetAutoIncrementCounter("vaccination_data");
+        resetAutoIncrementCounter("scheduled_vaccination");
+        resetAutoIncrementCounter("vaccination");
+        resetAutoIncrementCounter("schedule_exam");
+        resetAutoIncrementCounter("operation");
+        resetAutoIncrementCounter("medical_history");
+        resetAutoIncrementCounter("lab_results");
+        resetAutoIncrementCounter("prescription");
+        resetAutoIncrementCounter("hospitalization");
+        resetAutoIncrementCounter("examination_history");
+        resetAutoIncrementCounter("discharge");
+        resetAutoIncrementCounter("diagnosis_code");
+        resetAutoIncrementCounter("covid_stats");
+        resetAutoIncrementCounter("covid_examination_history");
+        resetAutoIncrementCounter("medical_record");
+        resetAutoIncrementCounter("patient");
+        resetAutoIncrementCounter("social_data");
+        resetAutoIncrementCounter("anamnesis");
+        resetAutoIncrementCounter("allergy_data");
+        resetAutoIncrementCounter("general_medical_data");
+        resetAutoIncrementCounter("allergy");
     }
 
 

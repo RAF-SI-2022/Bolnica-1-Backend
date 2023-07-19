@@ -3,6 +3,7 @@ package raf.bolnica1.infirmary.runner;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.mapper.DischargeListMapper;
@@ -106,7 +107,11 @@ public class TestDataRunner implements CommandLineRunner {
 
     }
 
-
+    private final JdbcTemplate jdbcTemplate;
+    public void resetAutoIncrementCounter(String name) {
+        String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
+        jdbcTemplate.execute(sql);
+    }
     private void clearAllRepositories(){
         visitRepository.deleteAll();
         scheduledAppointmentRepository.deleteAll();
@@ -115,13 +120,14 @@ public class TestDataRunner implements CommandLineRunner {
         hospitalizationRepository.deleteAll();
         prescriptionRepository.deleteAll();
         hospitalRoomRepository.deleteAll();
-        /*dischargeListRepository.deleteAll();
-        hospitalizationRepository.deleteAll();
-        hospitalRoomRepository.deleteAll();
-        patientStateRepository.deleteAll();
-        prescriptionRepository.deleteAll();
-        scheduledAppointmentRepository.deleteAll();
-        visitRepository.deleteAll();*/
+
+        resetAutoIncrementCounter("visit");
+        resetAutoIncrementCounter("scheduled_appointment");
+        resetAutoIncrementCounter("patient_state");
+        resetAutoIncrementCounter("discharge_list");
+        resetAutoIncrementCounter("hospitalization");
+        resetAutoIncrementCounter("prescription");
+        resetAutoIncrementCounter("hospital_room");
     }
 
     @Override
