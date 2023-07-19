@@ -23,4 +23,6 @@ public interface EmployeeService {
     EmployeeDto editEmployeeInfoByAdmin(EmployeeUpdateAdminDto dto, String lbz);
 
     List<EmployeeDto> findDoctorSpecialistsByDepartment(String pbo);
+
+    List<EmployeeDto> findNonDoctorsByDepartment(String pbo);
 }

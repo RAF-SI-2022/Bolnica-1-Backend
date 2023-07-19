@@ -29,6 +29,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT er FROM EmployeesRole er WHERE (er.role.name = 'ROLE_DR_SPEC_ODELJENJA' OR er.role.name = 'ROLE_DR_SPEC' OR er.role.name = 'ROLE_DR_SPEC_POV') AND er.employee.department.pbo = :pbo")
     Optional<List<EmployeesRole>> listDoctorsSpecialistsByDepartment(@Param("pbo")String pbo);
 
+    @Query("SELECT er FROM EmployeesRole er WHERE (er.role.name <> 'ROLE_DR_SPEC_ODELJENJA' AND er.role.name <> 'ROLE_DR_SPEC' AND er.role.name <> 'ROLE_DR_SPEC_POV') AND er.employee.department.pbo = :pbo ")
+    Optional<List<EmployeesRole>> listNonDoctorsByDepartment(@Param("pbo")String pbo);
+
     @Query("SELECT e FROM Employee e JOIN Department d " +
             "ON e.department.id = d.id " +
             "WHERE (:name IS NULL OR e.name LIKE %:name%) AND " +
