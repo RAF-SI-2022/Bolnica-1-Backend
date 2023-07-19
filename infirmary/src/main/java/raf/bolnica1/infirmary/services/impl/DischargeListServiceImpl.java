@@ -60,11 +60,11 @@ public class DischargeListServiceImpl implements DischargeListService {
         hospitalization.setDischargeDateAndTime(new Timestamp(System.currentTimeMillis()));
         hospitalizationRepository.save(hospitalization);
         if(dischargeList.isDied() && hospitalization.isCovid()){
-            CovidStatsDto stats = new CovidStatsDto(CovidStat.DEAD, hospitalization.getPrescription().getLbp());
+            CovidStatsDto stats = new CovidStatsDto(CovidStat.DEAD, hospitalization.getPrescription().getLbp(), new Date(System.currentTimeMillis()));
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(stats));
         }
         if(!dischargeList.isDied() && hospitalization.isCovid()){
-            CovidStatsDto stats = new CovidStatsDto(CovidStat.HEALED, hospitalization.getPrescription().getLbp());
+            CovidStatsDto stats = new CovidStatsDto(CovidStat.HEALED, hospitalization.getPrescription().getLbp(), new Date(System.currentTimeMillis()));
             jmsTemplate.convertAndSend(destination, messageHelper.createTextMessage(stats));
         }
         DischargeListCreateDto dischargeListCreateDto = dischargeListMapper.forPatientToDto(dischargeList);

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.client.RestTemplate;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalRoomGenerator;
 import raf.bolnica1.infirmary.dataGenerators.classes.domain.HospitalizationGenerator;
@@ -17,6 +18,7 @@ import raf.bolnica1.infirmary.domain.HospitalRoom;
 import raf.bolnica1.infirmary.domain.Hospitalization;
 import raf.bolnica1.infirmary.domain.Prescription;
 import raf.bolnica1.infirmary.dto.hospitalization.HospitalizationDto;
+import raf.bolnica1.infirmary.listener.helper.MessageHelper;
 import raf.bolnica1.infirmary.mapper.HospitalizationMapper;
 import raf.bolnica1.infirmary.repository.HospitalizationRepository;
 import raf.bolnica1.infirmary.security.util.AuthenticationUtils;
@@ -49,6 +51,8 @@ public class HospitalizationUnitTest {
     private HospitalizationService hospitalizationService;
     private AuthenticationUtils authenticationUtils;
     private RestTemplate patientRestTemplate;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
 
 
     @BeforeEach
@@ -57,7 +61,7 @@ public class HospitalizationUnitTest {
         patientRestTemplate=mock(RestTemplate.class);
         hospitalizationMapper=new HospitalizationMapper(authenticationUtils,patientRestTemplate);
         hospitalizationRepository=mock(HospitalizationRepository.class);
-        hospitalizationService=new HospitalizationServiceImpl(hospitalizationMapper,hospitalizationRepository);
+        hospitalizationService=new HospitalizationServiceImpl(hospitalizationMapper, messageHelper, hospitalizationRepository, jmsTemplate, "destination");
     }
 
     private List<Hospitalization> generateHospitalizations(int hospitalizationCount){

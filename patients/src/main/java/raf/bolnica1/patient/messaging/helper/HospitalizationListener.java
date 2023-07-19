@@ -16,6 +16,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 @Component
+@AllArgsConstructor
 public class HospitalizationListener {
     private HospitalizationRepository hospitalizationRepository;
     private DischargeListRepository dischargeListRepository;
@@ -25,8 +26,10 @@ public class HospitalizationListener {
 
     @JmsListener(destination = "${destination.send.hospitalization}", concurrency = "5-10")
     public void getHospitalization(Message message) throws JMSException {
+        System.out.println("USOOO");
         HospitalizationCreateDto hospitalizationCreateDto = messageHelper.getMessage(message, HospitalizationCreateDto.class);
-        hospitalizationRepository.save(hospitalizationMapper.dtoToEntityHospitalization(hospitalizationCreateDto));
+        Hospitalization hospitalization = hospitalizationRepository.save(hospitalizationMapper.dtoToEntityHospitalization(hospitalizationCreateDto));
+        System.out.println(hospitalization.getId());
     }
 
     @JmsListener(destination = "${destination.send.discharge}", concurrency = "5-10")

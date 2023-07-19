@@ -85,6 +85,7 @@ public class LabResultServiceImpl implements LabResultService {
     public MessageDto commitResults(Long workOrderId) {
         LabWorkOrder labWorkOrder = labWorkOrderRepository.findLabWorkOrderById(workOrderId);
         if (labWorkOrder.getStatus().equals(OrderStatus.OBRADJEN)) {
+            System.out.println("Usooo obradjeeen");
             labWorkOrder.getPrescription().setStatus(PrescriptionStatus.REALIZOVAN);
             PrescriptionCreateDto prescriptionCreateDto = new PrescriptionCreateDto();
             prescriptionCreateDto.setComment(labWorkOrder.getPrescription().getComment());
@@ -107,13 +108,16 @@ public class LabResultServiceImpl implements LabResultService {
                 prescriptionCreateDto.getLabResultDtoList().add(labResultDto);
 
                 if(parameterAnalysisResult.getAnalysisParameter().getLabAnalysis().isCovid()){
+                    System.out.println("Upisi covidddd");
                     prescriptionCreateDto.setCovid(true);
                     if(parameterAnalysisResult.getResult().equals("POZITIVAN")) {
-                        CovidStatsDto stats = new CovidStatsDto(CovidStat.POSITIVE, labWorkOrder.getPrescription().getLbp());
+                        System.out.println("poz");
+                        CovidStatsDto stats = new CovidStatsDto(CovidStat.POSITIVE, labWorkOrder.getPrescription().getLbp(), new Date(System.currentTimeMillis()));
                         jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
                     }
                     else if(parameterAnalysisResult.getResult().equals("NEGATIVAN")){
-                        CovidStatsDto stats = new CovidStatsDto(CovidStat.NEGATIVE, labWorkOrder.getPrescription().getLbp());
+                        System.out.println("neg");
+                        CovidStatsDto stats = new CovidStatsDto(CovidStat.NEGATIVE, labWorkOrder.getPrescription().getLbp(), new Date(System.currentTimeMillis()));
                         jmsTemplate.convertAndSend(destinationStats, messageHelper.createTextMessage(stats));
                     }
                 }

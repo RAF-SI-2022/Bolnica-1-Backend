@@ -24,6 +24,7 @@ public class HospitalizationMapper {
         hospitalization.setCovid(hospitalizationCreateDto.isCovid());
         hospitalization.setNote(hospitalizationCreateDto.getNote());
         hospitalization.setPatientAdmission(hospitalizationCreateDto.getPatientAdmission());
+        System.out.println("LBP " + hospitalizationCreateDto.getLbp());
         Patient patient = patientRepository.findByLbp(hospitalizationCreateDto.getLbp()).orElseThrow(()->new RuntimeException());
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatient(patient).orElseThrow(()->new RuntimeException());
         hospitalization.setMedicalRecord(medicalRecord);
