@@ -103,6 +103,8 @@ public class AdmissionUnitTest {
         scheduledAppointmentRepository=mock(ScheduledAppointmentRepository.class);
         hospitalRoomRepository=mock(HospitalRoomRepository.class);
         hospitalizationRepository=mock(HospitalizationRepository.class);
+        messageHelper=mock(MessageHelper.class);
+        jmsTemplate=mock(JmsTemplate.class);
         admissionService=new AdmissionServiceImpl(prescriptionMapper,scheduledAppointmentMapper,hospitalizationMapper, hospitalizationRepository,
                 prescriptionRepository,scheduledAppointmentRepository,hospitalRoomRepository, jmsTemplate, messageHelper, "destination", "destination2");
     }
@@ -148,6 +150,7 @@ public class AdmissionUnitTest {
 
         given(prescriptionRepository.findPrescriptionById(prescriptionId)).willReturn(prescription);
 
+        given(messageHelper.createTextMessage(any())).willReturn("objekat");
 
         HospitalizationDto result=admissionService.createHospitalization(hospitalizationCreateDto,authorization);
 

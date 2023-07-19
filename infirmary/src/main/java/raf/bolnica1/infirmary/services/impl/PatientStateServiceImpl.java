@@ -31,7 +31,7 @@ public class PatientStateServiceImpl implements PatientStateService {
 
 
     @Override
-    @CacheEvict(value = "patState", allEntries = true)
+    //@CacheEvict(value = "patState", allEntries = true)
     public PatientStateDto createPatientState(PatientStateCreateDto patientStateCreateDto) {
         PatientState patientState=patientStateMapper.toEntity(patientStateCreateDto,hospitalizationRepository);
         patientState=patientStateRepository.save(patientState);
@@ -39,7 +39,7 @@ public class PatientStateServiceImpl implements PatientStateService {
     }
 
     @Override
-    @Cacheable(value = "patState", key = "{#hospitalizationId, #startDate, #endDate, #page, #size}")
+    //@Cacheable(value = "patState", key = "{#hospitalizationId, #startDate, #endDate, #page, #size}")
     public Page<PatientStateDto> getPatientStateByDate(Long hospitalizationId, Date startDate, Date endDate,Integer page,Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<PatientState>patientStates=patientStateRepository.findPatientStatesByDate(pageable,hospitalizationId,startDate,endDate);

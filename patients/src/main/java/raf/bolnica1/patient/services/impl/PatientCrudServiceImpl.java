@@ -39,7 +39,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     private GeneralMedicalDataRepository generalMedicalDataRepository;
 
     @Override
-    @CacheEvict(value = "patient", key = "#patientCreateDto.lbp")
+    //@CacheEvict(value = "patient", key = "#patientCreateDto.lbp")
     public PatientDto registerPatient(PatientCreateDto patientCreateDto) {
         Patient patient = patientMapper.patientDtoToPatientGeneralData(patientCreateDto);
         SocialData socialData = socialDataRepository.save(patientMapper.patientDtoToPatientSocialData(patientCreateDto));
@@ -62,7 +62,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
 
     @Override
     @Transactional(timeout = 20)
-    @CachePut(value = "patient", key = "#dto.lbp")
+    //@CachePut(value = "patient", key = "#dto.lbp")
     public PatientDto updatePatient(PatientUpdateDto dto) {
         Patient patient = patientRepository.findByLbpLock(dto.getLbp()).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", dto.getLbp())));
         patient.setDeleted(dto.isDeleted());
@@ -72,14 +72,14 @@ public class PatientCrudServiceImpl implements PatientCrudService {
 
     @Override
     @Transactional(timeout = 20)
-    @Caching(evict = {
+    /*@Caching(evict = {
             @CacheEvict(value = "patient", key = "#lbp"),
             @CacheEvict(value = "gmd", key = "#lbp"),
             @CacheEvict(value = "ops", key = "#lbp"),
             @CacheEvict(value = "medHistory", key = "#lbp"),
             @CacheEvict(value = "examHistory", key = "#lbp"),
             @CacheEvict(value = "medRecord", key = "#lbp")
-    })
+    })*/
     public MessageDto deletePatient(String lbp) {
         Patient patient = patientRepository.findByLbpLock(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         patient.setDeleted(true);
@@ -100,7 +100,7 @@ public class PatientCrudServiceImpl implements PatientCrudService {
     }
 
     @Override
-    @Cacheable(value = "patient", key = "#lbp")
+    //@Cacheable(value = "patient", key = "#lbp")
     public PatientDto findPatient(String lbp) {
         Patient patient = patientRepository.findByLbp(lbp).orElseThrow(() -> new RuntimeException(String.format("Patient with lbp %s not found.", lbp)));
         return patientMapper.patientToPatientDto(patient);

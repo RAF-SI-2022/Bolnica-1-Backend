@@ -132,7 +132,9 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("Usao u runner");
         clearAllRepositories();
+        System.out.println("clearovao data");
         boolean addTestData = true;
         if(hospitalRoomRepository.findAll().size() > 0 ||
             dischargeListRepository.findAll().size() > 0 ||
@@ -147,6 +149,7 @@ public class TestDataRunner implements CommandLineRunner {
             createHospitalRooms();
             createData();
         }
+        System.out.println("Napravio data");
     }
 
     private void createHospitalRooms() {

@@ -27,7 +27,7 @@ public class HospitalizationServiceImpl implements HospitalizationService {
 
 
     @Override
-    @Cacheable(value = "hospDep", key = "{#departmentId, #page, #size}")
+    //@Cacheable(value = "hospDep", key = "{#departmentId, #page, #size}")
     public Page<HospitalizationDto> getHospitalizationsByDepartmentId(Long departmentId, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Hospitalization>hospitalizations=hospitalizationRepository.findHospitalizationsByDepartmentId(pageable,departmentId);
@@ -35,7 +35,7 @@ public class HospitalizationServiceImpl implements HospitalizationService {
     }
 
     @Override
-    @Cacheable(value = "hostRoom", key = "{#hospitalRoomId, #page, #size}")
+    //@Cacheable(value = "hostRoom", key = "{#hospitalRoomId, #page, #size}")
     public Page<HospitalizationDto> getHospitalizationsByHospitalRoomId(Long hospitalRoomId, Integer page, Integer size) {
         Pageable pageable= PageRequest.of(page,size);
         Page<Hospitalization>hospitalizations=hospitalizationRepository.findHospitalizationsByHospitalRoomId(pageable,hospitalRoomId);
