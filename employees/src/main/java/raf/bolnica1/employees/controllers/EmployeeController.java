@@ -51,6 +51,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findDoctorSpecialistsByDepartment(pbo),HttpStatus.OK);
     }
 
+    @GetMapping(path = "/find_non_doctors_by_department/{pbo}")
+    @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA','ROLE_DR_SPEC','ROLE_DR_SPEC_POV','ROLE_MED_SESTRA','ROLE_VISA_MED_SESTRA')")
+    public ResponseEntity<List<EmployeeDto>> findNonDoctorsByDepartment(@PathVariable("pbo") String pbo) {
+        return new ResponseEntity<>(employeeService.findNonDoctorsByDepartment(pbo),HttpStatus.OK);
+    }
+
     @PutMapping(path = "/password-reset/{lbz}")
     @PreAuthorize("#lbz == authentication.principal")
     public ResponseEntity<EmployeeMessageDto> passwordReset(@Valid @RequestBody PasswordResetDto passwordResetDto, @PathVariable String lbz) {

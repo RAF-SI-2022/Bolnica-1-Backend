@@ -76,20 +76,8 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public Page<ShiftScheduleDto> scheduleAll(Date startDate, Date endDate, int page, int size) {
 
-        Page<ShiftSchedule> shiftSchedules;
         Pageable sortedByDate = PageRequest.of(page, size, Sort.by("date"));
-
-        if(startDate != null && endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByDateGreaterThanEqualAndDateLessThanEqual(startDate, endDate, sortedByDate);
-        }
-        else if(startDate != null){
-            shiftSchedules = shiftScheduleRepository.findByDateGreaterThanEqual(startDate, sortedByDate);
-        }
-        else if(endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByDateLessThanEqual(endDate, sortedByDate);
-        }
-        else
-            shiftSchedules = new PageImpl<>(shiftScheduleRepository.findAll());
+        Page<ShiftSchedule> shiftSchedules=shiftScheduleRepository.findByDate(startDate,endDate,sortedByDate);
 
         return shiftSchedules.map(ShiftMapper::entityToDtoSchedule);
     }
@@ -97,20 +85,8 @@ public class ShiftServiceImpl implements ShiftService {
     @Override
     public Page<ShiftScheduleDto> scheduleEmployee(String lbz, Date startDate, Date endDate, int page, int size) {
 
-        Page<ShiftSchedule> shiftSchedules;
         Pageable sortedByDate = PageRequest.of(page, size, Sort.by("date"));
-
-        if(startDate != null && endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqualAndDateLessThanEqual(lbz, startDate, endDate, sortedByDate);
-        }
-        else if(startDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateGreaterThanEqual(lbz, startDate, sortedByDate);
-        }
-        else if(endDate != null){
-            shiftSchedules = shiftScheduleRepository.findByEmployeeAndDateLessThanEqual(lbz, endDate, sortedByDate);
-        }
-        else
-            shiftSchedules = shiftScheduleRepository.findByEmployee(lbz, sortedByDate);
+        Page<ShiftSchedule> shiftSchedules=shiftScheduleRepository.findByEmployeeAndDate(lbz,startDate,endDate,sortedByDate);
 
         return shiftSchedules.map(ShiftMapper::entityToDtoSchedule);
     }

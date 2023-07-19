@@ -92,5 +92,11 @@ public class HospitalizationServiceImpl implements HospitalizationService {
         return new MessageDto("Pacijent skinut sa respiratora");
     }
 
+    @Override
+    public Boolean getVentilator(Long id) {
+        Hospitalization hospitalization = hospitalizationRepository.findHospitalizationById(id);
+        return hospitalization.isVentiltor();
+    }
+
 
 }

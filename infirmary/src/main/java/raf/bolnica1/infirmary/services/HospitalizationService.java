@@ -20,4 +20,7 @@ public interface HospitalizationService {
     MessageDto addOnVentilator(Long id);
 
     MessageDto removeFromVentilator(Long id);
+
+    Boolean getVentilator(Long id);
+
 }

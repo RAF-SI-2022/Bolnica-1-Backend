@@ -57,5 +57,8 @@ public class HospitalizationController {
         return new ResponseEntity<>(hospitalizationService.removeFromVentilator(id), HttpStatus.OK);
     }
 
-
+    @GetMapping("/is_ventilator/{id}")
+    public ResponseEntity<Boolean> isVentilator(@PathVariable("id") Long id){
+        return new ResponseEntity<>(hospitalizationService.getVentilator(id), HttpStatus.OK);
+    }
 }
