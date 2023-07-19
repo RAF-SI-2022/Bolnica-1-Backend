@@ -53,7 +53,7 @@ public class EmployeeController {
 
     @GetMapping(path = "/find_non_doctors_by_department/{pbo}")
     @PreAuthorize("hasAnyRole('ROLE_DR_SPEC_ODELJENJA','ROLE_DR_SPEC','ROLE_DR_SPEC_POV','ROLE_MED_SESTRA','ROLE_VISA_MED_SESTRA')")
-    public ResponseEntity<List<EmployeeDto>> findNonDoctorsByDepartment(@PathVariable("pbo") String pbo) {
+    public ResponseEntity<List<DoctorDepartmentDto>> findNonDoctorsByDepartment(@PathVariable("pbo") String pbo) {
         return new ResponseEntity<>(employeeService.findNonDoctorsByDepartment(pbo),HttpStatus.OK);
     }
 

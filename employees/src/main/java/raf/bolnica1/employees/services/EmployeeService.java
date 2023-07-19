@@ -24,5 +24,5 @@ public interface EmployeeService {
 
     List<EmployeeDto> findDoctorSpecialistsByDepartment(String pbo);
 
-    List<EmployeeDto> findNonDoctorsByDepartment(String pbo);
+    List<DoctorDepartmentDto> findNonDoctorsByDepartment(String pbo);
 }
