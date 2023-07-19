@@ -428,4 +428,39 @@ public class EmployeeServiceTest {
 
     }
 
+    @Test
+    public void findNonDoctorsByDepartmentTest(){
+
+        int employeeCount=5;
+
+        hospitalDepartmentGenerator.fill();
+        Department department=hospitalDepartmentGenerator.getRandomDepartment();
+
+        employeeGenerator.fill(department);
+        List<EmployeesRole>employeesRoles=new ArrayList<>();
+        for(int i=0;i<employeeCount;i++){
+            EmployeesRole pom=new EmployeesRole();
+            pom.setEmployee(employeeGenerator.getRandomEmployee());
+            employeesRoles.add(pom);
+        }
+
+        given(employeeRepository.listNonDoctorsByDepartment(department.getPbo())).willReturn(Optional.of(employeesRoles));
+
+        List<DoctorDepartmentDto>ret=employeeService.findNonDoctorsByDepartment(department.getPbo());
+        List<Employee>ret2=new ArrayList<>();
+        for(EmployeesRole er:employeesRoles) {
+            ret2.add(er.getEmployee());
+        }
+
+        Assertions.assertEquals(ret.get(0).getDepartmentId(),ret2.get(0).getDepartment().getId());
+        Assertions.assertTrue(ret.size()==ret2.size());
+        for(int i=0;i<ret.size();i++){
+
+            ///ret.get(i).setDepartmentId(null);
+            ret2.get(i).setDepartment(null);
+            Assertions.assertTrue(classJsonComparator.compareCommonFields(ret.get(i),ret2.get(i)));
+        }
+
+    }
+
 }

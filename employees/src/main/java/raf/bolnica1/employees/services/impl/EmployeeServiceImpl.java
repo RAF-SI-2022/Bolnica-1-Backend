@@ -243,14 +243,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees;
     }
 
-    public List<EmployeeDto> findNonDoctorsByDepartment(String pbo) {
+    public List<DoctorDepartmentDto> findNonDoctorsByDepartment(String pbo) {
         List<EmployeesRole> employeesRolesList = employeeRepository.listNonDoctorsByDepartment(pbo)
                 .orElseThrow(() -> new RuntimeException(String.format("Doctor specialists for department with pbo %s not found.", pbo)));
 
-        List<EmployeeDto> employees = new ArrayList<>();
+        List<DoctorDepartmentDto> employees = new ArrayList<>();
 
         for(EmployeesRole er: employeesRolesList) {
-            employees.add(employeeMapper.toDto(er.getEmployee()));
+            DoctorDepartmentDto pom=new DoctorDepartmentDto();
+            pom.setDepartmentId(er.getEmployee().getDepartment().getId());
+            pom.setLbz(er.getEmployee().getLbz());
+            pom.setName(er.getEmployee().getName());
+            pom.setSurname(er.getEmployee().getSurname());
+            employees.add(pom);
         }
 
         return employees;
