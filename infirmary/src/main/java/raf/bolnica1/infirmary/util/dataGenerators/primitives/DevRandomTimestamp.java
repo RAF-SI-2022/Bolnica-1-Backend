@@ -14,10 +14,10 @@ public class DevRandomTimestamp {
     private List<Timestamp> list;
     /*private Timestamp upperLimit=Timestamp.valueOf("2023-01-01 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");*/
-    private Timestamp upperLimit=Timestamp.valueOf("1990-01-05 00:00:00");
+    private Timestamp upperLimit=Timestamp.valueOf("1999-01-05 00:00:00");
     private Timestamp lowerLimit=Timestamp.valueOf("1990-01-01 00:00:00");
     private Random random=new Random();
-    private int numberOfStamps=20;
+    private int numberOfStamps=2000;
 
 
     public static DevRandomTimestamp getInstance(){
