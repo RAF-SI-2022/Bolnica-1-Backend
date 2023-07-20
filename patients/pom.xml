@@ -19,10 +19,20 @@
 		<jacoco.version>0.8.8</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.coverage.exclusions>**/checking/**, **/config/**, **/controllers/**, **/runner/**, **/security/**, **/util/**</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/checking/**, **/config/**, **/controllers/**, **/runner/**, **/security/**, **/util/**, **/messaging/**</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>6.4.0.202211300538-r</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>

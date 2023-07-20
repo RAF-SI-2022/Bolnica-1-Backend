@@ -1,10 +1,14 @@
 package raf.bolnica1.patient.util;
 
 import com.sendgrid.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.VaccinationData;
 
@@ -168,9 +172,9 @@ public class PDFUtils {
 
     public static void sendToMail(String pdf,String email){
 
-        /// sendgrid password: 1589grewg431ffwew
+        /// sendgrid password:
 
-        Email from = new Email("rafsibolnica@gmail.com");
+        Email from = new Email("rafbolnica@gmail.com");
         String subject = "Kovid Sertifikat";
 
         System.out.println(email);
@@ -180,7 +184,7 @@ public class PDFUtils {
         Content content = new Content("text/plain", "Sertifikat");
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid("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");
+        SendGrid sg = new SendGrid("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");
         Request request = new Request();
 
         // Attach the PDF file
@@ -231,5 +235,59 @@ public class PDFUtils {
         }
     }
 
+
+    public static void downloadPdf(){
+        String gitRepositoryUrl = "https://github.com/stefanbalaz2/sertifikat";
+        String pdfFileName = "sertifikat.pdf";
+
+        String projectFolderPath = System.getProperty("user.dir");
+        String tempFolderPath = projectFolderPath + File.separator + "temp";
+
+        try {
+            // Step 1: Clone the Git repository
+            cloneGitRepository(gitRepositoryUrl, tempFolderPath);
+
+            // Step 2: Move the PDF file to the project folder
+            movePDFFile(tempFolderPath, pdfFileName, projectFolderPath);
+
+            // Clean up: Delete the temporary folder
+            deleteTempFolder(tempFolderPath);
+        } catch (GitAPIException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void cloneGitRepository(String gitRepositoryUrl, String tempFolderPath) throws GitAPIException {
+        Git git = null;
+        try {
+            CloneCommand cloneCommand = Git.cloneRepository()
+                    .setURI(gitRepositoryUrl)
+                    .setDirectory(new File(tempFolderPath));
+            git = cloneCommand.call(); // Wait for the cloning process to complete
+        } finally {
+            // Make sure to close the Git object to release any internal resources
+            if (git != null) {
+                git.close();
+            }
+        }
+    }
+
+    private static void movePDFFile(String tempFolderPath, String pdfFileName, String destinationFolderPath) throws IOException {
+        Path sourceFilePath = Paths.get(tempFolderPath, pdfFileName);
+        Path destinationFilePath = Paths.get(destinationFolderPath, pdfFileName);
+        Files.move(sourceFilePath, destinationFilePath);
+    }
+
+    private static void deleteTempFolder(String tempFolderPath) throws IOException {
+        File tempFolder = new File(tempFolderPath);
+        if (tempFolder.exists()) {
+            try {
+                FileUtils.deleteDirectory(tempFolder);
+            } catch (IOException e) {
+                // Handle the exception (e.g., log or print the error)
+                System.err.println("Error deleting temporary folder: " + e.getMessage());
+            }
+        }
+    }
 
 }

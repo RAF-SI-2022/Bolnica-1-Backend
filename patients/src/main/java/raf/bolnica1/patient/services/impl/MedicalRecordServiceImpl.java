@@ -3,17 +3,23 @@ package raf.bolnica1.patient.services.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.bolnica1.patient.domain.*;
+import raf.bolnica1.patient.domain.constants.CovidStat;
+import raf.bolnica1.patient.domain.stats.CovidStats;
 import raf.bolnica1.patient.dto.create.GeneralMedicalDataCreateDto;
 import raf.bolnica1.patient.dto.create.OperationCreateDto;
 import raf.bolnica1.patient.dto.create.VaccinationDataDto;
 import raf.bolnica1.patient.dto.general.*;
+import raf.bolnica1.patient.dto.stats.CovidStatsDto;
 import raf.bolnica1.patient.mapper.*;
+import raf.bolnica1.patient.messaging.helper.MessageHelper;
 import raf.bolnica1.patient.repository.*;
 import raf.bolnica1.patient.services.MedicalRecordService;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +52,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private DiagnosisCodeMapper diagnosisCodeMapper;
     private OperationRepository operationRepository;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
 
     @Override
     //    @Cacheable(value = "medRecord", key = "#lbp")
@@ -163,6 +171,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             vaccinationData.setDeleted(false);
             vaccinationData.setVaccinationDate(vaccinationDataDto.getVaccinationDate());
             vaccinationDataRepository.save(vaccinationData);
+
+            if(vaccination.isCovid()){
+                String destination="covid_stats";
+                jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(new CovidStatsDto(CovidStat.VACCINATED,
+                        lbp, new Date(System.currentTimeMillis()))));
+            }
+
             return new MessageDto("Uspesno dodata vakcina.");
         }
         return new MessageDto("Neuspesno dodata vakcina.");

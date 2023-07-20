@@ -85,9 +85,11 @@ public class PatientServiceImpl implements PatientService {
                 VaccinationData vd=new VaccinationData();
                 vd.setVaccination(v);
                 vd.setVaccinationDate(((Date)vaccinationsAndDates.get(i)[1]));
+                PDFUtils.downloadPdf();
                 String pdf= PDFUtils.makeVaccinationCertificate(patient,vd);
                 PDFUtils.sendToMail(pdf,patient.getEmail());
                 PDFUtils.removePDF(pdf);
+                PDFUtils.removePDF("sertifikat.pdf");
                 return new MessageDto("Mail successfully sent");
             }
         }
