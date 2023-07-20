@@ -97,7 +97,7 @@ public class ShiftServiceImpl implements ShiftService {
         Shift shift = shiftRepository.findByTime(time1);
         ShiftSchedule shiftSchedule = shiftScheduleRepository.findForEmployee(lbz, date).orElse(null);
 
-        System.out.println(shiftSchedule.getShift().getShiftNum());
+        //System.out.println(shiftSchedule.getShift().getShiftNum());
         if(shiftSchedule == null)
             return shift.getShiftNum() == 0;
 
