@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.VaccinationData;
 
@@ -56,7 +58,13 @@ public class PDFUtils {
      *      - dateOfPositiveTest
      *
      */
-
+    private static String sendgridApiKey;
+    @Bean
+    @Value("${sendgrid.api.key}")
+    public String setPatientsServiceUrl(String sendgridApiKey){
+        PDFUtils.sendgridApiKey = sendgridApiKey;
+        return "";
+    }
 
     public static String makeVaccinationCertificate(Patient patient, VaccinationData vaccinationData){
 
@@ -184,7 +192,7 @@ public class PDFUtils {
         Mail mail = new Mail(from, subject, to, content);
 
         ///System.out.println("Key: "+System.getenv("SENDGRID_API_KEY"));
-        SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+        SendGrid sg = new SendGrid(PDFUtils.sendgridApiKey);
         Request request = new Request();
 
         // Attach the PDF file
