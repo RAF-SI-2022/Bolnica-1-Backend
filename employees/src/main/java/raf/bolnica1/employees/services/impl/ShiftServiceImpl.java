@@ -93,10 +93,13 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public Boolean isDoctorWorking(String lbz, String time, Date date) {
+        //System.out.println("STIGAOO22");
         Time time1 = Time.valueOf(time);
         Shift shift = shiftRepository.findByTime(time1);
         ShiftSchedule shiftSchedule = shiftScheduleRepository.findForEmployee(lbz, date).orElse(null);
 
+        //System.out.println("STIGAOO "+ shiftSchedule);
+        //System.out.println("STIGAOO "+ shift);
         //System.out.println(shiftSchedule.getShift().getShiftNum());
         if(shiftSchedule == null)
             return shift.getShiftNum() == 0;
