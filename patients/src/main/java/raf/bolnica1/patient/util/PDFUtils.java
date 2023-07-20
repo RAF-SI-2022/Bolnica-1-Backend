@@ -11,6 +11,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.Patient;
 import raf.bolnica1.patient.domain.VaccinationData;
 
@@ -25,6 +26,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
+@Component
 public class PDFUtils {
 
     /**
@@ -63,6 +65,7 @@ public class PDFUtils {
     @Value("${sendgrid.api.key}")
     public String setPatientsServiceUrl(String sendgridApiKey){
         PDFUtils.sendgridApiKey = sendgridApiKey;
+        System.out.println("Ucitan key: "+sendgridApiKey);
         return "";
     }
 

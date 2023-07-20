@@ -2,6 +2,8 @@ package raf.bolnica1.patient.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import raf.bolnica1.patient.domain.*;
@@ -55,7 +57,10 @@ public class TestDataRunner implements CommandLineRunner {
     }
 
 
-
+    @Caching(evict = {
+            @CacheEvict(value = "medRecord", allEntries = true),
+            @CacheEvict(value = "medRecord", allEntries = true)
+    })
     private void clearAllRepositories(){
         vaccinationDataRepository.deleteAll();
         scheduledVaccinationRepository.deleteAll();
