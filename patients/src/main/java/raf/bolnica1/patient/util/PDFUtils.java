@@ -172,7 +172,6 @@ public class PDFUtils {
 
     public static void sendToMail(String pdf,String email){
 
-        /// sendgrid password:
 
         Email from = new Email("rafbolnica@gmail.com");
         String subject = "Kovid Sertifikat";
@@ -184,7 +183,8 @@ public class PDFUtils {
         Content content = new Content("text/plain", "Sertifikat");
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid("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");
+        ///System.out.println("Key: "+System.getenv("SENDGRID_API_KEY"));
+        SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
 
         // Attach the PDF file
