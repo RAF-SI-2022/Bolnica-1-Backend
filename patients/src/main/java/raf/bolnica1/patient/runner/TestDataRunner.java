@@ -9,12 +9,15 @@ import raf.bolnica1.patient.domain.constants.*;
 import raf.bolnica1.patient.domain.prescription.LabPrescription;
 import raf.bolnica1.patient.domain.prescription.LabResults;
 import raf.bolnica1.patient.domain.prescription.Prescription;
+import raf.bolnica1.patient.domain.stats.CovidStats;
 import raf.bolnica1.patient.mapper.PatientMapper;
 import raf.bolnica1.patient.repository.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Random;
 
 //@Profile({"default"})
 @Component
@@ -990,5 +993,41 @@ public class TestDataRunner implements CommandLineRunner {
 
         medicalHistoryRepository.saveAll(Arrays.asList(medicalHistory1, medicalHistory2, medicalHistory3, medicalHistory4, medicalHistory5));
 
+        createRow(Gender.MUSKO, Date.valueOf("2023-07-18"));
+        createRow(Gender.ZENSKO, Date.valueOf("2023-07-18"));
+
+        createRow(Gender.MUSKO, Date.valueOf("2023-07-19"));
+        createRow(Gender.ZENSKO, Date.valueOf("2023-07-19"));
+
+        createRow(Gender.MUSKO, Date.valueOf("2023-07-20"));
+        createRow(Gender.ZENSKO, Date.valueOf("2023-07-20"));
+
+    }
+
+    private void createRow(Gender gender, Date currentDate){
+        Random random = new Random();
+        LocalDate localDate = currentDate.toLocalDate();
+        LocalDate newDate = localDate.minusDays(1);
+        Date newSqlDate = Date.valueOf(newDate);
+
+        for(int i = 1; i<=3; i++) {
+            CovidStats covidStats = new CovidStats();
+            covidStats.setGender(gender);
+            covidStats.setAgeCategory(i);
+            covidStats.setDate(currentDate);
+            CovidStats covidStats1 = covidStatsRepository.findByDateAndGenderAndAgeCategory(newSqlDate, gender, i).orElse(null);
+            if(covidStats1!=null)
+                covidStats.setVentilator(covidStats1.getVentilator());
+            else
+                covidStats.setVentilator(random.nextInt(10));
+            covidStats.setDead(random.nextInt(5));
+            covidStats.setHealed(random.nextInt(100));
+            covidStats.setVaccinated(random.nextInt(20));
+            covidStats.setPositive(random.nextInt(500));
+            covidStats.setNegative(random.nextInt(300));
+            covidStats.setHospitalized(random.nextInt(50));
+
+            covidStatsRepository.save(covidStats);
+        }
     }
 }
