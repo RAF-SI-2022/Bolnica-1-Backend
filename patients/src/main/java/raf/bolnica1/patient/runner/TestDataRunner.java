@@ -53,6 +53,9 @@ public class TestDataRunner implements CommandLineRunner {
         String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
         jdbcTemplate.execute(sql);
     }
+
+
+
     private void clearAllRepositories(){
         vaccinationDataRepository.deleteAll();
         scheduledVaccinationRepository.deleteAll();
