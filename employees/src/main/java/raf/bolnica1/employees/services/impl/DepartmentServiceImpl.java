@@ -41,14 +41,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentMapper departmentMapper;
 
     @Override
-    //@Cacheable(value = "depId", key = "#lbz")
+    @Cacheable(value = "depId", key = "#lbz")
     public Long findDepartmentIdByLbz(String lbz) {
         Employee employee=employeeRepository.findByLbz(lbz).orElseThrow(()->new EmployeeNotFoundException(String.format("Employee with lbz %s not found",lbz)));
         return employee.getDepartment().getId();
     }
 
     @Override
-    //@Cacheable(value = "allDeps")
+    @Cacheable(value = "allDeps")
     public List<DepartmentDto> listAllDepartments() {
         List<DepartmentDto> departmentDtos = new ArrayList<>();
         for (Department department : departmentRepository.findAll()) {
@@ -65,7 +65,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    //@Cacheable(value = "deps", key = "#pbb")
+    @Cacheable(value = "deps", key = "#pbb")
     public List<DepartmentDto> getDepartments(String pbb) {
         List<DepartmentDto> departmentDtos = new ArrayList<>();
         List<Department> departments= departmentRepository.findByHostpitalPbb(pbb);
@@ -119,7 +119,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    //@Cacheable(value = "hosp")
+    @Cacheable(value = "hosp")
     public List<HospitalDto> listAllHospitals() {
         List<HospitalDto> hospitalDtos = new ArrayList<>();
         for (Hospital hospital : hospitalRepository.findAll()) {

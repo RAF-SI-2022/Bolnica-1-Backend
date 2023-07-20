@@ -41,6 +41,7 @@ public class AnalysisParameterServiceImpl implements AnalysisParameterService {
 
     @Override
     //@CachePut(value = "analParam", key = "#analysisParameterDto.id")
+    //@CacheEvict()
     public AnalysisParameterDto updateAnalysisParameter(AnalysisParameterDto analysisParameterDto) {
 
         if (analysisParameterRepository.findAnalysisParameterById(analysisParameterDto.getId()) == null)

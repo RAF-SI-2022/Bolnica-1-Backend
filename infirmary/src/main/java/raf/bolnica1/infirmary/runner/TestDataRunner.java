@@ -2,6 +2,8 @@ package raf.bolnica1.infirmary.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -112,6 +114,17 @@ public class TestDataRunner implements CommandLineRunner {
         String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
         jdbcTemplate.execute(sql);
     }
+
+    @Caching(evict = {
+            @CacheEvict(value = "hospDep", allEntries = true),
+            @CacheEvict(value = "hospRoom", allEntries = true),
+            @CacheEvict(value = "schedApp", allEntries = true),
+            @CacheEvict(value = "hostRoom", allEntries = true),
+            @CacheEvict(value = "hospDep", allEntries = true),
+            @CacheEvict(value = "hostRooms", allEntries = true),
+            @CacheEvict(value = "patState", allEntries = true),
+            @CacheEvict(value = "visits", allEntries = true)
+    })
     private void clearAllRepositories(){
         visitRepository.deleteAll();
         scheduledAppointmentRepository.deleteAll();
