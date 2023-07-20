@@ -3,6 +3,8 @@ package raf.bolnica1.employees.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +39,23 @@ public class TestDataRunner implements CommandLineRunner {
         String sql = "ALTER TABLE " + name + " AUTO_INCREMENT = 1;";
         jdbcTemplate.execute(sql);
     }
+
+
+    @Caching(evict = {
+            @CacheEvict(value = "depId", allEntries = true),
+            @CacheEvict(value = "allDeps", allEntries = true),
+            @CacheEvict(value = "dep", allEntries = true),
+            @CacheEvict(value = "deps", allEntries = true),
+            @CacheEvict(value = "docDeps", allEntries = true),
+            @CacheEvict(value = "nameDep", allEntries = true),
+            @CacheEvict(value = "hosp", allEntries = true),
+            @CacheEvict(value = "nameHosp", allEntries = true),
+            @CacheEvict(value = "emplRoles", allEntries = true),
+            @CacheEvict(value = "employee", allEntries = true),
+            @CacheEvict(value = "employees", allEntries = true),
+            @CacheEvict(value = "emplByDep", allEntries = true),
+            @CacheEvict(value = "emplRoles", allEntries = true)
+    })
     private void clearAllRepositories(){
         shiftScheduleRepository.deleteAll();
         shiftRepository.deleteAll();

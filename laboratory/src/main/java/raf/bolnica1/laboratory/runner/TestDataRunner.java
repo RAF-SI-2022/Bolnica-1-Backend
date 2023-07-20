@@ -3,6 +3,8 @@ package raf.bolnica1.laboratory.runner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -57,6 +59,18 @@ public class TestDataRunner implements CommandLineRunner {
         jdbcTemplate.execute(sql);
     }
 
+
+    @Caching(evict = {
+            @CacheEvict(value = "analParam", allEntries = true),
+            @CacheEvict(value = "labAnals", allEntries = true),
+            @CacheEvict(value = "labAnal", allEntries = true),
+            @CacheEvict(value = "workOrder", allEntries = true),
+            @CacheEvict(value = "param", allEntries = true),
+            @CacheEvict(value = "presForRest", allEntries = true),
+            @CacheEvict(value = "presForNotRealized", allEntries = true),
+            @CacheEvict(value = "patPres", allEntries = true),
+            @CacheEvict(value = "pres", allEntries = true)
+    })
     private void clearAllRepositories(){
         scheduledLabExaminationRepository.deleteAll();
         parameterAnalysisResultRepository.deleteAll();

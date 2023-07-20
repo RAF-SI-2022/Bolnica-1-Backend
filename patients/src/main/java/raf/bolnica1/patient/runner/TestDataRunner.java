@@ -59,7 +59,16 @@ public class TestDataRunner implements CommandLineRunner {
 
     @Caching(evict = {
             @CacheEvict(value = "medRecord", allEntries = true),
-            @CacheEvict(value = "medRecord", allEntries = true)
+            @CacheEvict(value = "gmd", allEntries = true),
+            @CacheEvict(value = "ops", allEntries = true),
+            @CacheEvict(value = "medHistory", allEntries = true),
+            @CacheEvict(value = "medHisotryPaged", allEntries = true),
+            @CacheEvict(value = "medHisotryCodePaged", allEntries = true),
+            @CacheEvict(value = "examHistory", allEntries = true),
+            @CacheEvict(value = "medRecord", allEntries = true),
+            @CacheEvict(value = "allergies", allEntries = true),
+            @CacheEvict(value = "scheduledExams", allEntries = true),
+            @CacheEvict(value = "patient", allEntries = true)
     })
     private void clearAllRepositories(){
         vaccinationDataRepository.deleteAll();

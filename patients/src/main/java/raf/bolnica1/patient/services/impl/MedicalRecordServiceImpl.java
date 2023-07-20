@@ -125,7 +125,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    //@Cacheable(value = "allergies")
+    @Cacheable(value = "allergies")
     public List<AllergyDto> gatherAllergies() {
         List<Allergy> allergies =  allergyRepository.findAll();
         List<AllergyDto> allergyDtos = new ArrayList<>();
@@ -136,7 +136,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    //@Cacheable(value = "vaccines")
+    @Cacheable(value = "vaccines", key = "#covid")
     public List<VaccinationDto> gatherVaccines(boolean covid) {
         List<Vaccination> vaccinations =  vaccinationRepository.findAll();
         List<VaccinationDto> vaccinationDtos = new ArrayList<>();
@@ -148,7 +148,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    //@Cacheable(value = "diagnosis")
+    @Cacheable(value = "diagnosis")
     public List<DiagnosisCodeDto> gatherDiagnosis() {
         List<DiagnosisCode> diagnosisCodes =  diagnosisCodeRepository.findAll();
         List<DiagnosisCodeDto> diagnosisCodeDtos = new ArrayList<>();
